@@ -1,10 +1,6 @@
 import { logger } from "./config/logger";
-<<<<<<< HEAD
-import userRouter from "./routes/userRouter";
-=======
 import userRouter from "./routes/user.routes";
-import reviewAuthRouter from './routes/review.routes';
->>>>>>> e992be69c81df7900840aedc41c30f5723c80eba
+import reviewAuthRouter from "./routes/review.routes";
 
 const cors = require("cors");
 const express = require("express");
@@ -26,7 +22,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRouter);
-app.use("/review",reviewAuthRouter);
-
+app.use("/review", reviewAuthRouter);
 
 export { app };
