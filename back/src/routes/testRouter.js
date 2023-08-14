@@ -1,8 +1,10 @@
-const Router = require('express');
+const Router = require("express");
 
 const userRouter = Router();
 
-userRouter.get('/userList', async (req,res)=>{});
-
-
-export { userRouter };
+/**
+ * @swagger
+ *  tags:
+ *      name: ㅎㅎ
+ */
+userRouter.get("/userList", async (req, res) => {});
