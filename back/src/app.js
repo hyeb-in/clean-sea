@@ -1,5 +1,5 @@
 import { logger } from "./config/logger";
-import userRouter from "./routes/user.routes";
+import userRouter from "./routes/userRouter";
 import reviewAuthRouter from "./routes/review.routes";
 
 const cors = require("cors");

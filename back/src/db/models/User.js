@@ -1,23 +1,23 @@
-import { Schema } from "mongoose";
+import UserModel from "../schemas/userSchema";
 
-const UserSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
+export class User {
+  static async findUserById(userId) {
+    const user = await UserModel.findById(userId);
+    return user;
   }
-);
 
-export default UserSchema;
+  static async findUserByEmail(email) {
+    const user = await UserModel.findOne({ email });
+    return user;
+  }
+
+  static async create(email, name, hashedPassword) {
+    const newUser = await UserModel.create({
+      email,
+      name,
+      password: hashedPassword,
+    });
+
+    return newUser;
+  }
+}

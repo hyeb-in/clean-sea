@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { joinUser } from "../controllers/userController";
 
 /**
  * @swagger
@@ -16,10 +17,7 @@ const userRouter = Router();
  *      tags: [User]
  *      summary: sign up
  */
-userRouter.post("/register", (req, res, next) => {
-  res.send("test");
-  console.log("test");
-});
+userRouter.post("/register", joinUser);
 
 /**
  * @swagger
