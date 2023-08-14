@@ -1,4 +1,4 @@
-const { ReviewModel } = require("../schemas/review");
+const { ReviewModel } = require('../schemas/reviewSchema');
 
 class Review {
   static async create(toCreate) {
