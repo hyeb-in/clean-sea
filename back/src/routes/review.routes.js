@@ -1,3 +1,4 @@
+import { Router } from "express";
 const {
     createReview,
     getMyReview,
@@ -6,19 +7,25 @@ const {
     deleteReview,
 } = require('../controllers/reviewController');
 
-const Router = require('express');
+const reviewAuthRouter = Router();
 
-const reviewRouter = Router();
 
-reviewRouter
+
+reviewAuthRouter
+    .route('/')
     .post(createReview)
     .get(getMyReview);
 
-reviewRouter.get('/:userId', getUserReview);
 
-reviewRouter
-    .router('/:reviewId')
+reviewAuthRouter
+    .route('/:userId')
+    .get(getUserReview);
+
+
+
+reviewAuthRouter
+    .route('/:reviewId')
     .put(updateReview)
     .delete(deleteReview);
 
-module.exports = { reviewRouter };
+export default reviewAuthRouter;

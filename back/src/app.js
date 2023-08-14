@@ -1,6 +1,6 @@
 import { logger } from "./config/logger";
 import userRouter from "./routes/user.routes";
-import reviewRouter from "./routes/review.routes";
+import reviewAuthRouter from './routes/review.routes';
 
 const cors = require("cors");
 const express = require("express");
@@ -21,8 +21,9 @@ app.get("/", (req, res) => {
   res.send("기본 페이지");
 });
 
-logger.error("app.js test error message");
-logger.info("app.js test info message");
+
 app.use("/users", userRouter);
-app.use("/review", reviewRouter);
+app.use("/review",reviewAuthRouter);
+
+
 export { app };

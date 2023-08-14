@@ -25,4 +25,4 @@ class reviewAuthService {
     }
 }
 
-module.exports = { reviewAuthService };res.status(200).json(myReview);
+module.exports = { reviewAuthService };
