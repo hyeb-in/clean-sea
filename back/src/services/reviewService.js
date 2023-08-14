@@ -25,4 +25,4 @@ class reviewAuthService {
     }
 }
 
-module.exports = { reviewAuthService };
+export { reviewAuthService };

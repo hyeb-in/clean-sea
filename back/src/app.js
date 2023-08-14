@@ -1,10 +1,10 @@
-import { logger } from "./config/logger";
 import userRouter from "./routes/user.routes";
 import reviewAuthRouter from "./routes/review.routes";
 
 const cors = require("cors");
 const express = require("express");
 const { swaggerUi, specs } = require("./swagger/swagger");
+const { errorMiddleware } = require('./middlewares/errorMiddleware');
 
 require("./db/index");
 
@@ -22,6 +22,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRouter);
-app.use("/review", reviewAuthRouter);
+app.use("/reviews",reviewAuthRouter);
+
+app.use(errorMiddleware);
 
 export { app };
