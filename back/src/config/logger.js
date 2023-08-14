@@ -1,8 +1,11 @@
 import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
 import { DailyRotateFile } from "winston/lib/winston/transports";
+import path from "path";
 
 const logDir = "logs";
+const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
+const errorLogDir = path.join(logDir, "error"); // error 로그를 저장할 폴더 경로
 
 const { combine, timestamp, printf } = winston.format;
 
@@ -27,22 +30,19 @@ export const logger = winston.createLogger({
       level: "info",
       filename: "%DATE%.log",
       datePattern: "YYYY-MM-DD",
-      dirname: logDir,
+      dirname: infoLogDir,
       zippedArchive: true,
       maxFiles: "30d",
     }),
-  ],
-  transports: [
     new DailyRotateFile({
       level: "error",
       filename: "%DATE%.error.log",
       datePattern: "YYYY-MM-DD",
-      dirname: logDir,
+      dirname: errorLogDir,
       zippedArchive: true,
       maxFiles: "30d",
     }),
   ],
-
   exceptionHandlers: [
     new winstonDaily({
       level: "error",
