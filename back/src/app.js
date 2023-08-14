@@ -1,5 +1,6 @@
 import { logger } from "./config/logger";
 import userRouter from "./routes/user.routes";
+import reviewRouter from "./routes/review.routes";
 
 const cors = require("cors");
 const express = require("express");
@@ -23,4 +24,5 @@ app.get("/", (req, res) => {
 logger.error("app.js test error message");
 logger.info("app.js test info message");
 app.use("/users", userRouter);
+app.use("/review", reviewRouter);
 export { app };

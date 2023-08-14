@@ -19,6 +19,11 @@
             "date": 1691993388011,
             "name": "logs\\2023-08-14-15.exception.log",
             "hash": "1510871b2da7acd7ec95b1d39cd85f92dc4e2a4449a49bff16d515d2af94ee42"
+        },
+        {
+            "date": 1692000143769,
+            "name": "logs\\2023-08-14-17.exception.log",
+            "hash": "b6549d61dfd960d250386a002fe37c39fbab3f6b90692819ef8b42de1aef3046"
         }
     ],
     "hashType": "sha256"
