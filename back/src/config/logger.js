@@ -26,7 +26,7 @@ export const logger = winston.createLogger({
     new DailyRotateFile({
       level: "info",
       filename: "%DATE%.log",
-      datePattern: "YYYY-MM-DD-HH",
+      datePattern: "YYYY-MM-DD",
       dirname: logDir,
       zippedArchive: true,
       maxFiles: "30d",
@@ -36,7 +36,7 @@ export const logger = winston.createLogger({
     new DailyRotateFile({
       level: "error",
       filename: "%DATE%.error.log",
-      datePattern: "YYYY-MM-DD-HH",
+      datePattern: "YYYY-MM-DD",
       dirname: logDir,
       zippedArchive: true,
       maxFiles: "30d",
@@ -47,7 +47,7 @@ export const logger = winston.createLogger({
     new winstonDaily({
       level: "error",
       filename: "%DATE%.exception.log",
-      datePattern: "YYYY-MM-DD-HH",
+      datePattern: "YYYY-MM-DD",
       dirname: logDir,
       zippedArchive: true,
       maxFiles: "30d",

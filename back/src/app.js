@@ -1,5 +1,5 @@
 import { logger } from "./config/logger";
-import userRouter from "./routes/user.routes";
+import userRouter from "./routes/userRouter";
 
 const cors = require("cors");
 const express = require("express");
@@ -20,7 +20,5 @@ app.get("/", (req, res) => {
   res.send("기본 페이지");
 });
 
-logger.error("app.js test error message");
-logger.info("app.js test info message");
 app.use("/users", userRouter);
 export { app };
