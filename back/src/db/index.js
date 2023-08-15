@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 
-
-
-
 const url = process.env.MONGODB_URL ||
 "mongodb+srv://user:user1234@cluster0.xwae34t.mongodb.net/";
 
@@ -16,4 +13,3 @@ db.on("connected", ()=>
 db.on("error", (error)=>
     console.log("mongoDB연결에 실패하였습니다...\n " + url + "\n"+error),
 );
-
