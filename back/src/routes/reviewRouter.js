@@ -9,10 +9,15 @@ const {
 
 const reviewAuthRouter = Router();
 
-reviewAuthRouter.route("/").post(createReview).get(getMyReview);
+reviewAuthRouter
+    .post("/register",createReview)
+    .get("/reviewList",getMyReview);
 
 reviewAuthRouter.route("/:userId").get(getUserReview);
 
-reviewAuthRouter.route("/:reviewId").put(updateReview).delete(deleteReview);
+reviewAuthRouter
+    .route("/:reviewId")
+    .put(updateReview)
+    .delete(deleteReview);
 
 export default reviewAuthRouter;

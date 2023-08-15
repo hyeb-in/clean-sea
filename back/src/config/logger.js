@@ -1,6 +1,7 @@
 import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
 import { DailyRotateFile } from "winston/lib/winston/transports";
+import morgan from 'morgan';
 import path from "path";
 
 const logDir = "logs";
@@ -18,7 +19,7 @@ const logFormat = printf(({ level, message, timestamp }) => {
  * error:0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
  */
 
-export const logger = winston.createLogger({
+const logger = winston.createLogger({
   format: combine(
     timestamp({
       format: "YYYY-MM-DD HH:mm:ss",
@@ -65,3 +66,27 @@ if (process.env.NODE_ENV !== "production") {
     })
   );
 }
+
+function httpLogger(req,res,next){
+  morgan('combined',{
+    stream : {
+      write : (message) => {
+        logger.http(message,trim());
+      },
+    },
+  })(req,res,next);
+}
+
+if (process.env.NODE_ENV !== "production") {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      ),
+    })
+  );
+}
+
+
+export { logger, httpLogger };

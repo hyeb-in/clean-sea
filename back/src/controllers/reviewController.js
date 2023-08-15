@@ -12,16 +12,18 @@ const sendResponse = function (res, statusCode, data) {
 const createReview = async (req, res, next) => {
   try {
     const author = req.currentUserId;
+    console.log(req.body);
     const validationResult = reviewValidator.postReview(req.body);
-    if (validationResult) {
-      return sendResponse(res, StatusCodes.BAD_REQUEST, {});
+    if (validationResult.error) {
+      return sendResponse(res, StatusCodes.BAD_REQUEST, {
+        error: validationResult.error.details[0].message,
+      });
     }
-
     const addMyReview = await reviewAuthService.addReview({
       toCreate: { ...req.body, author },
     });
 
-    return sendResponse(res, StatusCodes.created, addMyReview);
+    return sendResponse(res, StatusCodes.CREATED, addMyReview);
   } catch (err) {
     next(err);
   }
@@ -31,7 +33,7 @@ const getMyReview = async (req, res, next) => {
   try {
     const myReview = await reviewAuthService.getReview(req.currentUserId);
 
-    return sendResponse(res, StatusCodes.ok, myReview);
+    return sendResponse(res, StatusCodes.OK, myReview);
   } catch (err) {
     next(err);
   }
@@ -41,7 +43,7 @@ const getUserReview = async (req, res, next) => {
   try {
     const userReview = await reviewAuthService.getReview(req.params.userId);
 
-    return sendResponse(res, StatusCodes.ok, userReview);
+    return sendResponse(res, StatusCodes.OK, userReview);
   } catch (err) {
     next(err);
   }
@@ -52,13 +54,15 @@ const updateReview = async (req, res, next) => {
     const id = req.params.reviewId;
     const validationResult = reviewValidator.putReview(req.body);
     if (validationResult) {
-      return sendResponse(res, StatusCodes.BAD_REQUEST, {});
+      return sendResponse(res, StatusCodes.BAD_REQUEST, {
+        error: validationResult.error.details[0].message,
+      });
     }
     const updatedReview = await reviewAuthService.setReview(id, {
       toUpdate: { ...req.body },
     });
 
-    return sendResponse(res, StatusCodes.ok, updatedReview);
+    return sendResponse(res, StatusCodes.OK, updatedReview);
   } catch (err) {
     next(err);
   }
@@ -70,7 +74,7 @@ const deleteReview = async (req, res, next) => {
       req.params.reviewId
     );
 
-    return sendResponse(res, StatusCodes.ok, deletedReview);
+    return sendResponse(res, StatusCodes.OK, deletedReview);
   } catch (err) {
     next(err);
   }
