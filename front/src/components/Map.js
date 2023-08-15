@@ -10,7 +10,7 @@ import {
 // 맵 크기
 const containerStyle = {
   width: "100%",
-  height: "800px",
+  height: "100vh",
 };
 
 // 초기 중심 좌표 설정
@@ -94,6 +94,8 @@ const Map = () => {
           ))
         }
       </MarkerClusterer>
+
+      {/* 마커 클릭 시 info 윈도우 */}
       {selectedMarker && (
         <InfoWindow
           position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}

@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Join from "./pages/Join";
 import MyProfile from "./pages/MyProfile";
 import Search from "./pages/Search";
+import "./index.css";
 
 function App() {
   return (
