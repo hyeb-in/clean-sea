@@ -12,6 +12,9 @@ const Review = new Schema({
     author : {
         type : String,
     },
+    fileUpload : {
+        String,
+    },
     },
 
     {
