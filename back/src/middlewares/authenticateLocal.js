@@ -12,6 +12,9 @@ export const localAuthentication = async (req, res, next) => {
         if (!user) return res.status(400).json({ message: info.message });
         const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY);
 
+        req.user = user;
+        req.token = token;
+
         res.status(200).send({
           message: "로그인 성공",
           token: token,
