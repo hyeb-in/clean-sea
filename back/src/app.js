@@ -1,6 +1,5 @@
 import userRouter from "./routes/userRouter";
-import reviewAuthRouter from "./routes/review.routes";
-import { logger } from "./config/logger";
+import reviewAuthRouter from "./routes/reviewRouter";
 
 const cors = require("cors");
 const express = require("express");

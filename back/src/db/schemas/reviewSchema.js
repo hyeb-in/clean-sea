@@ -11,7 +11,6 @@ const Review = new Schema({
     },
     author : {
         type : String,
-        require : true,
     },
     },
 
