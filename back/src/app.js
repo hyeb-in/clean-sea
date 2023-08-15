@@ -1,6 +1,7 @@
 import userRouter from "./routes/userRouter";
 import reviewAuthRouter from "./routes/review.routes";
 import { logger } from "./config/logger";
+import { jwtStrategy, localStrategy } from "./config/passport";
 
 const cors = require("cors");
 const express = require("express");
@@ -11,6 +12,8 @@ require("./db/index");
 
 const app = express();
 app.use(cors());
+localStrategy();
+//jwtStrategy();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

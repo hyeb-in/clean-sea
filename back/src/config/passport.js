@@ -31,8 +31,24 @@ const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 };
 
-const jwtCallback = async (payload, done) => {};
+const jwtCallback = async (payload, done) => {
+  try {
+    const { id } = payload;
+    const user = await User.findUserById(id);
 
-passport.use("local", new LocalStrategy(localOptions, localCallback));
+    if (!user) {
+      return done(null, false, { message: "사용자가 존재하지 않습니다." });
+    }
 
-passport.use("jwt", new JwtStrategy(jwtOptions, jwtCallback));
+    return done(null, user);
+  } catch (err) {
+    console.error(err);
+    done(err);
+  }
+};
+
+export const localStrategy = () =>
+  passport.use("local", new LocalStrategy(localOptions, localCallback));
+
+export const jwtStrategy = () =>
+  passport.use("jwt", new JwtStrategy(jwtOptions, jwtCallback));
