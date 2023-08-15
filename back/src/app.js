@@ -29,7 +29,6 @@ app.use(httpLogger);
 
 app.use("/users", userRouter);
 app.use("/reviews", reviewAuthRouter);
-
 app.use("/beaches", beachRouter);
 app.use(errorMiddleware);
 
