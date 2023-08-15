@@ -1,7 +1,10 @@
 import React from "react";
+import MyProfile from "./MyProfile";
 
 const Main = () => {
-  return <div>Main Page</div>;
+  return <>
+    <MyProfile></MyProfile>
+  </>
 };
 
 export default Main;

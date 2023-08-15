@@ -1,5 +1,12 @@
 import * as React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Bootstrap Bundle CSS
+import './App.scss';
+
+// Bootstrap Bundle JS
+import "bootstrap/dist/js/bootstrap.bundle.min";
+
 import Main from "./pages/Main";
 import Login from "./pages/Login";
 import Join from "./pages/Join";
