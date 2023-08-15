@@ -1,17 +1,17 @@
 import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
-import { DailyRotateFile } from "winston/lib/winston/transports";
 import morgan from 'morgan';
 import path from "path";
 
 const logDir = "logs";
 const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
 const errorLogDir = path.join(logDir, "error"); // error 로그를 저장할 폴더 경로
+const httpLogDir = path.join(logDir, "http"); // http 로그를 저장할 폴더 경로
 
 const { combine, timestamp, printf } = winston.format;
 
-const logFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} ${level}: ${message}`;
+const logFormat = printf((info) => {
+  return `${info.timestamp} ${info.level}: ${info.message}`;
 });
 
 /**
@@ -27,56 +27,53 @@ const logger = winston.createLogger({
     logFormat
   ),
   transports: [
-    new DailyRotateFile({
+    new winstonDaily({
       level: "info",
-      filename: "%DATE%.log",
+      filename: path.join(infoLogDir, "%DATE%.info.log"),
       datePattern: "YYYY-MM-DD",
-      dirname: infoLogDir,
       zippedArchive: true,
       maxFiles: "30d",
     }),
-    new DailyRotateFile({
-      level: "error",
-      filename: "%DATE%.error.log",
+    new winstonDaily({
+      level: "info",
+      filename: path.join(httpLogDir, "%DATE%.http.log"),
       datePattern: "YYYY-MM-DD",
-      dirname: errorLogDir,
       zippedArchive: true,
       maxFiles: "30d",
     }),
-  ],
-  exceptionHandlers: [
     new winstonDaily({
       level: "error",
-      filename: "%DATE%.exception.log",
+      filename: path.join(errorLogDir, "%DATE%.error.log"),
       datePattern: "YYYY-MM-DD",
-      dirname: logDir,
       zippedArchive: true,
       maxFiles: "30d",
     }),
-  ],
+  ]
 });
 
-if (process.env.NODE_ENV !== "production") {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple()
-      ),
-    })
-  );
+logger.stream = {
+  write : (message) => {
+    logger.info(message);
+  }
 }
 
 function httpLogger(req,res,next){
-  morgan('combined',{
+  morgan('combined', {
     stream : {
       write : (message) => {
-        logger.http(message,trim());
+        logger.info(message);
       },
     },
   })(req,res,next);
 }
 
+function errorMiddleware(error, req, res, next) {
+
+  logger.error(error);
+  res.status(400).send(error.message);
+}
+
+
 if (process.env.NODE_ENV !== "production") {
   logger.add(
     new winston.transports.Console({
@@ -89,4 +86,5 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 
-export { logger, httpLogger };
+
+export { httpLogger, errorMiddleware };

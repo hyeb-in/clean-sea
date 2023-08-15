@@ -12,8 +12,10 @@ const sendResponse = function (res, statusCode, data) {
 const createReview = async (req, res, next) => {
   try {
     const author = req.currentUserId;
-    console.log(req.body);
-    const validationResult = reviewValidator.postReview(req.body);
+
+    const schema = reviewValidator.postReview();
+    const validationResult = schema.validate(req.body);
+
     if (validationResult.error) {
       return sendResponse(res, StatusCodes.BAD_REQUEST, {
         error: validationResult.error.details[0].message,
@@ -52,8 +54,10 @@ const getUserReview = async (req, res, next) => {
 const updateReview = async (req, res, next) => {
   try {
     const id = req.params.reviewId;
-    const validationResult = reviewValidator.putReview(req.body);
-    if (validationResult) {
+    const schema = reviewValidator.putReview();
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
       return sendResponse(res, StatusCodes.BAD_REQUEST, {
         error: validationResult.error.details[0].message,
       });
