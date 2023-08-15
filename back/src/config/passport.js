@@ -27,7 +27,7 @@ const localCallback = async (email, password, done) => {
 };
 
 const jwtOptions = {
-  secretOrkey: process.env.JWT_SECRET_fsdfKEY,
+  secretOrKey: process.env.JWT_SECRET_KEY,
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 };
 

@@ -1,7 +1,7 @@
 import userRouter from "./routes/userRouter";
 import reviewAuthRouter from "./routes/review.routes";
-import { logger } from "./config/logger";
 import { jwtStrategy, localStrategy } from "./config/passport";
+import passport from "passport";
 
 const cors = require("cors");
 const express = require("express");
@@ -11,9 +11,11 @@ const { errorMiddleware } = require("./middlewares/errorMiddleware");
 require("./db/index");
 
 const app = express();
-app.use(cors());
+app.use(passport.initialize());
 localStrategy();
-//jwtStrategy();
+jwtStrategy();
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
