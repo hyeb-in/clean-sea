@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { joinUser } from "../controllers/userController";
+import { login, signUpUser } from "../controllers/userController";
+import { local } from "../config/passport";
+import { localAuthentication } from "../controllers/authenticateLocal";
+import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 /**
  * @swagger
@@ -17,7 +20,7 @@ const userRouter = Router();
  *      tags: [User]
  *      summary: sign up
  */
-userRouter.post("/register", joinUser);
+userRouter.post("/register", signUpUser);
 
 /**
  * @swagger
@@ -27,7 +30,7 @@ userRouter.post("/register", joinUser);
  *      summary: login
  *
  */
-userRouter.post("/login");
+userRouter.post("/login", localAuthentication);
 
 /**
  * @swagger
@@ -37,7 +40,7 @@ userRouter.post("/login");
  *      summary: logout
  */
 userRouter.post("/logout");
-
+userRouter.post("/tokentest", jwtAuthentication);
 /**
  * @swagger
  * /users/{id}:
