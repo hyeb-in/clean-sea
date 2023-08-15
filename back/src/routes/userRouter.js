@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { login, signUpUser } from "../controllers/userController";
-import { local } from "../config/passport";
-import { localAuthentication } from "../controllers/authenticateLocal";
+import { loginUser, signUpUser } from "../controllers/userController";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
+import { localAuthentication } from "../middlewares/authenticateLocal";
 
 /**
  * @swagger
@@ -30,7 +29,7 @@ userRouter.post("/register", signUpUser);
  *      summary: login
  *
  */
-userRouter.post("/login", localAuthentication);
+userRouter.post("/login", localAuthentication, loginUser);
 
 /**
  * @swagger
@@ -39,8 +38,11 @@ userRouter.post("/login", localAuthentication);
  *      tags: [User]
  *      summary: logout
  */
+const testMiddle = (req, res, next) => {
+  next();
+};
 userRouter.post("/logout");
-userRouter.post("/tokentest", jwtAuthentication);
+userRouter.get("/tokentest", testMiddle, jwtAuthentication);
 /**
  * @swagger
  * /users/{id}:

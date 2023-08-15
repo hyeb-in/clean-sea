@@ -5,5 +5,5 @@ const ImageAppender = require('../utils/uploads/upload');
 const upload = multer({storage});
 
 async function handleImageUpload(req,res,next){
-    const imageStrategy = '';
+    this.strategy
 }

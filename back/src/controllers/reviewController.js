@@ -1,6 +1,8 @@
 const { reviewAuthService } = require("../services/reviewService");
 const { StatusCodes } = require("http-status-codes");
 const { reviewValidator } = require("../utils/validators/reviewValidator");
+const { handleImageUpload } = require('../middlewares/uploadMiddleware');
+
 
 const sendResponse = function (res, statusCode, data) {
   if (statusCode >= 400) {
@@ -12,15 +14,15 @@ const sendResponse = function (res, statusCode, data) {
 const createReview = async (req, res, next) => {
   try {
     const author = req.currentUserId;
-
     const schema = reviewValidator.postReview();
     const validationResult = schema.validate(req.body);
-
     if (validationResult.error) {
       return sendResponse(res, StatusCodes.BAD_REQUEST, {
         error: validationResult.error.details[0].message,
       });
     }
+    await handleImageUpload(req,res,()=>{});
+
     const addMyReview = await reviewAuthService.addReview({
       toCreate: { ...req.body, author },
     });

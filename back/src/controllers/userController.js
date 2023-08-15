@@ -20,9 +20,16 @@ export const signUpUser = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res, next) => {
+export const loginUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const user = {
+      token: req.token,
+      _id: req.user._id,
+      email: req.user.email,
+      name: req.user.name,
+      errorMessage: null,
+    };
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }
