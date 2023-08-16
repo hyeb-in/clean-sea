@@ -6,7 +6,7 @@ function Footer() {
       position: "fixed",
       bottom: 0,
       width: "100%",
-      minWidth: "833px",
+    //   minWidth: "833px",
       display: "flex",
     //   justifyContent: "center",
       alignItems: "center",

@@ -87,7 +87,6 @@ return (
                 이메일 형식이 올바르지 않습니다.
               </div>
             )}
-
       </div>
       <div className="form-group">
         <label style={{ fontSize: "18px" }}>Password</label>
