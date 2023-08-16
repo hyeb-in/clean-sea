@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
   createReview,
   getMyReview,
@@ -29,12 +29,12 @@ const reviewAuthRouter = Router();
  */
 
 reviewAuthRouter
-    .post("/register",createReview)
-    .get("/reviewList",getMyReview);
+  .post("/register", createReview)
+  .get("/reviewList", getMyReview);
 
 /**
  * @swagger
- * /reviews/{userId}:  
+ * /reviews/{userId}:
  *  get:
  *    tags: [Reviews]
  *    summary : Get reviews created by the authenticated user
@@ -48,15 +48,12 @@ reviewAuthRouter.get("/:userId", getUserReview);
  *  put:
  *    tags: [Reviews]
  *    summary: Update a review by review ID
- * 
+ *
  *  delete:
  *    tags: [Reviews]
  *    summary: Delete a review by review ID
  */
 
-reviewAuthRouter
-    .route("/:reviewId")
-    .put(updateReview)
-    .delete(deleteReview);
+reviewAuthRouter.route("/:reviewId").put(updateReview).delete(deleteReview);
 
 export default reviewAuthRouter;

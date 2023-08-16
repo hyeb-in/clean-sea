@@ -1,7 +1,7 @@
 import * as swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 
-const options : swaggerJsdoc.Options = {
+const options: swaggerJsdoc.Options = {
   swaggerDefinition: {
     info: {
       title: "Test API",
@@ -11,7 +11,7 @@ const options : swaggerJsdoc.Options = {
     host: "localhost:5001",
     basePath: "/",
   },
-  apis: ["./src/routes/*.js", "./swagger/*"],
+  apis: ["./src/routes/*.ts", "./src/swagger/*"],
 };
 
 const specs = swaggerJsdoc(options);
