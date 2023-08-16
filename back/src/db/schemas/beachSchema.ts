@@ -1,6 +1,18 @@
 import { Schema, model } from "mongoose";
 
-const BeachSchema = new Schema(
+interface IBeach {
+  id: number;
+  name: string;
+  address: string;
+  latitude?: number;
+  longitude?: number;
+  goodnessFit?: boolean;
+  score?: number;
+  ente?: number;
+  esch?: number;
+}
+
+const BeachSchema = new Schema<IBeach>(
   {
     id: {
       type: Number,
@@ -41,6 +53,5 @@ const BeachSchema = new Schema(
   }
 );
 
-const BeachModel = model("Beach", BeachSchema);
-
-export { BeachModel };
+const BeachModel = model<IBeach>("Beach", BeachSchema);
+export { BeachModel, IBeach };
