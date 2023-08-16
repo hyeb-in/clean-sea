@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback, memo, useEffect } from "react";
 import {
   GoogleMap,
   Marker,
@@ -7,10 +7,12 @@ import {
   InfoWindow,
 } from "@react-google-maps/api";
 
+const libraries = ["places"];
+
 // 맵 크기
 const containerStyle = {
   width: "100%",
-  height: "800px",
+  height: "100vh",
 };
 
 // 초기 중심 좌표 설정
@@ -48,23 +50,40 @@ const Map = () => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
+    libraries,
   });
 
-  const [map, setMap] = React.useState(null);
+  const [map, setMap] = useState(null);
+  const [location, setLocation] = useState(null);
 
+  // 해수욕장 이름으로 경위도 검색
+  useEffect(() => {
+    if (isLoaded) {
+      const geocoder = new window.google.maps.Geocoder();
+      const beachName = "갈음이 해수욕장"; // 검색하려는 해수욕장 이름
+
+      geocoder.geocode({ address: beachName }, (results, status) => {
+        if (status === "OK" && results.length > 0) {
+          const latLng = results[0].geometry.location;
+          setLocation({ lat: latLng.lat(), lng: latLng.lng() });
+        }
+      });
+    }
+  }, [isLoaded]);
+  console.log(location);
   // 지도가 성공적으로 로드 되었다면
-  const onLoad = React.useCallback((map) => {
+  const onLoad = useCallback((map) => {
     // const bounds = new window.google.maps.LatLngBounds(center);
     // map.fitBounds(bounds);
     setMap(map);
   }, []);
 
   // 언마운트 될 때  setMap(null)을 호출함으로써 현재 지도 객체의 참조를 해제하여 메모리 누수를 방지하고, 지도 관련 리소스를 정리한다
-  const onUnmount = React.useCallback((map) => {
+  const onUnmount = useCallback((map) => {
     setMap(null);
   }, []);
 
-  const [selectedMarker, setSelectedMarker] = React.useState(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   const handleMarkerClick = (marker) => {
     setSelectedMarker(marker);
@@ -94,6 +113,8 @@ const Map = () => {
           ))
         }
       </MarkerClusterer>
+
+      {/* 마커 클릭 시 info 윈도우 */}
       {selectedMarker && (
         <InfoWindow
           position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
@@ -108,4 +129,4 @@ const Map = () => {
   );
 };
 
-export default React.memo(Map);
+export default memo(Map);
