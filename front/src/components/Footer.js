@@ -8,12 +8,12 @@ function Footer() {
       width: "100%",
       minWidth: "833px",
       display: "flex",
-      justifyContent: "center",
+    //   justifyContent: "center",
       alignItems: "center",
     };
   
     const contentStyle = {
-      width: "1128px",
+      width: "1000px",
       height: "200px",
       padding: "30px",
     };
