@@ -7,7 +7,7 @@ import {
   ListGroupItem, Row
 } from "react-bootstrap";
 import CardHeader from "react-bootstrap/CardHeader";
-import History from "../Components/History";
+import History from "../components/History";
 
 const MyProfile = () => {
   return <>
