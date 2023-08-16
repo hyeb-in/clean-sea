@@ -23,11 +23,26 @@ const SignUp = ({ handleSignup }) => {
 
 
   return (
+    <div
+     style={{
+      paddingTop: "134px",
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+     }}
+    >
+    <div style={{ 
+    width: "300px",
+    height: "300px",
+    marginTop: "100px", 
+    boxShadow: "0px 4px 12px #00000026" 
+    }}>
     <div className="container">
-      <h2>회원가입</h2>
+      <h2 style={{ margin: "50px" }}>회원가입</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>ID</label>
+          <label style={{ fontSize: "18px" }}>ID</label>
           <input
             type="text"
             className="form-control"
@@ -37,17 +52,19 @@ const SignUp = ({ handleSignup }) => {
           />
         </div>
         <div className="form-group">
-          <label>Password</label>
+          <label style={{ fontSize: "18px" }}>Password</label>
           <input
             type="password"
             className="form-control"
-            placeholder="비밀번호를 입력하세요"
+            placeholder="비밀번호를 입력하세요."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <button type="submit" className="btn btn-primary" onClick={()=> goToAnotherPage()}>회원가입</button>
       </form>
+    </div>
+    </div>
     </div>
   );
 };
