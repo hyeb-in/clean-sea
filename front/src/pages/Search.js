@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SearchBar from "../components/SearchBar";
-import Map from "../components/Map";
+// import Map from "../components/Map";
 
 const Search = () => {
   return (
@@ -11,7 +11,7 @@ const Search = () => {
           <SearchBar />
         </Col>
         <Col xs={8} className="px-0">
-          <Map />
+          {/* <Map /> */}
         </Col>
       </Row>
     </Container>
