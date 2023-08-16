@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import { useHistory } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const SignUp = ({ handleSignup }) => {
@@ -11,6 +12,8 @@ const SignUp = ({ handleSignup }) => {
     // handleSignup(Id);
   };
 
+  // const History = useHistory();
+  // react-router-dom v6에서는 메서드의 변경으로 useHistory가 아닌 useNavigate를 사용
   const navigate = useNavigate();
 
   const goToAnotherPage = () => {
