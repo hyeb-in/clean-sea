@@ -1,11 +1,11 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SearchBar from "../components/SearchBar";
-// import Map from "../components/Map";
+import Map from "../components/Map";
 
 const Search = () => {
   return (
-    <Container fluid style={{ height: "100vh" }}>
+    <Container fluid style={{ height: "100%" }}>
       <Row>
         <Col xs={4} className="px-0">
           <SearchBar />

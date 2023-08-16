@@ -13,10 +13,12 @@ import SignUp from "./pages/SignUp";
 import MyProfile from "./pages/MyProfile";
 import Search from "./pages/Search";
 import Footer from "./components/Footer";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
     <Router>
+      <NavBar />
       <Routes>
         <Route path="/" exact element={<Main />} />
         <Route path="/login" exact element={<Login />} />
