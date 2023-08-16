@@ -1,11 +1,11 @@
-import { Router } from "express";
-const {
+import { Router } from 'express';
+import {
   createReview,
   getMyReview,
   getUserReview,
   updateReview,
   deleteReview,
-} = require("../controllers/reviewController");
+} from "../controllers/reviewController";
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ reviewAuthRouter
  *    summary : Get reviews created by the authenticated user
  */
 
-reviewAuthRouter.route("/:userId").get(getUserReview);
+reviewAuthRouter.get("/:userId", getUserReview);
 
 /**
  * @swagger
