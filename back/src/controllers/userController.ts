@@ -1,10 +1,15 @@
+import { NextFunction, Request, Response } from "express";
 import { userService } from "../services/userService";
-
+import { RequestTest } from "user";
 /**
  * @param {*} req name,email,password
  * @description 회원가입 api
  */
-export const signUpUser = async (req, res, next) => {
+export const signUpUser = async (
+  req: RequestTest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
@@ -20,14 +25,22 @@ export const signUpUser = async (req, res, next) => {
   }
 };
 
-export const loginUser = async (req, res, next) => {
+/**
+ *
+ * @param
+ * @description 로그인 함수 user 정보 + 토큰 값 넘겨준다.
+ */
+export const loginUser = async (
+  req: RequestTest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user = {
       token: req.token,
       _id: req.user._id,
       email: req.user.email,
       name: req.user.name,
-      errorMessage: null,
     };
     res.status(200).json(user);
   } catch (error) {

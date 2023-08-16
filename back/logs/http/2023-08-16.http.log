@@ -1,6 +1,5 @@
 2023-08-16 11:12:23 info: ::1 - - [16/Aug/2023:02:12:23 +0000] "POST /reviews/register HTTP/1.1" 201 172 "-" "PostmanRuntime/7.32.3"
 
-<<<<<<< HEAD
 2023-08-16 16:15:31 error: Unknown authentication strategy "local"
 2023-08-16 16:15:31 info: ::1 - - [16/Aug/2023:07:15:31 +0000] "POST /users/login HTTP/1.1" 400 39 "-" "PostmanRuntime/7.32.3"
 
@@ -16,9 +15,4 @@
 2023-08-16 17:49:10 info: ::1 - - [16/Aug/2023:08:49:10 +0000] "GET /users/tokentest HTTP/1.1" 400 37 "-" "PostmanRuntime/7.32.3"
 
 2023-08-16 17:49:42 info: ::1 - - [16/Aug/2023:08:49:42 +0000] "GET /users/tokentest HTTP/1.1" 200 269 "-" "PostmanRuntime/7.32.3"
-=======
-2023-08-16 17:20:46 info: ::1 - - [16/Aug/2023:08:20:46 +0000] "POST /reviews/register HTTP/1.1" 201 172 "-" "PostmanRuntime/7.32.3"
-
-2023-08-16 17:29:35 info: POST /reviews/register 201 59.687 ms - 172 {"title":"typescripttest","content":"Review Content"}
->>>>>>> feature/sub
 

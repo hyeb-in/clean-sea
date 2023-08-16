@@ -9,7 +9,7 @@ export class userService {
    * @returns createdUser
    * @description 유저 존재하는지 체크한 후 유저 생성
    */
-  static async createUser(email, name, password) {
+  static async createUser(email: string, name: string, password: string) {
     const user = await User.findUserByEmail(email);
 
     if (user) {

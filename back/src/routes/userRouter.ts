@@ -38,23 +38,21 @@ userRouter.post("/login", localAuthentication, loginUser);
  *      tags: [User]
  *      summary: logout
  */
-const testMiddle = (req, res, next) => {
-  next();
-};
+
 userRouter.post("/logout");
-userRouter.get("/tokentest", testMiddle, jwtAuthentication);
-/**
- * @swagger
- * /users/{id}:
- *  get:
- *      tags: [User]
- *      summary: get user info
- *  put:
- *      tags: [User]
- *      summary: update user info
- *  delete:
- *      tags: [User]
- *      summary: delete user
- */
+userRouter.get("/tokentest", jwtAuthentication);
+// /**
+//  * @swagger
+//  * /users/{id}:
+//  *  get:
+//  *      tags: [User]
+//  *      summary: get user info
+//  *  put:
+//  *      tags: [User]
+//  *      summary: update user info
+//  *  delete:
+//  *      tags: [User]
+//  *      summary: delete user
+//  */
 userRouter.route("/:id").get().put().delete();
 export default userRouter;
