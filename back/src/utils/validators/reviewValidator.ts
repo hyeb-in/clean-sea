@@ -1,7 +1,7 @@
-const joi = require('joi');
+import joi, { Schema } from 'joi';
 
-class reviewValidator {
-    static postReview(){
+class ReviewValidator {
+    static postReview() : Schema {
         return joi.object({
             title : joi.string().min(4).required().messages({
                 'string.base' : "문자여야합니다.",
@@ -13,7 +13,7 @@ class reviewValidator {
         });
     }
 
-    static putReview(){
+    static putReview() : Schema {
         return joi.object({
             title : joi.string().min(4).optional().messages({
                 'string.base' : "문자여야합니다.",
@@ -26,4 +26,4 @@ class reviewValidator {
     }
 }
 
-export { reviewValidator };
+export { ReviewValidator };

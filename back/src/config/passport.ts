@@ -1,5 +1,5 @@
 import passport from "passport";
-import LocalStrategy from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { User } from "../db/models/User";
 import bcrypt from "bcrypt";
@@ -9,7 +9,7 @@ const localOptions = {
   passwordField: "password",
 };
 
-const localCallback = async (email, password, done) => {
+const localCallback = async (email: string, password: string, done: any) => {
   try {
     const user = await User.findUserByEmail(email);
     if (!user) {
@@ -31,7 +31,7 @@ const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 };
 
-const jwtCallback = async (payload, done) => {
+const jwtCallback = async (payload: any, done: any) => {
   try {
     const { id } = payload;
     const user = await User.findUserById(id);
