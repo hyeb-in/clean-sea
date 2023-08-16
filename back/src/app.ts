@@ -1,6 +1,6 @@
 // import userRouter from "./routes/userRouter";
 import reviewAuthRouter from "./routes/reviewRouter";
-// import { errorMiddleware, httpLogger } from "./config/logger";
+import { errorMiddleware, httpLogger } from "./config/logger";
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 // import { jwtStrategy, localStrategy } from "./config/passport";
@@ -23,12 +23,12 @@ app.get("/", (req : Request, res : Response) => {
   res.send("기본 페이지");
 });
 
-// app.use(httpLogger);
+app.use(httpLogger);
 
 // app.use("/users", userRouter);
 app.use("/reviews", reviewAuthRouter);
 
-// app.use(errorMiddleware);
+app.use(errorMiddleware);
 
 
 export { app };

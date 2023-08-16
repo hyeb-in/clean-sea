@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ReviewAuthService } from '../services/reviewService';
-// import { reviewValidator } from '../utils/validators/reviewValidator';
+import { ReviewValidator } from '../utils/validators/reviewValidator';
 // import { handleImageUpload } from '../middlewares/uploadMiddleware';
 
 
@@ -15,13 +15,13 @@ const sendResponse = function (res : Response, statusCode : number, data : any) 
 const createReview = async (req : Request, res : Response, next : NextFunction) => {
   try {
     // const author = req.currentUserId;
-    // const schema = reviewValidator.postReview();
-    // const validationResult = schema.validate(req.body);
-    // if (validationResult.error) {
-    //   return sendResponse(res, StatusCodes.BAD_REQUEST, {
-    //     error: validationResult.error.details[0].message,
-    //   });
-    // }
+    const schema = ReviewValidator.postReview();
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      return sendResponse(res, StatusCodes.BAD_REQUEST, {
+        error: validationResult.error.details[0].message,
+      });
+    }
     // await handleImageUpload(req,res,()=>{});
 
     const addMyReview = await ReviewAuthService.addReview({
@@ -58,14 +58,14 @@ const getUserReview = async (req : Request, res : Response, next : NextFunction)
 const updateReview = async (req : Request, res : Response, next : NextFunction) => {
   try {
     const id = req.params.reviewId;
-    // const schema = reviewValidator.putReview();
-    // const validationResult = schema.validate(req.body);
+    const schema = ReviewValidator.putReview();
+    const validationResult = schema.validate(req.body);
 
-    // if (validationResult.error) {
-    //   return sendResponse(res, StatusCodes.BAD_REQUEST, {
-    //     error: validationResult.error.details[0].message,
-    //   });
-    // }
+    if (validationResult.error) {
+      return sendResponse(res, StatusCodes.BAD_REQUEST, {
+        error: validationResult.error.details[0].message,
+      });
+    }
     const updatedReview = await ReviewAuthService.setReview(id, {
       toUpdate: { ...req.body },
     });

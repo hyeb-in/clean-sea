@@ -1,7 +1,8 @@
 import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
-import morgan from 'morgan';
+import morgan from "morgan";
 import path from "path";
+import { Request, Response, NextFunction } from 'express';
 
 const logDir = "logs";
 const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
@@ -51,23 +52,23 @@ const logger = winston.createLogger({
   ]
 });
 
-logger.stream = {
-  write : (message) => {
-    logger.info(message);
-  }
-}
+// logger.stream = {
+//   write : (message : string) => {
+//     logger.info(message);
+//   }
+// }
 
-function httpLogger(req,res,next){
+function httpLogger(req : Request ,res : Response ,next : NextFunction) : void {
   morgan('combined', {
     stream : {
-      write : (message) => {
+      write : (message : string) => {
         logger.info(message);
       },
     },
   })(req,res,next);
 }
 
-function errorMiddleware(error, req, res, next) {
+function errorMiddleware(error : Error, req : Request, res : Response, next : NextFunction) : void {
 
   logger.error(error);
   res.status(400).send(error.message);

@@ -1,7 +1,7 @@
-const swaggerUi = require("swagger-ui-express");
-const swaggereJsdoc = require("swagger-jsdoc");
+import * as swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
 
-const options = {
+const options : swaggerJsdoc.Options = {
   swaggerDefinition: {
     info: {
       title: "Test API",
@@ -14,9 +14,6 @@ const options = {
   apis: ["./src/routes/*.js", "./swagger/*"],
 };
 
-const specs = swaggereJsdoc(options);
+const specs = swaggerJsdoc(options);
 
-module.exports = {
-  swaggerUi,
-  specs,
-};
+export { swaggerUi, specs };
