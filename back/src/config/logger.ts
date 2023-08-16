@@ -2,6 +2,7 @@ import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
 import morgan from "morgan";
 import path from "path";
+import expressWinston from 'express-winston';
 import { Request, Response, NextFunction } from 'express';
 
 const logDir = "logs";
@@ -36,13 +37,6 @@ const logger = winston.createLogger({
       maxFiles: "30d",
     }),
     new winstonDaily({
-      level: "info",
-      filename: path.join(httpLogDir, "%DATE%.http.log"),
-      datePattern: "YYYY-MM-DD",
-      zippedArchive: true,
-      maxFiles: "30d",
-    }),
-    new winstonDaily({
       level: "error",
       filename: path.join(errorLogDir, "%DATE%.error.log"),
       datePattern: "YYYY-MM-DD",
@@ -52,14 +46,8 @@ const logger = winston.createLogger({
   ]
 });
 
-// logger.stream = {
-//   write : (message : string) => {
-//     logger.info(message);
-//   }
-// }
-
 function httpLogger(req : Request ,res : Response ,next : NextFunction) : void {
-  morgan('combined', {
+  morgan(':method :url :status :response-time ms - :res[content-length] :body', {
     stream : {
       write : (message : string) => {
         logger.info(message);
@@ -67,6 +55,10 @@ function httpLogger(req : Request ,res : Response ,next : NextFunction) : void {
     },
   })(req,res,next);
 }
+
+morgan.token('body', (req: Request, res: Response) => {
+  return JSON.stringify(req.body);
+});
 
 function errorMiddleware(error : Error, req : Request, res : Response, next : NextFunction) : void {
 

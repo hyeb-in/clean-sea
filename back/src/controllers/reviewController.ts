@@ -38,7 +38,6 @@ const createReview = async (req : Request, res : Response, next : NextFunction) 
 const getMyReview = async (req : Request, res : Response, next : NextFunction) => {
   try {
     // const myReview = await ReviewAuthService.getReview(req.currentUserId);
-
     // return sendResponse(res, StatusCodes.OK, myReview);
   } catch (err) {
     next(err);
