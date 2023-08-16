@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ handleLogin, useHistory }) => {
   const [Id, setId] = useState('');
@@ -17,13 +17,34 @@ const Login = ({ handleLogin, useHistory }) => {
     //   // 다른 페이지로 이동
     //   history.push('/another-page');
     // }
+    const navigate = useNavigate();
+
+  const goToAnotherPage = () => {
+    // 다른 페이지로 이동
+    navigate('/SignUp');
+  };
 
 return (
+  <div
+     style={{
+      paddingTop: "134px",
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+     }}
+  >
+  <div style={{ 
+    width: "300px",
+    height: "300px",
+    marginTop: "100px", 
+    boxShadow: "0px 4px 12px #00000026" 
+  }}>
   <div className="container">
-    <h2>로그인</h2>
+    <h2 style={{ margin: "50px" }}>로그인</h2>
     <form onSubmit={handleSubmit}>
       <div className="form-group">
-        <label>ID</label>
+        <label style={{ fontSize: "18px" }}>ID</label>
         <input
           type="text"
           className="form-control"
@@ -33,7 +54,7 @@ return (
         />
       </div>
       <div className="form-group">
-        <label>Password</label>
+        <label style={{ fontSize: "18px" }}>Password</label>
         <input
           type="password"
           className="form-control"
@@ -43,10 +64,15 @@ return (
         />
       </div>
       <button type="submit" className="btn btn-primary">로그인</button>
-      <button type="button" className="btn btn-link" onClick={handleLogin}>회원가입</button>
+      <button type="button" className="btn btn-link" onClick={()=> goToAnotherPage()}>회원가입</button>
     </form>
   </div>
+  </div>
+  </div>
 );
+
 };
+
+
 
 export default Login;

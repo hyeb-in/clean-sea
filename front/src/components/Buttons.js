@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-export default function Button({ handleAdd, handleDelete, buttonText }) {
+const CommonButton = ({ handleAdd, handleDelete, buttonText }) => {
     return (
         <button
-            onClick={}
+            onClick={handleAdd}
             style={{
                 display:"inline-block",
                 float: "right",
@@ -19,3 +19,5 @@ export default function Button({ handleAdd, handleDelete, buttonText }) {
             </button>
     )
 }
+
+export default CommonButton;
