@@ -21,6 +21,8 @@ const SignUp = ({ handleSignup }) => {
     navigate('/login');
   };
 
+  // id 조건 : 영어+숫자, 4글자 이상
+  // pw 조건 : 4글자 이상
 
   return (
     <div
@@ -39,7 +41,7 @@ const SignUp = ({ handleSignup }) => {
     boxShadow: "0px 4px 12px #00000026" 
     }}>
     <div className="container">
-      <h2 style={{ margin: "50px" }}>회원가입</h2>
+      <h2 style={{ textAlign: "center" }}>회원가입</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label style={{ fontSize: "18px" }}>ID</label>

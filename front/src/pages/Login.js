@@ -41,7 +41,7 @@ return (
     boxShadow: "0px 4px 12px #00000026" 
   }}>
   <div className="container">
-    <h2 style={{ margin: "50px" }}>로그인</h2>
+    <h2 style={{ textAlign: "center" }}>로그인</h2>
     <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label style={{ fontSize: "18px" }}>ID</label>
