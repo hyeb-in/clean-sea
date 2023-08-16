@@ -20,7 +20,7 @@
 
 /**
  * @swagger
- * /review:
+ * /reviews/register:
  *   post:
  *     summary: Create a new review
  *     tags: [Reviews]
@@ -43,6 +43,8 @@
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/Review'
+ * 
+ * /reviews/reviewList
  *   get:
  *     summary: Get reviews created by the authenticated user
  *     tags: [Reviews]
@@ -59,7 +61,7 @@
 
 /**
  * @swagger
- * /review/{userId}:
+ * /reviews/{userId}: 
  *   get:
  *     summary: Get reviews by a specific user
  *     tags: [Reviews]
