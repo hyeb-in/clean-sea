@@ -1,13 +1,17 @@
 import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
-import { DailyRotateFile } from "winston/lib/winston/transports";
+import morgan from 'morgan';
+import path from "path";
 
 const logDir = "logs";
+const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
+const errorLogDir = path.join(logDir, "error"); // error 로그를 저장할 폴더 경로
+const httpLogDir = path.join(logDir, "http"); // http 로그를 저장할 폴더 경로
 
 const { combine, timestamp, printf } = winston.format;
 
-const logFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} ${level}: ${message}`;
+const logFormat = printf((info) => {
+  return `${info.timestamp} ${info.level}: ${info.message}`;
 });
 
 /**
@@ -15,7 +19,7 @@ const logFormat = printf(({ level, message, timestamp }) => {
  * error:0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
  */
 
-export const logger = winston.createLogger({
+const logger = winston.createLogger({
   format: combine(
     timestamp({
       format: "YYYY-MM-DD HH:mm:ss",
@@ -23,37 +27,52 @@ export const logger = winston.createLogger({
     logFormat
   ),
   transports: [
-    new DailyRotateFile({
+    new winstonDaily({
       level: "info",
-      filename: "%DATE%.log",
-      datePattern: "YYYY-MM-DD-HH",
-      dirname: logDir,
+      filename: path.join(infoLogDir, "%DATE%.info.log"),
+      datePattern: "YYYY-MM-DD",
       zippedArchive: true,
       maxFiles: "30d",
     }),
-  ],
-  transports: [
-    new DailyRotateFile({
-      level: "error",
-      filename: "%DATE%.error.log",
-      datePattern: "YYYY-MM-DD-HH",
-      dirname: logDir,
+    new winstonDaily({
+      level: "info",
+      filename: path.join(httpLogDir, "%DATE%.http.log"),
+      datePattern: "YYYY-MM-DD",
       zippedArchive: true,
       maxFiles: "30d",
     }),
-  ],
-
-  exceptionHandlers: [
     new winstonDaily({
       level: "error",
-      filename: "%DATE%.exception.log",
-      datePattern: "YYYY-MM-DD-HH",
-      dirname: logDir,
+      filename: path.join(errorLogDir, "%DATE%.error.log"),
+      datePattern: "YYYY-MM-DD",
       zippedArchive: true,
       maxFiles: "30d",
     }),
-  ],
+  ]
 });
+
+logger.stream = {
+  write : (message) => {
+    logger.info(message);
+  }
+}
+
+function httpLogger(req,res,next){
+  morgan('combined', {
+    stream : {
+      write : (message) => {
+        logger.info(message);
+      },
+    },
+  })(req,res,next);
+}
+
+function errorMiddleware(error, req, res, next) {
+
+  logger.error(error);
+  res.status(400).send(error.message);
+}
+
 
 if (process.env.NODE_ENV !== "production") {
   logger.add(
@@ -65,3 +84,7 @@ if (process.env.NODE_ENV !== "production") {
     })
   );
 }
+
+
+
+export { httpLogger, errorMiddleware };
