@@ -1,7 +1,7 @@
 import * as swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 
-const options : swaggerJsdoc.Options = {
+const options: swaggerJsdoc.Options = {
   swaggerDefinition: {
     info: {
       title: "해조 API",

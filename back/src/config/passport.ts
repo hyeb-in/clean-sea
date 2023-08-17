@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import { User } from "../db/models/User";
+import { findUserByEmail, findUserById } from "../db/models/User";
 import bcrypt from "bcrypt";
 
 const localOptions = {
@@ -11,7 +11,7 @@ const localOptions = {
 
 const localCallback = async (email: string, password: string, done: any) => {
   try {
-    const user = await User.findUserByEmail(email);
+    const user = await findUserByEmail(email);
     if (!user) {
       return done(null, false, { message: "회원이 존재하지 않습니다." });
     }
@@ -34,7 +34,7 @@ const jwtOptions = {
 const jwtCallback = async (payload: any, done: any) => {
   try {
     const { id } = payload;
-    const user = await User.findUserById(id);
+    const user = await findUserById(id);
 
     if (!user) {
       return done(null, false, { message: "사용자가 존재하지 않습니다." });
