@@ -1,11 +1,20 @@
 import React, { useReducer, useEffect, useState, createContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Bootstrap Bundle CSS
+import "./App.scss";
+
+// Bootstrap Bundle JS
+import "bootstrap/dist/js/bootstrap.bundle.min";
+
 import Main from "./pages/Main";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import MyProfile from "./pages/MyProfile";
 import Search from "./pages/Search";
 import Footer from "./components/Footer";
+import NavBar from "./components/NavBar";
+import Network from "./pages/Network";
 
 import * as Api from "./Api";
 import { loginReducer } from "./Reducer";
@@ -56,12 +65,14 @@ function App() {
     <Router>
       <DispatchContext.Provider value={dispatch}>
       <UserStateContext.Provider value={userState}>
+      <NavBar />
       <Routes>
         <Route path="/" exact element={<Main />} />
         <Route path="/login" exact element={<Login />} />
         <Route path="/signup" exact element={<SignUp />} />
         <Route path="/users/:id" exact element={<MyProfile />} />
         <Route path="/search" exact element={<Search />} />
+        <Route path="/network" exact element={<Network />} />
       </Routes>
       </UserStateContext.Provider>
       </DispatchContext.Provider>

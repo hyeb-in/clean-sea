@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
+import React from "react";
+import { Button } from "react-bootstrap";
 
 const CommonButton = ({ onClick, buttonText, style, variant = 'outline-info' }) => {
     return (

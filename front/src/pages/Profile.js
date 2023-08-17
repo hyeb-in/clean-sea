@@ -1,16 +1,18 @@
 import React from "react";
 import {
   Button,
-  Card, Col,
+  Card,
+  Col,
   Container,
   ListGroup,
-  ListGroupItem, Row
+  ListGroupItem,
+  Row,
 } from "react-bootstrap";
 import CardHeader from "react-bootstrap/CardHeader";
 import History from "../components/History";
 
 const MyProfile = () => {
-  return <>
+  return (
     <Container>
       <Row>
         <Col>
@@ -21,7 +23,8 @@ const MyProfile = () => {
                   className="rounded-circle"
                   src="https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
                   width="110"
-                  alt="test"/>
+                  alt="test"
+                />
               </div>
               <h4 className="mb-2">훈제오리</h4>
               <span className="text-muted d-block mb-1">elice@elice.com</span>
@@ -38,7 +41,6 @@ const MyProfile = () => {
             <span>
               <Button variant="link">편집</Button>
             </span>
-
           </Card>
         </Col>
       </Row>
@@ -46,8 +48,7 @@ const MyProfile = () => {
         <History></History>
       </Row>
     </Container>
-
-  </>;
+  );
 };
 
 export default MyProfile;
