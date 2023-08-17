@@ -94,6 +94,16 @@
  *         schema:
  *           type: string
  *         description: Travel ID to update
+ *       - name: beachId
+ *         in: formData
+ *         required: false
+ *         type: string
+ *         description: New title for the travel
+ *       - name: date
+ *         in: formData
+ *         required: false
+ *         type: date
+ *         description: New content for the travel
  *     requestBody:
  *       content:
  *         application/json:

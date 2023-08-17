@@ -58,3 +58,29 @@
 
 2023-08-17 18:51:35 info: PUT /reviews/64ddac0f36251e95d521f71b 200 53.820 ms - 176 {}
 
+2023-08-17 19:09:53 info: ::1 - - [17/Aug/2023:10:09:53 +0000] "PUT /reviews/64ddac0f36251e95d521f71b HTTP/1.1" 200 176 "http://localhost:5001/api-docs/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+2023-08-17 19:12:49 info: ::1 - - [17/Aug/2023:10:12:49 +0000] "PUT /reviews/64ddac0f36251e95d521f71b HTTP/1.1" 200 176 "http://localhost:5001/api-docs/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+2023-08-17 19:14:12 info: ::1 - - [17/Aug/2023:10:14:12 +0000] "POST /auth/login HTTP/1.1" 400 50 "http://localhost:5001/api-docs/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+2023-08-17 19:14:31 info: ::1 - - [17/Aug/2023:10:14:31 +0000] "POST /auth/login HTTP/1.1" 200 173 "http://localhost:5001/api-docs/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+2023-08-17 19:20:14 info: ::1 - - [17/Aug/2023:10:20:14 +0000] "PUT /reviews/64ddac0f36251e95d521f71b HTTP/1.1" 200 176 "http://localhost:5001/api-docs/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+2023-08-17 19:20:26 info: ::1 - - [17/Aug/2023:10:20:26 +0000] "POST /auth/login HTTP/1.1" 200 173 "http://localhost:5001/api-docs/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+2023-08-17 19:22:35 info: ::1 - - [17/Aug/2023:10:22:35 +0000] "PUT /reviews/64ddac4c8eff2ebf709997bd HTTP/1.1" 200 4 "-" "PostmanRuntime/7.32.3"
+
+2023-08-17 19:22:45 info: ::1 - - [17/Aug/2023:10:22:45 +0000] "PUT /reviews/64ddac4c8eff2ebf709997bd HTTP/1.1" 200 4 "-" "PostmanRuntime/7.32.3"
+
+2023-08-17 19:23:47 info: PUT /reviews/64ddac4c8eff2ebf709997bd 200 54.434 ms - 4 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 19:24:15 info: PUT /reviews/64ddac0f36251e95d521f71b 200 35.442 ms - 179 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 19:24:35 info: PUT /reviews/64ddac0f36251e95d521f71b 200 33.715 ms - 179 {}
+
+2023-08-17 19:24:59 info: POST /auth/login 200 21.637 ms - 173 {"email":"email@a.com","password":"2111"}
+
+2023-08-17 19:39:43 info: PUT /reviews/64ddac0f36251e95d521f71b 200 62.381 ms - 168 {"title":"ㅇㅁㄴㄹ","content":"ㅇㅁㄴㄹ"}
+

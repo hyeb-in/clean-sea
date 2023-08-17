@@ -105,16 +105,14 @@
  *           type: string
  *         description: Review ID to update
  *       - name: title
- *         in: query
+ *         in: formData
  *         required: false
- *         schema:
- *           type: string
+ *         type: string
  *         description: New title for the review
  *       - name: content
- *         in: query
+ *         in: formData
  *         required: false
- *         schema:
- *           type: string
+ *         type: string
  *         description: New content for the review
  *     requestBody:
  *       content:
@@ -142,6 +140,11 @@
  *                 content:
  *                   type: string
  *                   description: Updated review content
+ */
+
+/**
+ * @swagger
+ * /reviews/{reviewId}:
  *   delete:
  *     summary: Delete a review by review ID
  *     tags: [Reviews]
