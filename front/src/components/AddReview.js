@@ -7,14 +7,15 @@ import {
   InputGroup,
   Modal,
   Row,
+  Form,
 } from "react-bootstrap";
 import Avatar from "./Avatar";
-import { Form } from "react-router-dom";
 
 const AddReview = ({ setShowModal, showModal }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const handleClose = () => setShowModal(false);
+
   return (
     <Modal
       centered
