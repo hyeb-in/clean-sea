@@ -20,8 +20,8 @@ async function getBeachByBeachNameService(name: IBeach): Promise<IBeach[]> {
 }
 
 // 지역별 가져오기
-async function getBeachByRegionService(region: IBeach): Promise<IBeach[]> {
-  const beachDataRegion = await BeachByRegion(region);
+async function getBeachByRegionService(address: IBeach): Promise<IBeach[]> {
+  const beachDataRegion = await BeachByRegion(address);
   return beachDataRegion;
 }
 

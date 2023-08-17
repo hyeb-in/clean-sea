@@ -5,8 +5,8 @@ async function BeachByBeachName(name: IBeach): Promise<IBeach[]> {
   return getBeaches;
 }
 
-async function BeachByRegion(region: IBeach): Promise<IBeach[]> {
-  const getBeaches = await BeachModel.find({ 시도명 : region}) as IBeach[];
+async function BeachByRegion(address: IBeach): Promise<IBeach[]> {
+  const getBeaches = await BeachModel.find({ address : address}) as IBeach[];
   return getBeaches;
 }
 
