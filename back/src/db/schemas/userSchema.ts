@@ -14,6 +14,14 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: false,
+      default: "한 줄로 자신을 설명해주세요!",
+    },
+    profileImage: {
+      type: String,
+    },
   },
   {
     timestamps: true,
