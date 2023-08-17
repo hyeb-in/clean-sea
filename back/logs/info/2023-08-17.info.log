@@ -139,7 +139,7 @@
 
 2023-08-17 19:23:49 info: ::1 - - [17/Aug/2023:10:23:49 +0000] "GET /users/%7B%60id%60%7D/ HTTP/1.1" 404 160 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 
-2023-08-17 19:23:49 info: ::1 - - [17/Aug/2023:10:23:49 +0000] "GET /users/%7B%60id%60%7D/ HTTP/1.1" 404 160 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+2023-08-17 20:20:43 info: ::1 - - [17/Aug/2023:11:20:43 +0000] "GET /users/tokentest HTTP/1.1" 200 240 "-" "PostmanRuntime/7.32.3"
 
 2023-08-17 19:24:00 info: ::1 - - [17/Aug/2023:10:24:00 +0000] "POST /auth/login HTTP/1.1" 200 173 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 
