@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
-import { user } from "user";
+import { RequestTest, user } from "user";
 
 export const jwtAuthentication = async (
-  req: Request,
+  req: RequestTest,
   res: Response,
   next: NextFunction
 ) => {
@@ -24,6 +24,7 @@ export const jwtAuthentication = async (
             return res.status(404).json("User Not Found!");
         }
         if (user) {
+          req.user = user;
           return res.status(200).send({
             message: "jwt매세지",
             user: user,

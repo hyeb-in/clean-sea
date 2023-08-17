@@ -5,6 +5,7 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import passport from "passport";
 import { jwtStrategy, localStrategy } from "./config/passport";
+import authRouter from "./routes/authRouter";
 
 const { swaggerUi, specs } = require("./swagger/swagger");
 
@@ -29,6 +30,7 @@ app.use(httpLogger);
 
 app.use("/users", userRouter);
 app.use("/reviews", reviewAuthRouter);
+app.use("/auth", authRouter);
 
 app.use(errorMiddleware);
 

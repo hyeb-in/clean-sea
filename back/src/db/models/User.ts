@@ -21,3 +21,5 @@ export class User {
     return newUser;
   }
 }
+
+//const User = () => {};
