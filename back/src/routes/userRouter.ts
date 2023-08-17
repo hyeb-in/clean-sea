@@ -8,5 +8,7 @@ userRouter.post("/register", signUpUser);
 
 userRouter.get("/tokentest", jwtAuthentication);
 
+userRouter.get("/:id", jwtAuthentication);
+
 userRouter.route("/:id").get().put().delete();
 export default userRouter;
