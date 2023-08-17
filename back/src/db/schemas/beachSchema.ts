@@ -4,12 +4,13 @@ interface IBeach {
   id: number;
   name: string;
   address: string;
-  latitude?: number;
-  longitude?: number;
   goodnessFit?: boolean;
-  score?: number;
+  eschScore?: number,
+  enteScore?: number,
   ente?: number;
   esch?: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 const BeachSchema = new Schema<IBeach>(
@@ -38,7 +39,11 @@ const BeachSchema = new Schema<IBeach>(
       type: Boolean,
       required: false,
     },
-    score: {
+    eschScore: {
+      type: Number,
+      required: false,
+    },
+    enteScore: {
       type: Number,
       required: false,
     },

@@ -4,12 +4,13 @@ interface IBeach {
   id: number;
   name: string;
   address: string;
-  latitude?: number;
-  longitude?: number;
   goodnessFit?: boolean;
-  score?: number;
+  eschScore?: number,
+  enteScore?: number,
   ente?: number;
   esch?: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 // 해수욕장 명칭 하나로 가져오기
@@ -36,12 +37,13 @@ async function getBeachesService(): Promise<IBeach[]> {
     id: beach.id,
     name: beach.name,
     address: beach.address,
-    latitude: beach.latitude,
-    longitude: beach.longitude,
     goodnessFit: beach.goodnessFit,
-    score: beach.score,
+    eschScore: beach.eschScore,
+    enteScore: beach.enteScore,
     ente: beach.ente,
     esch: beach.esch,
+    latitude: beach.latitude,
+    longitude: beach.longitude,
   }));
 
   return beachDataResult;

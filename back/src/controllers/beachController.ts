@@ -5,12 +5,13 @@ interface IBeach {
   id: number;
   name: string;
   address: string;
-  latitude?: number;
-  longitude?: number;
   goodnessFit?: boolean;
-  score?: number;
+  eschScore?: number,
+  enteScore?: number,
   ente?: number;
   esch?: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 
