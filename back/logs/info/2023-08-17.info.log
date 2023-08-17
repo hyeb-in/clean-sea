@@ -84,3 +84,56 @@
 
 2023-08-17 19:39:43 info: PUT /reviews/64ddac0f36251e95d521f71b 200 62.381 ms - 168 {"title":"ㅇㅁㄴㄹ","content":"ㅇㅁㄴㄹ"}
 
+2023-08-17 21:45:03 info: POST /reviews 404 1.914 ms - 147 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:46:48 info: POST /reviews 404 2.846 ms - 147 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:47:09 info: POST /reviews/register 201 101.506 ms - 179 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:50:02 error: Cannot read properties of undefined (reading '_id')
+2023-08-17 21:50:02 info: POST /reviews/register 400 5.729 ms - 51 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:50:24 info: POST /reviews/register 200 30.463 ms - 264 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:54:02 info: POST /reviews/register - - ms - - {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:54:33 info: POST /reviews/register 201 88.496 ms - 179 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:55:37 info: POST /reviews/register 201 83.067 ms - 215 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:56:24 error: Cannot read properties of undefined (reading '_id')
+2023-08-17 21:56:24 info: GET /reviews/reviewList 400 2.386 ms - 51 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:57:44 info: GET /reviews/reviewList 200 43.471 ms - 4 {"title":"typescriptfunctioen22","content":"Review Content"}
+
+2023-08-17 21:58:43 error: Cast to ObjectId failed for value "register" (type string) at path "_id" for model "review"
+2023-08-17 21:58:43 info: GET /reviews/register 400 34.053 ms - 91 {"title":"new","content":"Review Content"}
+
+2023-08-17 21:58:59 info: POST /reviews/register - - ms - - {"title":"new","content":"Review Content"}
+
+2023-08-17 21:59:02 info: POST /reviews/register 201 51.973 ms - 201 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 21:59:33 info: POST /reviews/register 201 76.325 ms - 201 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 22:01:41 info: POST /reviews/register 201 79.441 ms - 201 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 22:01:56 info: GET /reviews/reviewList 200 20.876 ms - 4 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 22:02:34 info: GET /reviews/reviewList 200 41.320 ms - 4 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 22:03:12 info: GET /reviews/reviewList 200 71.361 ms - 4 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 22:04:50 info: GET /reviews/reviewList 200 89.809 ms - 823 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 22:05:21 info: GET /reviews/64dd9dfd67f4c72a7af6407a 200 22.114 ms - 823 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 22:05:50 info: PUT /reviews/64de1a35b6d4bb9235e87eeb 200 94.353 ms - 201 {"title":"nedasfw","content":"Review Content"}
+
+2023-08-17 22:05:54 info: PUT /reviews/64de1a35b6d4bb9235e87eeb 200 40.985 ms - 205 {"title":"nedasfsadfw","content":"Review Content"}
+
+2023-08-17 22:06:47 info: DELETE /reviews/64de1a35b6d4bb9235e87eeb 200 26.346 ms - 205 {"title":"nedasfsadfw","content":"Review Content"}
+
+2023-08-17 22:30:38 info: POST /reviews/register 201 150.345 ms - 205 {"title":"nedasfsadfw","content":"Review Content"}
+
+2023-08-17 22:32:54 info: POST /reviews/register 200 45.876 ms - 264 {"title":"test","content":"Review Content"}
+

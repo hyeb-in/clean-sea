@@ -15,8 +15,8 @@ const sendResponse = function (res : Response, statusCode : number, data : any) 
 
   const createReview = async (req : RequestTest, res : Response, next : NextFunction) => {
     try {
-      const author = req.user;
-
+      const author = req.user._id;
+      
       const schema = ReviewValidator.postReview();
       const validationResult = schema.validate(req.body);
       if (validationResult.error) {

@@ -6,18 +6,19 @@ import {
     updateTravel,
     deleteTravel,
   } from "../controllers/travelController";
+  import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const travelAuthRouter = Router();
 
 travelAuthRouter
-    .post('/register',createTravel)
-    .get('/travelList', getMyTravel);
+    .post('/register', jwtAuthentication, createTravel)
+    .get('/travelList', jwtAuthentication, getMyTravel);
 
-travelAuthRouter.get('/:userId',getUserTravel);
+travelAuthRouter.get('/:userId', jwtAuthentication, getUserTravel);
 
 travelAuthRouter
     .route('/:travelId')
-    .put(updateTravel)
-    .delete(deleteTravel);
+    .put(jwtAuthentication, updateTravel)
+    .delete(jwtAuthentication, deleteTravel);
 
   export default travelAuthRouter;

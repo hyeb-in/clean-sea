@@ -13,7 +13,7 @@ const sendResponse = function (res : Response, statusCode : number, data : any) 
 
 const createTravel = async (req : RequestTest, res : Response, next : NextFunction) => {
     try {
-      const author = req.user;
+      const author = req.user._id;
   
       const schema = TravelValidator.postTravel();
       const validationResult = schema.validate(req.body);

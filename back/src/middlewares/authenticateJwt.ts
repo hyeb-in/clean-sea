@@ -25,11 +25,7 @@ export const jwtAuthentication = async (
         }
         if (user) {
           req.user = user;
-          return res.status(200).send({
-            message: "jwt매세지",
-            user: user,
-            info: info,
-          });
+          next();
         }
       }
     )(req, res, next);

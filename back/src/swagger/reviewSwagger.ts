@@ -24,15 +24,32 @@
  *   post:
  *     summary: Create a new review
  *     tags: [Reviews]
+ *     parameters:
+ *       - name: author
+ *         in: path
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: userId
+ *       - name: title
+ *         in: formData
+ *         required: true
+ *         type: string
+ *         description: title
+ *       - name: content
+ *         in: formData
+ *         required: true
+ *         type: string
+ *         description: content
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               userId:
+ *               title:
  *                 type: string
- *                 description: User ID who is creating the review
+ *                 description: title
  *               content:
  *                 type: string
  *                 description: Review content

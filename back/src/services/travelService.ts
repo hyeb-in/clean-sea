@@ -6,13 +6,13 @@ async function addTravel({toCreate} : {toCreate:ITravel}):Promise<ITravel>{
     return createdTravel;
 }
 
-async function getTravel(userId : string) :Promise<ITravel | null>{
-    const review = await findUserTravel(userId);
-    return review;
+async function getTravel(userId : string) :Promise<ITravel[]>{
+    const travel = await findUserTravels(userId);
+    return travel;
 }
 
 async function setTravel(travelId : string, {toUpdate} : {toUpdate : Partial<ITravel>}){
-    await findUserTravels(travelId);
+    await findUserTravel(travelId);
 
     const updatedTravel = updateTravel(travelId, toUpdate);
     
