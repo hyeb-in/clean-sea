@@ -38,3 +38,25 @@
 
 2023-08-17 18:28:03 info: ::1 - - [17/Aug/2023:09:28:03 +0000] "POST /auth/login HTTP/1.1" 200 173 "http://localhost:5001/api-docs/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
 
+2023-08-17 16:18:59 info: PUT /reviews/64ddac4c8eff2ebf709997bd 200 50.972 ms - 176 {}
+
+2023-08-17 17:41:18 info: PUT /reviews/64ddac4c8eff2ebf709997bd?title=1111&content=change 200 53.298 ms - 176 {}
+
+2023-08-17 17:42:12 info: PUT /reviews/64ddac4c8eff2ebf709997bd 200 55.462 ms - 178 {"title":"typescriptfunction22","content":"Review Content"}
+
+2023-08-17 17:45:11 info: DELETE /reviews/64ddac4c8eff2ebf709997bd 200 16.496 ms - 178 {}
+
+2023-08-17 17:47:21 info: PUT /reviews/64ddac4c8eff2ebf709997bd 200 44.011 ms - 4 {}
+
+2023-08-17 17:48:36 info: PUT /reviews/64ddac0f36251e95d521f71b 200 63.550 ms - 176 {}
+
+2023-08-17 17:49:33 info: PUT /reviews/64ddac0f36251e95d521f71b?title=dasf&content=adsf 200 50.200 ms - 176 {}
+
+2023-08-17 18:36:56 info: PUT /reviews/64ddac0f36251e95d521f71b?title=adsf&content=adsf 200 58.791 ms - 176 {}
+
+2023-08-17 18:38:08 info: PUT /reviews/64ddac4c8eff2ebf709997bd 200 38.240 ms - 4 {"title":"typescriptfunction22","content":"Review Content"}
+
+2023-08-17 18:42:06 info: PUT /reviews/64ddac0f36251e95d521f71b?title=1111&content=%E3%85%81%E3%85%87%E3%84%B4%E3%84%B9 200 54.434 ms - 176 {}
+
+2023-08-17 18:51:35 info: PUT /reviews/64ddac0f36251e95d521f71b 200 53.820 ms - 176 {}
+

@@ -47,9 +47,10 @@
  *             schema:
  *               $ref: '#/definitions/Review'
  *       400:
- *              description: bad Request
-  */
- /**
+ *         description: Bad Request
+ */
+
+/**
  * @swagger
  * /reviews/reviewList:
  *   get:
@@ -103,12 +104,27 @@
  *         schema:
  *           type: string
  *         description: Review ID to update
+ *       - name: title
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: New title for the review
+ *       - name: content
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: New content for the review
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
+ *                 description: New title for the review
  *               content:
  *                 type: string
  *                 description: New content for the review
@@ -118,7 +134,14 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/definitions/Review'
+ *               type: object
+ *               properties:
+ *                 title:
+ *                   type: string
+ *                   description: Updated review title
+ *                 content:
+ *                   type: string
+ *                   description: Updated review content
  *   delete:
  *     summary: Delete a review by review ID
  *     tags: [Reviews]
