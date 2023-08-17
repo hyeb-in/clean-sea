@@ -1,10 +1,18 @@
 import { BeachModel, IBeach } from "../schemas/beachSchema";
 
-class Beach {
-  static async getBeaches(): Promise<IBeach[]> {
-    const getBeaches = await BeachModel.find({}) as IBeach[];
-    return getBeaches;
-  }
+async function BeachByBeachName(name: IBeach): Promise<IBeach[]> {
+  const getBeaches = await BeachModel.findOne({ name : name }) as IBeach[];
+  return getBeaches;
 }
 
-export { Beach };
+async function BeachByRegion(region: IBeach): Promise<IBeach[]> {
+  const getBeaches = await BeachModel.find({ region : region}) as IBeach[];
+  return getBeaches;
+}
+
+async function Beaches(): Promise<IBeach[]> {
+  const getBeaches = await BeachModel.find({}) as IBeach[];
+  return getBeaches;
+}
+
+export { BeachByBeachName, BeachByRegion, Beaches };

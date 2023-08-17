@@ -1,4 +1,4 @@
-import { Beach } from "../db/models/Beach";
+import { BeachByBeachName, BeachByRegion, Beaches } from "../db/models/Beach";
 
 interface IBeach {
   id: number;
@@ -12,29 +12,40 @@ interface IBeach {
   esch?: number;
 }
 
-class BeachService {
-  // 가져오기
-  static async getBeaches(): Promise<IBeach[]> {
-    const beachData = await Beach.getBeaches();
-    if (beachData.length === 0) {
-      return [];
-    }
-
-    // 모든 이력을 배열로 변환
-    const beachDataResult: IBeach[] = beachData.map(beach => ({
-      id: beach.id,
-      name: beach.name,
-      address: beach.address,
-      latitude: beach.latitude,
-      longitude: beach.longitude,
-      goodnessFit: beach.goodnessFit,
-      score: beach.score,
-      ente: beach.ente,
-      esch: beach.esch,
-    }));
-
-    return beachDataResult;
-  }
+// 해수욕장 명칭 하나로 가져오기
+async function getBeachByBeachNameService(name: IBeach): Promise<IBeach[]> {
+  const beachDataOne = await BeachByBeachName(name);
+  return beachDataOne;
 }
 
-export { BeachService };
+// 지역별 가져오기
+async function getBeachByRegionService(region: IBeach): Promise<IBeach[]> {
+  const beachDataRegion = await BeachByRegion(region);
+  return beachDataRegion;
+}
+
+// 전체 가져오기
+async function getBeachesService(): Promise<IBeach[]> {
+  const beachData = await Beaches();
+  if (beachData.length === 0) {
+    return [];
+  }
+
+  // 모든 이력을 배열로 변환
+  const beachDataResult: IBeach[] = beachData.map(beach => ({
+    id: beach.id,
+    name: beach.name,
+    address: beach.address,
+    latitude: beach.latitude,
+    longitude: beach.longitude,
+    goodnessFit: beach.goodnessFit,
+    score: beach.score,
+    ente: beach.ente,
+    esch: beach.esch,
+  }));
+
+  return beachDataResult;
+}
+
+
+export { getBeachByBeachNameService, getBeachByRegionService, getBeachesService };
