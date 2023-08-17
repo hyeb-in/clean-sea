@@ -1,6 +1,6 @@
 import passport from "passport";
 import jwt from "jsonwebtoken";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { RequestTest } from "user";
 
 export const localAuthentication = async (
@@ -20,7 +20,7 @@ export const localAuthentication = async (
         const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
           expiresIn: "30s",
         });
-
+        //req.token =token
         return res.status(200).json(token);
       }
     )(req, res, next);
