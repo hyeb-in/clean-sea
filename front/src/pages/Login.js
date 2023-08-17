@@ -1,10 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ handleLogin }) => {
+import * as Api from "./Api";
+import { DispatchContext } from "./App";
+
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useContext(DispatchContext);
+
   const validateEmail = (email) => {
     return email
       .toLowerCase()
@@ -21,22 +27,25 @@ const Login = ({ handleLogin }) => {
   // 이메일과 비밀번호 조건이 동시에 만족되는지 확인함.
   const isFormValid = isEmailValid && isPasswordValid;
 
-  const handleSubmit = (e) => {
-    // e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    handleLogin(email);
-  }
-    // const history = useHistory();
-  
-    // const goToAnotherPage = () => {
-    //   // 다른 페이지로 이동
-    //   history.push('/another-page');
-    // }
-    const navigate = useNavigate();
-
-  const goToAnotherPage = () => {
-    // 다른 페이지로 이동
-    navigate('/SignUp');
+    try {
+      const res = await Api.post("auth/login", {
+        email,
+        password
+      });
+      const user = res.data;
+      const jwtToken = user.token;
+      sessionStorage.setItem("userToken", jwtToken);
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: user,
+      });
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.log("로그인에 실패하셨습니다.\n", err);
+    }
   };
 
 return (
@@ -51,8 +60,6 @@ return (
   >
   <div style={{ 
     width: "300px",
-    // height: "300px",
-    // marginTop: "100px", 
     boxShadow: "0px 4px 12px #00000026" 
   }}>
   <div className="container" style={{
@@ -105,15 +112,12 @@ return (
 
       </div>
       <button type="submit" className="btn btn-primary" disabled={!isFormValid}>로그인</button>
-      <button type="button" className="btn btn-link" onClick={()=> goToAnotherPage()}>회원가입</button>
+      <button type="button" className="btn btn-link" onClick={()=> navigate("/SignUp")}>회원가입</button>
     </form>
   </div>
   </div>
   </div>
-);
-
+  );
 };
-
-
 
 export default Login;

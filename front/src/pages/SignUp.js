@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-// import { useHistory } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const SignUp = ({ handleSignup }) => {
+import * as Api from "./Api";
+
+const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
 
   //이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
   const validateEmail = (email) => {
@@ -16,39 +18,34 @@ const SignUp = ({ handleSignup }) => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
-
+  // 이름이 2글자 이상인지 여부를 확인함.
+  const isNameValid = name.length >= 2;
   //위 validateEmail 함수를 통해 이메일 형태 적합 여부를 확인함.
   const isEmailValid = validateEmail(email);
   // 비밀번호가 4글자 이상인지 여부를 확인함.
   const isPasswordValid = password.length >= 4;
   // 비밀번호와 확인용 비밀번호가 일치하는지 여부를 확인함.
   const isPasswordSame = password === confirmPassword;
-  // 이름이 2글자 이상인지 여부를 확인함.
-  const isNameValid = name.length >= 2;
 
   // 위 4개 조건이 모두 동시에 만족되는지 여부를 확인함.
   const isFormValid =
-    isEmailValid && isPasswordValid && isPasswordSame && isNameValid;
+    isNameValid && isEmailValid && isPasswordValid && isPasswordSame;
 
-  const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // 여기에서 실제 회원가입 로직을 구현하고 서버와 통신하면 됩니다.
-    handleSignup(email);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  // 여기에서 실제 회원가입 로직을 구현하고 서버와 통신하면 됩니다.
+    try {
+      if (isFormValid)
+      await Api.post("user/signup", {
+        name,
+        email,
+        password
+      });
+      navigate("/Login");
+    } catch (err) {
+      console.log("회원가입에 실패하셨습니다.", err);
+    }
   };
-
-  // const History = useHistory();
-  // react-router-dom v6에서는 메서드의 변경으로 useHistory가 아닌 useNavigate를 사용
-  // const navigate = useNavigate();
-
-  // const goToAnotherPage = () => {
-  //   // 다른 페이지로 이동
-  //   navigate('/login');
-  // };
-
-  // id 조건 : 영어+숫자, 4글자 이상
-  // pw 조건 : 4글자 이상
-
-
 
   return (
     <div
@@ -62,8 +59,6 @@ const SignUp = ({ handleSignup }) => {
     >
     <div style={{ 
     width: "350px",
-    // height: "400px",
-    // marginTop: "100px", 
     boxShadow: "0px 4px 12px #00000026" 
     }}>
     <div className="container" style={{
