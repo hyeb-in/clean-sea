@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as Api from "./Api";
+import * as Api from "../Api";
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -33,10 +33,11 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(name);
   // 여기에서 실제 회원가입 로직을 구현하고 서버와 통신하면 됩니다.
     try {
       if (isFormValid)
-      await Api.post("user/signup", {
+      await Api.post("users/register", {
         name,
         email,
         password

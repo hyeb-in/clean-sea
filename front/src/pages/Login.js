@@ -2,8 +2,8 @@ import React, {useState, useContext} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
-import * as Api from "./Api";
-import { DispatchContext } from "./App";
+import * as Api from "../Api";
+import { DispatchContext } from "../App";
 
 const Login = () => {
   const [email, setEmail] = useState('');
