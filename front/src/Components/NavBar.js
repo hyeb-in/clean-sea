@@ -11,7 +11,6 @@ import {
   Form,
   Image,
   InputGroup,
-  ListGroup,
   Modal,
   OverlayTrigger,
   Row,
@@ -20,7 +19,6 @@ import {
 import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "./Avatar";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
-import ModalWrapper from "./ModalWrapper";
 import { useState } from "react";
 
 const NavBar = () => {
@@ -105,13 +103,18 @@ const NavBar = () => {
                         >
                           <Form.Control
                             value={title}
-                            onChange={(e) => setTitle(e.value)}
+                            onChange={(e) => setTitle(e.target.value)}
                           />
                         </FloatingLabel>
-                        <div className="">
+                        <div>
+                          {/* column 정렬을 위한 div입니다. FloatingLabel 때문에 css로 정렬하면 레이아웃 망가짐. */}
                           <Form.Control
                             value={content}
-                            onChange={(e) => setContent(e.value)}
+                            onChange={(e) => {
+                              if (e.target.value.length <= 300) {
+                                setContent(e.target.value);
+                              }
+                            }}
                             placeholder="내용"
                             as="textarea"
                             rows={3}
@@ -120,7 +123,7 @@ const NavBar = () => {
                         </div>
                       </InputGroup>
                       <small className="text-muted">
-                        {content ? content.length : "0"} 글자
+                        {content ? content.length : "0"}/300
                       </small>
                     </Col>
                   </Row>
