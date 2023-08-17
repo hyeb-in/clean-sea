@@ -1,40 +1,37 @@
 import { ReviewModel } from '../schemas/reviewSchema';
-import { IReview } from '../../interfaces/review';
+import { IReview } from '../../types/review';
 
-class Review {
-  static async create(toCreate : IReview) : Promise<IReview> {
-    const newReview = await ReviewModel.create(toCreate);
-
-    return newReview;
-  }
-
-  static async findUser(userId: string): Promise<IReview[]> {
-    const user = await ReviewModel.find({ author: userId });
-
-    return user;
-  }
-
-  static async findReview(reviewId : string): Promise<IReview | null> {
-    const review = await ReviewModel.findOne({ _id: reviewId });
-
-    return review;
-  }
-
-  static async update(id : string, toUpdate : Partial<IReview>) : Promise<IReview | null> {
-    const updateReview = await ReviewModel.findOneAndUpdate(
-      { _id: id },
-      toUpdate,
-      { returnOriginal: false }
-    );
-
-    return updateReview;
-  }
-
-  static async delete(reviewId : string) : Promise<IReview | null> {
-    const deleteReview = await ReviewModel.findOneAndDelete({ _id: reviewId });
-
-    return deleteReview;
-  }
+async function createReview(toCreate:IReview) : Promise<IReview>{
+  const newReview = await ReviewModel.create(toCreate);
+  return newReview;
 }
 
-export { Review };
+async function findUserReviews(userId: string): Promise<IReview[]> {
+  const userReviews = await ReviewModel.find({ author: userId });
+
+  return userReviews;
+}
+
+async function findUserReview(reviewId : string): Promise<IReview | null> {
+  const review = await ReviewModel.findOne({ _id: reviewId });
+
+  return review;
+}
+
+async function updateReview(id : string, toUpdate : Partial<IReview>) : Promise<IReview | null> {
+  const updatedReview = await ReviewModel.findOneAndUpdate(
+    { _id: id },
+    toUpdate,
+    { returnOriginal: false }
+  );
+
+  return updatedReview;
+}
+
+async function deleteReview(reviewId : string) : Promise<IReview | null> {
+  const deletedReview = await ReviewModel.findOneAndDelete({ _id: reviewId });
+
+  return deletedReview;
+}
+
+export { createReview, findUserReviews, findUserReview, updateReview, deleteReview };

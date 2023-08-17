@@ -36,15 +36,22 @@
  *               content:
  *                 type: string
  *                 description: Review content
+ *               author:
+ *                 type: string
+ *                 description: userId
  *     responses:
- *       201:
+ *       200:
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/Review'
- * 
- * /reviews/reviewList
+ *       400:
+ *              description: bad Request
+  */
+ /**
+ * @swagger
+ * /reviews/reviewList:
  *   get:
  *     summary: Get reviews created by the authenticated user
  *     tags: [Reviews]
@@ -85,7 +92,7 @@
 
 /**
  * @swagger
- * /review/{reviewId}:
+ * /reviews/{reviewId}:
  *   put:
  *     summary: Update a review by review ID
  *     tags: [Reviews]

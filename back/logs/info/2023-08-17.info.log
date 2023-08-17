@@ -1,0 +1,38 @@
+2023-08-17 13:08:37 error: Cannot read properties of undefined (reading '_id')
+2023-08-17 13:08:37 info: POST /reviews/register 400 5.427 ms - 51 {"title":"typescriptfunction","content":"Review Content"}
+
+2023-08-17 13:09:48 error: Cannot read properties of undefined (reading '_id')
+2023-08-17 13:09:48 info: POST /reviews/register 400 7.630 ms - 51 {"title":"typescriptfunction","content":"Review Content"}
+
+2023-08-17 13:11:41 info: POST /users/register 200 125.721 ms - 230 {"name":"test","email":"email@a.com","password":"2111"}
+
+2023-08-17 13:11:58 info: POST /users/login 200 14.597 ms - 427 {"name":"test","email":"email@a.com","password":"2111"}
+
+2023-08-17 13:12:30 error: Cannot read properties of undefined (reading '_id')
+2023-08-17 13:12:30 info: POST /reviews/register 400 2.636 ms - 51 {"title":"typescriptfunction","content":"Review Content"}
+
+2023-08-17 13:16:40 info: POST /reviews/register 400 2.470 ms - 33 {"title":"typescriptfunction","content":"Review Content"}
+
+2023-08-17 14:09:52 info: POST /reviews/register 400 2.619 ms - 33 {"title":"typescriptfunction","content":"Review Content"}
+
+2023-08-17 14:11:43 info: POST /reviews/register 201 55.582 ms - 176 {"title":"typescriptfunction","content":"Review Content"}
+
+2023-08-17 14:12:20 error: Cannot read properties of undefined (reading '_id')
+2023-08-17 14:12:20 info: POST /reviews/register 400 8.920 ms - 51 {"title":"typescriptfunction","content":"Review Content"}
+
+2023-08-17 14:12:44 info: POST /reviews/register 201 87.608 ms - 176 {"title":"typescriptfunction","content":"Review Content"}
+
+2023-08-17 16:03:31 info: GET /reviews/reviewList 400 3.605 ms - 33 {}
+
+2023-08-17 16:04:06 info: GET /reviews/reviewList 400 0.734 ms - 33 {}
+
+2023-08-17 16:12:35 info: PUT /review/64ddac4c8eff2ebf709997bd 404 2.390 ms - 170 {}
+
+2023-08-17 16:13:34 info: PUT /reviews/64ddac4c8eff2ebf709997bd 400 2.613 ms - 33 {}
+
+2023-08-17 16:14:14 info: POST /reviews/64ddac4c8eff2ebf709997bd 404 1.105 ms - 172 {"title":"typescriptfunction11","content":"Review Content"}
+
+2023-08-17 16:14:21 info: PUT /reviews/64ddac4c8eff2ebf709997bd 400 0.935 ms - 33 {"title":"typescriptfunction11","content":"Review Content"}
+
+2023-08-17 16:15:08 info: PUT /reviews/64ddac4c8eff2ebf709997bd 200 77.106 ms - 176 {}
+

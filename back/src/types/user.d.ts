@@ -3,6 +3,7 @@ import { Request } from "express";
 export interface RequestTest extends Request {
   user: user;
   token: string;
+  currentUserId? :string;
 }
 
 export type user = {
