@@ -37,3 +37,4 @@ app.use("/beaches", beachRouter);
 app.use(errorMiddleware);
 
 export { app };
+

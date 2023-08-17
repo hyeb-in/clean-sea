@@ -43,7 +43,7 @@
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/Review'
- * 
+ *
  * /reviews/reviewList
  *   get:
  *     summary: Get reviews created by the authenticated user
@@ -61,7 +61,7 @@
 
 /**
  * @swagger
- * /reviews/{userId}: 
+ * /reviews/{userId}:
  *   get:
  *     summary: Get reviews by a specific user
  *     tags: [Reviews]
