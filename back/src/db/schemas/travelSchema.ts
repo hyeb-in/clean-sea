@@ -1,5 +1,4 @@
 import { Schema, model, Document } from 'mongoose';
-import { string } from 'yargs';
 
 interface ITravel extends Document {
     author? : string;
@@ -10,6 +9,7 @@ interface ITravel extends Document {
 const TravelSchema : Schema<ITravel> = new Schema({
     author : {
         type : String,
+        required : true,
     },
     beachId : {
         type : String,
@@ -18,7 +18,7 @@ const TravelSchema : Schema<ITravel> = new Schema({
     date : {
         type : Date,
         required : true,
-    }
+    },
 
     },
 

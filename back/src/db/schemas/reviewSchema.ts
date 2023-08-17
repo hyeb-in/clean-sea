@@ -18,6 +18,7 @@ const ReviewSchema : Schema<IReview> = new Schema({
     },
     author : {
         type : String,
+        required : true,
     },
     fileUpload : {
         type : String,

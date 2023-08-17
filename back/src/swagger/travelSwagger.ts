@@ -24,11 +24,38 @@
  *   post:
  *     summary: Create a new travel
  *     tags: [Travels]
+ *     parameters:
+ *       - name: author
+ *         in: path
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: userId
+ *       - name: beachId
+ *         in: formData
+ *         required: true
+ *         type: string
+ *         description: beachId
+ *       - name: date
+ *         in: formData
+ *         required: true
+ *         type: date
+ *         description: date
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/definitions/Travel'
+ *             type: object
+ *             properties:
+ *               beachId:
+ *                 type: string
+ *                 description: beachId
+ *               date:
+ *                 type: date
+ *                 description: date
+ *               author:
+ *                 type: string
+ *                 description: userId
  *     responses:
  *       200:
  *         description: Created
@@ -94,6 +121,16 @@
  *         schema:
  *           type: string
  *         description: Travel ID to update
+ *       - name: beachId
+ *         in: formData
+ *         required: false
+ *         type: string
+ *         description: New title for the travel
+ *       - name: date
+ *         in: formData
+ *         required: false
+ *         type: date
+ *         description: New content for the travel
  *     requestBody:
  *       content:
  *         application/json:

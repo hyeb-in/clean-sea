@@ -13,7 +13,7 @@ async function findUserReviews(userId: string): Promise<IReview[]> {
 }
 
 async function findUserReview(reviewId : string): Promise<IReview | null> {
-  const review = await ReviewModel.findOne({ _id: reviewId });
+  const review = await ReviewModel.findOne({ author: reviewId });
 
   return review;
 }
