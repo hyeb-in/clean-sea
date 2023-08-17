@@ -37,13 +37,13 @@
  *                 type: string
  *                 description: Review content
  *     responses:
- *       201:
+ *       200:
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/Review'
- *
+ * 
  * /reviews/reviewList
  *   get:
  *     summary: Get reviews created by the authenticated user
@@ -85,7 +85,7 @@
 
 /**
  * @swagger
- * /review/{reviewId}:
+ * /reviews/{reviewId}:
  *   put:
  *     summary: Update a review by review ID
  *     tags: [Reviews]
@@ -96,12 +96,27 @@
  *         schema:
  *           type: string
  *         description: Review ID to update
+ *       - name: title
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: New title for the review
+ *       - name: content
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: New content for the review
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
+ *                 description: New title for the review
  *               content:
  *                 type: string
  *                 description: New content for the review
@@ -111,7 +126,14 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/definitions/Review'
+ *               type: object
+ *               properties:
+ *                 title:
+ *                   type: string
+ *                   description: Updated review title
+ *                 content:
+ *                   type: string
+ *                   description: Updated review content
  *   delete:
  *     summary: Delete a review by review ID
  *     tags: [Reviews]
