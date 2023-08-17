@@ -14,6 +14,7 @@ import MyProfile from "./pages/MyProfile";
 import Search from "./pages/Search";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
+import Network from "./pages/Network";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/signup" exact element={<SignUp />} />
         <Route path="/users/:id" exact element={<MyProfile />} />
         <Route path="/search" exact element={<Search />} />
+        <Route path="/network" exact element={<Network />} />
       </Routes>
       <Footer />
     </Router>
