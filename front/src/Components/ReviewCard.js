@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Image,
-  ListGroup,
-  Modal,
-  Row,
-} from "react-bootstrap";
+import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
 import Avatar from "./Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import ModalWrapper from "./ModalWrapper";
 
 const ReviewCard = ({ review }) => {
   const [showModal, setShowModal] = useState(false);
@@ -42,14 +35,7 @@ const ReviewCard = ({ review }) => {
             >
               <FontAwesomeIcon icon={faEllipsis} />
             </Button>
-            <Modal
-              show={showModal}
-              onHide={handleClose}
-              backdrop="true"
-              keyboard={false}
-              aria-labelledby="contained-modal-title-vcenter"
-              centered
-            >
+            <ModalWrapper show={showModal} onHide={handleClose}>
               <ListGroup className="text-center">
                 {/* TO DO: onClick handler */}
                 <ListGroup.Item action>수정</ListGroup.Item>
@@ -60,7 +46,7 @@ const ReviewCard = ({ review }) => {
                   취소
                 </ListGroup.Item>
               </ListGroup>
-            </Modal>
+            </ModalWrapper>
           </Col>
         </Row>
       </Card.Header>

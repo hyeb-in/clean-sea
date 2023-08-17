@@ -70,7 +70,7 @@ const Map = () => {
       });
     }
   }, [isLoaded]);
-  console.log(location);
+
   // 지도가 성공적으로 로드 되었다면
   const onLoad = useCallback((map) => {
     // const bounds = new window.google.maps.LatLngBounds(center);

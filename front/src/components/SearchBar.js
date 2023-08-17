@@ -56,7 +56,7 @@ const SearchBar = () => {
     setSelectedItem(item);
     // DB에서 데이터 가져오는 로직을 구현하고, 가져온 데이터를 상태로 업데이트
   };
-  console.log(selectedItem);
+
   const handleSearchTerm = (e) => {
     e.preventDefault();
     // 검색 쿼리 날리기
