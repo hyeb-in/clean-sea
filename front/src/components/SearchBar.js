@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Container, Col, Dropdown, Row, ListGroup } from "react-bootstrap";
+import {
+  Container,
+  Col,
+  Dropdown,
+  Row,
+  ListGroup,
+  Form,
+  DropdownButton,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
 // import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
@@ -41,13 +49,17 @@ const beachData = [
 ];
 
 const SearchBar = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [itemInfo, setItemInfo] = useState(null);
+  const [selectedItem, setSelectedItem] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleItemSelect = (item) => {
     setSelectedItem(item);
     // DB에서 데이터 가져오는 로직을 구현하고, 가져온 데이터를 상태로 업데이트
-    // setItemInfo(가져온_데이터);
+  };
+  console.log(selectedItem);
+  const handleSearchTerm = (e) => {
+    e.preventDefault();
+    // 검색 쿼리 날리기
   };
 
   return (
@@ -61,30 +73,34 @@ const SearchBar = () => {
         justifyContent: "center",
       }}
     >
-      {/* 검색창 */}
+      {/* 드롭다운 - 지역 선택 */}
       <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-          지역을 선택해주세요
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
+        <DropdownButton
+          id="dropdown-basic-button"
+          title={selectedItem ? selectedItem : "지역을 선택해주세요"}
+          onSelect={handleItemSelect}
+        >
           {/* 메뉴는 DB에서 받아온다 ? */}
           {/* 로컬에 저장한다 ?? */}
-          <Dropdown.Item onSelect={() => handleItemSelect("지역이름")}>
-            강원
-          </Dropdown.Item>
-          <Dropdown.Item onSelect={() => handleItemSelect("지역이름")}>
-            부산
-          </Dropdown.Item>
-          <Dropdown.Item onSelect={() => handleItemSelect("지역이름")}>
-            충남
-          </Dropdown.Item>
-        </Dropdown.Menu>
+          <Dropdown.Item eventKey="강원">강원</Dropdown.Item>
+          <Dropdown.Item eventKey="부산">부산</Dropdown.Item>
+          <Dropdown.Item eventKey="충남">충남</Dropdown.Item>
+        </DropdownButton>
       </Dropdown>
-      {/* 선택된 지역에 대한 데이터 리스트 */}
-      <Row className="mt-3">
-        <h3>충남 지역</h3>
+
+      {/* 지역 필터링 -> 해수욕장 검색 */}
+      <Row className="mb-5">
+        <Form onSubmit={handleSearchTerm}>
+          <Form.Control
+            type="text"
+            placeholder="해수욕장 이름으로 검색하기"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </Form>
       </Row>
+
+      {/* 선택된 지역에 대한 데이터 리스트 */}
       {beachData &&
         beachData.map((beach, index) => (
           <ListGroup key={beach.id} className="my-2" style={{ width: "14rem" }}>
