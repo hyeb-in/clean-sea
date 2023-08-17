@@ -1,6 +1,6 @@
 import passport from "passport";
 import jwt from "jsonwebtoken";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { RequestTest } from "user";
 
 export const localAuthentication = async (
@@ -16,16 +16,12 @@ export const localAuthentication = async (
       async (error: Error, user: any, info: any) => {
         if (error) throw error;
         if (!user) return res.status(400).json({ message: info.message });
-        const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY);
-
-        req.user = user;
-        req.token = token;
-
-        res.status(200).send({
-          message: "로그인 성공",
-          token: token,
-          user: user,
+        //토큰 테스트하려고 짧게해둔 변경할 것
+        const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
+          expiresIn: "30s",
         });
+        //req.token =token
+        return res.status(200).json(token);
       }
     )(req, res, next);
   } catch (err) {

@@ -69,7 +69,7 @@
 
 /**
  * @swagger
- * /reviews/{userId}: 
+ * /reviews/{userId}:
  *   get:
  *     summary: Get reviews by a specific user
  *     tags: [Reviews]
