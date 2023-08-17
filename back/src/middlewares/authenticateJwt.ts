@@ -24,9 +24,9 @@ export const jwtAuthentication = async (
             return res.status(404).json("User Not Found!");
         }
 
-        //req.user = user;
-        console.log(user);
-        return res.status(200).json(user);
+        req.user = user;
+
+        next();
       }
     )(req, res, next);
   } catch (error) {
