@@ -23,14 +23,10 @@ export const jwtAuthentication = async (
           if (info.message === "user not exist")
             return res.status(404).json("User Not Found!");
         }
-        if (user) {
-          req.user = user;
-          return res.status(200).send({
-            message: "jwt매세지",
-            user: user,
-            info: info,
-          });
-        }
+
+        //req.user = user;
+        console.log(user);
+        return res.status(200).json(user);
       }
     )(req, res, next);
   } catch (error) {
