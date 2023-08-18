@@ -13,10 +13,9 @@ import Search from "./pages/Search";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Network from "./pages/Network";
-import "./App.css";
-
 import * as Api from "./Api";
 import { loginReducer } from "./Reducer";
+import "./Main.css";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
