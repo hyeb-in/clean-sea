@@ -22,9 +22,7 @@ const NavBar = () => {
 
   const userState = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
-  console.log(userState.user, "유저<<<<<<");
-  // 로그인 했을 때 유저 토큰만 찍힘
-  // 새로고침 누르면 false 찍힘
+
   const isLogin = !!userState.user;
 
   const logout = () => {

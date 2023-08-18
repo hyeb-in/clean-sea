@@ -33,6 +33,7 @@ const Login = () => {
         password,
       });
       const user = res.data;
+      if (!user) throw new Error("유저 정보 없음");
       const jwtToken = user.token;
       sessionStorage.setItem("userToken", jwtToken);
       dispatch({
