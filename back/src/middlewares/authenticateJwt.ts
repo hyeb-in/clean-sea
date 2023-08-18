@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
-import { RequestTest, user } from "user";
+import { IRequest, IUser } from "user";
 
 export const jwtAuthentication = async (
-  req: RequestTest,
+  req: IRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -11,7 +11,7 @@ export const jwtAuthentication = async (
     passport.authenticate(
       "jwt",
       { session: false },
-      (error: Error, user: user, info: any) => {
+      (error: Error, user: IUser, info: any) => {
         if (error) throw error;
         if (info) {
           if (info.message === "jwt expired")

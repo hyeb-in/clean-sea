@@ -6,5 +6,6 @@ import { getUserInfo } from "../controllers/userController";
 const authRouter = Router();
 
 authRouter.post("/login", localAuthentication);
+authRouter.post("/logout");
 
 export default authRouter;
