@@ -53,9 +53,6 @@
  *               content:
  *                 type: string
  *                 description: Review content
- *               author:
- *                 type: string
- *                 description: userId
  *     responses:
  *       200:
  *         description: Created
