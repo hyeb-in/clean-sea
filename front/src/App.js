@@ -16,6 +16,7 @@ import Network from "./pages/Network";
 import * as Api from "./Api";
 import { loginReducer } from "./Reducer";
 import "./Main.css";
+import Graph from "./pages/Graph";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -37,7 +38,6 @@ function App() {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
       const res = await Api.get("users/current");
       const currentUser = res.data;
-      console.log(currentUser);
 
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
       dispatch({
@@ -77,6 +77,7 @@ function App() {
           <Route path="/users/:id" exact element={<MyProfile />} />
           <Route path="/search" exact element={<Search />} />
           <Route path="/network" exact element={<Network />} />
+          <Route path="/graph" exact element={<Graph />} />
         </Routes>
         {!targetPath?.includes(location.pathname) && (
           <>
