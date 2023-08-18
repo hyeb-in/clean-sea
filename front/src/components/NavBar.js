@@ -19,7 +19,8 @@ import {
 import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "./Avatar";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserStateContext, DispatchContext } from "../App";
 
 const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -29,6 +30,21 @@ const NavBar = () => {
 
   const handleNavigate = (path) => navigate(path);
   const handleClose = () => setShowModal(false);
+
+  const userState = useContext(UserStateContext);
+  const dispatch = useContext(DispatchContext);
+
+  const isLogin = !!userState.user;
+
+  const logout = () => {
+    sessionStorage.removeItem("userToken");
+    dispatch({type: "LOGOUT"});
+    navigate("/");
+  };
+
+  const login = () => {
+    navigate("/login");
+  }
 
   return (
     <>
@@ -128,17 +144,22 @@ const NavBar = () => {
                     </Col>
                   </Row>
                 </Modal.Body>
-
                 <Modal.Footer>
                   <Button variant="primary">공유</Button>
                 </Modal.Footer>
               </Modal>
             </Nav.Link>
-
-            {/* TO DO: 로그인 했다면 '로그아웃'으로 변경 */}
-            <Nav.Link onClick={() => handleNavigate("/login")}>로그인</Nav.Link>
-            {/* TO DO: 로그인 했다면 보여주기 & 로그인한 유저의 아이디로 변경 */}
-            <Nav.Link onClick={() => handleNavigate("users/:id")}>
+            {isLogin && (
+              <Nav.Item>
+                <Nav.Link onClick={logout}>로그아웃</Nav.Link>
+              </Nav.Item>
+            )}
+            {!isLogin && (
+              <Nav.Item>
+                <Nav.Link onClick={login}>로그인</Nav.Link>
+              </Nav.Item>
+            )}
+              <Nav.Link onClick={() => handleNavigate("users/:id")}>
               <OverlayTrigger
                 placement="bottom"
                 overlay={<Tooltip id="button-tooltip-2">나의 프로필</Tooltip>}
