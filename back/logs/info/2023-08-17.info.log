@@ -143,3 +143,29 @@
 
 2023-08-17 19:24:00 info: ::1 - - [17/Aug/2023:10:24:00 +0000] "POST /auth/login HTTP/1.1" 200 173 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 
+2023-08-17 23:42:23 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:43:01 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:43:07 info: POST /users/register 200 152.335 ms - 290 {"name":"dd","email":"echk11@naver.com","password":"1111"}
+
+2023-08-17 23:43:22 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:43:22 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:43:29 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:43:41 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:44:38 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:44:38 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:44:59 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:44:59 info: GET /users/current/ - - ms - - {}
+
+2023-08-17 23:47:36 info: POST /users/register 200 111.918 ms - 289 {"name":"dfsa","email":"dsfa@fdsa.com","password":"1111"}
+
+2023-08-17 23:48:57 info: POST /auth/login 200 23.988 ms - 173 {"email":"dsfa@fdsa.com","password":"1111"}
+
