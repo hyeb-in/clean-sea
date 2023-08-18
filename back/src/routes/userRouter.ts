@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getUserInfo, signUpUser } from "../controllers/userController";
+import {
+  deleteUser,
+  getUserInfo,
+  signUpUser,
+  updateUser,
+} from "../controllers/userController";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const userRouter = Router();
@@ -11,8 +16,8 @@ userRouter.get("/tokentest", jwtAuthentication);
 userRouter.get("/current", jwtAuthentication, getUserInfo);
 
 userRouter
-  .route("/:id")
+  .route("/:userId")
   .get(jwtAuthentication, getUserInfo)
-  .put(jwtAuthentication)
-  .delete(jwtAuthentication);
+  .put(jwtAuthentication, updateUser)
+  .delete(jwtAuthentication, deleteUser);
 export default userRouter;

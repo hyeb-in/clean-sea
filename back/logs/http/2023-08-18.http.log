@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2023-08-18 00:05:13 info: ::1 - - [17/Aug/2023:15:05:13 +0000] "GET /users/current/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 
 2023-08-18 00:05:13 info: ::1 - - [17/Aug/2023:15:05:13 +0000] "GET /users/current/ HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
@@ -67,4 +68,28 @@
 2023-08-18 02:01:36 info: ::1 - - [17/Aug/2023:17:01:36 +0000] "POST /users/register HTTP/1.1" 200 291 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 
 2023-08-18 02:01:41 info: ::1 - - [17/Aug/2023:17:01:41 +0000] "POST /auth/login HTTP/1.1" 200 173 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+=======
+2023-08-18 15:19:18 info: ::1 - - [18/Aug/2023:06:19:18 +0000] "POST /auth/login HTTP/1.1" 200 173 "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 15:19:32 info: ::1 - - [18/Aug/2023:06:19:32 +0000] "GET /users/64df0718e2eca865bab10315 HTTP/1.1" 200 292 "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 15:20:48 info: ::1 - - [18/Aug/2023:06:20:48 +0000] "GET /users/64df0718e2eca865bab10315 HTTP/1.1" 200 292 "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 15:26:18 info: ::1 - - [18/Aug/2023:06:26:18 +0000] "POST /users/register HTTP/1.1" 200 293 "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 16:21:21 error: 이미 존재하는 이메일입니다.
+2023-08-18 16:21:21 info: ::1 - - [18/Aug/2023:07:21:21 +0000] "POST /users/register HTTP/1.1" 400 39 "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 16:21:29 info: ::1 - - [18/Aug/2023:07:21:29 +0000] "POST /users/register HTTP/1.1" 200 - "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 16:21:32 info: ::1 - - [18/Aug/2023:07:21:32 +0000] "POST /users/register HTTP/1.1" 200 - "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 16:22:17 info: ::1 - - [18/Aug/2023:07:22:17 +0000] "POST /users/register HTTP/1.1" 200 - "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 16:44:15 info: ::1 - - [18/Aug/2023:07:44:15 +0000] "POST /auth/login HTTP/1.1" 200 173 "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 16:44:27 info: ::1 - - [18/Aug/2023:07:44:27 +0000] "GET /users/64df0718e2eca865bab10315 HTTP/1.1" 200 292 "-" "PostmanRuntime/7.32.3"
+
+2023-08-18 16:45:24 info: ::1 - - [18/Aug/2023:07:45:24 +0000] "GET /users/64df0718e2eca865bab10315 HTTP/1.1" 200 292 "-" "PostmanRuntime/7.32.3"
+>>>>>>> origin/back
 

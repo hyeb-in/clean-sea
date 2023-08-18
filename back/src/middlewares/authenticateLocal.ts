@@ -1,10 +1,10 @@
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { NextFunction, Response } from "express";
-import { RequestTest } from "user";
+import { IRequest } from "user";
 
 export const localAuthentication = async (
-  req: RequestTest,
+  req: IRequest,
   res: Response,
   next: NextFunction
 ) => {
