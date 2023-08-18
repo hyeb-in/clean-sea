@@ -47,7 +47,6 @@ const Login = () => {
       console.log("로그인에 실패하셨습니다.\n", err);
     }
   };
-
 return (
   <div
      style={{
