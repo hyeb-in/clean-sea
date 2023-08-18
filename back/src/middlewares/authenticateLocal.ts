@@ -22,7 +22,7 @@ export const localAuthentication = async (
         });
         req.token = token;
         req.user = user;
-        return res.status(200).json(token);
+        next();
       }
     )(req, res, next);
   } catch (err) {
