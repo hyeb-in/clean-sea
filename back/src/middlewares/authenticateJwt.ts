@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
-import { user } from "user";
+import { IRequest, IUser } from "user";
 
 export const jwtAuthentication = async (
-  req: Request,
+  req: IRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -11,7 +11,7 @@ export const jwtAuthentication = async (
     passport.authenticate(
       "jwt",
       { session: false },
-      (error: Error, user: user, info: any) => {
+      (error: Error, user: IUser, info: any) => {
         if (error) throw error;
         if (info) {
           if (info.message === "jwt expired")
@@ -24,15 +24,12 @@ export const jwtAuthentication = async (
             return res.status(404).json("User Not Found!");
         }
         if (user) {
-          return res.status(200).send({
-            message: "jwt매세지",
-            user: user,
-            info: info,
-          });
+          req.user = user;
+          next();
         }
       }
     )(req, res, next);
   } catch (error) {
-    return res.status(400).json("error");
+    next(error);
   }
 };

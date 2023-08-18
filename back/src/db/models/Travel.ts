@@ -12,7 +12,7 @@ async function findUserTravels(userId: string) : Promise<ITravel[]>{
 }
 
 async function findUserTravel(travelId : string) : Promise<ITravel | null>{
-    const travel = await TravelModel.findOne({_id : travelId});
+    const travel = await TravelModel.findOne({author : travelId});
     return travel;
 }
 

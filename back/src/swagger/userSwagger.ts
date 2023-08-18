@@ -15,23 +15,6 @@
 
 /**
  * @swagger
- * /users/login:
- *  post:
- *      tags: [User]
- *      summary: login
- *
- */
-
-/**
- * @swagger
- * /users/logout:
- *  post:
- *      tags: [User]
- *      summary: logout
- */
-
-/**
- * @swagger
  * /users/{id}:
  *  get:
  *      tags: [User]

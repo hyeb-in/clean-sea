@@ -2,13 +2,11 @@ import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
 import morgan from "morgan";
 import path from "path";
-import expressWinston from 'express-winston';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 const logDir = "logs";
 const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
 const errorLogDir = path.join(logDir, "error"); // error 로그를 저장할 폴더 경로
-const httpLogDir = path.join(logDir, "http"); // http 로그를 저장할 폴더 경로
 
 const { combine, timestamp, printf } = winston.format;
 
@@ -43,7 +41,7 @@ const logger = winston.createLogger({
       zippedArchive: true,
       maxFiles: "30d",
     }),
-  ]
+  ],
 });
 
 function httpLogger(req : Request ,res : Response ,next : NextFunction) : void {
@@ -53,7 +51,7 @@ function httpLogger(req : Request ,res : Response ,next : NextFunction) : void {
         logger.info(message);
       },
     },
-  })(req,res,next);
+  })(req, res, next);
 }
 
 morgan.token('body', (req: Request, res: Response) => {
@@ -66,7 +64,6 @@ function errorMiddleware(error : Error, req : Request, res : Response, next : Ne
   res.status(400).send(error.message);
 }
 
-
 if (process.env.NODE_ENV !== "production") {
   logger.add(
     new winston.transports.Console({
@@ -77,7 +74,5 @@ if (process.env.NODE_ENV !== "production") {
     })
   );
 }
-
-
 
 export { httpLogger, errorMiddleware };

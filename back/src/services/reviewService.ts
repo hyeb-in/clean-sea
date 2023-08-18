@@ -6,13 +6,13 @@ async function addReview({toCreate} : {toCreate: IReview}): Promise<IReview> {
     return createdReview;
 }
 
-async function getReview(userId : string) : Promise<IReview | null>{
-    const review = await findUserReview(userId);
+async function getReview(userId : string) : Promise<IReview[]>{
+    const review = await findUserReviews(userId);
     return review;
 }
 
 async function setReview(reviewId : string,{toUpdate}:{toUpdate :Partial<IReview>}): Promise<IReview | null>{
-    await findUserReviews(reviewId);
+    await findUserReview(reviewId);
 
     const updatedReview = updateReview(reviewId, toUpdate);
 

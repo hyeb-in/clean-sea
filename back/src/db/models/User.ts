@@ -1,23 +1,26 @@
+import { IUser } from "user";
 import UserModel from "../schemas/userSchema";
 
-export class User {
-  static async findUserById(userId: string) {
-    const user = await UserModel.findById(userId);
-    return user;
-  }
+export const findUserById = async (userId: string): Promise<IUser> => {
+  const user = await UserModel.findById(userId);
+  return user;
+};
 
-  static async findUserByEmail(email: string) {
-    const user = await UserModel.findOne({ email });
-    return user;
-  }
+export const findUserByEmail = async (email: string): Promise<IUser> => {
+  const user = await UserModel.findOne({ email });
+  return user;
+};
 
-  static async create(email: string, name: string, hashedPassword: string) {
-    const newUser = await UserModel.create({
-      email,
-      name,
-      password: hashedPassword,
-    });
+export const createNewUser = async (
+  name: string,
+  email: string,
+  hashedPassword: string
+): Promise<IUser> => {
+  const newUser = await UserModel.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
 
-    return newUser;
-  }
-}
+  return newUser;
+};

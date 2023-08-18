@@ -6,19 +6,19 @@ import {
   updateReview,
   deleteReview,
 } from "../controllers/reviewController";
-import { localAuthentication } from "../middlewares/authenticateLocal";
+import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const reviewAuthRouter = Router();
 
 reviewAuthRouter
-    .post("/register", createReview)
-    .get("/reviewList", getMyReview);
+    .post("/register", jwtAuthentication, createReview)
+    .get("/reviewList", jwtAuthentication, getMyReview);
 
-reviewAuthRouter.get("/:userId", getUserReview);
+reviewAuthRouter.get("/:userId", jwtAuthentication, getUserReview);
 
 reviewAuthRouter
     .route("/:reviewId")
-    .put( updateReview)
-    .delete( deleteReview);
+    .put(jwtAuthentication, updateReview)
+    .delete(jwtAuthentication, deleteReview);
 
 export default reviewAuthRouter;

@@ -24,15 +24,32 @@
  *   post:
  *     summary: Create a new review
  *     tags: [Reviews]
+ *     parameters:
+ *       - name: author
+ *         in: path
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: userId
+ *       - name: title
+ *         in: formData
+ *         required: true
+ *         type: string
+ *         description: title
+ *       - name: content
+ *         in: formData
+ *         required: true
+ *         type: string
+ *         description: content
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               userId:
+ *               title:
  *                 type: string
- *                 description: User ID who is creating the review
+ *                 description: title
  *               content:
  *                 type: string
  *                 description: Review content
@@ -43,8 +60,13 @@
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/Review'
- * 
- * /reviews/reviewList
+ *       400:
+ *         description: Bad Request
+ */
+
+/**
+ * @swagger
+ * /reviews/reviewList:
  *   get:
  *     summary: Get reviews created by the authenticated user
  *     tags: [Reviews]
@@ -97,16 +119,14 @@
  *           type: string
  *         description: Review ID to update
  *       - name: title
- *         in: query
+ *         in: formData
  *         required: false
- *         schema:
- *           type: string
+ *         type: string
  *         description: New title for the review
  *       - name: content
- *         in: query
+ *         in: formData
  *         required: false
- *         schema:
- *           type: string
+ *         type: string
  *         description: New content for the review
  *     requestBody:
  *       content:
@@ -134,6 +154,11 @@
  *                 content:
  *                   type: string
  *                   description: Updated review content
+ */
+
+/**
+ * @swagger
+ * /reviews/{reviewId}:
  *   delete:
  *     summary: Delete a review by review ID
  *     tags: [Reviews]
