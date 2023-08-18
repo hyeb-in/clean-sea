@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 
+<<<<<<< HEAD
 const url =
   process.env.MONGODB_URL ||
   // "mongodb+srv://user:user1234@cluster0.xwae34t.mongodb.net/";
   "mongodb://127.0.0.1:27017"
+=======
+const url = process.env.MONGODB_URL;
+>>>>>>> feature/front2
 
 mongoose.connect(url);
 const db = mongoose.connection;

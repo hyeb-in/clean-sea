@@ -20,8 +20,9 @@ export const localAuthentication = async (
         const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
           expiresIn: "5m",
         });
-        //req.token =token
-        return res.status(200).json(token);
+        req.token = token;
+        req.user = user;
+        next();
       }
     )(req, res, next);
   } catch (err) {
