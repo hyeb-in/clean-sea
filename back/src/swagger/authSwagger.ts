@@ -42,9 +42,14 @@
  *         schema:
  *           type: object
  *           properties:
- *               token: 
+ *               token:
  *                  type: string
- 
+ *               _id:
+ *                  type: string
+ *               email:
+ *                  type: string
+ *               name:
+ *                  type: string
  */
 
 /**
