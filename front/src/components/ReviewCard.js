@@ -38,11 +38,17 @@ const ReviewCard = ({ review }) => {
             <ModalWrapper show={showModal} onHide={handleClose}>
               <ListGroup className="text-center">
                 {/* TO DO: onClick handler */}
-                <ListGroup.Item action>수정</ListGroup.Item>
-                <ListGroup.Item action style={{ color: "red" }}>
+                <ListGroup.Item key="edit" action>
+                  수정
+                </ListGroup.Item>
+                <ListGroup.Item key="del" action style={{ color: "red" }}>
                   삭제
                 </ListGroup.Item>
-                <ListGroup.Item action onClick={() => setShowModal(!showModal)}>
+                <ListGroup.Item
+                  key="cancel"
+                  action
+                  onClick={() => setShowModal(!showModal)}
+                >
                   취소
                 </ListGroup.Item>
               </ListGroup>

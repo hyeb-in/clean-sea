@@ -37,7 +37,7 @@ const CarouselWrapper = ({ imageUrls, setImageUrls }) => {
       }
     >
       {imageUrls.map((img, index) => (
-        <Carousel.Item>
+        <Carousel.Item key={img}>
           <img
             className="d-block w-100"
             src={img}
