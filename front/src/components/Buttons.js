@@ -1,21 +1,24 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
+import React from "react";
+import { Button } from "react-bootstrap";
 
-export default function Button({ handleAdd, handleDelete, buttonText }) {
+const CommonButton = ({ onClick, buttonText, style, variant = 'outline-info' }) => {
     return (
-        <button
-            onClick={}
+        <Button
+            onClick={onClick}
             style={{
                 display:"inline-block",
                 float: "right",
                 background: "white",
                 border: "none",
+                ...style,
             }}
-            variant="outline-info"
+            variant={variant}
             size="sm"
             className="mr-3"
             >
                 {buttonText}
-            </button>
+            </Button>
     )
 }
+
+export default CommonButton;
