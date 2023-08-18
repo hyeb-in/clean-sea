@@ -14,6 +14,7 @@ export const signUpUser = async (
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
+      //ErrorGenerate 만들기
       return res.status(400).send({ message: "모든 사항을 입력하세요" });
     }
 
@@ -47,4 +48,8 @@ export const updateUser = async (
   const { userId } = req.body;
   const {} = req.body;
 };
-export const deleteUser = () => {};
+export const deleteUser = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {};
