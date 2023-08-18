@@ -1,17 +1,5 @@
 import { BeachByBeachName, BeachByRegion, Beaches } from "../db/models/Beach";
-
-interface IBeach {
-  id: number;
-  name: string;
-  address: string;
-  goodnessFit?: boolean;
-  eschScore?: number,
-  enteScore?: number,
-  ente?: number;
-  esch?: number;
-  latitude?: number;
-  longitude?: number;
-}
+import { IBeach } from "beach";
 
 // 해수욕장 명칭 하나로 가져오기
 async function getBeachByBeachNameService(name: IBeach): Promise<IBeach[]> {
