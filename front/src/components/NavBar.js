@@ -11,10 +11,10 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "./Avatar";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
-import AddReview from "./AddReview";
 
 import React, { useState, useContext } from "react";
 import { UserStateContext, DispatchContext } from "../App";
+import ReviewForm from "./review/ReviewForm";
 
 const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -82,9 +82,10 @@ const NavBar = () => {
                   >
                     <FontAwesomeIcon icon={faSquarePlus} />
                   </OverlayTrigger>
-                  <AddReview
+                  <ReviewForm
                     showModal={showModal}
                     setShowModal={setShowModal}
+                    headerTitle="새 게시물 작성하기"
                   />
                 </Nav.Link>
                 <Nav.Item>
