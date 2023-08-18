@@ -14,14 +14,16 @@ import Avatar from "./Avatar";
 import Carousel from "./Carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages, faPlus } from "@fortawesome/free-solid-svg-icons";
+import ToastWrapper from "./Toast";
 
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
-// image/* 이런식으로 가능?
+const MAX_FILE_COUNT = 5;
 
 const AddReview = ({ setShowModal, showModal }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrls, setImageUrls] = useState([]);
+  const [showToast, setShowToast] = useState(false);
 
   const handleClose = () => setShowModal(false);
 
@@ -52,6 +54,12 @@ const AddReview = ({ setShowModal, showModal }) => {
       </Button>
     );
   const handleFileChange = (files) => {
+    if (
+      files.length > MAX_FILE_COUNT ||
+      (imageUrls.length > 0 && imageUrls.length + files.length > MAX_FILE_COUNT)
+    ) {
+      return setShowToast(true);
+    }
     if (files.length > 0) {
       // FileList 객체를 배열로 변환
       const fileList = Array.from(files);
@@ -102,6 +110,13 @@ const AddReview = ({ setShowModal, showModal }) => {
       onClick={(e) => e.stopPropagation()}
       // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상
     >
+      {showToast && (
+        <ToastWrapper
+          onClose={() => setShowToast(false)}
+          text={`최대 ${MAX_FILE_COUNT}개까지 업로드 가능합니다.`}
+        />
+      )}
+
       <Modal.Header closeButton>
         <Modal.Title>새 게시물 작성하기</Modal.Title>
       </Modal.Header>
@@ -122,6 +137,7 @@ const AddReview = ({ setShowModal, showModal }) => {
               // 어느정도 크기가 적당한지 모르겠엉
               children={fileUploaderIndicator}
             />
+
             {imageUrls.length > 0 && (
               <Carousel imageUrls={imageUrls} setImageUrls={setImageUrls} />
             )}
