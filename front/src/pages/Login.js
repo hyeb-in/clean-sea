@@ -48,7 +48,8 @@ const Login = () => {
   return (
     <div
       style={{
-        height: "100vh",
+        paddingTop: "134px",
+        height: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -124,7 +125,7 @@ const Login = () => {
             <button
               type="button"
               className="btn btn-link"
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/SignUp")}
             >
               회원가입
             </button>
