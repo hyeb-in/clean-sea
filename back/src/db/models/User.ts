@@ -1,23 +1,24 @@
+import { IUser } from "user";
 import UserModel from "../schemas/userSchema";
 
-export const findUserById = async (userId: string) => {
+export const findUserById = async (userId: string): Promise<IUser> => {
   const user = await UserModel.findById(userId);
   return user;
 };
 
-export const findUserByEmail = async (email: string) => {
+export const findUserByEmail = async (email: string): Promise<IUser> => {
   const user = await UserModel.findOne({ email });
   return user;
 };
 
 export const createNewUser = async (
-  email: string,
   name: string,
+  email: string,
   hashedPassword: string
-) => {
+): Promise<IUser> => {
   const newUser = await UserModel.create({
-    email,
     name,
+    email,
     password: hashedPassword,
   });
 
