@@ -8,7 +8,6 @@ import {
 import Main from "./pages/Main";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import MyProfile from "./pages/MyProfile";
 import Search from "./pages/Search";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
@@ -17,6 +16,7 @@ import * as Api from "./Api";
 import { loginReducer } from "./Reducer";
 import "./Main.css";
 import Graph from "./pages/Graph";
+import MyProfile from "./pages/MyProfile";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -74,7 +74,7 @@ function App() {
           <Route path="/" exact element={<Main />} />
           <Route path="/login" exact element={<Login />} />
           <Route path="/signup" exact element={<SignUp />} />
-          <Route path="/users/:id" exact element={<MyProfile />} />
+          <Route path="/my-profile" exact element={<MyProfile />} />
           <Route path="/search" exact element={<Search />} />
           <Route path="/network" exact element={<Network />} />
           <Route path="/graph" exact element={<Graph />} />
