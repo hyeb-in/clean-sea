@@ -12,9 +12,15 @@ export const findUserByEmail = async (email: string): Promise<IUser> => {
 };
 
 export const createNewUser = async (
-  newUserInput: Pick<IUser, "name" | "email" | "password">
+  name: string,
+  email: string,
+  hashedPassword: string
 ): Promise<IUser> => {
-  const newUser = await UserModel.create(newUserInput);
+  const newUser = await UserModel.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
 
   return newUser;
 };

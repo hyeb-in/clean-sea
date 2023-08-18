@@ -33,13 +33,6 @@ export const getUserInfo = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body;
-    const user = await findUserById(userId);
-    if (!user)
-      return res.status(400).send({ message: "회원이 존재하지 않습니다." });
-
-    return res.status(200).json(user);
-
     return res.status(200).json(req.user);
   } catch (error) {
     console.log(error);
