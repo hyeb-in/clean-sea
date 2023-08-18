@@ -40,14 +40,14 @@ const AddReview = ({ setShowModal, showModal }) => {
           <Col className="d-flex justify-content-center align-items-center">
             <FontAwesomeIcon icon={faImages} size="3x" />
           </Col>
-          <Col>사진을 여기에 끌어다 놓으세요</Col>
+          <Col className="py-4">사진을 여기에 끌어다 놓으세요</Col>
           <Col className="d-flex justify-content-center align-items-center">
             <Button>컴퓨터에서 선택</Button>
           </Col>
         </Row>
       </Container>
     ) : (
-      <Button>
+      <Button className="mb-2">
         <FontAwesomeIcon icon={faPlus} />
       </Button>
     );
@@ -122,7 +122,6 @@ const AddReview = ({ setShowModal, showModal }) => {
               // 어느정도 크기가 적당한지 모르겠엉
               children={fileUploaderIndicator}
             />
-
             {imageUrls.length > 0 && (
               <Carousel imageUrls={imageUrls} setImageUrls={setImageUrls} />
             )}
@@ -156,7 +155,7 @@ const AddReview = ({ setShowModal, showModal }) => {
                   }}
                   placeholder="내용"
                   as="textarea"
-                  rows={3}
+                  rows={10}
                   style={{ height: "100%" }}
                 />
               </div>

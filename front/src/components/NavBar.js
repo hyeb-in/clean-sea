@@ -3,18 +3,8 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { Form, useNavigate } from "react-router-dom";
-import {
-  Button,
-  Col,
-  FloatingLabel,
-  Image,
-  InputGroup,
-  Modal,
-  OverlayTrigger,
-  Row,
-  Tooltip,
-} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "./Avatar";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
@@ -23,13 +13,8 @@ import AddReview from "./AddReview";
 
 const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const handleClose = () => setShowModal(false);
-
   const navigate = useNavigate();
   const handleNavigate = (path) => navigate(path);
-  console.log(showModal);
   return (
     <>
       <Navbar bg="primary" data-bs-theme="dark">
