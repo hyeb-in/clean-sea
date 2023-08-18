@@ -23,10 +23,10 @@ export const jwtAuthentication = async (
           if (info.message === "user not exist")
             return res.status(404).json("User Not Found!");
         }
-
-        req.user = user;
-
-        next();
+        if (user) {
+          req.user = user;
+          next();
+        }
       }
     )(req, res, next);
   } catch (error) {
