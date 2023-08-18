@@ -4,14 +4,14 @@ import swaggerJsdoc from "swagger-jsdoc";
 const options: swaggerJsdoc.Options = {
   swaggerDefinition: {
     info: {
-      title: "Test API",
+      title: "해조 API",
       version: "1.0.0",
       description: "Test API with express",
     },
     host: "localhost:5001",
     basePath: "/",
   },
-  apis: ["./src/routes/*.ts", "./src/swagger/*"],
+  apis: ["./src/swagger/*.ts", "./swagger/*"],
 };
 
 const specs = swaggerJsdoc(options);

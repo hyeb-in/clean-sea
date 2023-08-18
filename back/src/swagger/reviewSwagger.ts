@@ -24,27 +24,49 @@
  *   post:
  *     summary: Create a new review
  *     tags: [Reviews]
+ *     parameters:
+ *       - name: author
+ *         in: path
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: userId
+ *       - name: title
+ *         in: formData
+ *         required: true
+ *         type: string
+ *         description: title
+ *       - name: content
+ *         in: formData
+ *         required: true
+ *         type: string
+ *         description: content
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               userId:
+ *               title:
  *                 type: string
- *                 description: User ID who is creating the review
+ *                 description: title
  *               content:
  *                 type: string
  *                 description: Review content
  *     responses:
- *       201:
+ *       200:
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/Review'
- *
- * /reviews/reviewList
+ *       400:
+ *         description: Bad Request
+ */
+
+/**
+ * @swagger
+ * /reviews/reviewList:
  *   get:
  *     summary: Get reviews created by the authenticated user
  *     tags: [Reviews]
@@ -85,7 +107,7 @@
 
 /**
  * @swagger
- * /review/{reviewId}:
+ * /reviews/{reviewId}:
  *   put:
  *     summary: Update a review by review ID
  *     tags: [Reviews]
@@ -96,12 +118,25 @@
  *         schema:
  *           type: string
  *         description: Review ID to update
+ *       - name: title
+ *         in: formData
+ *         required: false
+ *         type: string
+ *         description: New title for the review
+ *       - name: content
+ *         in: formData
+ *         required: false
+ *         type: string
+ *         description: New content for the review
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
+ *                 description: New title for the review
  *               content:
  *                 type: string
  *                 description: New content for the review
@@ -111,7 +146,19 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/definitions/Review'
+ *               type: object
+ *               properties:
+ *                 title:
+ *                   type: string
+ *                   description: Updated review title
+ *                 content:
+ *                   type: string
+ *                   description: Updated review content
+ */
+
+/**
+ * @swagger
+ * /reviews/{reviewId}:
  *   delete:
  *     summary: Delete a review by review ID
  *     tags: [Reviews]

@@ -1,20 +1,30 @@
-import { Request, Response, NextFunction } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import { ReviewAuthService } from '../services/reviewService';
-import { ReviewValidator } from '../utils/validators/reviewValidator';
-// import { handleImageUpload } from '../middlewares/uploadMiddleware';
+import { Request, Response, NextFunction } from "express";
+import { StatusCodes } from "http-status-codes";
+import {
+  addReview,
+  getReview,
+  setReview,
+  deletedReview,
+} from "../services/reviewService";
+import { ReviewValidator } from "../utils/validators/reviewValidator";
+// import { handleFileUpload } from '../middlewares/uploadMiddleware';
+import { IRequest } from "user";
 
-
-const sendResponse = function (res : Response, statusCode : number, data : any) {
+const sendResponse = function (res: Response, statusCode: number, data: any) {
   if (statusCode >= 400) {
   } else {
     res.status(statusCode).json(data);
   }
 };
 
-const createReview = async (req : Request, res : Response, next : NextFunction) => {
+const createReview = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    // const author = req.currentUserId;
+    const author = req.user._id;
+
     const schema = ReviewValidator.postReview();
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
@@ -24,9 +34,8 @@ const createReview = async (req : Request, res : Response, next : NextFunction) 
     }
     // await handleImageUpload(req,res,()=>{});
 
-    const addMyReview = await ReviewAuthService.addReview({
-      // toCreate: { ...req.body, author },
-      toCreate: { ...req.body},
+    const addMyReview = await addReview({
+      toCreate: { ...req.body, author },
     });
 
     return sendResponse(res, StatusCodes.CREATED, addMyReview);
@@ -35,19 +44,26 @@ const createReview = async (req : Request, res : Response, next : NextFunction) 
   }
 };
 
-const getMyReview = async (req : Request, res : Response, next : NextFunction) => {
+const getMyReview = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    // const myReview = await ReviewAuthService.getReview(req.currentUserId);
-
-    // return sendResponse(res, StatusCodes.OK, myReview);
+    const myReview = await getReview(req.user._id);
+    return sendResponse(res, StatusCodes.OK, myReview);
   } catch (err) {
     next(err);
   }
 };
 
-const getUserReview = async (req : Request, res : Response, next : NextFunction) => {
+const getUserReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const userReview = await ReviewAuthService.getReview(req.params.userId);
+    const userReview = await getReview(req.params.userId);
 
     return sendResponse(res, StatusCodes.OK, userReview);
   } catch (err) {
@@ -55,18 +71,24 @@ const getUserReview = async (req : Request, res : Response, next : NextFunction)
   }
 };
 
-const updateReview = async (req : Request, res : Response, next : NextFunction) => {
+const updateReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const id = req.params.reviewId;
+
     const schema = ReviewValidator.putReview();
     const validationResult = schema.validate(req.body);
-
     if (validationResult.error) {
       return sendResponse(res, StatusCodes.BAD_REQUEST, {
         error: validationResult.error.details[0].message,
       });
     }
-    const updatedReview = await ReviewAuthService.setReview(id, {
+    // await handleFileUpload(req,res,() => {});
+
+    const updatedReview = await setReview(id, {
       toUpdate: { ...req.body },
     });
 
@@ -76,13 +98,15 @@ const updateReview = async (req : Request, res : Response, next : NextFunction) 
   }
 };
 
-const deleteReview = async (req : Request, res : Response, next : NextFunction) => {
+const deleteReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const deletedReview = await ReviewAuthService.deleteReview(
-      req.params.reviewId
-    );
+    const deletReview = await deletedReview(req.params.reviewId);
 
-    return sendResponse(res, StatusCodes.OK, deletedReview);
+    return sendResponse(res, StatusCodes.OK, deletReview);
   } catch (err) {
     next(err);
   }

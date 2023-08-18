@@ -7,7 +7,6 @@ import { Request, Response, NextFunction } from "express";
 const logDir = "logs";
 const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
 const errorLogDir = path.join(logDir, "error"); // error 로그를 저장할 폴더 경로
-const httpLogDir = path.join(logDir, "http"); // http 로그를 저장할 폴더 경로
 
 const { combine, timestamp, printf } = winston.format;
 
@@ -36,13 +35,6 @@ const logger = winston.createLogger({
       maxFiles: "30d",
     }),
     new winstonDaily({
-      level: "info",
-      filename: path.join(httpLogDir, "%DATE%.http.log"),
-      datePattern: "YYYY-MM-DD",
-      zippedArchive: true,
-      maxFiles: "30d",
-    }),
-    new winstonDaily({
       level: "error",
       filename: path.join(errorLogDir, "%DATE%.error.log"),
       datePattern: "YYYY-MM-DD",
@@ -52,28 +44,22 @@ const logger = winston.createLogger({
   ],
 });
 
-// logger.stream = {
-//   write : (message : string) => {
-//     logger.info(message);
-//   }
-// }
-
-function httpLogger(req: Request, res: Response, next: NextFunction): void {
-  morgan("combined", {
-    stream: {
-      write: (message: string) => {
+function httpLogger(req : Request ,res : Response ,next : NextFunction) : void {
+  morgan(':method :url :status :response-time ms - :res[content-length] :body', {
+    stream : {
+      write : (message : string) => {
         logger.info(message);
       },
     },
   })(req, res, next);
 }
 
-function errorMiddleware(
-  error: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
+morgan.token('body', (req: Request, res: Response) => {
+  return JSON.stringify(req.body);
+});
+
+function errorMiddleware(error : Error, req : Request, res : Response, next : NextFunction) : void {
+
   logger.error(error);
   res.status(400).send(error.message);
 }
