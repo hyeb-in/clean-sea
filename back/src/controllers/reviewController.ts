@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { addReview, getReview, setReview, deletedReview } from '../services/reviewService';
 import { ReviewValidator } from '../utils/validators/reviewValidator';
-// import { handleImageUpload } from '../middlewares/uploadMiddleware';
+// import { handleFileUpload } from '../middlewares/uploadMiddleware';
 import { RequestTest } from "user";
 
 
@@ -58,14 +58,17 @@ const getUserReview = async (req : Request, res : Response, next : NextFunction)
 const updateReview = async (req : Request, res : Response, next : NextFunction) => {
   try {
     const id = req.params.reviewId;
+
     const schema = ReviewValidator.putReview();
     const validationResult = schema.validate(req.body);
-
     if (validationResult.error) {
       return sendResponse(res, StatusCodes.BAD_REQUEST, {
         error: validationResult.error.details[0].message,
       });
     }
+    // await handleFileUpload(req,res,() => {});
+
+
     const updatedReview = await setReview(id, {
       toUpdate : {...req.body},
     });

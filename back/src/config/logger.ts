@@ -7,7 +7,6 @@ import { Request, Response, NextFunction } from "express";
 const logDir = "logs";
 const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
 const errorLogDir = path.join(logDir, "error"); // error 로그를 저장할 폴더 경로
-const httpLogDir = path.join(logDir, "http"); // http 로그를 저장할 폴더 경로
 
 const { combine, timestamp, printf } = winston.format;
 
