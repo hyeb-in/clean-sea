@@ -10,12 +10,12 @@ import { jwtAuthentication } from "../middlewares/authenticateJwt";
 const beachRouter = Router();
 
 beachRouter
-  .get('/beaches/:name', validate(beachNameValidator()), getBeachByBeachName);
+  .get('/beachbyname/:name', validate(beachNameValidator()), jwtAuthentication, getBeachByBeachName);
 
 beachRouter
-  .get('/beaches/:address', validate(addressNameValidator()), jwtAuthentication, getBeachByRegion);
+  .get('/beachesbyregion/:address', validate(addressNameValidator()), jwtAuthentication, getBeachByRegion);
 
 beachRouter
   .get('/beaches', jwtAuthentication, getBeaches);
 
-export { beachRouter };
+export default beachRouter;
