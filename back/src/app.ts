@@ -21,10 +21,9 @@ jwtStrategy();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-if (process.env.NODE_ENV === "development") {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-  console.log("[LOG] Swagger API DOCS - http://localhost:5001/api-docs");
-}
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+console.log("[LOG] Swagger API DOCS - http://localhost:5001/api-docs");
+
 app.get("/", (req: Request, res: Response) => {
   res.send("기본 페이지");
 });
