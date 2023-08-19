@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import ReviewCard from "./ReviewCard";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import * as Api from "../../Api";
 import SpinnerWrapper from "../Spinner";
-import { useNavigate } from "react-router-dom";
+import NoReviewIndicator from "./NoReviewIndicator";
 
+// to do: setShowUploadForm -> context api ?
 const Reviews = ({ setShowUploadForm }) => {
-  const navigate = useNavigate();
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,43 +49,10 @@ const Reviews = ({ setShowUploadForm }) => {
               </Col>
             ))}
           {isLoaded && reviews?.length === 0 && (
-            <Container
-              className="d-flex flex-column justify-content-center align-items-center"
-              style={{ width: "100%", height: "calc(100vh - 20px)" }}
-            >
-              <Card style={{ width: "18rem", padding: "30px" }}>
-                <Card.Body className="d-flex flex-column justify-content-center align-items-center">
-                  <Card.Title>작성된 리뷰가 없습니다</Card.Title>
-                  <Card.Text
-                    style={{
-                      margin: "0 0 50px 0",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyItems: "center",
-                    }}
-                  >
-                    첫번째 게시물을 작성해보세요
-                  </Card.Text>
-                  {/* 클릭하면 setShowModal */}
-
-                  {loggedInUser ? (
-                    <Button
-                      variant="primary"
-                      onClick={() => setShowUploadForm(true)}
-                    >
-                      글 작성하기
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="primary"
-                      onClick={() => navigate("/login")}
-                    >
-                      로그인
-                    </Button>
-                  )}
-                </Card.Body>
-              </Card>
-            </Container>
+            <NoReviewIndicator
+              loggedInUser={loggedInUser}
+              setShowUploadForm={setShowUploadForm}
+            />
           )}
         </Row>
       </Container>

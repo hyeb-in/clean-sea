@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
+import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import Avatar from "../Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
@@ -66,7 +66,7 @@ const ReviewCard = ({ review, setReviews }) => {
                 <Button
                   variant="link"
                   style={{ color: "black" }}
-                  onClick={() => setIsActionModalVisible(!isActionModalVisible)}
+                  onClick={() => setIsActionModalVisible(false)}
                 >
                   <FontAwesomeIcon icon={faEllipsis} />
                 </Button>
@@ -87,9 +87,7 @@ const ReviewCard = ({ review, setReviews }) => {
                   <ListGroup.Item
                     key="cancel"
                     action
-                    onClick={() =>
-                      setIsActionModalVisible(!isActionModalVisible)
-                    }
+                    onClick={() => setIsActionModalVisible(false)}
                   >
                     취소
                   </ListGroup.Item>
