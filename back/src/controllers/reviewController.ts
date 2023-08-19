@@ -24,6 +24,8 @@ const createReview = async (
 ) => {
   try {
     const author = req.user._id;
+    console.log(req.user.name);
+    const userName = req.user.name;
 
     const schema = ReviewValidator.postReview();
     const validationResult = schema.validate(req.body);
@@ -35,7 +37,7 @@ const createReview = async (
     // await handleImageUpload(req,res,()=>{});
 
     const addMyReview = await addReview({
-      toCreate: { ...req.body, author },
+      toCreate: { ...req.body, author, userName },
     });
 
     return sendResponse(res, StatusCodes.CREATED, addMyReview);
@@ -44,32 +46,32 @@ const createReview = async (
   }
 };
 
-const getMyReview = async (
+const getAllReview = async (
   req: IRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const myReview = await getReview(req.user._id);
-    return sendResponse(res, StatusCodes.OK, myReview);
+    const allReview = await getReview();
+    return sendResponse(res, StatusCodes.OK, allReview);
   } catch (err) {
     next(err);
   }
 };
 
-const getUserReview = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const userReview = await getReview(req.params.userId);
+// const getUserReview = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const userReview = await getReview(req.params.userId);
 
-    return sendResponse(res, StatusCodes.OK, userReview);
-  } catch (err) {
-    next(err);
-  }
-};
+//     return sendResponse(res, StatusCodes.OK, userReview);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 const updateReview = async (
   req: Request,
@@ -112,4 +114,4 @@ const deleteReview = async (
   }
 };
 
-export { createReview, getMyReview, getUserReview, updateReview, deleteReview };
+export { createReview, getAllReview, updateReview, deleteReview };
