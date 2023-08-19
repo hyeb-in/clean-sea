@@ -8,6 +8,7 @@ export const findUserById = async (userId: string): Promise<IUser> => {
 
 export const findUserByEmail = async (email: string): Promise<IUser> => {
   const user = await UserModel.findOne({ email });
+  console.log(user);
   return user;
 };
 
@@ -15,12 +16,13 @@ export const createNewUser = async (
   name: string,
   email: string,
   hashedPassword: string
-): Promise<IUser> => {
+) => {
   const newUser = await UserModel.create({
     name,
     email,
     password: hashedPassword,
   });
+  console.log(newUser);
 
   return newUser;
 };

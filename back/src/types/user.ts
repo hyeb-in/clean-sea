@@ -13,10 +13,3 @@ export interface IRequest extends Request {
   user: IUser;
   token: string;
 }
-
-// export type user = {
-//   _id: string;
-//   name: string;
-//   email: string;
-//   password: string;
-// };

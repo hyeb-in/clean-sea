@@ -11,21 +11,19 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "./Avatar";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
-import AddReview from "./AddReview";
 
 import React, { useState, useContext } from "react";
 import { UserStateContext, DispatchContext } from "../App";
+import ReviewForm from "./review/ReviewForm";
 
 const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  const userState = useContext(UserStateContext);
+  const { user: loggedInUser } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
-  console.log(userState.user, "유저<<<<<<");
-  // 로그인 했을 때 유저 토큰만 찍힘
-  // 새로고침 누르면 false 찍힘
-  const isLogin = !!userState.user;
+
+  const isLogin = !!loggedInUser;
 
   const logout = () => {
     sessionStorage.removeItem("userToken");
@@ -84,20 +82,22 @@ const NavBar = () => {
                   >
                     <FontAwesomeIcon icon={faSquarePlus} />
                   </OverlayTrigger>
-                  <AddReview
+                  <ReviewForm
                     showModal={showModal}
                     setShowModal={setShowModal}
+                    headerTitle="새 게시물 작성하기"
                   />
                 </Nav.Link>
                 <Nav.Item>
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>
                 </Nav.Item>
-                <Nav.Link>
+                <Nav.Link
+                  onClick={() => navigate(`/users/${loggedInUser._id}`)}
+                >
                   <OverlayTrigger
                     placement="bottom"
                     overlay={<Tooltip id="my-profile">나의 프로필</Tooltip>}
-                    // onClick={() => navigate(`users/${}`)}
-                    // 유저 정보가 아직 userState에 저장되지 않고있음
+                    // '나의 프로필' 오버레이가 뜨지 않는 이유?_?
                   >
                     <Avatar width="50" />
                   </OverlayTrigger>
