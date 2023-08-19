@@ -48,7 +48,7 @@ const MyProfile = () => {
   const handleCompleteClick = async () => {
     setIsEditMode(false);
 
-    const apiEndpoint = `/users/${id}`;
+    const apiEndpoint = `users/${id}`;
     const postData = {
       name: userName,
       email: userEmail,
