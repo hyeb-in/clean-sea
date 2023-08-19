@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Image, Row } from "react-bootstrap";
 import Avatar from "../common/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
@@ -23,8 +23,10 @@ const ReviewCard = ({ review, setReviews }) => {
     content,
     createdAt,
     imageUrl,
+    userName,
   } = review;
 
+  console.log(userName);
   // get user avatar >> get 'users/id' ?
 
   return (
@@ -43,7 +45,7 @@ const ReviewCard = ({ review, setReviews }) => {
               <Avatar width="50" />
             </Col>
             <Col className="d-flex align-items-center px-0">
-              {authorId}
+              {userName}
               {/* TO DO: 몇 일 전, 몇시간 전 */}
             </Col>
 
@@ -78,7 +80,7 @@ const ReviewCard = ({ review, setReviews }) => {
         </Card.Header>
         <Card.Body>
           {/* to do: 서버 image 저장 후 carousel */}
-          {/* <Image src={imageUrl} fluid /> */}
+          <Image src={imageUrl} fluid />
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
         </Card.Body>

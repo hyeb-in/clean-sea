@@ -22,7 +22,7 @@ const Reviews = ({ reviews, setReviews }) => {
     };
     fetchData();
   }, [setReviews]);
-  console.log(reviews);
+
   return (
     <>
       <Container className="py-3">
