@@ -3,11 +3,10 @@ import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import Avatar from "../Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import ModalWrapper from "../ModalWrapper";
 import { UserStateContext } from "../../App";
-import * as Api from "../../Api";
 import ReviewForm from "./ReviewForm";
 import { useNavigate } from "react-router-dom";
+import ActionSelectorModal from "./ActionSelectorModal";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const ReviewCard = ({ review, setReviews }) => {
@@ -19,27 +18,6 @@ const ReviewCard = ({ review, setReviews }) => {
   const [error, setError] = useState(null);
 
   const handleClose = () => setIsActionModalVisible(false);
-
-  const showEditForm = async () => {
-    setIsActionModalVisible(false);
-    setIsEditingModalVisible(true);
-  };
-
-  const deleteReview = async (reviewId) => {
-    if (isActionModalVisible) {
-      setIsActionModalVisible(false);
-    }
-    try {
-      const res = await Api.delete(`reviews/${reviewId}`);
-      // to do: error handle
-      if (!res.statusText === "OK") throw new Error("서버 에러 받아오기");
-      setReviews((current) => {
-        return current.filter((review) => review._id !== reviewId);
-      });
-    } catch (err) {
-      setError(err);
-    }
-  };
 
   return (
     <>
@@ -66,33 +44,20 @@ const ReviewCard = ({ review, setReviews }) => {
                 <Button
                   variant="link"
                   style={{ color: "black" }}
-                  onClick={() => setIsActionModalVisible(false)}
+                  onClick={() => setIsActionModalVisible(true)}
                 >
                   <FontAwesomeIcon icon={faEllipsis} />
                 </Button>
               )}
-              <ModalWrapper show={isActionModalVisible} onHide={handleClose}>
-                <ListGroup className="text-center">
-                  <ListGroup.Item key="edit" action onClick={showEditForm}>
-                    수정
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    key="del"
-                    action
-                    style={{ color: "red" }}
-                    onClick={() => deleteReview(reviewId)}
-                  >
-                    삭제
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    key="cancel"
-                    action
-                    onClick={() => setIsActionModalVisible(false)}
-                  >
-                    취소
-                  </ListGroup.Item>
-                </ListGroup>
-              </ModalWrapper>
+              <ActionSelectorModal
+                reviewId={reviewId}
+                handleClose={handleClose}
+                isActionModalVisible={isActionModalVisible}
+                setIsActionModalVisible={setIsActionModalVisible}
+                setIsEditingModalVisible={setIsEditingModalVisible}
+                setReviews={setReviews}
+                setError={setError}
+              />
             </Col>
           </Row>
         </Card.Header>

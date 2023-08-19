@@ -6,9 +6,9 @@ import SpinnerWrapper from "../Spinner";
 import NoReviewIndicator from "./NoReviewIndicator";
 
 // to do: setShowUploadForm -> context api ?
-const Reviews = ({ setShowUploadForm }) => {
+const Reviews = ({ setShowUploadForm, reviews, setReviews }) => {
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [reviews, setReviews] = useState(null);
+  // const [reviews, setReviews] = useState(null);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);

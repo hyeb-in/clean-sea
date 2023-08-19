@@ -18,6 +18,7 @@ import "./Main.css";
 import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
+import ReviewForm from "./components/review/ReviewForm";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -33,6 +34,8 @@ function App() {
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
+  const [reviews, setReviews] = useState(null);
+
   const fetchCurrentUser = async () => {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
@@ -73,6 +76,16 @@ function App() {
               />
             </>
           )}
+          {
+            <ReviewForm
+              showUploadForm={showUploadForm}
+              setShowUploadForm={setShowUploadForm}
+              headerTitle="새 게시물 작성하기"
+              reviews={reviews}
+              setReviews={setReviews}
+              // 넘겨줘야 글 작성한 후에 list에 추가되는 거 보여줄 수 있음
+            />
+          }
           <Routes>
             {/* to do: 404 페이지 만들기 */}
             <Route path="/" exact element={<Main />} />
@@ -83,7 +96,13 @@ function App() {
             <Route
               path="/reviews"
               exact
-              element={<Reviews setShowUploadForm={setShowUploadForm} />}
+              element={
+                <Reviews
+                  setShowUploadForm={setShowUploadForm}
+                  reviews={reviews}
+                  setReviews={setReviews}
+                />
+              }
             />
             <Route path="/graph" exact element={<Graph />} />
           </Routes>

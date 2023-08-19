@@ -1,3 +1,6 @@
+import React, { useContext } from "react";
+import { UserStateContext, DispatchContext } from "../App";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartLine,
@@ -9,12 +12,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import ReviewForm from "./review/ReviewForm";
 import Avatar from "./Avatar";
-
-import React, { useContext } from "react";
-import { UserStateContext, DispatchContext } from "../App";
-import { useNavigate } from "react-router-dom";
 
 const NavBar = ({ showUploadForm, setShowUploadForm }) => {
   const navigate = useNavigate();
@@ -79,11 +77,6 @@ const NavBar = ({ showUploadForm, setShowUploadForm }) => {
                   >
                     <FontAwesomeIcon icon={faSquarePlus} />
                   </OverlayTrigger>
-                  <ReviewForm
-                    showUploadForm={showUploadForm}
-                    setShowUploadForm={setShowUploadForm}
-                    headerTitle="새 게시물 작성하기"
-                  />
                 </Nav.Link>
                 <Nav.Item>
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>
