@@ -1,8 +1,8 @@
 import { Router } from "express";
 import {
   createReview,
-  getMyReview,
-  getUserReview,
+  getAllReview,
+  // getUserReview,
   updateReview,
   deleteReview,
 } from "../controllers/reviewController";
@@ -12,9 +12,9 @@ const reviewAuthRouter = Router();
 
 reviewAuthRouter
     .post("/register", jwtAuthentication, createReview)
-    .get("/reviewList", jwtAuthentication, getMyReview);
+    .get("/reviewList", getAllReview);
 
-reviewAuthRouter.get("/:userId", jwtAuthentication, getUserReview);
+// reviewAuthRouter.get("/:userId", jwtAuthentication, getUserReview);
 
 reviewAuthRouter
     .route("/:reviewId")
