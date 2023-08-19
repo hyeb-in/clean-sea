@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import * as Api from "../Api";
 
 const SignUp = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
   //이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
@@ -34,14 +34,14 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(name);
-  // 여기에서 실제 회원가입 로직을 구현하고 서버와 통신하면 됩니다.
+    // 여기에서 실제 회원가입 로직을 구현하고 서버와 통신하면 됩니다.
     try {
       if (isFormValid)
-      await Api.post("users/register", {
-        name,
-        email,
-        password
-      });
+        await Api.post("users/register", {
+          name,
+          email,
+          password,
+        });
       navigate("/Login");
     } catch (err) {
       console.log("회원가입에 실패하셨습니다.", err);
@@ -50,100 +50,113 @@ const SignUp = () => {
 
   return (
     <div
-     style={{
-      paddingTop: "134px",
-      height: "100%",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-     }}
-    >
-    <div style={{ 
-    width: "350px",
-    boxShadow: "0px 4px 12px #00000026" 
-    }}>
-    <div className="container" style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100%",
-      gap: "16px",
-      padding: "16px"
-    }}>
-      <h2 style={{ textAlign: "center" }}>회원가입</h2>
-      <form onSubmit={handleSubmit} style={{
+      style={{
+        height: "100vh",
         display: "flex",
-        flexDirection: "column",
         justifyContent: "center",
-        height: "100%",
-        width: "100%",
-        gap: "16px"
-      }}>
-         <div className="form-group">
-          <label style={{ fontSize: "18px" }}>Name</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="이름을 입력하세요."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          {!isNameValid && (
-              <div className="text-danger">
-                이름은 2글자 이상으로 설정해 주세요.
-              </div>
-            )}
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          width: "350px",
+          boxShadow: "0px 4px 12px #00000026",
+        }}
+      >
+        <div
+          className="container"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            gap: "16px",
+            padding: "16px",
+          }}
+        >
+          <h2 style={{ textAlign: "center" }}>회원가입</h2>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              height: "100%",
+              width: "100%",
+              gap: "16px",
+            }}
+          >
+            <div className="form-group">
+              <label style={{ fontSize: "18px" }}>Name</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="이름을 입력하세요."
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              {!isNameValid && (
+                <div className="text-danger">
+                  이름은 2글자 이상으로 설정해 주세요.
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label style={{ fontSize: "18px" }}>Email</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="생성할 이메일을 입력하세요."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {!isEmailValid && (
+                <div className="text-danger">
+                  이메일 형식이 올바르지 않습니다.
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label style={{ fontSize: "18px" }}>Password</label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="비밀번호를 입력하세요."
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {!isPasswordValid && (
+                <div className="text-danger">
+                  비밀번호는 4글자 이상으로 설정해 주세요.
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label style={{ fontSize: "18px" }}>Confirm Password</label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="비밀번호 확인."
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              {!isPasswordValid && (
+                <div className="text-danger">
+                  비밀번호가 일치한지 확인해 주세요.
+                </div>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!isFormValid}
+            >
+              회원가입
+            </button>
+          </form>
         </div>
-        <div className="form-group">
-          <label style={{ fontSize: "18px" }}>Email</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="생성할 이메일을 입력하세요."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {!isEmailValid && (
-              <div className="text-danger">
-                이메일 형식이 올바르지 않습니다.
-              </div>
-            )}
-        </div>
-        <div className="form-group">
-          <label style={{ fontSize: "18px" }}>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="비밀번호를 입력하세요."
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {!isPasswordValid && (
-              <div className="text-danger">
-                비밀번호는 4글자 이상으로 설정해 주세요.
-              </div>
-            )}
-        </div>
-        <div className="form-group">
-          <label style={{ fontSize: "18px" }}>Confirm Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="비밀번호 확인."
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          {!isPasswordValid && (
-              <div className="text-danger">
-                비밀번호가 일치한지 확인해 주세요.
-              </div>
-            )}
-        </div>
-        <button type="submit" className="btn btn-primary" disabled={!isFormValid}>회원가입</button>
-      </form>
-    </div>
-    </div>
+      </div>
     </div>
   );
 };

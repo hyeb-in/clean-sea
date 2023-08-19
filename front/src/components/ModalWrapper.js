@@ -1,5 +1,6 @@
 import { Modal } from "react-bootstrap";
 
+// to do: 뭔가 이상함.. 다시 생각해보기
 const ModalWrapper = ({ children, show, onHide }) => {
   return (
     <Modal
