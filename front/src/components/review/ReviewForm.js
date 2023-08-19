@@ -1,18 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FileUploader } from "react-drag-drop-files";
 import { Button, Col, Modal, Row, Form } from "react-bootstrap";
-import Carousel from "../common/Carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FileUploader } from "react-drag-drop-files";
+import Carousel from "../common/Carousel";
 import Toast from "../common/Toast";
-import * as Api from "../../Api";
 import {
   EditFormContext,
   EditingDataContext,
   UploadFormContext,
-  UserStateContext,
 } from "../../App";
 import DragAndDrop from "../common/DragAndDrop";
+import * as Api from "../../Api";
 
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
 const MAX_FILE_COUNT = 5;
@@ -83,11 +82,13 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     // to do: upload imageUrls
     try {
       // to do:   에러 핸들링
+      if (title.length < 4) return setError("제목을 4글자 이상 입력해주세요");
+      if (content.length < 4) return setError("내용을 4글자 이상 입력해주세요");
       if (FORM_STATUS.adding) {
         const res = await Api.post("reviews/register", { title, content });
         console.log(res);
-        // if (res.statusText !== "OK") throw new Error("에러가져오기");
-        console.log(res.data);
+        if (!res.data.ok) throw new Error("에러가져오기");
+
         setReviews((currentReviews) => [...currentReviews, res.data]);
       }
       if (FORM_STATUS.editing) {
@@ -140,13 +141,25 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
           }}
           onClick={(e) => e.stopPropagation()}
           // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
-          // to do: space bar입력시 모달창 사라짐 버그
+          // to do: space bar입력시 모달창 사라짐 버그 (윈도우..? 확인하기)
         >
           {showToast && (
             <Toast
+              show={showToast}
               onClose={() => setShowToast(false)}
               text={`최대 ${MAX_FILE_COUNT}개까지 업로드 가능합니다.`}
             />
+          )}
+          {error && (
+            <Toast
+              show={!!error}
+              delay={2000}
+              autohide
+              onClose={() => setError(null)}
+              text={error}
+              bg="light"
+            />
+            // 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'dark' | 'light'
           )}
           <Modal.Header closeButton>
             <Modal.Title>{headerTitle}</Modal.Title>
