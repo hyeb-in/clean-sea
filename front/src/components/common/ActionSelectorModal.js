@@ -12,7 +12,6 @@ const ActionSelectorModal = ({
   setIsActionModalVisible,
   reviewId,
   setReviews,
-  setError,
 }) => {
   const { setIsEditFormVisible } = useContext(EditFormContext);
 
@@ -28,7 +27,8 @@ const ActionSelectorModal = ({
         return current.filter((review) => review._id !== reviewId);
       });
     } catch (err) {
-      setError(err);
+      console.error(err);
+      // to do
     }
   };
   return (

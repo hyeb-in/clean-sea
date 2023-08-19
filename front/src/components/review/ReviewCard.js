@@ -13,7 +13,6 @@ const ReviewCard = ({ review, setReviews }) => {
   const { setEditingData } = useContext(EditingDataContext);
 
   const [isActionModalVisible, setIsActionModalVisible] = useState(false);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const {
@@ -27,6 +26,15 @@ const ReviewCard = ({ review, setReviews }) => {
   } = review;
 
   // get user avatar >> get 'users/id' ?
+
+  const currentTime = new Date(); // 현재 시간
+  const createdAtgg = new Date(createdAt); // 주어진 시간
+
+  const timeDifference = currentTime.getTime() - createdAtgg.getTime(); // 밀리초 단위의 차이
+
+  const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+  const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60)); // 시간으로 변환
+  const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일자로 변환
 
   return (
     <>
@@ -43,10 +51,7 @@ const ReviewCard = ({ review, setReviews }) => {
               {/* to do: get user's info -> avatar url */}
               <Avatar width="50" />
             </Col>
-            <Col className="d-flex align-items-center px-0">
-              {userName}
-              {/* TO DO: 몇 일 전, 몇시간 전 */}
-            </Col>
+            <Col className="d-flex align-items-center px-0">{userName}</Col>
 
             {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
             {/* 클릭하면 수정, 삭제 선택하는 모달 창을 띄운다 */}
@@ -72,7 +77,6 @@ const ReviewCard = ({ review, setReviews }) => {
                 isActionModalVisible={isActionModalVisible}
                 setIsActionModalVisible={setIsActionModalVisible}
                 setReviews={setReviews}
-                setError={setError}
               />
             </Col>
           </Row>
@@ -82,6 +86,11 @@ const ReviewCard = ({ review, setReviews }) => {
           <Image src={imageUrl} fluid />
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
+          <Card.Text className="d-flex justify-content-end">
+            {minutesPassed < 60 && `${minutesPassed}분 전`}
+            {minutesPassed >= 60 && hoursPassed < 12 && `${hoursPassed}시간 전`}
+            {minutesPassed >= 60 && hoursPassed >= 12 && `${daysPassed}일 전`}
+          </Card.Text>
         </Card.Body>
       </Card>
     </>
