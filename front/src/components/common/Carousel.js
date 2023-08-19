@@ -1,8 +1,5 @@
-import {
-  faArrowLeft,
-  faArrowRight,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
@@ -14,26 +11,31 @@ const CarouselWrapper = ({ imageUrls, setImageUrls }) => {
   };
   return (
     <Carousel
+      interval={null}
       variant="dark"
       prevIcon={
-        <FontAwesomeIcon
-          icon={faArrowLeft}
-          style={{
-            backgroundColor: "black",
-            padding: "5px",
-            borderRadius: "50%",
-          }}
-        />
+        imageUrls.length > 1 && (
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            style={{
+              backgroundColor: "black",
+              padding: "5px",
+              borderRadius: "50%",
+            }}
+          />
+        )
       }
       nextIcon={
-        <FontAwesomeIcon
-          icon={faArrowRight}
-          style={{
-            backgroundColor: "black",
-            padding: "5px",
-            borderRadius: "50%",
-          }}
-        />
+        imageUrls.length > 1 && (
+          <FontAwesomeIcon
+            icon={faArrowRight}
+            style={{
+              backgroundColor: "black",
+              padding: "5px",
+              borderRadius: "50%",
+            }}
+          />
+        )
       }
     >
       {imageUrls.map((img, index) => (
@@ -45,8 +47,8 @@ const CarouselWrapper = ({ imageUrls, setImageUrls }) => {
             style={{ width: "auto", height: "320px", objectFit: "cover" }}
           />
           <Carousel.Caption style={{ textAlign: "right" }}>
-            <Button variant="dark" onClick={() => removeUrl(index)}>
-              <FontAwesomeIcon icon={faTrash} />
+            <Button variant="danger" onClick={() => removeUrl(index)}>
+              삭제 <FontAwesomeIcon icon={faTrashCan} />
             </Button>
           </Carousel.Caption>
         </Carousel.Item>

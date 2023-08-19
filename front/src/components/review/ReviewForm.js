@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Modal, Row, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBomb,
+  faCircleCheck,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { FileUploader } from "react-drag-drop-files";
 import Carousel from "../common/Carousel";
 import Toast from "../common/Toast";
@@ -12,9 +16,15 @@ import {
 } from "../../App";
 import DragAndDrop from "../common/DragAndDrop";
 import * as Api from "../../Api";
+import SpinnerWrapper from "../common/Spinner";
+import ModalBodyWrapper from "../common/ModalBodyWrapper";
 
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
 const MAX_FILE_COUNT = 5;
+const RESULT_ENUM = {
+  SUCCESS: "성공",
+  FAIL: "실패",
+};
 
 const ReviewForm = ({ headerTitle, setReviews }) => {
   const { isUploadFormVisible, setIsUploadFormVisible } =
@@ -32,15 +42,16 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   const [title, setTitle] = useState(currentFormData?.title || "");
   const [content, setContent] = useState(currentFormData?.content || "");
   const [imageUrls, setImageUrls] = useState([]);
-  const [showToast, setShowToast] = useState(false);
-  const [error, setError] = useState(null);
+  const [toastMsg, setToastMsg] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [result, setResult] = useState(null);
 
   const fileUploaderIndicator =
     imageUrls.length === 0 ? (
       <DragAndDrop />
     ) : (
       <Button className="mb-2">
-        <FontAwesomeIcon icon={faPlus} />
+        <FontAwesomeIcon icon={faPlus} /> 추가하기
       </Button>
     );
   const handleFileChange = (files) => {
@@ -48,7 +59,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
       files.length > MAX_FILE_COUNT ||
       (imageUrls.length > 0 && imageUrls.length + files.length > MAX_FILE_COUNT)
     ) {
-      return setShowToast(true);
+      return setToastMsg(`최대 ${MAX_FILE_COUNT}개까지 업로드 가능합니다.`);
     }
     if (files.length > 0) {
       // FileList 객체를 배열로 변환
@@ -81,23 +92,32 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     e.preventDefault();
     // to do: upload imageUrls
     try {
-      // to do:   에러 핸들링
-      if (title.length < 4) return setError("제목을 4글자 이상 입력해주세요");
-      if (content.length < 4) return setError("내용을 4글자 이상 입력해주세요");
-      if (FORM_STATUS.adding) {
-        const res = await Api.post("reviews/register", { title, content });
-        console.log(res);
-        if (!res.data.ok) throw new Error("에러가져오기");
+      if (title.length < 4)
+        return setToastMsg("제목을 4글자 이상 입력해주세요");
+      if (content.length < 4)
+        return setToastMsg("내용을 4글자 이상 입력해주세요");
+      if (content.length > 300) return;
 
+      // POST reviews
+      if (FORM_STATUS.adding) {
+        setIsUploading(true);
+        const res = await Api.post("reviews/register", {
+          title,
+          content,
+        });
+        // 에러 메세지 안가져와지는 거 같은뎅
+        if (!res.status === 400) throw new Error("업로드에 실패했습니다");
         setReviews((currentReviews) => [...currentReviews, res.data]);
       }
+
+      // PUT reviews
       if (FORM_STATUS.editing) {
+        setIsUploading(true);
         const res = await Api.put(`reviews/${currentFormData._id}`, {
           title,
           content,
         });
-        if (!res.data.ok) throw new Error("에러가져오기");
-
+        if (!res.status === 400) throw new Error("업로드에 실패했습니다");
         setReviews((currentReviews) =>
           currentReviews.map((review) =>
             review._id === currentFormData._id
@@ -111,11 +131,13 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         setContent(null);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error(error);
+      setResult(RESULT_ENUM.FAIL);
     }
-    // to do: 백엔드 에러 상태코드 받아서 체크할 것
-    setIsUploadFormVisible(false);
-    setIsEditFormVisible(false);
+    setIsUploading(false);
+    setResult(RESULT_ENUM.SUCCESS);
+    // setIsUploadFormVisible(false);
+    // setIsEditFormVisible(false);
   };
 
   useEffect(() => {
@@ -128,98 +150,126 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     }
   }, [imageUrls, isUploadFormVisible]);
 
+  const closeResultIndicator = () => {
+    setIsUploadFormVisible(false);
+    setIsEditFormVisible(false);
+    setEditingData(null);
+    setTitle("");
+    setContent("");
+    setImageUrls([]);
+    setToastMsg("");
+    setResult(null);
+  };
   return (
     <>
+      {/* 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
       {(isUploadFormVisible || isEditFormVisible) && (
         <Modal
           centered
           show={isUploadFormVisible || isEditFormVisible}
-          onHide={() => {
-            setIsUploadFormVisible(false);
-            setIsEditFormVisible(false);
-            setEditingData(null);
-          }}
+          onHide={closeResultIndicator}
+          onClose={closeResultIndicator}
           onClick={(e) => e.stopPropagation()}
           // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
           // to do: space bar입력시 모달창 사라짐 버그 (윈도우..? 확인하기)
         >
-          {showToast && (
-            <Toast
-              show={showToast}
-              onClose={() => setShowToast(false)}
-              text={`최대 ${MAX_FILE_COUNT}개까지 업로드 가능합니다.`}
-            />
+          {/* validation 통과하지 못했다면 toast pop-up으로 유저에게 알려줌 */}
+          {toastMsg && (
+            <Toast onClose={() => setToastMsg("")} text={toastMsg} />
           )}
-          {error && (
-            <Toast
-              show={!!error}
-              delay={2000}
-              autohide
-              onClose={() => setError(null)}
-              text={error}
-              bg="light"
-            />
-            // 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'dark' | 'light'
+          {/* 모달창 내부: 입력 받는 공간 */}
+          {!isUploading && !result && (
+            <ModalBodyWrapper text={headerTitle}>
+              {
+                <Row>
+                  {/* 드래그앤 드롭으로 파일 업로드 받을 수 있는 구역 */}
+                  <Col
+                    xs={7}
+                    className="d-flex flex-column align-items-center"
+                    style={{
+                      height: "100%",
+                    }}
+                  >
+                    <FileUploader
+                      handleChange={handleFileChange}
+                      name="file"
+                      types={fileTypes}
+                      multiple={true}
+                      // maxSize={2} // 최대 2MB 크기까지 허용
+                      // minSize={1} // 최소 1MB 크기 이상만 허용
+                      children={fileUploaderIndicator}
+                    />
+                    {imageUrls.length > 0 && (
+                      <Carousel
+                        imageUrls={imageUrls}
+                        setImageUrls={setImageUrls}
+                      />
+                    )}
+                  </Col>
+                  {/* 리뷰 제목, 내용에 대한 인풋 */}
+                  <Col xs={5}>
+                    <Form.Group>
+                      <Form.Label>제목</Form.Label>
+                      <Form.Control
+                        as="input"
+                        size="sm"
+                        type="input"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>내용</Form.Label>
+                      <Form.Control
+                        rows={6}
+                        as="textarea"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                      />
+                    </Form.Group>
+                    <small
+                      className={content.length < 300 ? "text-muted" : ""}
+                      style={{ color: "red" }}
+                    >
+                      {content ? content.length : "0"}/300
+                    </small>
+                  </Col>
+                </Row>
+              }
+            </ModalBodyWrapper>
           )}
-          <Modal.Header closeButton>
-            <Modal.Title>{headerTitle}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Row>
-              <Col
-                xs={7}
-                className="d-flex flex-column align-items-center"
+          {/* 모달창 내부 */}
+          {/* submit 후 업로드 중 -> 1. loading indicator */}
+          {isUploading && (
+            <ModalBodyWrapper text="게시물을 업로드하는 중입니다">
+              <SpinnerWrapper />
+            </ModalBodyWrapper>
+          )}
+          {/* submit 후 결과 -> 2. success or fail */}
+          {result && !isUploading && (
+            <ModalBodyWrapper
+              text="게시물이 공유되었습니다"
+              onHide={() => closeResultIndicator}
+            >
+              <FontAwesomeIcon
+                icon={RESULT_ENUM.SUCCESS ? faCircleCheck : faBomb}
                 style={{
-                  height: "100%",
+                  width: "70px",
+                  height: "70px",
+                  color: "blue",
+                  padding: "50px 0",
                 }}
-              >
-                <FileUploader
-                  handleChange={handleFileChange}
-                  name="file"
-                  types={fileTypes}
-                  multiple={true}
-                  // maxSize={2} // 최대 2MB 크기까지 허용
-                  // minSize={1} // 최소 1MB 크기 이상만 허용
-                  children={fileUploaderIndicator}
-                />
-                {imageUrls.length > 0 && (
-                  <Carousel imageUrls={imageUrls} setImageUrls={setImageUrls} />
-                )}
-              </Col>
-              <Col xs={5}>
-                <Form.Group>
-                  <Form.Label>제목</Form.Label>
-                  <Form.Control
-                    as="input"
-                    size="sm"
-                    type="input"
-                    value={title}
-                    setState={setTitle}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label>내용</Form.Label>
-                  <Form.Control
-                    rows={6}
-                    as="textarea"
-                    value={content}
-                    setState={setContent}
-                    onChange={(e) => setContent(e.target.value)}
-                  />
-                </Form.Group>
-
-                <small className="text-muted">
-                  {content ? content.length : "0"}/300
-                </small>
-              </Col>
-            </Row>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={handleSubmit} variant="primary" type="submit">
-              {currentFormData ? "수정" : "공유"}
-            </Button>
-          </Modal.Footer>
+              />
+            </ModalBodyWrapper>
+          )}
+          {/* 모달창 footer */}
+          {!isUploading && !result && (
+            <Modal.Footer>
+              <Button onClick={handleSubmit} variant="primary" type="submit">
+                {currentFormData ? "수정" : "공유"}
+              </Button>
+            </Modal.Footer>
+          )}
         </Modal>
       )}
     </>

@@ -27,7 +27,7 @@ const Reviews = ({ reviews, setReviews }) => {
     <>
       <Container className="py-3">
         <Row xs={1} md={2} lg={3}>
-          {!isLoaded && <SpinnerWrapper />}
+          {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&
             reviews.map((review) => (

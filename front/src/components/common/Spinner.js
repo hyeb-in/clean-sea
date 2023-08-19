@@ -1,10 +1,21 @@
 import { Spinner } from "react-bootstrap";
 
-const SpinnerWrapper = () => {
+const SpinnerWrapper = ({ text }) => {
   return (
-    <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        margin: "100px 0",
+        flexDirection: "column",
+        justifyItems: "center",
+        alignItems: "center",
+      }}
+    >
+      <Spinner animation="border" variant="primary" />
+      <div style={{ marginTop: "40px" }}>{text}</div>
+    </div>
   );
 };
 export default SpinnerWrapper;

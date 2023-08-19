@@ -26,7 +26,6 @@ const ReviewCard = ({ review, setReviews }) => {
     userName,
   } = review;
 
-  console.log(userName);
   // get user avatar >> get 'users/id' ?
 
   return (

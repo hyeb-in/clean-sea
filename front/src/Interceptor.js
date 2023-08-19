@@ -36,6 +36,7 @@ const Interceptor = ({ children }) => {
         }
         if (response.status >= 400) {
           response.data.ok = false;
+          console.log(response.data.error);
         }
         return response;
       },
