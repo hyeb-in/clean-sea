@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserStateContext, DispatchContext } from "../App";
+import { UserStateContext, DispatchContext, UploadFormContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,11 +14,11 @@ import Navbar from "react-bootstrap/Navbar";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Avatar from "./Avatar";
 
-const NavBar = ({ showUploadForm, setShowUploadForm }) => {
+const NavBar = () => {
   const navigate = useNavigate();
-
   const { user: loggedInUser } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
+  const { setIsUploadFormVisible } = useContext(UploadFormContext);
   const isLogin = !!loggedInUser;
 
   const logout = () => {
@@ -70,7 +70,7 @@ const NavBar = ({ showUploadForm, setShowUploadForm }) => {
 
             {isLogin ? (
               <>
-                <Nav.Link onClick={() => setShowUploadForm(!showUploadForm)}>
+                <Nav.Link onClick={() => setIsUploadFormVisible(true)}>
                   <OverlayTrigger
                     placement="bottom"
                     overlay={<Tooltip id="upload">업로드</Tooltip>}

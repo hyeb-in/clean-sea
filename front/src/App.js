@@ -11,7 +11,7 @@ import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
-import Reviews from "./components/review/Reviews";
+import Reviews from "./pages/Reviews";
 import * as Api from "./Api";
 import { loginReducer } from "./Reducer";
 import "./Main.css";
@@ -22,6 +22,8 @@ import ReviewForm from "./components/review/ReviewForm";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
+export const UploadFormContext = createContext(false);
+
 const targetPath = ["/login", "/signup"];
 
 function App() {
@@ -29,11 +31,13 @@ function App() {
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
+  // isUploadFormVisible, setIsUploadFormVisible
+  const [isFetchCompleted, setIsFetchCompleted] = useState(false);
+  const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
+  const [isEditingModalVisible, setIsEditingModalVisible] = useState(false);
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
-  const [isFetchCompleted, setIsFetchCompleted] = useState(false);
-  const [showUploadForm, setShowUploadForm] = useState(false);
   const [reviews, setReviews] = useState(null);
 
   const fetchCurrentUser = async () => {
@@ -65,55 +69,55 @@ function App() {
   }
 
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <UserStateContext.Provider value={userState}>
-        <Interceptor>
-          {!targetPath?.includes(location.pathname) && (
-            <>
-              <NavBar
-                showUploadForm={showUploadForm}
-                setShowUploadForm={setShowUploadForm}
+    <UploadFormContext.Provider
+      value={{ isUploadFormVisible, setIsUploadFormVisible }}
+    >
+      <DispatchContext.Provider value={dispatch}>
+        <UserStateContext.Provider value={userState}>
+          <Interceptor>
+            {!targetPath?.includes(location.pathname) && (
+              <>
+                <NavBar />
+              </>
+            )}
+            {(isEditingModalVisible || isUploadFormVisible) && (
+              <ReviewForm
+                headerTitle="새 게시물 작성하기"
+                reviews={reviews}
+                setReviews={setReviews}
+                setIsEditingModalVisible={setIsEditingModalVisible}
+                // 넘겨줘야 글 작성한 후에 list에 추가되는 거 보여줄 수 있음
               />
-            </>
-          )}
-          {
-            <ReviewForm
-              showUploadForm={showUploadForm}
-              setShowUploadForm={setShowUploadForm}
-              headerTitle="새 게시물 작성하기"
-              reviews={reviews}
-              setReviews={setReviews}
-              // 넘겨줘야 글 작성한 후에 list에 추가되는 거 보여줄 수 있음
-            />
-          }
-          <Routes>
-            {/* to do: 404 페이지 만들기 */}
-            <Route path="/" exact element={<Main />} />
-            <Route path="/login" exact element={<Login />} />
-            <Route path="/signup" exact element={<SignUp />} />
-            <Route path="/users/:id" exact element={<MyProfile />} />
-            <Route path="/search" exact element={<Search />} />
-            <Route
-              path="/reviews"
-              exact
-              element={
-                <Reviews
-                  setShowUploadForm={setShowUploadForm}
-                  reviews={reviews}
-                  setReviews={setReviews}
-                />
-              }
-            />
-            <Route path="/graph" exact element={<Graph />} />
-          </Routes>
-          {!targetPath?.includes(location.pathname) && (
-            <>
-              <Footer />
-            </>
-          )}
-        </Interceptor>
-      </UserStateContext.Provider>
-    </DispatchContext.Provider>
+            )}
+            <Routes>
+              {/* to do: 404 페이지 만들기 */}
+              <Route path="/" exact element={<Main />} />
+              <Route path="/login" exact element={<Login />} />
+              <Route path="/signup" exact element={<SignUp />} />
+              <Route path="/users/:id" exact element={<MyProfile />} />
+              <Route path="/search" exact element={<Search />} />
+              <Route
+                path="/reviews"
+                exact
+                element={
+                  <Reviews
+                    reviews={reviews}
+                    setReviews={setReviews}
+                    setIsEditingModalVisible={setIsEditingModalVisible}
+                  />
+                }
+              />
+              <Route path="/graph" exact element={<Graph />} />
+            </Routes>
+            {!targetPath?.includes(location.pathname) && (
+              <>
+                <Footer />
+              </>
+            )}
+          </Interceptor>
+        </UserStateContext.Provider>
+      </DispatchContext.Provider>
+    </UploadFormContext.Provider>
   );
 }
 

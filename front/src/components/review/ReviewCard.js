@@ -1,19 +1,18 @@
 import React, { useContext, useState } from "react";
-import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import Avatar from "../Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { UserStateContext } from "../../App";
-import ReviewForm from "./ReviewForm";
+// import ReviewForm from "./ReviewForm";
 import { useNavigate } from "react-router-dom";
 import ActionSelectorModal from "./ActionSelectorModal";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const ReviewCard = ({ review, setReviews }) => {
+const ReviewCard = ({ review, setReviews, setIsEditingModalVisible }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const navigate = useNavigate();
   const [isActionModalVisible, setIsActionModalVisible] = useState(false);
-  const [isEditingModalVisible, setIsEditingModalVisible] = useState(false);
   const { _id: reviewId, author, title, content, createdAt, imageUrl } = review;
   const [error, setError] = useState(null);
 
@@ -68,7 +67,7 @@ const ReviewCard = ({ review, setReviews }) => {
           <Card.Text>{content}</Card.Text>
         </Card.Body>
       </Card>
-      {isEditingModalVisible && (
+      {/* {isEditingModalVisible && (
         <ReviewForm
           showModal={isEditingModalVisible}
           setShowModal={setIsEditingModalVisible}
@@ -76,7 +75,7 @@ const ReviewCard = ({ review, setReviews }) => {
           currentFormData={review}
           setReviews={setReviews}
         />
-      )}
+      )} */}
     </>
   );
 };

@@ -1,9 +1,12 @@
+import { useContext } from "react";
 import { Button, Card, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { UploadFormContext, UserStateContext } from "../../App";
 
-const NoReviewIndicator = ({ loggedInUser, setShowUploadForm }) => {
+const NoReviewIndicator = () => {
   const navigate = useNavigate();
-
+  const { user: loggedInUser } = useContext(UserStateContext);
+  const { setIsUploadFormVisible } = useContext(UploadFormContext);
   return (
     <Container
       className="d-flex flex-column justify-content-center align-items-center"
@@ -25,7 +28,10 @@ const NoReviewIndicator = ({ loggedInUser, setShowUploadForm }) => {
           {/* 클릭하면 setShowModal */}
 
           {loggedInUser ? (
-            <Button variant="primary" onClick={() => setShowUploadForm(true)}>
+            <Button
+              variant="primary"
+              onClick={() => setIsUploadFormVisible(true)}
+            >
               글 작성하기
             </Button>
           ) : (

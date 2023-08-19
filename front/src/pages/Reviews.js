@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import ReviewCard from "./ReviewCard";
+import React, { useContext, useEffect, useState } from "react";
+import ReviewCard from "../components/review/ReviewCard";
 import { Col, Container, Row } from "react-bootstrap";
-import * as Api from "../../Api";
-import SpinnerWrapper from "../Spinner";
-import NoReviewIndicator from "./NoReviewIndicator";
+import * as Api from "../Api";
+import SpinnerWrapper from "../components/Spinner";
+import NoReviewIndicator from "../components/review/NoReviewIndicator";
+import { UploadFormContext } from "../App";
 
-// to do: setShowUploadForm -> context api ?
-const Reviews = ({ setShowUploadForm, reviews, setReviews }) => {
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  // const [reviews, setReviews] = useState(null);
+const Reviews = ({ reviews, setReviews, setIsEditingModalVisible }) => {
+  const { setIsUploadFormVisible } = useContext(UploadFormContext);
+
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -23,15 +23,12 @@ const Reviews = ({ setShowUploadForm, reviews, setReviews }) => {
         // 프로필 클릭시 /users/:id로 이동
         setReviews(res.data);
         setIsLoaded(true);
-        if (res.data.loggedInUser) {
-          setLoggedInUser(res.data.loggedInUser);
-        }
       } catch (error) {
         setError(error);
       }
     };
     fetchData();
-  }, []);
+  }, [setReviews]);
 
   return (
     <>
@@ -45,13 +42,16 @@ const Reviews = ({ setShowUploadForm, reviews, setReviews }) => {
                 key={review._id}
                 className="d-flex justify-content-center align-items-center"
               >
-                <ReviewCard review={review} setReviews={setReviews} />
+                <ReviewCard
+                  review={review}
+                  setReviews={setReviews}
+                  setIsEditingModalVisible={setIsEditingModalVisible}
+                />
               </Col>
             ))}
           {isLoaded && reviews?.length === 0 && (
             <NoReviewIndicator
-              loggedInUser={loggedInUser}
-              setShowUploadForm={setShowUploadForm}
+              setIsUploadFormVisible={setIsUploadFormVisible}
             />
           )}
         </Row>

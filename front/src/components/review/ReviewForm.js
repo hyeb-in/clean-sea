@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import {
   Button,
@@ -16,18 +16,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages, faPlus } from "@fortawesome/free-solid-svg-icons";
 import ToastWrapper from "../Toast";
 import * as Api from "../../Api";
+import { UploadFormContext } from "../../App";
 
 // to do: 백엔드 상의. edit에서 파일도 수정 가능하게 할 건지?
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
 const MAX_FILE_COUNT = 5;
 
-const ReviewForm = ({
-  showUploadForm,
-  setShowUploadForm,
-  headerTitle,
-  currentFormData,
-  setReviews,
-}) => {
+const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
+  const { isUploadFormVisible, setIsUploadFormVisible } =
+    useContext(UploadFormContext);
   const isAdding = !currentFormData;
   // to do: reducer...? state 줄이는 방법
   const [title, setTitle] = useState(currentFormData?.title || "");
@@ -38,7 +35,7 @@ const ReviewForm = ({
   const [error, setError] = useState(null);
   // 모달창 안에서 review -> 어떻게 바깥 화면에 보여줄 건지 ?
   const [isUploaded, setIsUploaded] = useState(false);
-  const handleClose = () => setShowUploadForm(false);
+  const handleClose = () => setIsUploadFormVisible(false);
 
   const fileUploaderIndicator =
     imageUrls.length === 0 ? (
@@ -134,7 +131,7 @@ const ReviewForm = ({
               : review
           )
         );
-        setShowUploadForm(false);
+        setIsUploadFormVisible(false);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -145,20 +142,20 @@ const ReviewForm = ({
 
   useEffect(() => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
-    if (!showUploadForm && imageUrls.length > 0) {
+    if (!isUploadFormVisible && imageUrls.length > 0) {
       return () => {
         imageUrls.forEach((url) => URL.revokeObjectURL(url));
         setImageUrls([]);
       };
     }
-  }, [imageUrls, showUploadForm]);
+  }, [imageUrls, isUploadFormVisible]);
 
   return (
     <>
       {!isUploaded && (
         <Modal
           centered
-          show={showUploadForm}
+          show={isUploadFormVisible}
           onHide={handleClose}
           onClick={(e) => e.stopPropagation()}
           // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상
