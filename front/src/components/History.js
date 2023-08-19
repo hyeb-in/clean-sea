@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { Col, Container, Row } from "react-bootstrap";
 
 const History = () => {
@@ -16,7 +16,7 @@ const History = () => {
         </Row>
       </Container>
     </>
-  );
-};
+  )
+}
 
 export default History;
