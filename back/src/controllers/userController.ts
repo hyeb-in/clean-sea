@@ -1,5 +1,9 @@
 import { NextFunction, Response } from "express";
-import { createUser } from "../services/userService";
+import {
+  createUserService,
+  deleteUserService,
+  updateUserService,
+} from "../services/userService";
 import { IRequest } from "user";
 
 /**
@@ -14,19 +18,19 @@ export const signUpUser = async (
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-      return res.status(400).send({ message: "모든 사항을 입력하세요" });
+      //ErrorGenerate 만들기
+      throw new Error("항목을 빠짐없이 입력해주세요");
     }
 
-    const newUser = await createUser(name, email, password);
+    const newUser = await createUserService(name, email, password);
 
     res.status(200).json(newUser);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
-export const getUserInfo = async (
+export const getUser = async (
   req: IRequest,
   res: Response,
   next: NextFunction
@@ -34,7 +38,6 @@ export const getUserInfo = async (
   try {
     return res.status(200).json(req.user);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -44,7 +47,29 @@ export const updateUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = req.body;
-  const {} = req.body;
+  try {
+    const { userId } = req.params;
+    const inputData = req.body;
+
+    const updatedUser = await updateUserService(userId, inputData);
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
 };
-export const deleteUser = () => {};
+
+export const deleteUser = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.params;
+    const user = await deleteUserService(userId);
+
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
