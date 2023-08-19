@@ -7,10 +7,12 @@ import ModalWrapper from "../ModalWrapper";
 import { UserStateContext } from "../../App";
 import * as Api from "../../Api";
 import ReviewForm from "./ReviewForm";
+import { useNavigate } from "react-router-dom";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const ReviewCard = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
+  const navigate = useNavigate();
   const [isActionModalVisible, setIsActionModalVisible] = useState(false);
   const [isEditingModalVisible, setIsEditingModalVisible] = useState(false);
   const { _id: reviewId, author, title, content, createdAt, imageUrl } = review;
@@ -50,7 +52,7 @@ const ReviewCard = ({ review, setReviews }) => {
       >
         <Card.Header>
           <Row>
-            <Col xs="auto">
+            <Col xs="auto" onClick={() => navigate(`/users/${author}`)}>
               <Avatar width="50" />
             </Col>
             <Col className="d-flex align-items-center px-0">

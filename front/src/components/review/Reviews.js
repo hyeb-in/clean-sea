@@ -20,7 +20,7 @@ const Reviews = ({ setShowUploadForm }) => {
         // data 0이라면?
         // 로딩 indicator 만들기
         // 프로필 클릭시 /users/:id로 이동
-        setReviews([]);
+        setReviews(res.data);
         setIsLoaded(true);
         if (res.data.loggedInUser) {
           setLoggedInUser(res.data.loggedInUser);
