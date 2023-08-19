@@ -74,7 +74,7 @@ function App() {
           <Route path="/" exact element={<Main />} />
           <Route path="/login" exact element={<Login />} />
           <Route path="/signup" exact element={<SignUp />} />
-          <Route path="/my-profile" exact element={<MyProfile />} />
+          <Route path="/users/:id"  exact element={<MyProfile />} />
           <Route path="/search" exact element={<Search />} />
           <Route path="/network" exact element={<Network />} />
           <Route path="/graph" exact element={<Graph />} />
