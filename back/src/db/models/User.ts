@@ -12,7 +12,7 @@ export const findUserByEmail = async (email: string): Promise<IUser> => {
   return user;
 };
 
-export const createNewUser = async (
+export const create = async (
   name: string,
   email: string,
   hashedPassword: string
@@ -25,4 +25,16 @@ export const createNewUser = async (
   console.log(newUser);
 
   return newUser;
+};
+
+export const update = async (userId: string, inputData: Partial<IUser>) => {
+  const updatedUser = await UserModel.findByIdAndUpdate(userId, inputData, {
+    new: true,
+  });
+
+  return updatedUser;
+};
+export const deleteById = async (userId: string) => {
+  const user = await UserModel.findByIdAndDelete(userId);
+  return user;
 };

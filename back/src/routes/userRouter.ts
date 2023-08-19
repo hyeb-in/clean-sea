@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   deleteUser,
-  getUserInfo,
+  getUser,
   signUpUser,
   updateUser,
 } from "../controllers/userController";
@@ -13,11 +13,11 @@ userRouter.post("/register", signUpUser);
 
 userRouter.get("/tokentest", jwtAuthentication);
 
-userRouter.get("/current", jwtAuthentication, getUserInfo);
+userRouter.get("/current", jwtAuthentication, getUser);
 
 userRouter
   .route("/:userId")
-  .get(jwtAuthentication, getUserInfo)
+  .get(jwtAuthentication, getUser)
   .put(jwtAuthentication, updateUser)
   .delete(jwtAuthentication, deleteUser);
 export default userRouter;

@@ -11,7 +11,6 @@ const localOptions = {
 };
 
 const localCallback = async (email: string, password: string, done: any) => {
-  console.log("로컬 콜백~~~~~~~~~~~~~", email);
   try {
     const user = await findUserByEmail(email);
     if (!user) {
