@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import ReviewCard from "../components/review/ReviewCard";
 import SpinnerWrapper from "../components/common/Spinner";
@@ -13,8 +13,6 @@ const Reviews = ({ reviews, setReviews }) => {
       try {
         const res = await Api.get("reviews/reviewList");
         if (res.statusText !== "OK") throw new Error("서버 에러 발생");
-        // data 0이라면?
-        // 로딩 indicator 만들기
         // 프로필 클릭시 /users/:id로 이동
         setReviews(res.data);
         setIsLoaded(true);
@@ -24,7 +22,7 @@ const Reviews = ({ reviews, setReviews }) => {
     };
     fetchData();
   }, [setReviews]);
-
+  console.log(reviews);
   return (
     <>
       <Container className="py-3">

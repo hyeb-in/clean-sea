@@ -28,7 +28,8 @@ const MAX_FILE_COUNT = 5;
 const ReviewForm = ({ headerTitle, setReviews }) => {
   const { isUploadFormVisible, setIsUploadFormVisible } =
     useContext(UploadFormContext);
-  const { editingData: currentFormData } = useContext(EditingDataContext);
+  const { editingData: currentFormData, setEditingData } =
+    useContext(EditingDataContext);
   const { isEditFormVisible, setIsEditFormVisible } =
     useContext(EditFormContext);
   const FORM_STATUS = {
@@ -120,8 +121,9 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
       // to do:   에러 핸들링
       if (FORM_STATUS.adding) {
         const res = await Api.post("reviews/register", { title, content });
-        if (res.statusText !== "OK") throw new Error("에러가져오기");
         console.log(res);
+        // if (res.statusText !== "OK") throw new Error("에러가져오기");
+        console.log(res.data);
         setReviews((currentReviews) => [...currentReviews, res.data]);
       }
       if (FORM_STATUS.editing) {
@@ -129,7 +131,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
           title,
           content,
         });
-        if (res.statusText !== "OK") throw new Error("에러가져오기");
+        // if (res.statusText !== "OK") throw new Error("에러가져오기");
 
         setReviews((currentReviews) =>
           currentReviews.map((review) =>
@@ -139,6 +141,9 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
           )
         );
         setIsUploadFormVisible(false);
+        setEditingData(null);
+        setTitle(null);
+        setContent(null);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -167,6 +172,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
           onHide={() => {
             setIsUploadFormVisible(false);
             setIsEditFormVisible(false);
+            setEditingData(null);
           }}
           onClick={(e) => e.stopPropagation()}
           // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
