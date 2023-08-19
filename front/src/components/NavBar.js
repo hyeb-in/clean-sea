@@ -92,7 +92,8 @@ const NavBar = () => {
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>
                 </Nav.Item>
                 <Nav.Link
-                  onClick={() => navigate(`/users/${loggedInUser._id}`)}
+                  // onClick={() => navigate(`/users/${loggedInUser._id}`)}
+                  onClick={() => navigate(`/users/my-profile`)}
                 >
                   <OverlayTrigger
                     placement="bottom"

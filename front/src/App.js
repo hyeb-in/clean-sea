@@ -58,9 +58,9 @@ function App() {
     console.log("fetch");
   }, []);
 
-  // if (!isFetchCompleted) {
-  //   return "loading...";
-  // }
+  if (!isFetchCompleted) {
+    return "loading...";
+  }
 
   return (
     <DispatchContext.Provider value={dispatch}>
