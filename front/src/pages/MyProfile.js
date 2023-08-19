@@ -66,7 +66,7 @@ const MyProfile = () => {
     <Container>
       <Row>
         <Col>
-          <Card small className="mb-4 pt-3">
+          <Card small className="mb-4 mt-4 pt-3">
             <CardHeader className="border-bottom">
               <div className="mb-3 mx-auto">
                 <img
