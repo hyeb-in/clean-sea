@@ -42,7 +42,7 @@ const Interceptor = ({ children }) => {
       (error) => {
         console.error(`❌ 오류: ${JSON.stringify(error.response.data)}`);
         if (error.response.status >= 400) {
-          console.error("Error:", error.data.error); // 에러 데이터 출력
+          console.error("Error:", error.data.error);
         }
         return Promise.reject(error);
       }
