@@ -42,7 +42,7 @@ const SignUp = () => {
           email,
           password,
         });
-      navigate("/Login");
+      navigate("/login");
     } catch (err) {
       console.log("회원가입에 실패하셨습니다.", err);
     }

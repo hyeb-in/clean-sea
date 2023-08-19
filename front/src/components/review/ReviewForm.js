@@ -22,8 +22,8 @@ const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
 const MAX_FILE_COUNT = 5;
 
 const ReviewForm = ({
-  showModal,
-  setShowModal,
+  showUploadForm,
+  setShowUploadForm,
   headerTitle,
   currentFormData,
   setReviews,
@@ -38,7 +38,7 @@ const ReviewForm = ({
   const [error, setError] = useState(null);
   // 모달창 안에서 review -> 어떻게 바깥 화면에 보여줄 건지 ?
   const [isUploaded, setIsUploaded] = useState(false);
-  const handleClose = () => setShowModal(false);
+  const handleClose = () => setShowUploadForm(false);
 
   const fileUploaderIndicator =
     imageUrls.length === 0 ? (
@@ -134,7 +134,7 @@ const ReviewForm = ({
               : review
           )
         );
-        setShowModal(false);
+        setShowUploadForm(false);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -145,20 +145,20 @@ const ReviewForm = ({
 
   useEffect(() => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
-    if (!showModal && imageUrls.length > 0) {
+    if (!showUploadForm && imageUrls.length > 0) {
       return () => {
         imageUrls.forEach((url) => URL.revokeObjectURL(url));
         setImageUrls([]);
       };
     }
-  }, [imageUrls, showModal]);
+  }, [imageUrls, showUploadForm]);
 
   return (
     <>
       {!isUploaded && (
         <Modal
           centered
-          show={showModal}
+          show={showUploadForm}
           onHide={handleClose}
           onClick={(e) => e.stopPropagation()}
           // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상
