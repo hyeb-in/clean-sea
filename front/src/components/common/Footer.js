@@ -1,4 +1,4 @@
-import { FOOTER_HEIGHT } from "../constants";
+import { FOOTER_HEIGHT } from "../../constants";
 
 function Footer() {
   const footerStyle = {

@@ -1,22 +1,31 @@
 import React, { useContext, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
-import Avatar from "../Avatar";
+import Avatar from "../common/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { UserStateContext } from "../../App";
-// import ReviewForm from "./ReviewForm";
+import { EditingDataContext, UserStateContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-import ActionSelectorModal from "./ActionSelectorModal";
+import ActionSelectorModal from "../common/ActionSelectorModal";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const ReviewCard = ({ review, setReviews, setIsEditingModalVisible }) => {
+const ReviewCard = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const navigate = useNavigate();
-  const [isActionModalVisible, setIsActionModalVisible] = useState(false);
-  const { _id: reviewId, author, title, content, createdAt, imageUrl } = review;
-  const [error, setError] = useState(null);
+  const { setEditingData } = useContext(EditingDataContext);
 
-  const handleClose = () => setIsActionModalVisible(false);
+  const [isActionModalVisible, setIsActionModalVisible] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const {
+    _id: reviewId,
+    author: authorId,
+    title,
+    content,
+    createdAt,
+    imageUrl,
+  } = review;
+
+  // get user avatar >> get 'users/id' ?
 
   return (
     <>
@@ -29,31 +38,38 @@ const ReviewCard = ({ review, setReviews, setIsEditingModalVisible }) => {
       >
         <Card.Header>
           <Row>
-            <Col xs="auto" onClick={() => navigate(`/users/${author}`)}>
+            <Col xs="auto" onClick={() => navigate(`/users/${authorId}`)}>
+              {/* to do: get user's info -> avatar url */}
               <Avatar width="50" />
             </Col>
             <Col className="d-flex align-items-center px-0">
-              {author}
-              {/* TO DO: 몇 일 전, 몇 시간 전 */}
+              {authorId}
+              {/* TO DO: 몇 일 전, 몇시간 전 */}
             </Col>
-            {/* 로그인 유저가 작성한 글이라면 수정, 삭제 모달 창을 띄운다 */}
+
+            {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
+            {/* 클릭하면 수정, 삭제 선택하는 모달 창을 띄운다 */}
             <Col className="d-flex align-items-center justify-content-end">
-              {/*  author 값이 바뀌면 수정 되어야 함 */}
-              {loggedInUser && loggedInUser._id === author && (
+              {loggedInUser && loggedInUser._id === authorId && (
                 <Button
                   variant="link"
                   style={{ color: "black" }}
-                  onClick={() => setIsActionModalVisible(true)}
+                  onClick={() => {
+                    setIsActionModalVisible(true);
+                    setEditingData(review);
+                  }}
                 >
                   <FontAwesomeIcon icon={faEllipsis} />
                 </Button>
               )}
+
+              {/* '수정, 삭제' 선택하는 모달 창 */}
               <ActionSelectorModal
+                show={isActionModalVisible}
                 reviewId={reviewId}
-                handleClose={handleClose}
+                handleClose={() => setIsActionModalVisible(false)}
                 isActionModalVisible={isActionModalVisible}
                 setIsActionModalVisible={setIsActionModalVisible}
-                setIsEditingModalVisible={setIsEditingModalVisible}
                 setReviews={setReviews}
                 setError={setError}
               />
@@ -61,21 +77,12 @@ const ReviewCard = ({ review, setReviews, setIsEditingModalVisible }) => {
           </Row>
         </Card.Header>
         <Card.Body>
-          {/* to do: 서버 image 저장 후 */}
+          {/* to do: 서버 image 저장 후 carousel */}
           {/* <Image src={imageUrl} fluid /> */}
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
         </Card.Body>
       </Card>
-      {/* {isEditingModalVisible && (
-        <ReviewForm
-          showModal={isEditingModalVisible}
-          setShowModal={setIsEditingModalVisible}
-          headerTitle="게시물 수정하기"
-          currentFormData={review}
-          setReviews={setReviews}
-        />
-      )} */}
     </>
   );
 };

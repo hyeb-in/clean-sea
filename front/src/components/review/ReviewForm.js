@@ -10,22 +10,31 @@ import {
   Form,
   Container,
 } from "react-bootstrap";
-import Avatar from "../Avatar";
-import Carousel from "../Carousel";
+import Avatar from "../common/Avatar";
+import Carousel from "../common/Carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages, faPlus } from "@fortawesome/free-solid-svg-icons";
-import ToastWrapper from "../Toast";
+import Toast from "../common/Toast";
 import * as Api from "../../Api";
-import { UploadFormContext } from "../../App";
-
+import {
+  EditFormContext,
+  EditingDataContext,
+  UploadFormContext,
+} from "../../App";
 // to do: 백엔드 상의. edit에서 파일도 수정 가능하게 할 건지?
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
 const MAX_FILE_COUNT = 5;
 
-const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
+const ReviewForm = ({ headerTitle, setReviews }) => {
   const { isUploadFormVisible, setIsUploadFormVisible } =
     useContext(UploadFormContext);
-  const isAdding = !currentFormData;
+  const { editingData: currentFormData } = useContext(EditingDataContext);
+  const { isEditFormVisible, setIsEditFormVisible } =
+    useContext(EditFormContext);
+  const FORM_STATUS = {
+    adding: isUploadFormVisible,
+    editing: isEditFormVisible,
+  };
   // to do: reducer...? state 줄이는 방법
   const [title, setTitle] = useState(currentFormData?.title || "");
   const [content, setContent] = useState(currentFormData?.content || "");
@@ -33,9 +42,6 @@ const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
   // to do: currentFormData 있을 경우에 초기값 지정
   const [showToast, setShowToast] = useState(false);
   const [error, setError] = useState(null);
-  // 모달창 안에서 review -> 어떻게 바깥 화면에 보여줄 건지 ?
-  const [isUploaded, setIsUploaded] = useState(false);
-  const handleClose = () => setIsUploadFormVisible(false);
 
   const fileUploaderIndicator =
     imageUrls.length === 0 ? (
@@ -112,12 +118,13 @@ const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
 
     try {
       // to do:   에러 핸들링
-      if (isAdding) {
+      if (FORM_STATUS.adding) {
         const res = await Api.post("reviews/register", { title, content });
-        // if (res.statusText !== "OK") throw new Error("에러가져오기");
+        if (res.statusText !== "OK") throw new Error("에러가져오기");
         console.log(res);
         setReviews((currentReviews) => [...currentReviews, res.data]);
-      } else {
+      }
+      if (FORM_STATUS.editing) {
         const res = await Api.put(`reviews/${currentFormData._id}`, {
           title,
           content,
@@ -137,7 +144,8 @@ const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
       console.error("Error:", error);
     }
     // to do: 백엔드 에러 상태코드 받아서 체크할 것
-    setIsUploaded(true);
+    setIsUploadFormVisible(false);
+    setIsEditFormVisible(false);
   };
 
   useEffect(() => {
@@ -152,25 +160,27 @@ const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
 
   return (
     <>
-      {!isUploaded && (
+      {(isUploadFormVisible || isEditFormVisible) && (
         <Modal
           centered
-          show={isUploadFormVisible}
-          onHide={handleClose}
+          show={isUploadFormVisible || isEditFormVisible}
+          onHide={() => {
+            setIsUploadFormVisible(false);
+            setIsEditFormVisible(false);
+          }}
           onClick={(e) => e.stopPropagation()}
-          // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상
+          // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
+          // to do: space bar입력시 모달창 사라짐 버그
         >
           {showToast && (
-            <ToastWrapper
+            <Toast
               onClose={() => setShowToast(false)}
               text={`최대 ${MAX_FILE_COUNT}개까지 업로드 가능합니다.`}
             />
           )}
           {error && (
-            <ToastWrapper
-              onClose={() => {
-                setError(null);
-              }}
+            <Toast
+              onClose={() => setError(null)}
               text="4글자 이상 입력해주세요"
             />
           )}
@@ -191,7 +201,6 @@ const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
                   multiple={true}
                   // maxSize={2} // 최대 2MB 크기까지 허용
                   // minSize={1} // 최소 1MB 크기 이상만 허용
-                  // 어느정도 크기가 적당한지 모르겠엉
                   children={fileUploaderIndicator}
                 />
                 {imageUrls.length > 0 && (
@@ -203,9 +212,10 @@ const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
                   <Col xs="auto">
                     <Avatar width="30" />
                   </Col>
+                  {/* to do: 이름 받아오기 */}
                   <Col className="px-0 d-flex align-items-center">훈제오리</Col>
                 </Row>
-                <InputGroup className="">
+                <InputGroup>
                   <FloatingLabel
                     controlId="floatingInput"
                     label="제목"
@@ -243,14 +253,6 @@ const ReviewForm = ({ headerTitle, currentFormData, setReviews }) => {
               {currentFormData ? "수정" : "공유"}
             </Button>
           </Modal.Footer>
-        </Modal>
-      )}
-      {isUploaded && (
-        <Modal>
-          <Modal.Header closeButton>
-            <Modal.Title>{headerTitle}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body></Modal.Body>
         </Modal>
       )}
     </>

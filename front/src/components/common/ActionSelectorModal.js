@@ -1,17 +1,21 @@
-import { ListGroup } from "react-bootstrap";
-import ModalWrapper from "../ModalWrapper";
+import React, { useContext } from "react";
+import { ListGroup, Modal } from "react-bootstrap";
 import * as Api from "../../Api";
+import { EditFormContext } from "../../App";
 
-// 취소, 수정, 삭제 등 유저 입력을 받는 모달창
+/**
+ * @param "취소, 수정, 삭제" 등 유저 입력을 받는 모달창
+ */
 const ActionSelectorModal = ({
-  handleClose,
+  show,
   isActionModalVisible,
   setIsActionModalVisible,
-  setIsEditingModalVisible,
   reviewId,
   setReviews,
   setError,
 }) => {
+  const { setIsEditFormVisible } = useContext(EditFormContext);
+
   const deleteReview = async (reviewId) => {
     if (isActionModalVisible) {
       setIsActionModalVisible(false);
@@ -28,14 +32,21 @@ const ActionSelectorModal = ({
     }
   };
   return (
-    <ModalWrapper show={isActionModalVisible} onHide={handleClose}>
+    <Modal
+      show={show}
+      onHide={() => setIsActionModalVisible(false)}
+      backdrop="true"
+      keyboard={false}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
       <ListGroup className="text-center">
         <ListGroup.Item
           key="edit"
           action
           onClick={() => {
             setIsActionModalVisible(false);
-            setIsEditingModalVisible(true);
+            setIsEditFormVisible(true);
           }}
         >
           수정
@@ -56,7 +67,7 @@ const ActionSelectorModal = ({
           취소
         </ListGroup.Item>
       </ListGroup>
-    </ModalWrapper>
+    </Modal>
   );
 };
 

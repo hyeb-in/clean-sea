@@ -1,18 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import ReviewCard from "../components/review/ReviewCard";
 import { Col, Container, Row } from "react-bootstrap";
-import * as Api from "../Api";
-import SpinnerWrapper from "../components/Spinner";
+import ReviewCard from "../components/review/ReviewCard";
+import SpinnerWrapper from "../components/common/Spinner";
 import NoReviewIndicator from "../components/review/NoReviewIndicator";
-import { UploadFormContext } from "../App";
+import * as Api from "../Api";
 
-const Reviews = ({ reviews, setReviews, setIsEditingModalVisible }) => {
-  const { setIsUploadFormVisible } = useContext(UploadFormContext);
-
+const Reviews = ({ reviews, setReviews }) => {
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,18 +37,10 @@ const Reviews = ({ reviews, setReviews, setIsEditingModalVisible }) => {
                 key={review._id}
                 className="d-flex justify-content-center align-items-center"
               >
-                <ReviewCard
-                  review={review}
-                  setReviews={setReviews}
-                  setIsEditingModalVisible={setIsEditingModalVisible}
-                />
+                <ReviewCard review={review} setReviews={setReviews} />
               </Col>
             ))}
-          {isLoaded && reviews?.length === 0 && (
-            <NoReviewIndicator
-              setIsUploadFormVisible={setIsUploadFormVisible}
-            />
-          )}
+          {isLoaded && reviews?.length === 0 && <NoReviewIndicator />}
         </Row>
       </Container>
     </>
