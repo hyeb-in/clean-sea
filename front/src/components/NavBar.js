@@ -89,8 +89,7 @@ const NavBar = ({ showUploadForm, setShowUploadForm }) => {
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>
                 </Nav.Item>
                 <Nav.Link
-                  // onClick={() => navigate(`/users/${loggedInUser._id}`)}
-                  onClick={() => navigate(`/users/my-profile`)}
+                  onClick={() => navigate(`/users/${loggedInUser._id}`)}
                 >
                   <OverlayTrigger
                     placement="bottom"
