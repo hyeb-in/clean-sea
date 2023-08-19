@@ -11,7 +11,7 @@ async function getReview() : Promise<IReview[]>{
     return review;
 }
 
-async function setReview(reviewId : string,{toUpdate}:{toUpdate :Partial<IReview>}): Promise<IReview | null>{
+async function setReview(reviewId : string,{toUpdate}:{toUpdate :any}): Promise<IReview | null>{
     await findUserReview(reviewId);
 
     const updatedReview = updateReview(reviewId, toUpdate);

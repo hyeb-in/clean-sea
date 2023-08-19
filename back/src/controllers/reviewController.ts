@@ -7,14 +7,15 @@ import {
   deletedReview,
 } from "../services/reviewService";
 import { ReviewValidator } from "../utils/validators/reviewValidator";
-// import { handleFileUpload } from '../middlewares/uploadMiddleware';
+import { handleFileUpload } from '../middlewares/uploadMiddleware';
 import { IRequest } from "user";
 
-const sendResponse = function (res: Response, statusCode: number, data: any) {
-  if (statusCode >= 400) {
-  } else {
-    res.status(statusCode).json(data);
-  }
+const sendResponseWithError = function (res: Response, statusCode: number, error: any) {
+  res.status(statusCode).json({ error });
+};
+
+const sendResponseWithData = function (res: Response, statusCode: number, data: any) {
+  res.status(statusCode).json(data);
 };
 
 const createReview = async (
@@ -27,18 +28,23 @@ const createReview = async (
     const userName = req.user.name;
     const schema = ReviewValidator.postReview();
     const validationResult = schema.validate(req.body);
-    if (validationResult.error) {
-      return sendResponse(res, StatusCodes.BAD_REQUEST, {
-        error: validationResult.error.details[0].message,
-      });
-    }
-    // await handleImageUpload(req,res,()=>{});
 
+    if (validationResult.error) {
+      return sendResponseWithError(res, StatusCodes.BAD_REQUEST, validationResult.error.details[0].message);
+    }
+
+    // await handleFileUpload(req, res, async () => {
+    //   const addMyReview = await addReview({
+    //     toCreate: { ...req.body, author, userName, uploadFile: req.file.path },
+    //   });
+
+    //   return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
+    // });
     const addMyReview = await addReview({
       toCreate: { ...req.body, author, userName },
     });
 
-    return sendResponse(res, StatusCodes.CREATED, addMyReview);
+    return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
   } catch (err) {
     next(err);
   }
@@ -51,25 +57,11 @@ const getAllReview = async (
 ) => {
   try {
     const allReview = await getReview();
-    return sendResponse(res, StatusCodes.OK, allReview);
+    return sendResponseWithData(res, StatusCodes.OK, allReview);
   } catch (err) {
     next(err);
   }
 };
-
-// const getUserReview = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const userReview = await getReview(req.params.userId);
-
-//     return sendResponse(res, StatusCodes.OK, userReview);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
 
 const updateReview = async (
   req: Request,
@@ -78,21 +70,21 @@ const updateReview = async (
 ) => {
   try {
     const id = req.params.reviewId;
-
     const schema = ReviewValidator.putReview();
     const validationResult = schema.validate(req.body);
+
     if (validationResult.error) {
-      return sendResponse(res, StatusCodes.BAD_REQUEST, {
-        error: validationResult.error.details[0].message,
-      });
+      return sendResponseWithError(res, StatusCodes.BAD_REQUEST, validationResult.error.details[0].message);
     }
-    // await handleFileUpload(req,res,() => {});
 
-    const updatedReview = await setReview(id, {
-      toUpdate: { ...req.body },
+    await handleFileUpload(req, res, async () => {
+      const inputValue = req.body;
+      const updatedReview = await setReview(id, {
+        toUpdate: { inputValue, uploadFile: req.file.path },
+      });
+
+      return sendResponseWithData(res, StatusCodes.OK, updatedReview);
     });
-
-    return sendResponse(res, StatusCodes.OK, updatedReview);
   } catch (err) {
     next(err);
   }
@@ -105,8 +97,7 @@ const deleteReview = async (
 ) => {
   try {
     const deletReview = await deletedReview(req.params.reviewId);
-
-    return sendResponse(res, StatusCodes.OK, deletReview);
+    return sendResponseWithData(res, StatusCodes.OK, deletReview);
   } catch (err) {
     next(err);
   }
