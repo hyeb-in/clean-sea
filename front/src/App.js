@@ -19,14 +19,13 @@ import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
 import ReviewForm from "./components/review/ReviewForm";
+import PageNotFound from "./pages/PageNotFound";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
 export const UploadFormContext = createContext(false);
 export const EditFormContext = createContext(false);
 export const EditingDataContext = createContext(null);
-
-const targetPath = ["/login", "/signup"];
 
 function App() {
   // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
@@ -43,6 +42,14 @@ function App() {
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
   const [reviews, setReviews] = useState(null);
+  const path = location.pathname.split("/")[1];
+  const is404Page =
+    path !== "" &&
+    path !== "users" &&
+    path !== "search" &&
+    path !== "graph" &&
+    path !== "reviews";
+
   const fetchCurrentUser = async () => {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
@@ -82,11 +89,7 @@ function App() {
           <DispatchContext.Provider value={dispatch}>
             <UserStateContext.Provider value={userState}>
               <Interceptor>
-                {!targetPath?.includes(location.pathname) && (
-                  <>
-                    <NavBar />
-                  </>
-                )}
+                {!is404Page && <NavBar />}
                 {(isUploadFormVisible || isEditFormVisible) && (
                   <ReviewForm
                     headerTitle={
@@ -113,12 +116,11 @@ function App() {
                     }
                   />
                   <Route path="/graph" exact element={<Graph />} />
+                  {/* 404 페이지 */}
+                  <Route path="*" element={<PageNotFound />} />
                 </Routes>
-                {!targetPath?.includes(location.pathname) && (
-                  <>
-                    <Footer />
-                  </>
-                )}
+
+                {!is404Page && <Footer />}
               </Interceptor>
             </UserStateContext.Provider>
           </DispatchContext.Provider>

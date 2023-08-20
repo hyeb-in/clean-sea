@@ -13,6 +13,7 @@ import {
   EditFormContext,
   EditingDataContext,
   UploadFormContext,
+  UserStateContext,
 } from "../../App";
 import DragAndDrop from "../common/DragAndDrop";
 import * as Api from "../../Api";
@@ -39,6 +40,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     adding: isUploadFormVisible,
     editing: isEditFormVisible,
   };
+  const { user: loggedInUser } = useContext(UserStateContext);
 
   const [review, setReview] = useState({
     title: currentFormData?.title || "",
@@ -84,7 +86,8 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // to do: 백엔드랑 합쳐서 확인 필요
-    // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로
+    // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로 ?
+    if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
     try {
       if (title.length < 4)
         return setToastMsg("제목을 4글자 이상 입력해주세요");
