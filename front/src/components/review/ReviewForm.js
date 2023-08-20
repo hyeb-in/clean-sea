@@ -18,6 +18,7 @@ import DragAndDrop from "../common/DragAndDrop";
 import * as Api from "../../Api";
 import SpinnerWrapper from "../common/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
+import ConfirmModal from "../common/ConfirmModal";
 
 const allowedFileTypes = ["png", "jpeg"];
 
@@ -49,7 +50,7 @@ const ReviewForm = ({ headerTitle, reviews, setReviews }) => {
   const [toastMsg, setToastMsg] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
-
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const fileUploaderIndicator =
     imageUrls.length === 0 ? (
       <DragAndDrop />
@@ -59,7 +60,6 @@ const ReviewForm = ({ headerTitle, reviews, setReviews }) => {
       </Button>
     );
 
-  console.log(review, imageUrls);
   // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
   const handleFileChange = (files) => {
     const blobUrls = [];
@@ -143,7 +143,7 @@ const ReviewForm = ({ headerTitle, reviews, setReviews }) => {
     }
   }, [imageUrls, isUploadFormVisible]);
 
-  const closeResultIndicator = () => {
+  const closeReviewFormModal = () => {
     setIsUploadFormVisible(false);
     setIsEditFormVisible(false);
     setEditingData(null);
@@ -162,8 +162,14 @@ const ReviewForm = ({ headerTitle, reviews, setReviews }) => {
         <Modal
           centered
           show={isUploadFormVisible || isEditFormVisible}
-          onHide={closeResultIndicator}
-          onClose={closeResultIndicator}
+          // 내용이 아무것도 없다면 그냥 닫는다 closeReviewFormModal
+          onHide={() => {
+            if (title === "" && content === "") {
+              return closeReviewFormModal();
+            }
+            setShowConfirmModal(true);
+          }}
+          onClose={() => setShowConfirmModal(true)}
           onClick={(e) => e.stopPropagation()}
           // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
           // to do: space bar입력시 모달창 사라짐 버그 (윈도우..? 확인하기)
@@ -172,9 +178,10 @@ const ReviewForm = ({ headerTitle, reviews, setReviews }) => {
           {toastMsg && (
             <Toast onClose={() => setToastMsg("")} text={toastMsg} />
           )}
+
           {/* 모달창 내부: 입력 받는 공간 */}
           {!isUploading && !result && (
-            <ModalBodyWrapper text={headerTitle}>
+            <ModalBodyWrapper title={headerTitle}>
               {
                 <Row>
                   {/* 드래그앤 드롭으로 파일 업로드 받을 수 있는 구역 */}
@@ -247,7 +254,7 @@ const ReviewForm = ({ headerTitle, reviews, setReviews }) => {
           {result && !isUploading && (
             <ModalBodyWrapper
               text="게시물이 공유되었습니다"
-              onHide={() => closeResultIndicator}
+              onHide={() => closeReviewFormModal()}
             >
               <FontAwesomeIcon
                 icon={RESULT_ENUM.SUCCESS ? faCircleCheck : faBomb}
@@ -267,6 +274,13 @@ const ReviewForm = ({ headerTitle, reviews, setReviews }) => {
                 {currentFormData ? "수정" : "공유"}
               </Button>
             </Modal.Footer>
+          )}
+          {showConfirmModal && content !== "" && title !== "" && (
+            <ConfirmModal
+              show={showConfirmModal}
+              setShowConfirmModal={setShowConfirmModal}
+              closeReviewFormModal={closeReviewFormModal}
+            />
           )}
         </Modal>
       )}
