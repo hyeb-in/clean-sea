@@ -190,6 +190,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
             onClose={() => setToastMsg("")}
             text={toastMsg}
             position="middle-center"
+            bg="warning"
           />
         )}
 
