@@ -30,14 +30,18 @@ const Reviews = ({ reviews, setReviews }) => {
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&
-            reviews.map((review) => (
-              <Col
-                key={review._id}
-                className="d-flex justify-content-center align-items-center"
-              >
-                <ReviewCard review={review} setReviews={setReviews} />
-              </Col>
-            ))}
+            // 임시 코드: 백엔드에서 데이터 역순으로 받아와야 함
+            reviews
+              .slice()
+              .reverse()
+              .map((review) => (
+                <Col
+                  key={review._id}
+                  className="d-flex justify-content-center align-items-center"
+                >
+                  <ReviewCard review={review} setReviews={setReviews} />
+                </Col>
+              ))}
           {isLoaded && reviews?.length === 0 && <NoReviewIndicator />}
         </Row>
       </Container>

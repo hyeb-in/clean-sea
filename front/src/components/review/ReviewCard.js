@@ -87,9 +87,10 @@ const ReviewCard = ({ review, setReviews }) => {
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
           <Card.Text className="d-flex justify-content-end">
-            {minutesPassed < 60 && `${minutesPassed}분 전`}
-            {minutesPassed >= 60 && hoursPassed < 12 && `${hoursPassed}시간 전`}
-            {minutesPassed >= 60 && hoursPassed >= 12 && `${daysPassed}일 전`}
+            {minutesPassed < 1 && "방금 전"}
+            {minutesPassed < 60 && minutesPassed > 0 && `${minutesPassed}분 전`}
+            {minutesPassed >= 60 && hoursPassed < 24 && `${hoursPassed}시간 전`}
+            {minutesPassed >= 60 && hoursPassed >= 24 && `${daysPassed}일 전`}
           </Card.Text>
         </Card.Body>
       </Card>

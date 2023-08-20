@@ -94,7 +94,7 @@ function App() {
                         ? "새 게시물 작성하기"
                         : "게시물 수정하기"
                     }
-                    // reviews={reviews}
+                    reviews={reviews}
                     setReviews={setReviews}
                   />
                 )}

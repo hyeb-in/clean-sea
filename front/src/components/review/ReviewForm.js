@@ -27,7 +27,7 @@ const RESULT_ENUM = {
   FAIL: "실패",
 };
 
-const ReviewForm = ({ headerTitle, setReviews }) => {
+const ReviewForm = ({ headerTitle, reviews, setReviews }) => {
   const { isUploadFormVisible, setIsUploadFormVisible } =
     useContext(UploadFormContext);
   const { editingData: currentFormData, setEditingData } =
@@ -44,7 +44,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     content: currentFormData?.content || "",
     imageUrls: currentFormData?.imageUrls || [],
   });
-  console.log(review);
+
   const { title, content, imageUrls } = review;
   const [toastMsg, setToastMsg] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -85,7 +85,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     e.preventDefault();
     // to do: 백엔드랑 합쳐서 확인 필요
     // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로
-    const { title, content, imageUrls } = review;
+    // const { title, content, imageUrls } = review;
     try {
       if (title.length < 4)
         return setToastMsg("제목을 4글자 이상 입력해주세요");
@@ -99,7 +99,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         const res = await Api.post("reviews/register", {
           title,
           content,
-          imageUrls: imageUrls.length > 0 ? imageUrls : null,
+          // imageUrls: imageUrls.length > 0 ? imageUrls : null,
         });
         // 에러 메세지 안가져와지는 거 같은뎅
         if (!res.status === 400) throw new Error("업로드에 실패했습니다");
@@ -123,7 +123,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         );
         setIsUploadFormVisible(false);
         setEditingData(null);
-        setReview(null);
+        setReview({ title: "", content: "", imageUrls: [] });
       }
     } catch (error) {
       console.error(error);
@@ -147,7 +147,11 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     setIsUploadFormVisible(false);
     setIsEditFormVisible(false);
     setEditingData(null);
-    setReview(null);
+    setReview({
+      title: "",
+      content: "",
+      imageUrls: [],
+    });
     setToastMsg("");
     setResult(null);
   };
