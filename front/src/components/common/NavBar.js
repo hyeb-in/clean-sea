@@ -43,7 +43,7 @@ const NavBar = () => {
             onClick={() => navigate("/")}
             style={{ cursor: "pointer" }}
           >
-            로고
+            해조
           </Navbar.Brand>
           <Nav className="align-items-center">
             <Nav.Link onClick={() => navigate("/search")}>

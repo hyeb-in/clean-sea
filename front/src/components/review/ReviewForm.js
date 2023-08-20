@@ -19,7 +19,8 @@ import * as Api from "../../Api";
 import SpinnerWrapper from "../common/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 
-const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
+const allowedFileTypes = ["png", "jpeg"];
+
 const MAX_FILE_COUNT = 5;
 const RESULT_ENUM = {
   SUCCESS: "성공",
@@ -38,10 +39,13 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     editing: isEditFormVisible,
   };
 
-  // to do: reducer...? state 줄이는 방법
-  const [title, setTitle] = useState(currentFormData?.title || "");
-  const [content, setContent] = useState(currentFormData?.content || "");
-  const [imageUrls, setImageUrls] = useState([]);
+  const [review, setReview] = useState({
+    title: currentFormData?.title || "",
+    content: currentFormData?.content || "",
+    imageUrls: currentFormData?.imageUrls || [],
+  });
+  console.log(review);
+  const { title, content, imageUrls } = review;
   const [toastMsg, setToastMsg] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
@@ -55,13 +59,12 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
       </Button>
     );
 
+  console.log(review, imageUrls);
   // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
   const handleFileChange = (files) => {
     const blobUrls = [];
-    if (
-      files.length > MAX_FILE_COUNT ||
-      (imageUrls.length > 0 && imageUrls.length + files.length > MAX_FILE_COUNT)
-    ) {
+    const isFileCountValid = imageUrls.length + files.length <= MAX_FILE_COUNT;
+    if (!isFileCountValid) {
       return setToastMsg(
         `사진은 한번에 ${MAX_FILE_COUNT}개까지 업로드할 수 있습니다`
       );
@@ -73,12 +76,16 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         blobUrls.push(url);
       },
     ]);
-    setImageUrls((current) => [...current, ...blobUrls]);
+    setReview({
+      ...review,
+      imageUrls: [...imageUrls, ...blobUrls],
+    });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     // to do: 백엔드랑 합쳐서 확인 필요
     // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로
+    const { title, content, imageUrls } = review;
     try {
       if (title.length < 4)
         return setToastMsg("제목을 4글자 이상 입력해주세요");
@@ -116,8 +123,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         );
         setIsUploadFormVisible(false);
         setEditingData(null);
-        setTitle(null);
-        setContent(null);
+        setReview(null);
       }
     } catch (error) {
       console.error(error);
@@ -132,7 +138,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     if (!isUploadFormVisible && imageUrls.length > 0) {
       return () => {
         imageUrls.forEach((url) => URL.revokeObjectURL(url));
-        setImageUrls([]);
+        // setImageUrls([]);
       };
     }
   }, [imageUrls, isUploadFormVisible]);
@@ -141,9 +147,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     setIsUploadFormVisible(false);
     setIsEditFormVisible(false);
     setEditingData(null);
-    setTitle("");
-    setContent("");
-    setImageUrls([]);
+    setReview(null);
     setToastMsg("");
     setResult(null);
   };
@@ -180,16 +184,15 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                     <FileUploader
                       handleChange={handleFileChange}
                       name="file"
-                      types={fileTypes}
+                      types={allowedFileTypes}
                       multiple={true}
-                      // maxSize={2} // 최대 2MB 크기까지 허용
-                      // minSize={1} // 최소 1MB 크기 이상만 허용
+                      maxSize={1} // 최대 2MB 크기까지 허용
                       children={fileUploaderIndicator}
                     />
                     {imageUrls.length > 0 && (
                       <Carousel
                         imageUrls={imageUrls}
-                        setImageUrls={setImageUrls}
+                        setReview={setReview} // carousel 바꿔야함
                       />
                     )}
                   </Col>
@@ -202,7 +205,9 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                         size="sm"
                         type="input"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) =>
+                          setReview({ ...review, title: e.target.value })
+                        }
                       />
                     </Form.Group>
                     <Form.Group>
@@ -211,7 +216,9 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                         rows={6}
                         as="textarea"
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
+                        onChange={(e) =>
+                          setReview({ ...review, content: e.target.value })
+                        }
                       />
                     </Form.Group>
                     <small

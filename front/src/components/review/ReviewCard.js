@@ -24,6 +24,7 @@ const ReviewCard = ({ review, setReviews }) => {
     imageUrl,
     userName,
   } = review;
+  const isMyReview = loggedInUser && loggedInUser._id === authorId;
 
   // get user avatar >> get 'users/id' ?
 
@@ -35,7 +36,6 @@ const ReviewCard = ({ review, setReviews }) => {
   const minutesPassed = Math.floor(timeDifference / (1000 * 60));
   const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60)); // 시간으로 변환
   const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일자로 변환
-
   return (
     <>
       <Card
@@ -56,7 +56,7 @@ const ReviewCard = ({ review, setReviews }) => {
             {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
             {/* 클릭하면 수정, 삭제 선택하는 모달 창을 띄운다 */}
             <Col className="d-flex align-items-center justify-content-end">
-              {loggedInUser && loggedInUser._id === authorId && (
+              {isMyReview && (
                 <Button
                   variant="link"
                   style={{ color: "black" }}
