@@ -28,7 +28,10 @@ const localCallback = (email, password, done) => __awaiter(void 0, void 0, void 
         if (!user) {
             return done(null, false, { message: "회원이 존재하지 않습니다." });
         }
-        const isMatched = bcrypt_1.default.compare(password, user.password);
+        bcrypt_1.default.genSalt;
+        console.log("local전략 유저", user);
+        const isMatched = yield bcrypt_1.default.compare(password, user.password);
+        console.log("매치", isMatched);
         if (!isMatched) {
             return done(null, false, { message: "비밀번호가 일치하지 않습니다." });
         }

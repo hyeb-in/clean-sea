@@ -27,10 +27,8 @@ const jwtAuthentication = (req, res, next) => __awaiter(void 0, void 0, void 0, 
                 if (info.message === "user not exist")
                     return res.status(404).json("User Not Found!");
             }
-            if (user) {
-                req.user = user;
-                next();
-            }
+            req.user = user;
+            next();
         })(req, res, next);
     }
     catch (error) {

@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const url = process.env.MONGODB_URL ||
-    // "mongodb+srv://user:user1234@cluster0.xwae34t.mongodb.net/";
-    "mongodb://127.0.0.1:27017";
+require('dotenv').config();
+const url = process.env.MONGODB_URL;
 mongoose.connect(url);
 const db = mongoose.connection;
 db.on("connected", () => console.log("✅ 정상적으로 mongoDB서버에 연결되었습니다. 👻 " + url));

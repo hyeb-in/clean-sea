@@ -24,6 +24,7 @@ app.use(passport_1.default.initialize());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+console.log("[LOG] Swagger API DOCS - http://localhost:5001/api-docs");
 app.get("/", (req, res) => {
     res.send("기본 페이지");
 });

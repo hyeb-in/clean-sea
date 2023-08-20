@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = void 0;
+exports.deleteUserService = exports.updateUserService = exports.createUserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const User_1 = require("../db/models/User");
 /**
@@ -22,15 +22,28 @@ const User_1 = require("../db/models/User");
  * @returns createdUser
  * @description 유저 존재하는지 체크한 후 유저 생성
  */
-const createUser = (name, email, password) => __awaiter(void 0, void 0, void 0, function* () {
+const createUserService = (name, email, password) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield (0, User_1.findUserByEmail)(email);
     if (user) {
         throw new Error("이미 존재하는 이메일입니다.");
     }
     const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-    const newUserInput = { email, name, password: hashedPassword };
-    const createdUser = yield (0, User_1.createNewUser)(email, name, hashedPassword);
+    const createdUser = yield (0, User_1.create)(name, email, hashedPassword);
     return createdUser;
 });
-exports.createUser = createUser;
+exports.createUserService = createUserService;
+const updateUserService = (userId, inputData) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedUser = yield (0, User_1.update)(userId, inputData);
+    if (!updatedUser)
+        throw new Error("유저가 존재하지 않습니다.");
+    return updatedUser;
+});
+exports.updateUserService = updateUserService;
+const deleteUserService = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const deletedUser = yield (0, User_1.deleteById)(userId);
+    if (!deletedUser)
+        throw new Error("유저가 존재하지 않습니다.");
+    return deletedUser;
+});
+exports.deleteUserService = deleteUserService;
 //# sourceMappingURL=userService.js.map

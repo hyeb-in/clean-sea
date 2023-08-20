@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.getUserInfo = exports.signUpUser = void 0;
+exports.deleteUser = exports.updateUser = exports.getUser = exports.signUpUser = void 0;
 const userService_1 = require("../services/userService");
 /**
  * @param {*} req name,email,password
@@ -19,32 +19,47 @@ const signUpUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     try {
         const { name, email, password } = req.body;
         if (!name || !email || !password) {
-            return res.status(400).send({ message: "모든 사항을 입력하세요" });
+            //ErrorGenerate 만들기
+            throw new Error("항목을 빠짐없이 입력해주세요");
         }
-        const newUser = yield (0, userService_1.createUser)(name, email, password);
+        const newUser = yield (0, userService_1.createUserService)(name, email, password);
         res.status(200).json(newUser);
     }
     catch (error) {
-        console.log(error);
         next(error);
     }
 });
 exports.signUpUser = signUpUser;
-const getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return res.status(200).json(req.user);
     }
     catch (error) {
-        console.log(error);
         next(error);
     }
 });
-exports.getUserInfo = getUserInfo;
+exports.getUser = getUser;
 const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.body;
-    const {} = req.body;
+    try {
+        const { userId } = req.params;
+        const inputData = req.body;
+        const updatedUser = yield (0, userService_1.updateUserService)(userId, inputData);
+        res.status(200).json(updatedUser);
+    }
+    catch (error) {
+        next(error);
+    }
 });
 exports.updateUser = updateUser;
-const deleteUser = () => { };
+const deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const user = yield (0, userService_1.deleteUserService)(userId);
+        res.status(200).json(user);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.deleteUser = deleteUser;
 //# sourceMappingURL=userController.js.map

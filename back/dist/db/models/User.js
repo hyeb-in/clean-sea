@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNewUser = exports.findUserByEmail = exports.findUserById = void 0;
+exports.deleteById = exports.update = exports.create = exports.findUserByEmail = exports.findUserById = void 0;
 const userSchema_1 = __importDefault(require("../schemas/userSchema"));
 const findUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userSchema_1.default.findById(userId);
@@ -24,13 +24,26 @@ const findUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* (
     return user;
 });
 exports.findUserByEmail = findUserByEmail;
-const createNewUser = (name, email, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
+const create = (name, email, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
     const newUser = yield userSchema_1.default.create({
         name,
         email,
         password: hashedPassword,
     });
+    console.log(newUser);
     return newUser;
 });
-exports.createNewUser = createNewUser;
+exports.create = create;
+const update = (userId, inputData) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedUser = yield userSchema_1.default.findByIdAndUpdate(userId, inputData, {
+        new: true,
+    });
+    return updatedUser;
+});
+exports.update = update;
+const deleteById = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield userSchema_1.default.findByIdAndDelete(userId);
+    return user;
+});
+exports.deleteById = deleteById;
 //# sourceMappingURL=User.js.map

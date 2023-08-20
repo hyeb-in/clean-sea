@@ -25,10 +25,11 @@ const localAuthentication = (req, res, next) => __awaiter(void 0, void 0, void 0
                 return res.status(400).json({ message: info.message });
             //토큰 테스트하려고 짧게해둔 변경할 것
             const token = jsonwebtoken_1.default.sign({ id: user._id }, JWT_SECRET_KEY, {
-                expiresIn: "5m",
+                expiresIn: "30m",
             });
-            //req.token =token
-            return res.status(200).json(token);
+            req.token = token;
+            req.user = user;
+            next();
         }))(req, res, next);
     }
     catch (err) {
