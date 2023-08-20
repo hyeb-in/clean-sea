@@ -32,7 +32,6 @@ function App() {
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
-  // isUploadFormVisible, setIsUploadFormVisible
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
   const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
   const [isEditFormVisible, setIsEditFormVisible] = useState(false);
@@ -55,7 +54,7 @@ function App() {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
       const res = await Api.get("users/current");
       const currentUser = res.data;
-
+      console.log(currentUser);
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
       dispatch({
         type: "LOGIN_SUCCESS",
@@ -102,7 +101,6 @@ function App() {
                   />
                 )}
                 <Routes>
-                  {/* to do: 404 페이지 만들기 */}
                   <Route path="/" exact element={<Main />} />
                   <Route path="/login" exact element={<Login />} />
                   <Route path="/signup" exact element={<SignUp />} />

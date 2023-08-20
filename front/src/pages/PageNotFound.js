@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Container, Row } from "react-bootstrap";
 
 const PageNotFound = () => {
   const navigate = useNavigate();

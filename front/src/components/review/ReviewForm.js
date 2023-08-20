@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FileUploader } from "react-drag-drop-files";
 import Carousel from "../common/Carousel";
-import Toast from "../common/Toast";
+import ToastWrapper from "../common/ToastWrapper";
 import {
   EditFormContext,
   EditingDataContext,
@@ -88,6 +88,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     // to do: 백엔드랑 합쳐서 확인 필요
     // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로 ?
     if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
+
     try {
       if (title.length < 4)
         return setToastMsg("제목을 4글자 이상 입력해주세요");
@@ -110,6 +111,10 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
 
       // PUT reviews
       if (FORM_STATUS.editing) {
+        const { author: authorId } = currentFormData;
+        if (loggedInUser._id === authorId) {
+          return setToastMsg("다른사람의 게시물을 수정할 수 없습니다");
+        }
         setIsUploading(true);
         const res = await Api.put(`reviews/${currentFormData._id}`, {
           title,
@@ -130,6 +135,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     } catch (error) {
       console.error(error);
       setResult(RESULT_ENUM.FAIL);
+      setToastMsg(error);
     }
     setIsUploading(false);
     setResult(RESULT_ENUM.SUCCESS);
@@ -179,7 +185,13 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         // to do: space bar입력시 모달창 사라짐 버그 (윈도우..? 확인하기)
       >
         {/* validation 통과하지 못했다면 toast pop-up으로 유저에게 알려줌 */}
-        {toastMsg && <Toast onClose={() => setToastMsg("")} text={toastMsg} />}
+        {toastMsg && (
+          <ToastWrapper
+            onClose={() => setToastMsg("")}
+            text={toastMsg}
+            position="middle-center"
+          />
+        )}
 
         {/* 모달창 내부: 입력 받는 공간 */}
         {!isUploading && !result && (

@@ -73,6 +73,7 @@ const ReviewCard = ({ review, setReviews }) => {
               <ActionSelectorModal
                 show={isActionModalVisible}
                 reviewId={reviewId}
+                authorId={authorId}
                 handleClose={() => setIsActionModalVisible(false)}
                 isActionModalVisible={isActionModalVisible}
                 setIsActionModalVisible={setIsActionModalVisible}
