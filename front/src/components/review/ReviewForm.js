@@ -54,43 +54,23 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         <FontAwesomeIcon icon={faPlus} /> 추가하기
       </Button>
     );
-  const handleFileChange = (files) => {
-    if (
-      files.length > MAX_FILE_COUNT ||
-      (imageUrls.length > 0 && imageUrls.length + files.length > MAX_FILE_COUNT)
-    ) {
-      return setToastMsg(`최대 ${MAX_FILE_COUNT}개까지 업로드 가능합니다.`);
-    }
-    if (files.length > 0) {
-      // FileList 객체를 배열로 변환
-      const fileList = Array.from(files);
-      // 파일을 Blob으로 변환하고 Blob URL을 생성하는 Promise 배열 생성
-      const blobPromises = fileList.map((file) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          // 파일을 ArrayBuffer로 읽은 후 Blob을 생성하고 Blob URL을 생성
-          reader.onload = (event) => {
-            const blob = new Blob([event.target.result], { type: file.type });
-            resolve(URL.createObjectURL(blob));
-          };
-          reader.readAsArrayBuffer(file);
-        });
-      });
-      // 모든 Promise를 병렬로 처리하여 Blob URL 배열을 업데이트
-      Promise.all(blobPromises).then((newBlobUrls) => {
-        setImageUrls((prevUrls) => [...prevUrls, ...newBlobUrls]);
-      });
-    } else {
-      // 단일 파일인 경우
-      const blob = new Blob([files], { type: files.type });
-      const url = URL.createObjectURL(blob);
-      setImageUrls([url]);
-    }
-  };
 
+  // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
+  const handleFileChange = (files) => {
+    const blobUrls = [];
+    Array.prototype.forEach.apply(files, [
+      (file) => {
+        const blob = new Blob([file], { type: file.type });
+        const url = URL.createObjectURL(blob);
+        blobUrls.push(url);
+      },
+    ]);
+    setImageUrls((current) => [...current, ...blobUrls]);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     // to do: upload imageUrls
+    // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로
     try {
       if (title.length < 4)
         return setToastMsg("제목을 4글자 이상 입력해주세요");
@@ -104,6 +84,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         const res = await Api.post("reviews/register", {
           title,
           content,
+          imageUrls: imageUrls.length > 0 ? imageUrls : null,
         });
         // 에러 메세지 안가져와지는 거 같은뎅
         if (!res.status === 400) throw new Error("업로드에 실패했습니다");
@@ -136,8 +117,6 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     }
     setIsUploading(false);
     setResult(RESULT_ENUM.SUCCESS);
-    // setIsUploadFormVisible(false);
-    // setIsEditFormVisible(false);
   };
 
   useEffect(() => {
