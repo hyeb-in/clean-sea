@@ -21,7 +21,8 @@ const History = () => {
   const fetchTravelList = async () => {
     try {
       const response = await Api.get('travels/travelList');
-      setTravels(response);
+      console.log(response);
+      setTravels(response.data);
     } catch (error) {
       console.error('방문 로그 조회 실패:', error);
     }
@@ -29,7 +30,7 @@ const History = () => {
   const handleNewTravelSubmit = async () => {
     try {
       const travelData = { ...newTravel, date: new Date(newTravel.date) };
-      await Api.post('travels/register', { data: travelData });
+      await Api.post('travels/register', travelData);
     } catch (error) {
       console.error('새로운 여행 정보 등록 실패:', error);
     }
@@ -46,9 +47,9 @@ const History = () => {
     if (!editedTravel) return;
 
     try {
-      await Api.put(`travels/update/${editedTravel._id}`, editedTravel);
-      const updatedTravels = travels.map(travel => travel._id === editedTravel._id ? editedTravel : travel);
-      setTravels(updatedTravels);
+      // await Api.put(`travels/update/${editedTravel._id}`, editedTravel);
+      // const updatedTravels = travels.map(travel => travel._id === editedTravel._id ? editedTravel : travel);
+      // setTravels(updatedTravels);
       setIsEditMode(false);
       setEditedTravel(null);
     } catch (error) {
