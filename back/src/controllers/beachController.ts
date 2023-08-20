@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { getBeachByBeachNameService, getBeachByRegionService, getBeachesService } from "../services/beachService";
 import { validate } from '../utils/validators/beachValidator'
 import { StatusCodes } from "http-status-codes";
-import { IBeach } from 'beach';
+import { IBeach } from '../types/beach';
 
 const getBeachByBeachName = async (
   req: Request, 

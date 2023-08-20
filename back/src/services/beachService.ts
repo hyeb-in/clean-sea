@@ -1,5 +1,5 @@
 import { BeachByBeachName, BeachByRegion, Beaches } from "../db/models/Beach";
-import { IBeach } from "beach";
+import { IBeach } from '../types/beach';
 
 // 해수욕장 명칭 하나로 가져오기
 async function getBeachByBeachNameService(name: IBeach): Promise<IBeach[]> {
