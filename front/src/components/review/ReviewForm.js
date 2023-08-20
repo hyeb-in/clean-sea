@@ -58,6 +58,14 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
   const handleFileChange = (files) => {
     const blobUrls = [];
+    if (
+      files.length > MAX_FILE_COUNT ||
+      (imageUrls.length > 0 && imageUrls.length + files.length > MAX_FILE_COUNT)
+    ) {
+      return setToastMsg(
+        `사진은 한번에 ${MAX_FILE_COUNT}개까지 업로드할 수 있습니다`
+      );
+    }
     Array.prototype.forEach.apply(files, [
       (file) => {
         const blob = new Blob([file], { type: file.type });
@@ -69,7 +77,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // to do: upload imageUrls
+    // to do: 백엔드랑 합쳐서 확인 필요
     // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로
     try {
       if (title.length < 4)
