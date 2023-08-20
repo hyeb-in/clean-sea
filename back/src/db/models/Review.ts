@@ -7,8 +7,8 @@ async function createReview(toCreate: IReview): Promise<IReview> {
   return newReviewObject as IReview;
 }
 
-async function findUserReviews(userId: string): Promise<IReview[]> {
-  const userReviews = await ReviewModel.find({ author: userId });
+async function findAllReviews(): Promise<IReview[]> {
+  const userReviews = await ReviewModel.find();
   const userReviewsObjects = userReviews.map(review => review.toObject());
   return userReviewsObjects as IReview[];
 }
@@ -45,4 +45,4 @@ async function deleteReview(reviewId: string): Promise<IReview | null> {
   return null;
 }
 
-export { createReview, findUserReviews, findUserReview, updateReview, deleteReview };
+export { createReview, findAllReviews, findUserReview, updateReview, deleteReview };

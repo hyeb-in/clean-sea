@@ -1,28 +1,28 @@
+import React, { useContext } from "react";
+import {
+  UserStateContext,
+  DispatchContext,
+  UploadFormContext,
+} from "../../App";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartLine,
   faMagnifyingGlass,
+  faCompass,
 } from "@fortawesome/free-solid-svg-icons";
+import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useNavigate } from "react-router-dom";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "./Avatar";
-import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
-
-import React, { useState, useContext } from "react";
-import { UserStateContext, DispatchContext } from "../App";
-import ReviewForm from "./review/ReviewForm";
 
 const NavBar = () => {
-  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-
   const { user: loggedInUser } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
-
+  const { setIsUploadFormVisible } = useContext(UploadFormContext);
   const isLogin = !!loggedInUser;
 
   const logout = () => {
@@ -54,7 +54,7 @@ const NavBar = () => {
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
               </OverlayTrigger>
             </Nav.Link>
-            <Nav.Link onClick={() => navigate("/network")}>
+            <Nav.Link onClick={() => navigate("/reviews")}>
               <OverlayTrigger
                 placement="bottom"
                 overlay={<Tooltip id="browse">둘러보기</Tooltip>}
@@ -74,19 +74,13 @@ const NavBar = () => {
 
             {isLogin ? (
               <>
-                <Nav.Link onClick={() => setShowModal(!showModal)}>
+                <Nav.Link onClick={() => setIsUploadFormVisible(true)}>
                   <OverlayTrigger
                     placement="bottom"
                     overlay={<Tooltip id="upload">업로드</Tooltip>}
-                    onClick={() => setShowModal(!showModal)}
                   >
                     <FontAwesomeIcon icon={faSquarePlus} />
                   </OverlayTrigger>
-                  <ReviewForm
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                    headerTitle="새 게시물 작성하기"
-                  />
                 </Nav.Link>
                 <Nav.Item>
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>

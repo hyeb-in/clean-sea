@@ -3,11 +3,19 @@ import { Schema, model, Document } from 'mongoose';
 interface IReview extends Document {
     title: string;
     content: string;
+    userName? : string;
+    location? : string;
     author?: string;
     uploadFile?: string;
 }
 
 const ReviewSchema : Schema<IReview> = new Schema({
+    userName : {
+        type : String,
+    },
+    location : {
+        type : String,
+    },
     title : {
         type : String,
         required : true,

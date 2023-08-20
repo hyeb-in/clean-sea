@@ -1,43 +1,40 @@
 import React, { useContext, useState } from "react";
-import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
-import Avatar from "../Avatar";
+import { Button, Card, Col, Image, Row } from "react-bootstrap";
+import Avatar from "../common/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import ModalWrapper from "../ModalWrapper";
-import { UserStateContext } from "../../App";
-import * as Api from "../../Api";
-import ReviewForm from "./ReviewForm";
+import { EditingDataContext, UserStateContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+import ActionSelectorModal from "../common/ActionSelectorModal";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const ReviewCard = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
+  const { setEditingData } = useContext(EditingDataContext);
+
   const [isActionModalVisible, setIsActionModalVisible] = useState(false);
-  const [isEditingModalVisible, setIsEditingModalVisible] = useState(false);
-  const { _id: reviewId, author, title, content, createdAt, imageUrl } = review;
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleClose = () => setIsActionModalVisible(false);
+  const {
+    _id: reviewId,
+    author: authorId,
+    title,
+    content,
+    createdAt,
+    imageUrl,
+    userName,
+  } = review;
 
-  const showEditForm = async () => {
-    setIsActionModalVisible(false);
-    setIsEditingModalVisible(true);
-  };
+  // get user avatar >> get 'users/id' ?
 
-  const deleteReview = async (reviewId) => {
-    if (isActionModalVisible) {
-      setIsActionModalVisible(false);
-    }
-    try {
-      const res = await Api.delete(`reviews/${reviewId}`);
-      // to do: error handle
-      if (!res.statusText === "OK") throw new Error("서버 에러 받아오기");
-      setReviews((current) => {
-        return current.filter((review) => review._id !== reviewId);
-      });
-    } catch (err) {
-      setError(err);
-    }
-  };
+  const currentTime = new Date(); // 현재 시간
+  const createdAtgg = new Date(createdAt); // 주어진 시간
+
+  const timeDifference = currentTime.getTime() - createdAtgg.getTime(); // 밀리초 단위의 차이
+
+  const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+  const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60)); // 시간으로 변환
+  const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일자로 변환
 
   return (
     <>
@@ -50,68 +47,52 @@ const ReviewCard = ({ review, setReviews }) => {
       >
         <Card.Header>
           <Row>
-            <Col xs="auto">
+            <Col xs="auto" onClick={() => navigate(`/users/${authorId}`)}>
+              {/* to do: get user's info -> avatar url */}
               <Avatar width="50" />
             </Col>
-            <Col className="d-flex align-items-center px-0">
-              {author}
-              {/* TO DO: 몇 일 전, 몇 시간 전 */}
-            </Col>
-            {/* 로그인 유저가 작성한 글이라면 수정, 삭제 모달 창을 띄운다 */}
+            <Col className="d-flex align-items-center px-0">{userName}</Col>
+
+            {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
+            {/* 클릭하면 수정, 삭제 선택하는 모달 창을 띄운다 */}
             <Col className="d-flex align-items-center justify-content-end">
-              {/*  author 값이 바뀌면 수정 되어야 함 */}
-              {loggedInUser && loggedInUser._id === author && (
+              {loggedInUser && loggedInUser._id === authorId && (
                 <Button
                   variant="link"
                   style={{ color: "black" }}
-                  onClick={() => setIsActionModalVisible(!isActionModalVisible)}
+                  onClick={() => {
+                    setIsActionModalVisible(true);
+                    setEditingData(review);
+                  }}
                 >
                   <FontAwesomeIcon icon={faEllipsis} />
                 </Button>
               )}
-              <ModalWrapper show={isActionModalVisible} onHide={handleClose}>
-                <ListGroup className="text-center">
-                  <ListGroup.Item key="edit" action onClick={showEditForm}>
-                    수정
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    key="del"
-                    action
-                    style={{ color: "red" }}
-                    onClick={() => deleteReview(reviewId)}
-                  >
-                    삭제
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    key="cancel"
-                    action
-                    onClick={() =>
-                      setIsActionModalVisible(!isActionModalVisible)
-                    }
-                  >
-                    취소
-                  </ListGroup.Item>
-                </ListGroup>
-              </ModalWrapper>
+
+              {/* '수정, 삭제' 선택하는 모달 창 */}
+              <ActionSelectorModal
+                show={isActionModalVisible}
+                reviewId={reviewId}
+                handleClose={() => setIsActionModalVisible(false)}
+                isActionModalVisible={isActionModalVisible}
+                setIsActionModalVisible={setIsActionModalVisible}
+                setReviews={setReviews}
+              />
             </Col>
           </Row>
         </Card.Header>
         <Card.Body>
-          {/* to do: 서버 image 저장 후 */}
-          {/* <Image src={imageUrl} fluid /> */}
+          {/* to do: 서버 image 저장 후 carousel */}
+          <Image src={imageUrl} fluid />
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
+          <Card.Text className="d-flex justify-content-end">
+            {minutesPassed < 60 && `${minutesPassed}분 전`}
+            {minutesPassed >= 60 && hoursPassed < 12 && `${hoursPassed}시간 전`}
+            {minutesPassed >= 60 && hoursPassed >= 12 && `${daysPassed}일 전`}
+          </Card.Text>
         </Card.Body>
       </Card>
-      {isEditingModalVisible && (
-        <ReviewForm
-          showModal={isEditingModalVisible}
-          setShowModal={setIsEditingModalVisible}
-          headerTitle="게시물 수정하기"
-          currentFormData={review}
-          setReviews={setReviews}
-        />
-      )}
     </>
   );
 };

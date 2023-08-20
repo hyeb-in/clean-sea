@@ -1,3 +1,5 @@
+import { FOOTER_HEIGHT } from "../../constants";
+
 function Footer() {
   const footerStyle = {
     background: "#4B89DC",
@@ -14,7 +16,7 @@ function Footer() {
 
   const contentStyle = {
     width: "1000px",
-    height: "200px",
+    height: `${FOOTER_HEIGHT}px`,
     padding: "30px",
   };
 

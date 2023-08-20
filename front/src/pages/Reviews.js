@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from "react";
-import ReviewCard from "../components/review/ReviewCard";
 import { Col, Container, Row } from "react-bootstrap";
+import ReviewCard from "../components/review/ReviewCard";
+import SpinnerWrapper from "../components/common/Spinner";
+import NoReviewIndicator from "../components/review/NoReviewIndicator";
 import * as Api from "../Api";
 
-const Network = () => {
-  const [reviews, setReviews] = useState(null);
+const Reviews = ({ reviews, setReviews }) => {
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await Api.get("reviews/reviewList");
         if (res.statusText !== "OK") throw new Error("서버 에러 발생");
-        console.log(res.data);
+        // 프로필 클릭시 /users/:id로 이동
         setReviews(res.data);
+        setIsLoaded(true);
       } catch (error) {
         setError(error);
       }
     };
     fetchData();
-  }, []);
+  }, [setReviews]);
 
   return (
     <>
       <Container className="py-3">
         <Row xs={1} md={2} lg={3}>
-          {reviews?.length > 0 &&
+          {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
+          {isLoaded &&
+            reviews?.length > 0 &&
             reviews.map((review) => (
               <Col
                 key={review._id}
@@ -34,10 +38,11 @@ const Network = () => {
                 <ReviewCard review={review} setReviews={setReviews} />
               </Col>
             ))}
+          {isLoaded && reviews?.length === 0 && <NoReviewIndicator />}
         </Row>
       </Container>
     </>
   );
 };
 
-export default Network;
+export default Reviews;

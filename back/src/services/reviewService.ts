@@ -1,4 +1,4 @@
-import { createReview, findUserReviews, findUserReview, updateReview, deleteReview } from '../db/models/Review';
+import { createReview, findAllReviews, findUserReview, updateReview, deleteReview } from '../db/models/Review';
 import { IReview } from '../types/review';
 
 async function addReview({toCreate} : {toCreate: IReview}): Promise<IReview> {
@@ -6,8 +6,8 @@ async function addReview({toCreate} : {toCreate: IReview}): Promise<IReview> {
     return createdReview;
 }
 
-async function getReview(userId : string) : Promise<IReview[]>{
-    const review = await findUserReviews(userId);
+async function getReview() : Promise<IReview[]>{
+    const review = await findAllReviews();
     return review;
 }
 
