@@ -1,7 +1,7 @@
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 
 const CarouselWrapper = ({ imageUrls, setReview }) => {
@@ -13,6 +13,7 @@ const CarouselWrapper = ({ imageUrls, setReview }) => {
     <Carousel
       interval={null}
       variant="dark"
+      indicators={imageUrls.length > 1}
       prevIcon={
         imageUrls.length > 1 && (
           <FontAwesomeIcon
@@ -40,17 +41,14 @@ const CarouselWrapper = ({ imageUrls, setReview }) => {
     >
       {imageUrls.map((img, index) => (
         <Carousel.Item key={img}>
-          <img
-            className="d-block w-100"
-            src={img}
-            alt="slide"
-            style={{ width: "auto", height: "320px", objectFit: "cover" }}
-          />
-          <Carousel.Caption style={{ textAlign: "right" }}>
-            <Button variant="danger" onClick={() => removeUrl(index)}>
-              삭제 <FontAwesomeIcon icon={faTrashCan} />
-            </Button>
-          </Carousel.Caption>
+          <Image src={img} fluid />
+          {setReview && (
+            <Carousel.Caption style={{ textAlign: "right" }}>
+              <Button variant="danger" onClick={() => removeUrl(index)}>
+                삭제 <FontAwesomeIcon icon={faTrashCan} />
+              </Button>
+            </Carousel.Caption>
+          )}
         </Carousel.Item>
       ))}
     </Carousel>

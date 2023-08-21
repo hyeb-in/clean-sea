@@ -7,6 +7,7 @@ import { EditingDataContext, UserStateContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import ActionSelectorModal from "../common/ActionSelectorModal";
 import * as Api from "../../Api";
+import CarouselWrapper from "../common/Carousel";
 
 const mock = [
   {
@@ -121,7 +122,12 @@ const ReviewCard = ({ review, setReviews }) => {
         </Card.Header>
         <Card.Body>
           {/* to do: 서버 image 저장 후 carousel */}
-          <Carousel imageUrls={imageUrl} />
+          <CarouselWrapper
+            imageUrls={[
+              "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
+              "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
+            ]}
+          />
           {/* <Image src={imageUrl} fluid /> */}
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
