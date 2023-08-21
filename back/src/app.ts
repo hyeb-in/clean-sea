@@ -15,12 +15,7 @@ import "./db";
 import { mailSender } from "./utils/sendMail";
 
 const app: Express = express();
-app.use(
-  cors({
-    origin: "*", // cors origin 허용 * 일 경우 보안 문제 있을 수 있음
-    methods: "GET", // 허용할 HTTP 메서드
-  })
-);
+app.use(cors());
 app.use(passport.initialize());
 localStrategy();
 jwtStrategy();
