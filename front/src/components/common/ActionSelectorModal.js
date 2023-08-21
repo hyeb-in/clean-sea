@@ -30,13 +30,13 @@ const ActionSelectorModal = ({
     try {
       const res = await Api.delete(`reviews/${reviewId}`);
       // to do: error handle
-      if (!res.statusText === "OK") throw new Error("서버 에러 받아오기");
+      if (!res.statusText === "OK") setToastMsg("서버 에러 받아오기");
       setReviews((current) => {
         return current.filter((review) => review._id !== reviewId);
       });
       setToastMsg("게시물이 삭제되었습니다");
     } catch (err) {
-      setToastMsg(err);
+      console.error(err);
     }
   };
 

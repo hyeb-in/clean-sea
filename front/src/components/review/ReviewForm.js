@@ -20,8 +20,6 @@ import * as Api from "../../Api";
 import SpinnerWrapper from "../common/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 import ConfirmModal from "../common/ConfirmModal";
-import axios from "axios";
-
 const allowedFileTypes = ["png", "jpeg"];
 
 const MAX_FILE_COUNT = 5;
@@ -46,7 +44,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   const [review, setReview] = useState({
     title: currentFormData?.title || "",
     content: currentFormData?.content || "",
-    // location: currentFormData?.location || "",
+    location: currentFormData?.location || "",
     imageUrls: currentFormData?.imageUrls || [],
   });
 
@@ -58,8 +56,8 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   } = review;
   const [toastMsg, setToastMsg] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [currentPosition, setCurrentPosition] = useState(null);
+  // const [searchResults, setSearchResults] = useState([]);
+  const [currentPosition, setCurrentPosition] = useState();
   console.log(review);
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
@@ -153,11 +151,9 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
 
   useEffect(() => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
-    if (!isUploadFormVisible && imageUrls.length > 0) {
+    if (!isUploadFormVisible && !isEditFormVisible && imageUrls.length > 0) {
       return () => {
-        // imageUrls?.forEach((url) => URL.revokeObjectURL(url));
-        // setReview
-        // to do: 수정 필요
+        imageUrls?.forEach((url) => URL.revokeObjectURL(url));
       };
     }
   }, [imageUrls, isUploadFormVisible, isEditFormVisible]);
@@ -174,7 +170,6 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     setToastMsg("");
     setResult(null);
   };
-
   // 브라우저의 Geolocation API 기능을 사용해서 사용자의 위치 정보를 불러온다
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -199,27 +194,16 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   };
 
   useEffect(() => {
-    const searchLocationByTerm = async () => {
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_MAPS_API_KEY}&location=${getCurrentLocation.lat},${getCurrentLocation.lng}&radius=5000&keyword=${searchTerm}`
-      );
-
-      if (!response.data.status === "OK") {
-        setToastMsg("Error fetching places:", response.data.status);
-      }
-      console.log(response);
-      // setSearchResults(response)
-    };
     try {
-      // searchLocationByTerm();
-      // to do: CORS ERROR!!!!
+      if (searchTerm === "") return;
+      if (!currentPosition) {
+        return setToastMsg("사용자 위치를 찾을 수 없습니다");
+      }
+      console.log(searchTerm, currentPosition);
     } catch (error) {
       console.error("Error fetching places:", error);
     }
-  }, [
-    // location,
-    searchTerm,
-  ]);
+  }, [currentPosition, searchTerm]);
 
   useEffect(() => {
     getCurrentLocation();
@@ -296,16 +280,24 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                       }
                     />
                   </Form.Group>
-                  <Form.Group>
+                  {/* 사용자 위치, 검색어 기반으로 위치 추가하기 */}
+                  {/* to do: cors 문제 해결한 후에 작업 */}
+                  {/* <Form.Group>
                     <Form.Control
-                      placeholder="위치추가"
+                      placeholder="위치추가 미구현"
                       as="input"
                       size="sm"
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={(e) => {
+                        if (!currentPosition)
+                          return setToastMsg(
+                            "사용자의 위치를 찾을 수 없습니다"
+                          );
+                        setSearchTerm(e.target.value);
+                      }}
                       className="my-2"
                     />
-                  </Form.Group>
+                  </Form.Group> */}
 
                   <Form.Group>
                     <Form.Label>내용</Form.Label>
