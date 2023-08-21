@@ -6,7 +6,7 @@ interface IReview extends Document {
   userName? : string;
   location? : string;
   author?: string;
-  uploadFile?: string;
+  uploadFile?: [string];
 }
 
 export { IReview };

@@ -6,7 +6,7 @@ interface IReview extends Document {
     userName? : string;
     location? : string;
     author?: string;
-    uploadFile?: string;
+    uploadFile?: [string];
 }
 
 const ReviewSchema : Schema<IReview> = new Schema({
@@ -26,7 +26,7 @@ const ReviewSchema : Schema<IReview> = new Schema({
         type : String,
     },
     uploadFile : {
-        type : String,
+        type : [String],
     },
     },
 
