@@ -8,10 +8,6 @@ import {
 } from '../services/commentService';
 // 유효성검사추가예정
 import { IRequest } from "user";
-
-const sendResponseWithError = function (res: Response, statusCode: number, error: any) {
-    res.status(statusCode).json({ error });
-  };
   
 const sendResponseWithData = function (res: Response, statusCode: number, data: any) {
     res.status(statusCode).json(data);

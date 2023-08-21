@@ -6,15 +6,9 @@ import {
   setReview,
   deletedReview,
 } from "../services/reviewService";
-import { ReviewValidator } from "../utils/validators/reviewValidator";
 import { IRequest } from "user";
 import { saveAndManageImage } from '../utils/uploads/uploadHelper';
 // import fetch from 'node-fetch';
-
-
-const sendResponseWithError = function (res: Response, statusCode: number, error: any) {
-  res.status(statusCode).json({ error });
-};
 
 const sendResponseWithData = function (res: Response, statusCode: number, data: any) {
   res.status(statusCode).json(data);
@@ -28,12 +22,6 @@ const createReview = async (
   try {
     const author = req.user._id;
     const userName = req.user.name;
-    const schema = ReviewValidator.postReview();
-    const validationResult = schema.validate(req.body);
-
-    if (validationResult.error) {
-      return sendResponseWithError(res, StatusCodes.BAD_REQUEST, validationResult.error.details[0].message);
-    }
 
     console.log(req.body);
     console.log(req.body.imageUrls);

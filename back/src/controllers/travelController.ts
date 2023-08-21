@@ -6,7 +6,6 @@ import {
   setTravel,
   deletedTravel,
 } from "../services/travelService";
-import { TravelValidator } from "../utils/validators/travelValidator";
 import { IRequest } from "user";
 
 const sendResponse = function (res: Response, statusCode: number, data: any) {
@@ -23,14 +22,6 @@ const createTravel = async (
 ) => {
   try {
     const author = req.user._id;
-
-    const schema = TravelValidator.postTravel();
-    const validationResult = schema.validate(req.body);
-    if (validationResult.error) {
-      return sendResponse(res, StatusCodes.BAD_REQUEST, {
-        error: validationResult.error.details[0].message,
-      });
-    }
 
     const addMyTravel = await addTravel({
       toCreate: { ...req.body, author },
@@ -76,14 +67,7 @@ const updateTravel = async (
 ) => {
   try {
     const id = req.params.travelId;
-    const schema = TravelValidator.putTravel();
-    const validationResult = schema.validate(req.body);
-
-    if (validationResult.error) {
-      return sendResponse(res, StatusCodes.BAD_REQUEST, {
-        error: validationResult.error.details[0].message,
-      });
-    }
+    
     const updatedTravel = await setTravel(id, {
       toUpdate: { ...req.body },
     });
