@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext  } from 'react'
-import { Col, Container, Row, Card, Button, Modal, FormControl } from "react-bootstrap";
+import {
+  Col, Container, Row, Card, Button, Modal, FormControl
+} from "react-bootstrap";
 import * as Api from "../../Api";
 import { UserStateContext } from "../../App";
 import TravelItem from './TravelItem';
 
-const History = () => {
+const History = ({ displayToast }) => {
   const [travels, setTravels] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const { user } = useContext(UserStateContext);
@@ -23,15 +25,16 @@ const History = () => {
       console.log(response);
       setTravels(response.data);
     } catch (error) {
-      console.error('방문 로그 조회 실패:', error);
+      displayToast('방문 로그 조회 실패.');
     }
   };
+
   const handleNewTravelSubmit = async () => {
     try {
       const travelData = { ...newTravel, date: new Date(newTravel.date) };
       await Api.post('travels/register', travelData);
     } catch (error) {
-      console.error('새로운 여행 정보 등록 실패:', error);
+      displayToast('방문 로그 등록 실패.');
     }
 
     await fetchTravelList();
@@ -72,7 +75,8 @@ const History = () => {
               <Col>
                 {travels.length > 0 ? (
                   travels.map((travel, index) => (
-                    <TravelItem key={index} travelData={travel} onTravelUpdate={handleTravelUpdate} />
+                    <TravelItem key={index} travelData={travel} onTravelUpdate={handleTravelUpdate}
+                                onTravelDelete={fetchTravelList} displayToast={displayToast} />
                   ))
                 ) : (
                   <p className="m-2">방문 로그가 없습니다</p>
@@ -112,7 +116,6 @@ const History = () => {
       </Container>
     </>
   )
-
 }
 
 export default History;

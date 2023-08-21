@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
-  Row,
-  Col,
-  Card,
-  ListGroup,
-  ListGroupItem,
-  Button,
-  FormControl
+  Container, Row, Col, Card, ListGroup, ListGroupItem, Button, FormControl, Toast
 } from "react-bootstrap";
 import { useParams } from 'react-router-dom';
 import History from "../components/travel/History";
@@ -23,6 +16,14 @@ const MyProfile = () => {
   const [userProfileImage, setUserProfileImage] = useState("https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png");
   const [isEditMode, setIsEditMode] = useState(false);
 
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+
+  const displayToastMessage = (message) => {
+    setToastMessage(message);
+    setShowToast(true);
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -34,7 +35,7 @@ const MyProfile = () => {
         setUserDescription(userData.description);
         setUserProfileImage(userData.profileImage || "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png");
       } catch (error) {
-        alert('유저 정보를 가져오는 데 실패했습니다.');
+        displayToastMessage('유저 정보를 가져오는 데 실패했습니다.');
       }
     };
 
@@ -56,9 +57,9 @@ const MyProfile = () => {
     };
     try {
       await Api.put(apiEndpoint, postData);
-      alert('정보가 성공적으로 업데이트되었습니다.');
+      displayToastMessage('프로필이 성공적으로 업데이트되었습니다.');
     } catch (error) {
-      alert('오류가 발생했습니다. 다시 시도해주세요.');
+      displayToastMessage('오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
 
@@ -93,7 +94,11 @@ const MyProfile = () => {
         </Col>
       </Row>
       <Row>
-        <History></History>
+        <History displayToast={displayToastMessage} />
+
+        <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
       </Row>
     </Container>
   );
