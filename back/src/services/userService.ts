@@ -47,5 +47,10 @@ export const deleteUserService = async (userId: string) => {
 
 export const resetPasswordService = async (userId: string, email: string) => {
   const newPassword = generateRandomPassword();
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
   mailSender(email, "비밀번호 초기화 이메일", newPassword);
+
+  const updatedUser = await update(userId, { password: hashedPassword });
+
+  return updatedUser;
 };

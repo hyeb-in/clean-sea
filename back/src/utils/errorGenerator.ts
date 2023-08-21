@@ -1,5 +1,10 @@
-const errorGenerator = (errorMessage: string, statusCode: number) => {
-  let error = new Error(errorMessage);
-  error = error as Error & { statusCode: number };
+import { IError } from "error";
+
+export const errorGenerator = (
+  errorMessage: string,
+  statusCode: number
+): IError => {
+  const error: IError = new Error(errorMessage);
+  error.statusCode = statusCode;
   return error;
 };

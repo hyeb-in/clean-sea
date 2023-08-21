@@ -3,6 +3,7 @@ import winstonDaily from "winston-daily-rotate-file";
 import morgan from "morgan";
 import path from "path";
 import { Request, Response, NextFunction } from "express";
+import { IError } from "error";
 
 const logDir = "logs";
 const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
@@ -62,13 +63,14 @@ morgan.token("body", (req: Request, res: Response) => {
 });
 
 function errorMiddleware(
-  error: Error,
+  error: IError,
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
+  console.log("이건 미들웨어 속 에러야 ", error);
   logger.error(error);
-  res.status(400).send(error.message);
+  res.status(error.statusCode).send(error.message);
 }
 
 if (process.env.NODE_ENV !== "production") {

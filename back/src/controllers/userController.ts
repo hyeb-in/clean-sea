@@ -95,14 +95,17 @@ export const resetPassword = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { email } = req.body;
-  const user = await findUserByEmail(email);
-  //1.이메일을 받아온다.
-  //2. 실제로 그 이메일이 회원가입한 유저인지 파악한다.
-  //3. 이메일을 보낸다.
+  try {
+    const { email } = req.body;
+    const user = await findUserByEmail(email);
 
-  if (!user) throw new Error("해당 이메일은 존재하지 않습니다.");
+    if (!user) throw new Error("해당 이메일은 존재하지 않습니다.");
 
-  const userId = user._id;
-  resetPasswordService(userId, email);
+    const userId = user._id;
+    const resetedUser = await resetPasswordService(userId, email);
+
+    res.status(200).json(resetedUser);
+  } catch (error) {
+    next(error);
+  }
 };
