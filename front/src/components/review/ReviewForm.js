@@ -46,16 +46,21 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   const [review, setReview] = useState({
     title: currentFormData?.title || "",
     content: currentFormData?.content || "",
-    location: currentFormData?.location || "",
+    // location: currentFormData?.location || "",
     imageUrls: currentFormData?.imageUrls || [],
   });
 
-  const { title, content, location, imageUrls } = review;
+  const {
+    title,
+    content,
+    //  location,
+    imageUrls,
+  } = review;
   const [toastMsg, setToastMsg] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [currentPosition, setCurrentPosition] = useState(null);
-
+  console.log(review);
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -107,9 +112,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
       if (FORM_STATUS.adding) {
         setIsUploading(true);
         const res = await Api.post("reviews/register", {
-          title,
-          content,
-          // imageUrls: imageUrls.length > 0 ? imageUrls : null,
+          ...review,
         });
         // 에러 메세지 안가져와지는 거 같은뎅
         if (!res.status === 400) throw new Error("업로드에 실패했습니다");
@@ -152,11 +155,12 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
     if (!isUploadFormVisible && imageUrls.length > 0) {
       return () => {
-        imageUrls?.forEach((url) => URL.revokeObjectURL(url));
-        // setImageUrls([]);
+        // imageUrls?.forEach((url) => URL.revokeObjectURL(url));
+        // setReview
+        // to do: 수정 필요
       };
     }
-  }, [imageUrls, isUploadFormVisible]);
+  }, [imageUrls, isUploadFormVisible, isEditFormVisible]);
 
   const closeReviewFormModal = () => {
     setIsUploadFormVisible(false);
@@ -207,12 +211,15 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
       // setSearchResults(response)
     };
     try {
-      searchLocationByTerm();
+      // searchLocationByTerm();
       // to do: CORS ERROR!!!!
     } catch (error) {
       console.error("Error fetching places:", error);
     }
-  }, [location, searchTerm]);
+  }, [
+    // location,
+    searchTerm,
+  ]);
 
   useEffect(() => {
     getCurrentLocation();
