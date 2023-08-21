@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext  } from 'react'
 import { Col, Container, Row, Card, Button, Modal, FormControl } from "react-bootstrap";
-import * as Api from "../Api";
-import { UserStateContext } from "../App";
+import * as Api from "../../Api";
+import { UserStateContext } from "../../App";
 
 const History = () => {
   const [isEditMode, setIsEditMode] = useState(false);

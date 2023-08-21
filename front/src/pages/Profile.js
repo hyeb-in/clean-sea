@@ -9,7 +9,7 @@ import {
   Row,
 } from "react-bootstrap";
 import CardHeader from "react-bootstrap/CardHeader";
-import History from "../components/History";
+import History from "../components/travel/History";
 
 const MyProfile = () => {
   return (

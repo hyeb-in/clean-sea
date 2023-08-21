@@ -10,7 +10,7 @@ import {
   FormControl
 } from "react-bootstrap";
 import { useParams } from 'react-router-dom';
-import History from "../components/History";
+import History from "../components/travel/History";
 import CardHeader from "react-bootstrap/CardHeader";
 import * as Api from "../Api";
 
