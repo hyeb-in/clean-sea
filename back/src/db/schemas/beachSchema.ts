@@ -11,6 +11,7 @@ interface IBeach {
   esch?: number;
   latitude?: number;
   longitude?: number;
+  likes?: number;
 }
 
 const BeachSchema = new Schema<IBeach>(
@@ -55,6 +56,10 @@ const BeachSchema = new Schema<IBeach>(
       type: Number,
       required: false,
     },
+    likes: {
+      type: Number,
+      required: false,
+    }
   }
 );
 
