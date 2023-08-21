@@ -20,6 +20,7 @@ import * as Api from "../../Api";
 import SpinnerWrapper from "../common/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 import ConfirmModal from "../common/ConfirmModal";
+import axios from "axios";
 
 const allowedFileTypes = ["png", "jpeg"];
 
@@ -45,14 +46,20 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   const [review, setReview] = useState({
     title: currentFormData?.title || "",
     content: currentFormData?.content || "",
+    location: currentFormData?.location || "",
     imageUrls: currentFormData?.imageUrls || [],
   });
 
-  const { title, content, imageUrls } = review;
+  const { title, content, location, imageUrls } = review;
   const [toastMsg, setToastMsg] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [currentPosition, setCurrentPosition] = useState(null);
+
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const fileUploaderIndicator =
     imageUrls.length === 0 ? (
       <DragAndDrop />
@@ -112,7 +119,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
       // PUT reviews
       if (FORM_STATUS.editing) {
         const { author: authorId } = currentFormData;
-        if (loggedInUser._id === authorId) {
+        if (loggedInUser._id !== authorId) {
           return setToastMsg("다른사람의 게시물을 수정할 수 없습니다");
         }
         setIsUploading(true);
@@ -145,7 +152,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
     if (!isUploadFormVisible && imageUrls.length > 0) {
       return () => {
-        imageUrls.forEach((url) => URL.revokeObjectURL(url));
+        imageUrls?.forEach((url) => URL.revokeObjectURL(url));
         // setImageUrls([]);
       };
     }
@@ -163,6 +170,53 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     setToastMsg("");
     setResult(null);
   };
+
+  // 브라우저의 Geolocation API 기능을 사용해서 사용자의 위치 정보를 불러온다
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentPosition({
+            lat: position.coords?.latitude,
+            lng: position.coords?.longitude,
+          });
+        },
+        (error) => {
+          if (error.code === 1) {
+            setToastMsg("사용자가 위치 정보 사용을 거부했습니다");
+          } else if (error.code === 2) {
+            setToastMsg("브라우저가 위치 정보 사용을 지원하지 않습니다");
+          } else if (error.code === 3) {
+            setToastMsg("위치 정보를 가져올 수 없습니다");
+          }
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    const searchLocationByTerm = async () => {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_MAPS_API_KEY}&location=${getCurrentLocation.lat},${getCurrentLocation.lng}&radius=5000&keyword=${searchTerm}`
+      );
+
+      if (!response.data.status === "OK") {
+        setToastMsg("Error fetching places:", response.data.status);
+      }
+      console.log(response);
+      // setSearchResults(response)
+    };
+    try {
+      searchLocationByTerm();
+      // to do: CORS ERROR!!!!
+    } catch (error) {
+      console.error("Error fetching places:", error);
+    }
+  }, [location, searchTerm]);
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
 
   return (
     <>
@@ -229,13 +283,23 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                     <Form.Control
                       as="input"
                       size="sm"
-                      type="input"
                       value={title}
                       onChange={(e) =>
                         setReview({ ...review, title: e.target.value })
                       }
                     />
                   </Form.Group>
+                  <Form.Group>
+                    <Form.Control
+                      placeholder="위치추가"
+                      as="input"
+                      size="sm"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="my-2"
+                    />
+                  </Form.Group>
+
                   <Form.Group>
                     <Form.Label>내용</Form.Label>
                     <Form.Control
@@ -267,6 +331,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
           />
         )}
         {/* submit 후 결과 -> 2. success or fail */}
+        {/* to do: 버그수정. 공유되었습니다 모달창 뜬 후에 x 버튼이 아니라 바깥 창을 클릭하면 '게시글을 삭제하시겠어요?' 팝업이 뜸 */}
         {result && !isUploading && (
           <ModalBodyWrapper
             title="게시물이 공유되었습니다"

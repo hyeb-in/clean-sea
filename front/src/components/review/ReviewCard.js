@@ -36,6 +36,7 @@ const ReviewCard = ({ review, setReviews }) => {
   const minutesPassed = Math.floor(timeDifference / (1000 * 60));
   const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60)); // 시간으로 변환
   const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일자로 변환
+
   return (
     <>
       <Card

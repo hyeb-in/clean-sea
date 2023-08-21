@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { forwardRef, useContext } from "react";
 import {
   UserStateContext,
   DispatchContext,
@@ -20,6 +20,7 @@ import Avatar from "./Avatar";
 
 const NavBar = () => {
   const navigate = useNavigate();
+  console.log(navigate.pathname);
   const { user: loggedInUser } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
   const { setIsUploadFormVisible } = useContext(UploadFormContext);
@@ -34,6 +35,15 @@ const NavBar = () => {
   const login = () => {
     navigate("/login");
   };
+
+  const AvatarWithTooltip = forwardRef((props, ref) => (
+    <OverlayTrigger
+      placement="bottom"
+      overlay={<Tooltip id="my-profile">나의 프로필</Tooltip>}
+    >
+      <Avatar width="50" ref={ref} {...props} />
+    </OverlayTrigger>
+  ));
 
   return (
     <>
@@ -88,13 +98,7 @@ const NavBar = () => {
                 <Nav.Link
                   onClick={() => navigate(`/users/${loggedInUser._id}`)}
                 >
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={<Tooltip id="my-profile">나의 프로필</Tooltip>}
-                    // '나의 프로필' 오버레이가 뜨지 않는 이유?_?
-                  >
-                    <Avatar width="50" />
-                  </OverlayTrigger>
+                  <AvatarWithTooltip />
                 </Nav.Link>
               </>
             ) : (
