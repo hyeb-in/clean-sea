@@ -68,8 +68,7 @@ function errorMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  console.log("이건 미들웨어 속 에러야 ", error);
-  logger.error(error);
+  logger.error(error.message);
   res.status(error.statusCode).send(error.message);
 }
 
