@@ -44,15 +44,22 @@ const logger = winston.createLogger({
   ],
 });
 
-function httpLogger(req : Request ,res : Response ,next : NextFunction) : void {
-  morgan('combined', {
-    stream : {
-      write : (message : string) => {
-        logger.info(message);
+function httpLogger(req: Request, res: Response, next: NextFunction): void {
+  morgan(
+    ":method :url :status :response-time ms - :res[content-length] :body",
+    {
+      stream: {
+        write: (message: string) => {
+          logger.info(message);
+        },
       },
-    },
-  })(req, res, next);
+    }
+  )(req, res, next);
 }
+
+morgan.token("body", (req: Request, res: Response) => {
+  return JSON.stringify(req.body);
+});
 
 function errorMiddleware(
   error: Error,
