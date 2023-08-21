@@ -77,7 +77,7 @@ const MyProfile = () => {
                 />
               </div>
               {isEditMode ? <FormControl type="text" value={userName} onChange={e => setUserName(e.target.value)} /> : <h4 className="mb-2">{userName}</h4>}
-              {isEditMode ? <FormControl type="text" value={userEmail} onChange={e => setUserEmail(e.target.value)} /> : <span className="text-muted d-block mb-1">{userEmail}</span>}
+              <span className="text-muted d-block mb-1">{userEmail}</span>
             </CardHeader>
             <ListGroup flush>
               <ListGroupItem className="p-4">

@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext  } from 'react'
 import { Col, Container, Row, Card, Button, Modal, FormControl } from "react-bootstrap";
 import * as Api from "../../Api";
 import { UserStateContext } from "../../App";
+import TravelItem from './TravelItem';
 
 const History = () => {
-  const [isEditMode, setIsEditMode] = useState(false);
   const [travels, setTravels] = useState([]);
-  const [editedTravel, setEditedTravel] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const { user } = useContext(UserStateContext);
   const [newTravel, setNewTravel] = useState({
@@ -43,18 +42,9 @@ const History = () => {
     fetchTravelList();
   }, []);
 
-  const handleUpdateLogClick = async () => {
-    if (!editedTravel) return;
-
-    try {
-      // await Api.put(`travels/update/${editedTravel._id}`, editedTravel);
-      // const updatedTravels = travels.map(travel => travel._id === editedTravel._id ? editedTravel : travel);
-      // setTravels(updatedTravels);
-      setIsEditMode(false);
-      setEditedTravel(null);
-    } catch (error) {
-      console.error('Error updating the log:', error);
-    }
+  const handleTravelUpdate = (travelId, updatedTravel) => {
+    const updatedTravels = travels.map(travel => travel._id === travelId ? updatedTravel : travel);
+    setTravels(updatedTravels);
   };
 
   return (
@@ -68,6 +58,7 @@ const History = () => {
               </Col>
               <Col xs={6} className="d-flex justify-content-end">
                 <Button
+                  size="sm" style={{ marginTop: '5px', marginBottom: '5px' }}
                   onClick={handleModalOpen}
                 >
                   로그 작성
@@ -81,34 +72,13 @@ const History = () => {
               <Col>
                 {travels.length > 0 ? (
                   travels.map((travel, index) => (
-                    <Row key={index}>
-                      <h5>
-                        {isEditMode
-                          ? <FormControl type="text" defaultValue={travel.beachId} onChange={e => setEditedTravel({ ...editedTravel, beachId: e.target.value })} />
-                          : travel.beachId
-                        }
-                      </h5>
-                      <p>
-                        {isEditMode
-                          ? <FormControl type="text" defaultValue={travel.date} onChange={e => setEditedTravel({ ...editedTravel, date: new Date(e.target.value) })} />
-                          : travel.date
-                        }
-                      </p>
-                    </Row>
+                    <TravelItem key={index} travelData={travel} onTravelUpdate={handleTravelUpdate} />
                   ))
                 ) : (
                   <p className="m-2">방문 로그가 없습니다</p>
                 )}
               </Col>
             </Row>
-            {travels.length > 0 &&
-              <Row className="align-items-start">
-                <Button variant="link" onClick={() => setIsEditMode(!isEditMode)}>
-                  {isEditMode ? '취소' : '편집'}
-                </Button>
-                {isEditMode && <Button variant="link" onClick={handleUpdateLogClick}>업데이트</Button>}
-              </Row>
-            }
           </Card.Body>
         </Card>
 

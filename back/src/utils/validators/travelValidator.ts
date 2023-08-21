@@ -11,7 +11,8 @@ class TravelValidator {
 
     static putTravel() : Schema {
         return joi.object({
-            date : joi.date().iso().optional(),
+            beachId: joi.required(),
+            date : joi.date().iso().required(),
         });
     }
 }
