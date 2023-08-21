@@ -19,6 +19,7 @@ import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
 import ReviewForm from "./components/review/ReviewForm";
+import PageNotFound from "./pages/PageNotFound";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -26,14 +27,11 @@ export const UploadFormContext = createContext(false);
 export const EditFormContext = createContext(false);
 export const EditingDataContext = createContext(null);
 
-const targetPath = ["/login", "/signup"];
-
 function App() {
   // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
-  // isUploadFormVisible, setIsUploadFormVisible
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
   const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
   const [isEditFormVisible, setIsEditFormVisible] = useState(false);
@@ -43,12 +41,20 @@ function App() {
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
   const [reviews, setReviews] = useState(null);
+  const path = location.pathname.split("/")[1];
+  const is404Page =
+    path !== "" &&
+    path !== "users" &&
+    path !== "search" &&
+    path !== "graph" &&
+    path !== "reviews";
+
   const fetchCurrentUser = async () => {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
       const res = await Api.get("users/current");
       const currentUser = res.data;
-
+      console.log(currentUser);
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
       dispatch({
         type: "LOGIN_SUCCESS",
@@ -82,11 +88,7 @@ function App() {
           <DispatchContext.Provider value={dispatch}>
             <UserStateContext.Provider value={userState}>
               <Interceptor>
-                {!targetPath?.includes(location.pathname) && (
-                  <>
-                    <NavBar />
-                  </>
-                )}
+                {!is404Page && <NavBar />}
                 {(isUploadFormVisible || isEditFormVisible) && (
                   <ReviewForm
                     headerTitle={
@@ -94,12 +96,11 @@ function App() {
                         ? "새 게시물 작성하기"
                         : "게시물 수정하기"
                     }
-                    // reviews={reviews}
+                    reviews={reviews}
                     setReviews={setReviews}
                   />
                 )}
                 <Routes>
-                  {/* to do: 404 페이지 만들기 */}
                   <Route path="/" exact element={<Main />} />
                   <Route path="/login" exact element={<Login />} />
                   <Route path="/signup" exact element={<SignUp />} />
@@ -113,12 +114,11 @@ function App() {
                     }
                   />
                   <Route path="/graph" exact element={<Graph />} />
+                  {/* 404 페이지 */}
+                  <Route path="*" element={<PageNotFound />} />
                 </Routes>
-                {!targetPath?.includes(location.pathname) && (
-                  <>
-                    <Footer />
-                  </>
-                )}
+
+                {!is404Page && <Footer />}
               </Interceptor>
             </UserStateContext.Provider>
           </DispatchContext.Provider>

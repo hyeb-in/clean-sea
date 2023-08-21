@@ -8,18 +8,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FileUploader } from "react-drag-drop-files";
 import Carousel from "../common/Carousel";
-import Toast from "../common/Toast";
+import ToastWrapper from "../common/ToastWrapper";
 import {
   EditFormContext,
   EditingDataContext,
   UploadFormContext,
+  UserStateContext,
 } from "../../App";
 import DragAndDrop from "../common/DragAndDrop";
 import * as Api from "../../Api";
 import SpinnerWrapper from "../common/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
+import ConfirmModal from "../common/ConfirmModal";
+import axios from "axios";
 
-const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
+const allowedFileTypes = ["png", "jpeg"];
+
 const MAX_FILE_COUNT = 5;
 const RESULT_ENUM = {
   SUCCESS: "성공",
@@ -37,14 +41,29 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     adding: isUploadFormVisible,
     editing: isEditFormVisible,
   };
+  const { user: loggedInUser } = useContext(UserStateContext);
 
-  // to do: reducer...? state 줄이는 방법
-  const [title, setTitle] = useState(currentFormData?.title || "");
-  const [content, setContent] = useState(currentFormData?.content || "");
-  const [imageUrls, setImageUrls] = useState([]);
+  const [review, setReview] = useState({
+    title: currentFormData?.title || "",
+    content: currentFormData?.content || "",
+    // location: currentFormData?.location || "",
+    imageUrls: currentFormData?.imageUrls || [],
+  });
+
+  const {
+    title,
+    content,
+    //  location,
+    imageUrls,
+  } = review;
   const [toastMsg, setToastMsg] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [currentPosition, setCurrentPosition] = useState(null);
+  console.log(review);
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const fileUploaderIndicator =
     imageUrls.length === 0 ? (
@@ -54,43 +73,34 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         <FontAwesomeIcon icon={faPlus} /> 추가하기
       </Button>
     );
-  const handleFileChange = (files) => {
-    if (
-      files.length > MAX_FILE_COUNT ||
-      (imageUrls.length > 0 && imageUrls.length + files.length > MAX_FILE_COUNT)
-    ) {
-      return setToastMsg(`최대 ${MAX_FILE_COUNT}개까지 업로드 가능합니다.`);
-    }
-    if (files.length > 0) {
-      // FileList 객체를 배열로 변환
-      const fileList = Array.from(files);
-      // 파일을 Blob으로 변환하고 Blob URL을 생성하는 Promise 배열 생성
-      const blobPromises = fileList.map((file) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          // 파일을 ArrayBuffer로 읽은 후 Blob을 생성하고 Blob URL을 생성
-          reader.onload = (event) => {
-            const blob = new Blob([event.target.result], { type: file.type });
-            resolve(URL.createObjectURL(blob));
-          };
-          reader.readAsArrayBuffer(file);
-        });
-      });
-      // 모든 Promise를 병렬로 처리하여 Blob URL 배열을 업데이트
-      Promise.all(blobPromises).then((newBlobUrls) => {
-        setImageUrls((prevUrls) => [...prevUrls, ...newBlobUrls]);
-      });
-    } else {
-      // 단일 파일인 경우
-      const blob = new Blob([files], { type: files.type });
-      const url = URL.createObjectURL(blob);
-      setImageUrls([url]);
-    }
-  };
 
+  // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
+  const handleFileChange = (files) => {
+    const blobUrls = [];
+    const isFileCountValid = imageUrls.length + files.length <= MAX_FILE_COUNT;
+    if (!isFileCountValid) {
+      return setToastMsg(
+        `사진은 한번에 ${MAX_FILE_COUNT}개까지 업로드할 수 있습니다`
+      );
+    }
+    Array.prototype.forEach.apply(files, [
+      (file) => {
+        const blob = new Blob([file], { type: file.type });
+        const url = URL.createObjectURL(blob);
+        blobUrls.push(url);
+      },
+    ]);
+    setReview({
+      ...review,
+      imageUrls: [...imageUrls, ...blobUrls],
+    });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // to do: upload imageUrls
+    // to do: 백엔드랑 합쳐서 확인 필요
+    // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로 ?
+    if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
+
     try {
       if (title.length < 4)
         return setToastMsg("제목을 4글자 이상 입력해주세요");
@@ -102,8 +112,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
       if (FORM_STATUS.adding) {
         setIsUploading(true);
         const res = await Api.post("reviews/register", {
-          title,
-          content,
+          ...review,
         });
         // 에러 메세지 안가져와지는 거 같은뎅
         if (!res.status === 400) throw new Error("업로드에 실패했습니다");
@@ -112,6 +121,10 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
 
       // PUT reviews
       if (FORM_STATUS.editing) {
+        const { author: authorId } = currentFormData;
+        if (loggedInUser._id !== authorId) {
+          return setToastMsg("다른사람의 게시물을 수정할 수 없습니다");
+        }
         setIsUploading(true);
         const res = await Api.put(`reviews/${currentFormData._id}`, {
           title,
@@ -127,130 +140,210 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         );
         setIsUploadFormVisible(false);
         setEditingData(null);
-        setTitle(null);
-        setContent(null);
+        setReview({ title: "", content: "", imageUrls: [] });
       }
     } catch (error) {
       console.error(error);
       setResult(RESULT_ENUM.FAIL);
+      setToastMsg(error);
     }
     setIsUploading(false);
     setResult(RESULT_ENUM.SUCCESS);
-    // setIsUploadFormVisible(false);
-    // setIsEditFormVisible(false);
   };
 
   useEffect(() => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
     if (!isUploadFormVisible && imageUrls.length > 0) {
       return () => {
-        imageUrls.forEach((url) => URL.revokeObjectURL(url));
-        setImageUrls([]);
+        // imageUrls?.forEach((url) => URL.revokeObjectURL(url));
+        // setReview
+        // to do: 수정 필요
       };
     }
-  }, [imageUrls, isUploadFormVisible]);
+  }, [imageUrls, isUploadFormVisible, isEditFormVisible]);
 
-  const closeResultIndicator = () => {
+  const closeReviewFormModal = () => {
     setIsUploadFormVisible(false);
     setIsEditFormVisible(false);
     setEditingData(null);
-    setTitle("");
-    setContent("");
-    setImageUrls([]);
+    setReview({
+      title: "",
+      content: "",
+      imageUrls: [],
+    });
     setToastMsg("");
     setResult(null);
   };
+
+  // 브라우저의 Geolocation API 기능을 사용해서 사용자의 위치 정보를 불러온다
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentPosition({
+            lat: position.coords?.latitude,
+            lng: position.coords?.longitude,
+          });
+        },
+        (error) => {
+          if (error.code === 1) {
+            setToastMsg("사용자가 위치 정보 사용을 거부했습니다");
+          } else if (error.code === 2) {
+            setToastMsg("브라우저가 위치 정보 사용을 지원하지 않습니다");
+          } else if (error.code === 3) {
+            setToastMsg("위치 정보를 가져올 수 없습니다");
+          }
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    const searchLocationByTerm = async () => {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${process.env.REACT_APP_MAPS_API_KEY}&location=${getCurrentLocation.lat},${getCurrentLocation.lng}&radius=5000&keyword=${searchTerm}`
+      );
+
+      if (!response.data.status === "OK") {
+        setToastMsg("Error fetching places:", response.data.status);
+      }
+      console.log(response);
+      // setSearchResults(response)
+    };
+    try {
+      // searchLocationByTerm();
+      // to do: CORS ERROR!!!!
+    } catch (error) {
+      console.error("Error fetching places:", error);
+    }
+  }, [
+    // location,
+    searchTerm,
+  ]);
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
+
   return (
     <>
-      {/* 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
-      {(isUploadFormVisible || isEditFormVisible) && (
-        <Modal
-          centered
-          show={isUploadFormVisible || isEditFormVisible}
-          onHide={closeResultIndicator}
-          onClose={closeResultIndicator}
-          onClick={(e) => e.stopPropagation()}
-          // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
-          // to do: space bar입력시 모달창 사라짐 버그 (윈도우..? 확인하기)
-        >
-          {/* validation 통과하지 못했다면 toast pop-up으로 유저에게 알려줌 */}
-          {toastMsg && (
-            <Toast onClose={() => setToastMsg("")} text={toastMsg} />
-          )}
-          {/* 모달창 내부: 입력 받는 공간 */}
-          {!isUploading && !result && (
-            <ModalBodyWrapper text={headerTitle}>
-              {
-                <Row>
-                  {/* 드래그앤 드롭으로 파일 업로드 받을 수 있는 구역 */}
-                  <Col
-                    xs={7}
-                    className="d-flex flex-column align-items-center"
-                    style={{
-                      height: "100%",
-                    }}
-                  >
-                    <FileUploader
-                      handleChange={handleFileChange}
-                      name="file"
-                      types={fileTypes}
-                      multiple={true}
-                      // maxSize={2} // 최대 2MB 크기까지 허용
-                      // minSize={1} // 최소 1MB 크기 이상만 허용
-                      children={fileUploaderIndicator}
+      {/* 리뷰 입력 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
+      <Modal
+        centered
+        show={isUploadFormVisible || isEditFormVisible}
+        onHide={() => {
+          // title과 content가 비어있다면 리뷰 작성하는 모달창을 제거한다
+          if (title !== "" || content !== "") {
+            // 내용이 있다면 다시 한 번 확인하는 모달창에 표시한다
+            setShowConfirmModal(true);
+          }
+          if (title === "" && content === "") {
+            return closeReviewFormModal();
+          }
+        }}
+        onClick={(e) => e.stopPropagation()}
+        // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
+        // to do: space bar입력시 모달창 사라짐 버그 (윈도우..? 확인하기)
+      >
+        {/* validation 통과하지 못했다면 toast pop-up으로 유저에게 알려줌 */}
+        {toastMsg && (
+          <ToastWrapper
+            onClose={() => setToastMsg("")}
+            text={toastMsg}
+            position="middle-center"
+            bg="warning"
+          />
+        )}
+
+        {/* 모달창 내부: 입력 받는 공간 */}
+        {!isUploading && !result && (
+          <ModalBodyWrapper title={headerTitle}>
+            {
+              <Row>
+                {/* 드래그앤 드롭으로 파일 업로드 받을 수 있는 구역 */}
+                <Col
+                  xs={7}
+                  className="d-flex flex-column align-items-center"
+                  style={{
+                    height: "100%",
+                  }}
+                >
+                  <FileUploader
+                    handleChange={handleFileChange}
+                    name="file"
+                    types={allowedFileTypes}
+                    multiple={true}
+                    maxSize={1} // 최대 2MB 크기까지 허용
+                    children={fileUploaderIndicator}
+                  />
+                  {imageUrls.length > 0 && (
+                    <Carousel
+                      imageUrls={imageUrls}
+                      setReview={setReview} // carousel 바꿔야함
                     />
-                    {imageUrls.length > 0 && (
-                      <Carousel
-                        imageUrls={imageUrls}
-                        setImageUrls={setImageUrls}
-                      />
-                    )}
-                  </Col>
-                  {/* 리뷰 제목, 내용에 대한 인풋 */}
-                  <Col xs={5}>
-                    <Form.Group>
-                      <Form.Label>제목</Form.Label>
-                      <Form.Control
-                        as="input"
-                        size="sm"
-                        type="input"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label>내용</Form.Label>
-                      <Form.Control
-                        rows={6}
-                        as="textarea"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                      />
-                    </Form.Group>
-                    <small
-                      className={content.length < 300 ? "text-muted" : ""}
-                      style={{ color: "red" }}
-                    >
-                      {content ? content.length : "0"}/300
-                    </small>
-                  </Col>
-                </Row>
-              }
-            </ModalBodyWrapper>
-          )}
-          {/* 모달창 내부 */}
-          {/* submit 후 업로드 중 -> 1. loading indicator */}
-          {isUploading && (
-            <ModalBodyWrapper text="게시물을 업로드하는 중입니다">
-              <SpinnerWrapper />
-            </ModalBodyWrapper>
-          )}
-          {/* submit 후 결과 -> 2. success or fail */}
-          {result && !isUploading && (
-            <ModalBodyWrapper
-              text="게시물이 공유되었습니다"
-              onHide={() => closeResultIndicator}
-            >
+                  )}
+                </Col>
+                {/* 리뷰 제목, 내용에 대한 인풋 */}
+                <Col xs={5}>
+                  <Form.Group>
+                    <Form.Label>제목</Form.Label>
+                    <Form.Control
+                      as="input"
+                      size="sm"
+                      value={title}
+                      onChange={(e) =>
+                        setReview({ ...review, title: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Control
+                      placeholder="위치추가"
+                      as="input"
+                      size="sm"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="my-2"
+                    />
+                  </Form.Group>
+
+                  <Form.Group>
+                    <Form.Label>내용</Form.Label>
+                    <Form.Control
+                      rows={6}
+                      as="textarea"
+                      value={content}
+                      onChange={(e) =>
+                        setReview({ ...review, content: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                  <small
+                    className={content.length < 300 ? "text-muted" : ""}
+                    style={{ color: "red" }}
+                  >
+                    {content ? content.length : "0"}/300
+                  </small>
+                </Col>
+              </Row>
+            }
+          </ModalBodyWrapper>
+        )}
+        {/* 리뷰 내용 입력 모달창 내부 */}
+        {/* submit 후 업로드 중 -> 1. loading indicator */}
+        {isUploading && (
+          <ModalBodyWrapper
+            text="게시물을 업로드하는 중입니다"
+            content={<SpinnerWrapper />}
+          />
+        )}
+        {/* submit 후 결과 -> 2. success or fail */}
+        {/* to do: 버그수정. 공유되었습니다 모달창 뜬 후에 x 버튼이 아니라 바깥 창을 클릭하면 '게시글을 삭제하시겠어요?' 팝업이 뜸 */}
+        {result && !isUploading && (
+          <ModalBodyWrapper
+            title="게시물이 공유되었습니다"
+            onHide={() => closeReviewFormModal()}
+            content={
               <FontAwesomeIcon
                 icon={RESULT_ENUM.SUCCESS ? faCircleCheck : faBomb}
                 style={{
@@ -260,18 +353,26 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                   padding: "50px 0",
                 }}
               />
-            </ModalBodyWrapper>
-          )}
-          {/* 모달창 footer */}
-          {!isUploading && !result && (
-            <Modal.Footer>
-              <Button onClick={handleSubmit} variant="primary" type="submit">
-                {currentFormData ? "수정" : "공유"}
-              </Button>
-            </Modal.Footer>
-          )}
-        </Modal>
-      )}
+            }
+          />
+        )}
+        {/* 리뷰 내용 입력 모달창 내부 footer */}
+        {!isUploading && !result && (
+          <Modal.Footer className="d-flex justify-content-end">
+            <Button onClick={handleSubmit} variant="primary" type="submit">
+              {currentFormData ? "수정" : "공유"}
+            </Button>
+          </Modal.Footer>
+        )}
+        {/* 입력 도중에 화면 이탈할 경우 confirm 모달창 띄운다 */}
+        {(content !== "" || title !== "") && (
+          <ConfirmModal
+            show={showConfirmModal}
+            setShowConfirmModal={setShowConfirmModal}
+            closeReviewFormModal={closeReviewFormModal}
+          />
+        )}
+      </Modal>
     </>
   );
 };

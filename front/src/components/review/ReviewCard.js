@@ -24,6 +24,7 @@ const ReviewCard = ({ review, setReviews }) => {
     imageUrl,
     userName,
   } = review;
+  const isMyReview = loggedInUser && loggedInUser._id === authorId;
 
   // get user avatar >> get 'users/id' ?
 
@@ -56,7 +57,7 @@ const ReviewCard = ({ review, setReviews }) => {
             {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
             {/* 클릭하면 수정, 삭제 선택하는 모달 창을 띄운다 */}
             <Col className="d-flex align-items-center justify-content-end">
-              {loggedInUser && loggedInUser._id === authorId && (
+              {isMyReview && (
                 <Button
                   variant="link"
                   style={{ color: "black" }}
@@ -73,6 +74,7 @@ const ReviewCard = ({ review, setReviews }) => {
               <ActionSelectorModal
                 show={isActionModalVisible}
                 reviewId={reviewId}
+                authorId={authorId}
                 handleClose={() => setIsActionModalVisible(false)}
                 isActionModalVisible={isActionModalVisible}
                 setIsActionModalVisible={setIsActionModalVisible}
@@ -87,9 +89,10 @@ const ReviewCard = ({ review, setReviews }) => {
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
           <Card.Text className="d-flex justify-content-end">
-            {minutesPassed < 60 && `${minutesPassed}분 전`}
-            {minutesPassed >= 60 && hoursPassed < 12 && `${hoursPassed}시간 전`}
-            {minutesPassed >= 60 && hoursPassed >= 12 && `${daysPassed}일 전`}
+            {minutesPassed < 1 && "방금 전"}
+            {minutesPassed < 60 && minutesPassed > 0 && `${minutesPassed}분 전`}
+            {minutesPassed >= 60 && hoursPassed < 24 && `${hoursPassed}시간 전`}
+            {minutesPassed >= 60 && hoursPassed >= 24 && `${daysPassed}일 전`}
           </Card.Text>
         </Card.Body>
       </Card>

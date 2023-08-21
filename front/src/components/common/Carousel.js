@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 
-const CarouselWrapper = ({ imageUrls, setImageUrls }) => {
+const CarouselWrapper = ({ imageUrls, setReview }) => {
   const removeUrl = (index) => {
-    const newImageUrls = [...imageUrls].splice(index, 1);
-    setImageUrls(newImageUrls);
+    const newImageUrls = imageUrls.filter((idx) => index !== idx);
+    setReview((current) => ({ ...current, imageUrls: newImageUrls }));
   };
   return (
     <Carousel

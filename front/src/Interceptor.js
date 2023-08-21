@@ -19,6 +19,8 @@ const Interceptor = ({ children }) => {
       //     }
       //   }
       //   config.headers["Content-Type"] = "application/json";
+      config.headers["Access-Control-Allow-Origin"] = "*";
+
       return config;
     });
 

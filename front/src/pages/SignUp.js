@@ -33,7 +33,6 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name);
     // 여기에서 실제 회원가입 로직을 구현하고 서버와 통신하면 됩니다.
     try {
       if (isFormValid)
