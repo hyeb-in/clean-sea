@@ -2,16 +2,17 @@ import { NextFunction, Response } from "express";
 import joi from "joi";
 import { IRequest } from "user";
 
-export const postTravelValidator = async (
+export const postCommentValidator = async (
     req : IRequest,
     res : Response,
     next : NextFunction
 ) => {
-    const { date } = req.body;
+    const { content, date } = req.body;
     const schema = joi.object({
+        content : joi.string().required(),
         date : joi.date().iso().required(),
     });
-    const { value, error } = schema.validate({ date });
+    const { value, error } = schema.validate({ content, date });
 
     if (error) {
     next(error.details[0].message);
@@ -20,16 +21,17 @@ export const postTravelValidator = async (
     next();
 };
 
-export const putTravelValidator = async (
+export const putCommentValidator = async (
     req : IRequest,
     res : Response,
     next : NextFunction
 ) => {
-    const { date } = req.body;
+    const { content, date } = req.body;
     const schema = joi.object({
-        date : joi.date().iso().required(),
+        content : joi.string().optional(),
+        date : joi.date().iso().optional(),
     });
-    const { value, error } = schema.validate({ date });
+    const { value, error } = schema.validate({ content, date });
 
     if (error) {
     next(error.details[0].message);
@@ -37,4 +39,3 @@ export const putTravelValidator = async (
 
     next();
 };
-

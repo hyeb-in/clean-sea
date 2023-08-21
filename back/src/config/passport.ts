@@ -17,9 +17,9 @@ const localCallback = async (email: string, password: string, done: any) => {
       return done(null, false, { message: "회원이 존재하지 않습니다." });
     }
     bcrypt.genSalt;
-    console.log("local전략 유저", user);
+
     const isMatched = await bcrypt.compare(password, user.password);
-    console.log("매치", isMatched);
+
     if (!isMatched) {
       return done(null, false, { message: "비밀번호가 일치하지 않습니다." });
     }

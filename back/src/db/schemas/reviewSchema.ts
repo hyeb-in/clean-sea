@@ -1,12 +1,13 @@
-import { Schema, model, Document } from 'mongoose';
+import mongoose, { Schema, model, Document, Types } from 'mongoose';
 
 interface IReview extends Document {
-    title: string;
-    content: string;
+    title?: string;
+    content?: string;
     userName? : string;
     location? : string;
     author?: string;
-    uploadFile?: string;
+    uploadFile?: [string];
+    comments?: Types.ObjectId[];
 }
 
 const ReviewSchema : Schema<IReview> = new Schema({
@@ -18,19 +19,22 @@ const ReviewSchema : Schema<IReview> = new Schema({
     },
     title : {
         type : String,
-        required : true,
     },
     content : {
         type : String,
-        required : true,
     },
     author : {
         type : String,
-        required : true,
     },
     uploadFile : {
-        type : String,
+        type : [String],
     },
+    comments: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Comment',
+        },
+      ],
     },
 
     {
