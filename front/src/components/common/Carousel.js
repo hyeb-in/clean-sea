@@ -6,7 +6,7 @@ import Carousel from "react-bootstrap/Carousel";
 
 const CarouselWrapper = ({ imageUrls, setReview }) => {
   const removeUrl = (index) => {
-    const newImageUrls = imageUrls.filter((idx) => index !== idx);
+    const newImageUrls = imageUrls.filter((_, idx) => index !== idx); // Use a different variable name, like `_`, for clarity
     setReview((current) => ({ ...current, imageUrls: newImageUrls }));
   };
   return (

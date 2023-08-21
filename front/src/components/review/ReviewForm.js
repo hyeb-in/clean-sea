@@ -261,10 +261,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                     children={fileUploaderIndicator}
                   />
                   {imageUrls.length > 0 && (
-                    <Carousel
-                      imageUrls={imageUrls}
-                      setReview={setReview} // carousel 바꿔야함
-                    />
+                    <Carousel imageUrls={imageUrls} setReview={setReview} />
                   )}
                 </Col>
                 {/* 리뷰 제목, 내용에 대한 인풋 */}

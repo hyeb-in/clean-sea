@@ -15,6 +15,8 @@ const Reviews = ({ reviews, setReviews }) => {
       try {
         const res = await Api.get("reviews/reviewList");
         // 프로필 클릭시 /users/:id로 이동
+        // to do: error handling
+        // if(!res)
         setReviews(res.data);
         setIsLoaded(true);
       } catch (error) {

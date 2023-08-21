@@ -30,11 +30,11 @@ const Interceptor = ({ children }) => {
       },
       (error) => {
         // console.log(`❌ 오류: ${JSON.stringify(error?.response?.data)}`);
-        if (error?.response?.status >= 400) {
-          if (error?.data?.error) {
-            console.error("Error:", error.data.error);
-          }
-        }
+        // if (error?.response?.status >= 400) {
+        //   if (error?.data?.error) {
+        //     console.error("Error:", error.data.error);
+        //   }
+        // }
         return Promise.reject(error);
       }
     );

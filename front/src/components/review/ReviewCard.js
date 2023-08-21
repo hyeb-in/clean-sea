@@ -1,17 +1,42 @@
-import React, { useContext, useState } from "react";
-import { Button, Card, Col, Image, Row } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { Button, Card, Carousel, Col, Image, Row } from "react-bootstrap";
 import Avatar from "../common/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { EditingDataContext, UserStateContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import ActionSelectorModal from "../common/ActionSelectorModal";
+import * as Api from "../../Api";
+
+const mock = [
+  {
+    postId: 1,
+    userId: 1,
+    content: "커맨트 내용입니다 아아아아아",
+    userName: "유저 이름",
+    date: "8/20",
+  },
+  {
+    postId: 2,
+    userId: 1,
+    content: "커맨트 내용입니다 아아아아아",
+    userName: "유저 이름",
+    date: "8/20",
+  },
+  {
+    postId: 3,
+    userId: 2,
+    content: "커맨트 내용입니다 아아아아아",
+    userName: "유저 이름 22",
+    date: "8/20",
+  },
+];
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const ReviewCard = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { setEditingData } = useContext(EditingDataContext);
-
+  const [comments, setComments] = useState(mock);
   const [isActionModalVisible, setIsActionModalVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -24,6 +49,17 @@ const ReviewCard = ({ review, setReviews }) => {
     imageUrl,
     userName,
   } = review;
+  // get comments : /comments/:reviewId
+  useEffect(() => {
+    const getComments = async () => {
+      // const res = await Api.get("comments", reviewId);
+      // to do: fetch
+      // console.log(res);
+      // setComments(res);
+    };
+    getComments();
+  }, [reviewId, comments]);
+
   const isMyReview = loggedInUser && loggedInUser._id === authorId;
 
   // get user avatar >> get 'users/id' ?
@@ -85,7 +121,8 @@ const ReviewCard = ({ review, setReviews }) => {
         </Card.Header>
         <Card.Body>
           {/* to do: 서버 image 저장 후 carousel */}
-          <Image src={imageUrl} fluid />
+          <Carousel imageUrls={imageUrl} />
+          {/* <Image src={imageUrl} fluid /> */}
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
           <Card.Text className="d-flex justify-content-end">
@@ -94,6 +131,8 @@ const ReviewCard = ({ review, setReviews }) => {
             {minutesPassed >= 60 && hoursPassed < 24 && `${hoursPassed}시간 전`}
             {minutesPassed >= 60 && hoursPassed >= 24 && `${daysPassed}일 전`}
           </Card.Text>
+          {/* 클릭하면 모달창으로 리뷰 카드 띄우기 */}
+          <Card.Text>댓글 {comments.length}개 모두 보기</Card.Text>
         </Card.Body>
       </Card>
     </>
