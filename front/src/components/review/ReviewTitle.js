@@ -7,7 +7,7 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useState } from "react";
 import { EditingDataContext, UserStateContext } from "../../App";
 
-const ReviewTitle = ({ review, setReviews }) => {
+const ReviewTitle = ({ review, setReviews, className }) => {
   const navigate = useNavigate();
   const { setEditingData } = useContext(EditingDataContext);
   const { user: loggedInUser } = useContext(UserStateContext);
@@ -15,7 +15,7 @@ const ReviewTitle = ({ review, setReviews }) => {
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
 
   return (
-    <Row>
+    <Row className={className}>
       <Col xs="auto" onClick={() => navigate(`/users/${review?.author}`)}>
         {/* to do: get user's info -> avatar url */}
         <Avatar width="50" />

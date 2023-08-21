@@ -41,10 +41,15 @@ const ReviewModal = ({ showingReview, setShowingReview, setReviews }) => {
         setIsReviewModalVisible(false);
       }}
       centered
+      className="px-2"
     >
       {/* 작은 화면에서는 세로로 정렬 */}
       {/* 큰 화면에서는 타이틀 한 줄, 사진이랑 댓글 한 줄로 나누기 */}
-      <ReviewTitle review={showingReview} setReviews={setReviews} />
+      <ReviewTitle
+        review={showingReview}
+        setReviews={setReviews}
+        className="px-2"
+      />
       <CarouselWrapper
         imageUrls={[
           "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
