@@ -8,6 +8,7 @@ async function createReview(toCreate: IReview): Promise<IReview> {
 }
 
 async function findAllReviews(): Promise<IReview[]> {
+  // const userReviews = await ReviewModel.find();
   const userReviews = await ReviewModel.find().sort({createdAt : -1});
   const userReviewsObjects = userReviews.map(review => review.toObject());
   return userReviewsObjects as IReview[];

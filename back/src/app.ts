@@ -2,6 +2,7 @@ import userRouter from "./routes/userRouter";
 import reviewAuthRouter from "./routes/reviewRouter";
 import travelAuthRouter from "./routes/travelRouter";
 import beachRouter from "./routes/beachRouter";
+import commentAuthRouter from "./routes/commentRouter";
 import { errorMiddleware, httpLogger } from "./config/logger";
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
@@ -41,6 +42,7 @@ app.use("/reviews", reviewAuthRouter);
 app.use("/travels", travelAuthRouter);
 app.use("/beaches", beachRouter);
 app.use("/auth", authRouter);
+app.use("/comments", commentAuthRouter);
 
 app.use(errorMiddleware);
 

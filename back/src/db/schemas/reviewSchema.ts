@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import mongoose, { Schema, model, Document, Types } from 'mongoose';
 
 interface IReview extends Document {
     title?: string;
@@ -7,6 +7,7 @@ interface IReview extends Document {
     location? : string;
     author?: string;
     uploadFile?: [string];
+    comments?: Types.ObjectId[];
 }
 
 const ReviewSchema : Schema<IReview> = new Schema({
@@ -28,6 +29,12 @@ const ReviewSchema : Schema<IReview> = new Schema({
     uploadFile : {
         type : [String],
     },
+    comments: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Comment',
+        },
+      ],
     },
 
     {
