@@ -9,29 +9,45 @@ import Main from "./pages/Main";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
-import Footer from "./components/Footer";
-import NavBar from "./components/NavBar";
-import Network from "./pages/Network";
+import Footer from "./components/common/Footer";
+import NavBar from "./components/common/NavBar";
+import Reviews from "./pages/Reviews";
 import * as Api from "./Api";
 import { loginReducer } from "./Reducer";
 import "./Main.css";
 import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
+import { Interceptor } from "./Interceptor";
+import ReviewForm from "./components/review/ReviewForm";
+import PageNotFound from "./pages/PageNotFound";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
-const targetPath = ["/login", "/signup"];
+export const UploadFormContext = createContext(false);
+export const EditFormContext = createContext(false);
+export const EditingDataContext = createContext(null);
 
 function App() {
   // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
+  const [isFetchCompleted, setIsFetchCompleted] = useState(false);
+  const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
+  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+  const [editingData, setEditingData] = useState(null);
+
   const location = useLocation();
-  console.log(userState.user, "<<<<<<<");
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
-  const [isFetchCompleted, setIsFetchCompleted] = useState(false);
+  const [reviews, setReviews] = useState(null);
+  const path = location.pathname.split("/")[1];
+  const is404Page =
+    path !== "" &&
+    path !== "users" &&
+    path !== "search" &&
+    path !== "graph" &&
+    path !== "reviews";
 
   const fetchCurrentUser = async () => {
     try {
@@ -55,37 +71,60 @@ function App() {
   // useEffect함수를 통해 fetchCurrentUser 함수를 실행함.
   useEffect(() => {
     fetchCurrentUser();
-    console.log("fetch");
   }, []);
 
-  // if (!isFetchCompleted) {
-  //   return "loading...";
-  // }
+  if (!isFetchCompleted) {
+    return "loading...";
+  }
 
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <UserStateContext.Provider value={userState}>
-        {!targetPath?.includes(location.pathname) && (
-          <>
-            <NavBar />
-          </>
-        )}
-        <Routes>
-          <Route path="/" exact element={<Main />} />
-          <Route path="/login" exact element={<Login />} />
-          <Route path="/signup" exact element={<SignUp />} />
-          <Route path="/users/:id"  exact element={<MyProfile />} />
-          <Route path="/search" exact element={<Search />} />
-          <Route path="/network" exact element={<Network />} />
-          <Route path="/graph" exact element={<Graph />} />
-        </Routes>
-        {!targetPath?.includes(location.pathname) && (
-          <>
-            <Footer />
-          </>
-        )}
-      </UserStateContext.Provider>
-    </DispatchContext.Provider>
+    <UploadFormContext.Provider
+      value={{ isUploadFormVisible, setIsUploadFormVisible }}
+    >
+      <EditFormContext.Provider
+        value={{ isEditFormVisible, setIsEditFormVisible }}
+      >
+        <EditingDataContext.Provider value={{ editingData, setEditingData }}>
+          <DispatchContext.Provider value={dispatch}>
+            <UserStateContext.Provider value={userState}>
+              <Interceptor>
+                {!is404Page && <NavBar />}
+                {(isUploadFormVisible || isEditFormVisible) && (
+                  <ReviewForm
+                    headerTitle={
+                      isUploadFormVisible
+                        ? "새 게시물 작성하기"
+                        : "게시물 수정하기"
+                    }
+                    reviews={reviews}
+                    setReviews={setReviews}
+                  />
+                )}
+                <Routes>
+                  <Route path="/" exact element={<Main />} />
+                  <Route path="/login" exact element={<Login />} />
+                  <Route path="/signup" exact element={<SignUp />} />
+                  <Route path="/users/:id" exact element={<MyProfile />} />
+                  <Route path="/search" exact element={<Search />} />
+                  <Route
+                    path="/reviews"
+                    exact
+                    element={
+                      <Reviews reviews={reviews} setReviews={setReviews} />
+                    }
+                  />
+                  <Route path="/graph" exact element={<Graph />} />
+                  {/* 404 페이지 */}
+                  <Route path="*" element={<PageNotFound />} />
+                </Routes>
+
+                {!is404Page && <Footer />}
+              </Interceptor>
+            </UserStateContext.Provider>
+          </DispatchContext.Provider>
+        </EditingDataContext.Provider>
+      </EditFormContext.Provider>
+    </UploadFormContext.Provider>
   );
 }
 
