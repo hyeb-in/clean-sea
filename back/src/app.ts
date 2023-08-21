@@ -8,10 +8,10 @@ import cors from "cors";
 import passport from "passport";
 import { jwtStrategy, localStrategy } from "./config/passport";
 import authRouter from "./routes/authRouter";
+import { swaggerUi, specs } from "./swagger/swagger";
 
-const { swaggerUi, specs } = require("./swagger/swagger");
-
-require("./db/index");
+import "./db";
+import { mailSender } from "./utils/sendMail";
 
 const app: Express = express();
 app.use(cors());

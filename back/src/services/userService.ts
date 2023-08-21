@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import { create, deleteById, findUserByEmail, update } from "../db/models/User";
-import { IUser } from "user";
+import { IRequest, IUser } from "user";
+import { generateRandomPassword } from "../utils/randomPassword";
+import { mailSender } from "../utils/sendMail";
 
 /**
  * @param {*} email
@@ -41,4 +43,9 @@ export const deleteUserService = async (userId: string) => {
   if (!deletedUser) throw new Error("유저가 존재하지 않습니다.");
 
   return deletedUser;
+};
+
+export const resetPasswordService = async (userId: string, email: string) => {
+  const newPassword = generateRandomPassword();
+  mailSender(email, "비밀번호 초기화 이메일", newPassword);
 };
