@@ -39,6 +39,7 @@ const CarouselWrapper = ({ imageUrls, setReview }) => {
         )
       }
     >
+      {/* to do: 실제 데이터로 바꾸면서 key 값 확인할 것 */}
       {imageUrls.map((img, index) => (
         <Carousel.Item key={img}>
           <Image src={img} fluid />

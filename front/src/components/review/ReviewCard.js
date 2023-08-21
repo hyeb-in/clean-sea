@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Carousel, Col, Image, Row } from "react-bootstrap";
-import Avatar from "../common/Avatar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { EditingDataContext, UserStateContext } from "../../App";
-import { useNavigate } from "react-router-dom";
-import ActionSelectorModal from "../common/ActionSelectorModal";
+import { Card, Modal } from "react-bootstrap";
+import { IsReviewModalVisibleContext, UserStateContext } from "../../App";
 import * as Api from "../../Api";
 import CarouselWrapper from "../common/Carousel";
+import ReviewTitle from "./ReviewTitle";
 
 const mock = [
   {
@@ -32,14 +28,13 @@ const mock = [
     date: "8/20",
   },
 ];
-
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const ReviewCard = ({ review, setReviews }) => {
-  const { user: loggedInUser } = useContext(UserStateContext);
-  const { setEditingData } = useContext(EditingDataContext);
+const ReviewCard = ({ review, setReviews, setShowingReview }) => {
   const [comments, setComments] = useState(mock);
-  const [isActionModalVisible, setIsActionModalVisible] = useState(false);
-  const navigate = useNavigate();
+  const { isReviewModalVisible, setIsReviewModalVisible } = useContext(
+    IsReviewModalVisibleContext
+  );
+  const [selectedReview, setSelectedReview] = useState(false);
 
   const {
     _id: reviewId,
@@ -60,8 +55,6 @@ const ReviewCard = ({ review, setReviews }) => {
     };
     getComments();
   }, [reviewId, comments]);
-
-  const isMyReview = loggedInUser && loggedInUser._id === authorId;
 
   // get user avatar >> get 'users/id' ?
 
@@ -84,41 +77,7 @@ const ReviewCard = ({ review, setReviews }) => {
         className="mb-5"
       >
         <Card.Header>
-          <Row>
-            <Col xs="auto" onClick={() => navigate(`/users/${authorId}`)}>
-              {/* to do: get user's info -> avatar url */}
-              <Avatar width="50" />
-            </Col>
-            <Col className="d-flex align-items-center px-0">{userName}</Col>
-
-            {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
-            {/* 클릭하면 수정, 삭제 선택하는 모달 창을 띄운다 */}
-            <Col className="d-flex align-items-center justify-content-end">
-              {isMyReview && (
-                <Button
-                  variant="link"
-                  style={{ color: "black" }}
-                  onClick={() => {
-                    setIsActionModalVisible(true);
-                    setEditingData(review);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faEllipsis} />
-                </Button>
-              )}
-
-              {/* '수정, 삭제' 선택하는 모달 창 */}
-              <ActionSelectorModal
-                show={isActionModalVisible}
-                reviewId={reviewId}
-                authorId={authorId}
-                handleClose={() => setIsActionModalVisible(false)}
-                isActionModalVisible={isActionModalVisible}
-                setIsActionModalVisible={setIsActionModalVisible}
-                setReviews={setReviews}
-              />
-            </Col>
-          </Row>
+          <ReviewTitle review={review} setReviews={setReviews} />
         </Card.Header>
         <Card.Body>
           {/* to do: 서버 image 저장 후 carousel */}
@@ -128,7 +87,6 @@ const ReviewCard = ({ review, setReviews }) => {
               "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
             ]}
           />
-          {/* <Image src={imageUrl} fluid /> */}
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
           <Card.Text className="d-flex justify-content-end">
@@ -137,8 +95,22 @@ const ReviewCard = ({ review, setReviews }) => {
             {minutesPassed >= 60 && hoursPassed < 24 && `${hoursPassed}시간 전`}
             {minutesPassed >= 60 && hoursPassed >= 24 && `${daysPassed}일 전`}
           </Card.Text>
-          {/* 클릭하면 모달창으로 리뷰 카드 띄우기 */}
-          <Card.Text>댓글 {comments.length}개 모두 보기</Card.Text>
+          {/* 댓글 모두보기: 클릭하면 모달창으로 리뷰 카드 띄우기 */}
+          {!isReviewModalVisible && (
+            <Card.Text
+              onClick={() => {
+                // 아이디 저장
+                setShowingReview(review);
+                console.log(review);
+                console.log(selectedReview);
+                setIsReviewModalVisible(true);
+                setSelectedReview(review);
+              }}
+            >
+              댓글 {comments.length}개 모두 보기
+            </Card.Text>
+          )}
+          {/* 댓글 작성란 */}
         </Card.Body>
       </Card>
     </>

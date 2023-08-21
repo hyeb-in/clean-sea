@@ -26,6 +26,7 @@ export const DispatchContext = createContext(null);
 export const UploadFormContext = createContext(false);
 export const EditFormContext = createContext(false);
 export const EditingDataContext = createContext(null);
+export const IsReviewModalVisibleContext = createContext(null);
 
 function App() {
   // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
@@ -36,7 +37,7 @@ function App() {
   const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
   const [isEditFormVisible, setIsEditFormVisible] = useState(false);
   const [editingData, setEditingData] = useState(null);
-
+  const [isReviewModalVisible, setIsReviewModalVisible] = useState(false);
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
@@ -54,7 +55,6 @@ function App() {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
       const res = await Api.get("users/current");
       const currentUser = res.data;
-      console.log(currentUser);
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
       dispatch({
         type: "LOGIN_SUCCESS",
@@ -87,39 +87,42 @@ function App() {
         <EditingDataContext.Provider value={{ editingData, setEditingData }}>
           <DispatchContext.Provider value={dispatch}>
             <UserStateContext.Provider value={userState}>
-              <Interceptor>
-                {!is404Page && <NavBar />}
-                {(isUploadFormVisible || isEditFormVisible) && (
-                  <ReviewForm
-                    headerTitle={
-                      isUploadFormVisible
-                        ? "새 게시물 작성하기"
-                        : "게시물 수정하기"
-                    }
-                    reviews={reviews}
-                    setReviews={setReviews}
-                  />
-                )}
-                <Routes>
-                  <Route path="/" exact element={<Main />} />
-                  <Route path="/login" exact element={<Login />} />
-                  <Route path="/signup" exact element={<SignUp />} />
-                  <Route path="/users/:id" exact element={<MyProfile />} />
-                  <Route path="/search" exact element={<Search />} />
-                  <Route
-                    path="/reviews"
-                    exact
-                    element={
-                      <Reviews reviews={reviews} setReviews={setReviews} />
-                    }
-                  />
-                  <Route path="/graph" exact element={<Graph />} />
-                  {/* 404 페이지 */}
-                  <Route path="*" element={<PageNotFound />} />
-                </Routes>
-
-                {!is404Page && <Footer />}
-              </Interceptor>
+              <IsReviewModalVisibleContext.Provider
+                value={{ isReviewModalVisible, setIsReviewModalVisible }}
+              >
+                <Interceptor>
+                  {!is404Page && <NavBar />}
+                  {(isUploadFormVisible || isEditFormVisible) && (
+                    <ReviewForm
+                      headerTitle={
+                        isUploadFormVisible
+                          ? "새 게시물 작성하기"
+                          : "게시물 수정하기"
+                      }
+                      reviews={reviews}
+                      setReviews={setReviews}
+                    />
+                  )}
+                  <Routes>
+                    <Route path="/" exact element={<Main />} />
+                    <Route path="/login" exact element={<Login />} />
+                    <Route path="/signup" exact element={<SignUp />} />
+                    <Route path="/users/:id" exact element={<MyProfile />} />
+                    <Route path="/search" exact element={<Search />} />
+                    <Route
+                      path="/reviews"
+                      exact
+                      element={
+                        <Reviews reviews={reviews} setReviews={setReviews} />
+                      }
+                    />
+                    <Route path="/graph" exact element={<Graph />} />
+                    {/* 404 페이지 */}
+                    <Route path="*" element={<PageNotFound />} />
+                  </Routes>
+                  {!is404Page && <Footer />}
+                </Interceptor>
+              </IsReviewModalVisibleContext.Provider>
             </UserStateContext.Provider>
           </DispatchContext.Provider>
         </EditingDataContext.Provider>
