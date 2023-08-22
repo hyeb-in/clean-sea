@@ -39,10 +39,7 @@ const NavBar = () => {
     <>
       <Navbar bg="primary" data-bs-theme="dark">
         <Container className="d-flex justify-content-between">
-          <Navbar.Brand
-            onClick={() => navigate("/")}
-            style={{ cursor: "pointer" }}
-          >
+          <Navbar.Brand onClick={() => navigate("/")} className="link">
             해조
           </Navbar.Brand>
           <Nav className="align-items-center">

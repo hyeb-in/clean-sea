@@ -31,7 +31,7 @@ const ReviewTitle = ({ children, review, setReviews, className }) => {
         {isMyReview && (
           <Button
             variant="link"
-            style={{ color: "black" }}
+            className="black"
             onClick={() => {
               setIsActionModalVisible(true);
               setEditingData(review);

@@ -65,7 +65,7 @@ const ActionSelectorModal = ({
           <ListGroup.Item
             key="del"
             action
-            style={{ color: "red" }}
+            className="delete"
             onClick={() => deleteReview(reviewId)}
           >
             삭제

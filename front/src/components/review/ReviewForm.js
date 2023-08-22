@@ -208,6 +208,8 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   useEffect(() => {
     getCurrentLocation();
   }, []);
+  const isLoading = !isUploading && !result;
+  const isFetched = !isUploading && result;
 
   return (
     <>
@@ -243,7 +245,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         {!isUploading && !result && (
           <ModalBodyWrapper title={headerTitle}>
             {
-              <Row>
+              <Row className="align-items-center">
                 {/* 드래그앤 드롭으로 파일 업로드 받을 수 있는 구역 */}
                 <Col
                   xs={7}
@@ -305,8 +307,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                     />
                   </Form.Group>
                   <small
-                    className={content.length < 300 ? "text-muted" : ""}
-                    style={{ color: "red" }}
+                    className={content.length < 300 ? "text-muted" : "delete"}
                   >
                     {content ? content.length : "0"}/300
                   </small>
@@ -317,7 +318,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         )}
         {/* 리뷰 내용 입력 모달창 내부 */}
         {/* submit 후 업로드 중 -> 1. loading indicator */}
-        {isUploading && (
+        {!isUploading && (
           <ModalBodyWrapper
             text="게시물을 업로드하는 중입니다"
             content={<SpinnerWrapper />}
@@ -325,19 +326,18 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         )}
         {/* submit 후 결과 -> 2. success or fail */}
         {/* to do: 버그수정. 공유되었습니다 모달창 뜬 후에 x 버튼이 아니라 바깥 창을 클릭하면 '게시글을 삭제하시겠어요?' 팝업이 뜸 */}
-        {result && !isUploading && (
+        {isFetched && (
           <ModalBodyWrapper
-            title="게시물이 공유되었습니다"
+            title={
+              RESULT_ENUM.SUCCESS
+                ? "게시물이 공유되었습니다"
+                : "게시물을 업로드하지 못했습니다"
+            }
             onHide={() => closeReviewFormModal()}
             content={
               <FontAwesomeIcon
                 icon={RESULT_ENUM.SUCCESS ? faCircleCheck : faBomb}
-                style={{
-                  width: "70px",
-                  height: "70px",
-                  color: "blue",
-                  padding: "50px 0",
-                }}
+                className="indicator-success"
               />
             }
           />

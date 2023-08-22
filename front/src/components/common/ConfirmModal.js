@@ -11,11 +11,9 @@ const ConfirmModal = ({ show, setShowConfirmModal, closeReviewFormModal }) => {
       show={show}
       keyboard={false}
       centered
-      style={{
-        // 가시성을 위해 모달창 바깥 화면 어둡게 조정
-        // backdrop: 'static'일 경우 먼저 띄워진 모달은 영향받지 않기때문에 직접 css로 배경색을 바꿔준다
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-      }}
+      className="backdrop"
+      // 가시성을 위해 모달창 바깥 화면 어둡게 조정
+      // backdrop: 'static'일 경우 먼저 띄워진 모달은 영향받지 않기때문에 직접 css로 배경색을 바꿔준다
       onHide={() => setShowConfirmModal(false)}
       onClick={(e) => e.stopPropagation()}
     >
