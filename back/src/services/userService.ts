@@ -1,8 +1,15 @@
 import bcrypt from "bcrypt";
-import { create, deleteById, findUserByEmail, update } from "../db/models/User";
+import {
+  create,
+  deleteById,
+  findUserByEmail,
+  getRandomUser,
+  update,
+} from "../db/models/User";
 import { IRequest, IUser } from "user";
 import { generateRandomPassword } from "../utils/randomPassword";
 import { mailSender } from "../utils/sendMail";
+import { errorGenerator } from "../utils/errorGenerator";
 
 /**
  * @param {*} email
@@ -19,7 +26,7 @@ export const createUserService = async (
   const user = await findUserByEmail(email);
 
   if (user) {
-    throw new Error("이미 존재하는 이메일입니다.");
+    throw errorGenerator("이미 존재하는 이메일 입니다.", 403);
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,7 +47,7 @@ export const updateUserService = async (
 export const deleteUserService = async (userId: string) => {
   const deletedUser = await deleteById(userId);
 
-  if (!deletedUser) throw new Error("유저가 존재하지 않습니다.");
+  if (!deletedUser) throw errorGenerator("유저가 존재하지 않습니다.", 403);
 
   return deletedUser;
 };
@@ -53,4 +60,9 @@ export const resetPasswordService = async (userId: string, email: string) => {
   const updatedUser = await update(userId, { password: hashedPassword });
 
   return updatedUser;
+};
+
+export const getRandomUserService = async () => {
+  const randomUser = await getRandomUser();
+  return randomUser;
 };

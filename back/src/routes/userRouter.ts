@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   deleteUser,
+  getRandomUser,
   getUser,
   resetPassword,
   signUpUser,
@@ -20,7 +21,7 @@ userRouter.get("/tokentest", jwtAuthentication);
 
 userRouter.get("/current", jwtAuthentication, getUser);
 
-userRouter.get("/userlist");
+userRouter.get("/randomlist", getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
 
@@ -28,5 +29,5 @@ userRouter
   .route("/:userId")
   .get(jwtAuthentication, getUser)
   .put(jwtAuthentication, validateUpdateUser, updateUser)
-  .delete(jwtAuthentication, deleteUser);
+  .delete(deleteUser);
 export default userRouter;

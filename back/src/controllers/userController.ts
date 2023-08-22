@@ -2,13 +2,14 @@ import { NextFunction, Response } from "express";
 import {
   createUserService,
   deleteUserService,
+  getRandomUserService,
   resetPasswordService,
   updateUserService,
 } from "../services/userService";
 import { IRequest } from "user";
-import { generateRandomPassword } from "../utils/randomPassword";
-import { mailSender } from "../utils/sendMail";
 import { findUserByEmail } from "../db/models/User";
+import { errorGenerator } from "../utils/errorGenerator";
+import UserModel from "../db/schemas/userSchema";
 
 /**
  * @param {*} req name,email,password
@@ -20,20 +21,35 @@ export const signUpUser = async (
   next: NextFunction
 ) => {
   try {
+    //throw new Error("에러야");
     const { name, email, password } = req.body;
 
     const newUser = await createUserService(name, email, password);
 
     res.status(200).json(newUser);
   } catch (error) {
-    next(error);
+    const err = errorGenerator(error.message, 400);
+    next(err);
   }
 };
 
 /**
  * @description 랜덤 유저 호출
  */
-export const getRandomUser = () => {};
+export const getRandomUser = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const randomUser = await getRandomUserService();
+    console.log(randomUser);
+
+    res.status(200).json(randomUser);
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**
  * @description id값으로 유저 호출 api
@@ -99,7 +115,7 @@ export const resetPassword = async (
     const { email } = req.body;
     const user = await findUserByEmail(email);
 
-    if (!user) throw new Error("해당 이메일은 존재하지 않습니다.");
+    if (!user) throw errorGenerator("해당 이메일은 존재하지 않습니다.", 400);
 
     const userId = user._id;
     const resetedUser = await resetPasswordService(userId, email);

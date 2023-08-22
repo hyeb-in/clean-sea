@@ -42,3 +42,8 @@ export const deleteById = async (userId: string) => {
   const user = await UserModel.findByIdAndDelete(userId);
   return user;
 };
+
+export const getRandomUser = async () => {
+  const randomUser = await UserModel.aggregate([{ $sample: { size: 5 } }]);
+  return randomUser;
+};
