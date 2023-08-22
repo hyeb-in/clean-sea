@@ -6,6 +6,11 @@ export const findUserById = async (userId: string): Promise<IUser> => {
   return user;
 };
 
+/**
+ *
+ * @param email ({email} 아님)
+ * @returns
+ */
 export const findUserByEmail = async (email: string): Promise<IUser> => {
   const user = await UserModel.findOne({ email });
 
@@ -22,7 +27,6 @@ export const create = async (
     email,
     password: hashedPassword,
   });
-  console.log(newUser);
 
   return newUser;
 };

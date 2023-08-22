@@ -20,7 +20,6 @@ import Avatar from "./Avatar";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  console.log(navigate.pathname);
   const { user: loggedInUser } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
   const { setIsUploadFormVisible } = useContext(UploadFormContext);
@@ -36,23 +35,11 @@ const NavBar = () => {
     navigate("/login");
   };
 
-  const AvatarWithTooltip = forwardRef((props, ref) => (
-    <OverlayTrigger
-      placement="bottom"
-      overlay={<Tooltip id="my-profile">나의 프로필</Tooltip>}
-    >
-      <Avatar width="50" ref={ref} {...props} />
-    </OverlayTrigger>
-  ));
-
   return (
     <>
       <Navbar bg="primary" data-bs-theme="dark">
         <Container className="d-flex justify-content-between">
-          <Navbar.Brand
-            onClick={() => navigate("/")}
-            style={{ cursor: "pointer" }}
-          >
+          <Navbar.Brand onClick={() => navigate("/")} className="link">
             해조
           </Navbar.Brand>
           <Nav className="align-items-center">
@@ -98,7 +85,13 @@ const NavBar = () => {
                 <Nav.Link
                   onClick={() => navigate(`/users/${loggedInUser._id}`)}
                 >
-                  <AvatarWithTooltip />
+                  {/* to do: 툴팁 안뜸 */}
+                  <OverlayTrigger
+                    placement="bottom"
+                    overlay={<Tooltip id="profile">프로필</Tooltip>}
+                  >
+                    <Avatar width="50" />
+                  </OverlayTrigger>
                 </Nav.Link>
               </>
             ) : (

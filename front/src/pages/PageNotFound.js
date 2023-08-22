@@ -7,12 +7,15 @@ const PageNotFound = () => {
 
   return (
     <Container
-      className="d-flex flex-column justify-content-center
+      className="d-flex flex-column justify-content-center min-h-100
       align-items-center"
-      style={{ height: "100vh" }}
     >
-      <Row style={{ fontSize: "3rem" }}>404</Row>
-      <Row>페이지를 찾을 수 없습니다</Row>
+      <Row className="fontSize: 4rem">
+        <h2>404</h2>
+      </Row>
+      <Row>
+        <span>페이지를 찾을 수 없습니다</span>
+      </Row>
       <Row className="mt-5">
         <Button onClick={() => navigate(-1)}>홈으로 돌아가기</Button>
       </Row>

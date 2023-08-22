@@ -1,4 +1,5 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
+@import "./components/review/review.css";
 
 body {
   margin: 0;
@@ -6,4 +7,47 @@ body {
   width: 100%;
   height: 100%;
   min-height: 100vh;
+}
+/* flex-방향-justify-align 순서 */
+.flex-row-center-center {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+/* d-flex flex-column justify-content-center align-items-center */
+.flex-column-center-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.link {
+  cursor: pointer;
+}
+.h-100 {
+  height: 100%;
+}
+.min-h-100 {
+  height: 100vh;
+}
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.spinner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin: 100px 0;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
+.toast-popup {
+  font-size: 1rem;
+}
+.toast-popup__icon {
+  font-size: 2rem;
+  min-height: 60px;
+}
+.toast-popup__title {
+  font-weight: 600;
 }

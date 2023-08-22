@@ -1,60 +1,69 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import ReviewCard from "../components/review/ReviewCard";
 import SpinnerWrapper from "../components/common/Spinner";
 import NoReviewIndicator from "../components/review/NoReviewIndicator";
 import * as Api from "../Api";
+import { HandlerEnabledContext, IsReviewModalVisibleContext } from "../App";
+import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from "../constants";
 import ToastWrapper from "../components/common/ToastWrapper";
 
 const Reviews = ({ reviews, setReviews }) => {
+  const { isHandlerEnabled, setIsHandlerEnabled } = useContext(
+    HandlerEnabledContext
+  );
   const [isLoaded, setIsLoaded] = useState(false);
-  const [toastMsg, setToastMsg] = useState("");
+  const { toast, setToast } = useState();
+
+  const [showingReview, setShowingReview] = useState(null);
+  // const { isReviewModalVisible } = useContext(IsReviewModalVisibleContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await Api.get("reviews/reviewList");
-        // 프로필 클릭시 /users/:id로 이동
+        // to do: 서버에러 -> 모달창으로 바꾸기
+        if (!res) {
+          return setToast({
+            text: "서버 에러 ",
+            status: TOAST_POPUP_STATUS.alert,
+            position: TOAST_POPUP_POSITION.middleCenter,
+          });
+        }
+        setIsHandlerEnabled(true);
         setReviews(res.data);
         setIsLoaded(true);
       } catch (error) {
-        setToastMsg(error);
+        console.log(error);
       }
     };
     fetchData();
-  }, [setReviews]);
+  }, [setToast, setReviews, isHandlerEnabled, setIsHandlerEnabled]);
 
   return (
     <>
       <Container className="py-3">
         <Row xs={1} md={2} lg={3}>
+          {/* to do: 서버 에러 났을 경우 알려주기 -> 해결 방안 보여주기 */}
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&
-            // 임시 코드: 백엔드에서 데이터 역순으로 받아와야 함
-            reviews
-              .slice()
-              .reverse()
-              .map((review) => (
-                <Col
-                  key={review._id}
-                  className="d-flex justify-content-center align-items-center"
-                >
-                  <ReviewCard review={review} setReviews={setReviews} />
-                </Col>
-              ))}
+            reviews.map((review) => (
+              <Col
+                key={review._id}
+                className="d-flex justify-content-center align-items-center"
+              >
+                <ReviewCard
+                  review={review}
+                  setReviews={setReviews}
+                  setShowingReview={setShowingReview}
+                />
+              </Col>
+            ))}
           {isLoaded && reviews?.length === 0 && <NoReviewIndicator />}
         </Row>
       </Container>
-      {/* 에러 메세지 toast pop-up으로 유저에게 알려줌 */}
-      {toastMsg && (
-        <ToastWrapper
-          onClose={() => setToastMsg("")}
-          text={toastMsg}
-          position="middle-center"
-          bg="warning"
-        />
-      )}
+      {toast && isHandlerEnabled && <ToastWrapper toast={toast} />}
     </>
   );
 };

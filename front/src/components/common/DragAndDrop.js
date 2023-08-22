@@ -4,16 +4,8 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 
 const DragAndDrop = () => {
   return (
-    <Container fluid style={{ height: "300px", padding: "60px 0" }}>
-      <Row
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyItems: "center",
-          height: "100%",
-        }}
-      >
+    <Container className="flex-d flex-column">
+      <Row className="h-100 flex-column">
         <Col className="d-flex justify-content-center align-items-center">
           <FontAwesomeIcon icon={faImages} size="3x" />
         </Col>

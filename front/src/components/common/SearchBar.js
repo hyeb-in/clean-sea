@@ -63,31 +63,23 @@ const SearchBar = () => {
   };
 
   return (
-    <Container
-      fluid
-      className="py-4"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <Container fluid className="py-4 flex-column-center-center">
       {/* 드롭다운 - 지역 선택 */}
-      <Dropdown>
-        <DropdownButton
-          id="dropdown-basic-button"
-          title={selectedItem ? selectedItem : "지역을 선택해주세요"}
-          onSelect={handleItemSelect}
-        >
-          {/* 메뉴는 DB에서 받아온다 ? */}
-          {/* 로컬에 저장한다 ?? */}
-          <Dropdown.Item eventKey="강원">강원</Dropdown.Item>
-          <Dropdown.Item eventKey="부산">부산</Dropdown.Item>
-          <Dropdown.Item eventKey="충남">충남</Dropdown.Item>
-        </DropdownButton>
-      </Dropdown>
-
+      <Row>
+        <Dropdown>
+          <DropdownButton
+            id="dropdown-basic-button"
+            title={selectedItem ? selectedItem : "지역을 선택해주세요"}
+            onSelect={handleItemSelect}
+          >
+            {/* 메뉴는 DB에서 받아온다 ? */}
+            {/* 로컬에 저장한다 ?? */}
+            <Dropdown.Item eventKey="강원">강원</Dropdown.Item>
+            <Dropdown.Item eventKey="부산">부산</Dropdown.Item>
+            <Dropdown.Item eventKey="충남">충남</Dropdown.Item>
+          </DropdownButton>
+        </Dropdown>
+      </Row>
       {/* 지역 필터링 -> 해수욕장 검색 */}
       <Row className="mb-5">
         <Form onSubmit={handleSearchTerm}>
@@ -99,26 +91,27 @@ const SearchBar = () => {
           />
         </Form>
       </Row>
-
-      {/* 선택된 지역에 대한 데이터 리스트 */}
-      {beachData &&
-        beachData.map((beach, index) => (
-          <ListGroup key={beach.id} className="my-2" style={{ width: "14rem" }}>
-            <ListGroup.Item>{`${index + 1}위 - ${
-              beach.name
-            } 해수욕장`}</ListGroup.Item>
-            <ListGroup.Item>
-              <Row>
-                <Col>
-                  <FontAwesomeIcon icon={faThumbsUp} /> 몇 개
-                </Col>
-                <Col>
-                  <FontAwesomeIcon icon={faThumbsDown} /> 몇 개
-                </Col>
-              </Row>
-            </ListGroup.Item>
-          </ListGroup>
-        ))}
+      <Row>
+        {/* 선택된 지역에 대한 데이터 리스트 */}
+        {beachData &&
+          beachData.map((beach, index) => (
+            <ListGroup key={beach.id} className="my-2">
+              <ListGroup.Item>{`${index + 1}위 - ${
+                beach.name
+              } 해수욕장`}</ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>
+                    <FontAwesomeIcon icon={faThumbsUp} /> 몇 개
+                  </Col>
+                  <Col>
+                    <FontAwesomeIcon icon={faThumbsDown} /> 몇 개
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+            </ListGroup>
+          ))}
+      </Row>
     </Container>
   );
 };

@@ -1,0 +1,32 @@
+.noReviewIndicator {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+
+/* review form */
+.carousel-arrow-icon {
+  background-color: black;
+  padding: 5px;
+  border-radius: 50%;
+}
+.delete {
+  color: red;
+}
+.indicator-success {
+  width: 70px;
+  height: 70px;
+  color: blue;
+  padding: 50px0;
+}
+
+.comment__author {
+  font-weight: 600;
+}
+.comment__title {
+  margin-right: 10px;
+}
+.comment__content {
+  color: grey;
+}
