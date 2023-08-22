@@ -13,15 +13,12 @@ const Reviews = ({ reviews, setReviews }) => {
   const [toastMsg, setToastMsg] = useState("");
   const [showingReview, setShowingReview] = useState(null);
   const { isReviewModalVisible } = useContext(IsReviewModalVisibleContext);
-  // review를 받아서 Modal창 띄운다
-  // comments를 받아서 같이 띄운다
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await Api.get("reviews/reviewList");
-        // 프로필 클릭시 /users/:id로 이동
-        // to do: error handling
+        // to do: 댓글 갯수 reviews에서 받아오기
         if (!res) return setToastMsg("데이터를 불러올 수 없습니다");
         setReviews(res.data);
         setIsLoaded(true);
@@ -36,7 +33,7 @@ const Reviews = ({ reviews, setReviews }) => {
     <>
       <Container className="py-3">
         <Row xs={1} md={2} lg={3}>
-          {isLoaded && <SpinnerWrapper text="로딩 중..." />}
+          {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&
             reviews.map((review) => (
@@ -63,7 +60,7 @@ const Reviews = ({ reviews, setReviews }) => {
           onClose={() => setToastMsg("")}
           text={toastMsg}
           position="middle-center"
-          // middle-center center-center(커멘트 에러msg)
+          // middle-center() center-center(커멘트 에러msg)
           bg="warning"
         />
       )}
