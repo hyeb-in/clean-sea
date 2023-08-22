@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 import * as Api from "../Api";
-import { DispatchContext } from "../App";
+import { DispatchContext, HandlerEnabledContext } from "../App";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -42,7 +42,7 @@ const Login = () => {
       });
       navigate("/", { replace: true });
     } catch (err) {
-      // console.log("로그인에 실패하셨습니다.\n", err);
+      console.log("로그인에 실패하셨습니다.\n", err);
     }
   };
 

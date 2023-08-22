@@ -15,7 +15,7 @@ const Comment = ({ comment }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newComment, setNewComment] = useState(comment);
   const [isEllipsisClicked, setIsEllipsisClicked] = useState(false);
-  const [toastMsg, setToastMsg] = useState();
+  // const [toastMsg, setToastMsg] = useState();
   console.log(isEditing, "is editing");
 
   console.log(newComment);
@@ -30,7 +30,7 @@ const Comment = ({ comment }) => {
     // put api
     e.preventDefault();
     if (!isMyComment) {
-      return setToastMsg("다른 사람의 게시물을 수정할 수 없습니다");
+      // return setToastMsg("다른 사람의 게시물을 수정할 수 없습니다");
     }
 
     try {
@@ -48,7 +48,7 @@ const Comment = ({ comment }) => {
 
   const deleteComment = async () => {
     if (!isMyComment) {
-      return setToastMsg("다른 사람의 게시물을 수정할 수 없습니다");
+      // return setToastMsg("다른 사람의 게시물을 수정할 수 없습니다");
     }
     try {
       // const res = await Api.delete(`/comments/${postId}`);
@@ -134,14 +134,14 @@ const Comment = ({ comment }) => {
           )}
         </Row>
       </Container>
-      {toastMsg && (
+      {/* {toastMsg && (
         <ToastWrapper
           onClose={() => setToastMsg("")}
           text={toastMsg}
           bg="warning"
           position="middle-center"
         />
-      )}
+      )} */}
     </>
   );
 };

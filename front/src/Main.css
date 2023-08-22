@@ -41,6 +41,13 @@ body {
   justify-items: center;
   align-items: center;
 }
-.black {
-  color: black;
+.toast-popup {
+  font-size: 1rem;
+}
+.toast-popup__icon {
+  font-size: 2rem;
+  min-height: 60px;
+}
+.toast-popup__title {
+  font-weight: 600;
 }

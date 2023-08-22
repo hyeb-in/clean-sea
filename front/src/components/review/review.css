@@ -20,3 +20,13 @@
   color: blue;
   padding: 50px0;
 }
+
+.comment__author {
+  font-weight: 600;
+}
+.comment__title {
+  margin-right: 10px;
+}
+.comment__content {
+  color: grey;
+}

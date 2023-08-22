@@ -318,9 +318,9 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         )}
         {/* 리뷰 내용 입력 모달창 내부 */}
         {/* submit 후 업로드 중 -> 1. loading indicator */}
-        {!isUploading && (
+        {isUploading && (
           <ModalBodyWrapper
-            text="게시물을 업로드하는 중입니다"
+            title="게시물을 업로드하는 중입니다"
             content={<SpinnerWrapper />}
           />
         )}
