@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import ApexCharts from 'apexcharts'; // Import from 'react-apexcharts' instead of 'apexcharts'
+import ApexCharts from 'apexcharts';
 
 const options = {
   series: [
