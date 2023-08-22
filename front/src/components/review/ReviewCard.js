@@ -52,6 +52,7 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
       // to do: fetch
       // console.log(res);
       // setComments(res);
+      // 성공 알림
     };
     getComments();
   }, [reviewId, comments]);
@@ -68,52 +69,43 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
   const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일자로 변환
 
   return (
-    <>
-      <Card
-        bg="light"
-        key={reviewId}
-        text="black"
-        style={{ width: "18rem" }}
-        className="mb-5"
-      >
-        <Card.Header>
-          <ReviewTitle review={review} setReviews={setReviews} />
-        </Card.Header>
-        <Card.Body>
-          {/* to do: 서버 image 저장 후 carousel */}
-          <CarouselWrapper
-            imageUrls={[
-              "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
-              "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
-            ]}
-          />
-          <Card.Title>{title}</Card.Title>
-          <Card.Text>{content}</Card.Text>
-          <Card.Text className="d-flex justify-content-end">
-            {minutesPassed < 1 && "방금 전"}
-            {minutesPassed < 60 && minutesPassed > 0 && `${minutesPassed}분 전`}
-            {minutesPassed >= 60 && hoursPassed < 24 && `${hoursPassed}시간 전`}
-            {minutesPassed >= 60 && hoursPassed >= 24 && `${daysPassed}일 전`}
+    <Card bg="light" key={reviewId} sm="12" md="6" lg="4" className="mb-5">
+      <Card.Header>
+        <ReviewTitle review={review} setReviews={setReviews} />
+      </Card.Header>
+      <Card.Body>
+        {/* to do: 서버 image 저장 후 carousel */}
+        <CarouselWrapper
+          imageUrls={[
+            "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
+            "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
+          ]}
+        />
+        <Card.Title>{title}</Card.Title>
+        <Card.Text>{content}</Card.Text>
+        <Card.Text className="d-flex justify-content-end">
+          {minutesPassed < 1 && "방금 전"}
+          {minutesPassed < 60 && minutesPassed > 0 && `${minutesPassed}분 전`}
+          {minutesPassed >= 60 && hoursPassed < 24 && `${hoursPassed}시간 전`}
+          {minutesPassed >= 60 && hoursPassed >= 24 && `${daysPassed}일 전`}
+        </Card.Text>
+        {/* 댓글 모두보기: 클릭하면 모달창으로 리뷰 카드 띄우기 */}
+        {!isReviewModalVisible && (
+          <Card.Text
+            onClick={() => {
+              setShowingReview(review);
+              console.log(review);
+              console.log(selectedReview);
+              setIsReviewModalVisible(true);
+              setSelectedReview(review);
+            }}
+            className="link"
+          >
+            댓글 {comments.length}개 모두 보기
           </Card.Text>
-          {/* 댓글 모두보기: 클릭하면 모달창으로 리뷰 카드 띄우기 */}
-          {!isReviewModalVisible && (
-            <Card.Text
-              onClick={() => {
-                // 아이디 저장
-                setShowingReview(review);
-                console.log(review);
-                console.log(selectedReview);
-                setIsReviewModalVisible(true);
-                setSelectedReview(review);
-              }}
-            >
-              댓글 {comments.length}개 모두 보기
-            </Card.Text>
-          )}
-          {/* 댓글 작성란 */}
-        </Card.Body>
-      </Card>
-    </>
+        )}
+      </Card.Body>
+    </Card>
   );
 };
 

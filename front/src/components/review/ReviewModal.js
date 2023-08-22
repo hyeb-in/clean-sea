@@ -1,6 +1,5 @@
 import React from "react-router-dom";
-import { Modal } from "react-bootstrap";
-
+import { CloseButton, Container, Modal, Row } from "react-bootstrap";
 import CarouselWrapper from "../common/Carousel";
 import ReviewTitle from "./ReviewTitle";
 import { useContext } from "react";
@@ -41,24 +40,34 @@ const ReviewModal = ({ showingReview, setShowingReview, setReviews }) => {
         setIsReviewModalVisible(false);
       }}
       centered
-      className="px-2"
     >
       {/* 작은 화면에서는 세로로 정렬 */}
       {/* 큰 화면에서는 타이틀 한 줄, 사진이랑 댓글 한 줄로 나누기 */}
       <ReviewTitle
         review={showingReview}
         setReviews={setReviews}
-        className="px-2"
-      />
+        className="p-2"
+      >
+        {
+          <CloseButton
+            onClick={() => setIsReviewModalVisible(false)}
+            aria-label="Hide"
+          />
+        }
+      </ReviewTitle>
       <CarouselWrapper
         imageUrls={[
           "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
           "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
         ]}
       />
-      {mock.map((comment) => (
-        <Comment comment={comment} />
-      ))}
+      <Container>
+        <Row className="py-4 mx-2">
+          {mock.map((comment) => (
+            <Comment comment={comment} />
+          ))}
+        </Row>
+      </Container>
     </Modal>
   );
 };

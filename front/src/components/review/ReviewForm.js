@@ -247,10 +247,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                 {/* 드래그앤 드롭으로 파일 업로드 받을 수 있는 구역 */}
                 <Col
                   xs={7}
-                  className="d-flex flex-column align-items-center"
-                  style={{
-                    height: "100%",
-                  }}
+                  className="d-flex flex-column align-items-center h-100"
                 >
                   <FileUploader
                     handleChange={handleFileChange}

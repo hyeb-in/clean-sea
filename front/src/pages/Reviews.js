@@ -22,7 +22,7 @@ const Reviews = ({ reviews, setReviews }) => {
         const res = await Api.get("reviews/reviewList");
         // 프로필 클릭시 /users/:id로 이동
         // to do: error handling
-        // if(!res)
+        if (!res) return setToastMsg("데이터를 불러올 수 없습니다");
         setReviews(res.data);
         setIsLoaded(true);
       } catch (error) {
@@ -34,7 +34,6 @@ const Reviews = ({ reviews, setReviews }) => {
 
   return (
     <>
-      {/* <ReviewModal  review, setReviews  /> */}
       <Container className="py-3">
         <Row xs={1} md={2} lg={3}>
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
@@ -64,6 +63,7 @@ const Reviews = ({ reviews, setReviews }) => {
           onClose={() => setToastMsg("")}
           text={toastMsg}
           position="middle-center"
+          // middle-center center-center(커멘트 에러msg)
           bg="warning"
         />
       )}

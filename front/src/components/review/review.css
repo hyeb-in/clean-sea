@@ -1,0 +1,6 @@
+.noReviewIndicator {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}

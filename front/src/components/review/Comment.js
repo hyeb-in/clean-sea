@@ -22,10 +22,10 @@ const Comment = ({ comment }) => {
   const { postId, userId, content, userName, date } = comment;
   // get user avatarUrl
   const isMyComment = true;
+  console.log(loggedInUser === userId, loggedInUser);
   // to do: 주석 풀기
   // const isMyComment = loggedInUser && loggedInUser._id === userId;
   const isButtonsVisible = isMyComment && !isEditing && isEllipsisClicked;
-
   const handleSubmit = async (e) => {
     // put api
     e.preventDefault();
@@ -66,7 +66,7 @@ const Comment = ({ comment }) => {
   return (
     <>
       <Container>
-        <Row className="d-flex justify-content-center align-items-center">
+        <Row className="flex-row-center-center">
           <Col xs="auto" onClick={() => navigate(`/users/${userId}`)}>
             <Avatar width="50" />
           </Col>
