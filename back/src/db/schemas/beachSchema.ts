@@ -60,6 +60,9 @@ const BeachSchema = new Schema<IBeach>(
       type: Number,
       required: false,
     }
+  },
+  {
+    timestamps: true,
   }
 );
 
