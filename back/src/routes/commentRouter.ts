@@ -12,7 +12,7 @@ const commentAuthRouter = Router();
 
 commentAuthRouter
     .post('/:reviewId', jwtAuthentication, postCommentValidator, createComment)
-    .get('/:reviewId', jwtAuthentication, getReviewComment);
+    .get('/:reviewId', getReviewComment);
 
 commentAuthRouter
     .route('/:commentId')
