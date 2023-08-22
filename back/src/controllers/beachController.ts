@@ -12,7 +12,7 @@ const getBeachByBeachName = async (
     const name = req.params.name;
 
     const result = await getBeachByBeachNameService({ name } as IBeach);
-    res.status(200).json(result);
+    res.status(StatusCodes.OK).json(result);
   } catch (e) {
     next(e);
   }
@@ -27,7 +27,7 @@ const getBeachByRegion = async (
     const address = req.params.address;
 
     const result = await getBeachByRegionService({ address } as IBeach);
-    res.status(200).json(result);
+    res.status(StatusCodes.OK).json(result);
   } catch (e) {
     next(e);
   }
@@ -40,7 +40,7 @@ const getBeaches = async (
   ) => {
   try {
     const result = await getBeachesService();
-    res.status(200).json(result);
+    res.status(StatusCodes.OK).json(result);
   } catch (e) {
     next(e);
   }
