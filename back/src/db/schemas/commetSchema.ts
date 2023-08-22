@@ -5,7 +5,7 @@ interface IComment extends Document {
     userId : mongoose.Types.ObjectId;
     content : string;
     userName : string;
-    date : Date;
+    date? : Date;
 }
 
 const commentSchema = new Schema<IComment>(
@@ -30,7 +30,7 @@ const commentSchema = new Schema<IComment>(
         },
         date : {
             type : Date,
-            required : true,
+            default : Date.now,
         },
     },
     {
