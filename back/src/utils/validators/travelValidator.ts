@@ -16,7 +16,7 @@ export const postTravelValidator = async (
     const { value, error } = schema.validate({ date });
 
     if (error) {
-    next(error.details[0].message);
+        next(error.details[0].message);
     }
 
     next();
@@ -35,7 +35,7 @@ export const putTravelValidator = async (
     const { value, error } = schema.validate({ date });
 
     if (error) {
-    next(error.details[0].message);
+        next(error.details[0].message);
     }
 
     next();

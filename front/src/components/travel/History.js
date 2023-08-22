@@ -22,7 +22,6 @@ const History = ({ displayToast }) => {
   const fetchTravelList = async () => {
     try {
       const response = await Api.get('travels/travelList');
-      console.log(response);
       setTravels(response.data);
     } catch (error) {
       displayToast('방문 로그 조회 실패.');

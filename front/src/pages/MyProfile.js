@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import History from "../components/travel/History";
 import CardHeader from "react-bootstrap/CardHeader";
 import * as Api from "../Api";
+import ToastWrapper from "../components/common/ToastWrapper";
 
 const MyProfile = () => {
   const { id } = useParams();
@@ -64,43 +65,49 @@ const MyProfile = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <Card small className="mb-4 mt-4 pt-3">
-            <CardHeader className="border-bottom">
-              <div className="mb-3 mx-auto">
-                <img
-                  className="rounded-circle"
-                  src={userProfileImage}
-                  width="110"
-                  alt="User Profile"
-                />
-              </div>
-              {isEditMode ? <FormControl type="text" value={userName} onChange={e => setUserName(e.target.value)} /> : <h4 className="mb-2">{userName}</h4>}
-              <span className="text-muted d-block mb-1">{userEmail}</span>
-            </CardHeader>
-            <ListGroup flush>
-              <ListGroupItem className="p-4">
-                {isEditMode ? <FormControl type="text" value={userDescription} onChange={e => setUserDescription(e.target.value)} /> : <strong className="text-muted d-block mb-2">{userDescription}</strong>}
-              </ListGroupItem>
-            </ListGroup>
+    <>
+      <Container>
+        <Row>
+          <Col>
+            <Card small className="mb-4 mt-4 pt-3">
+              <CardHeader className="border-bottom">
+                <div className="mb-3 mx-auto">
+                  <img
+                    className="rounded-circle"
+                    src={userProfileImage}
+                    width="110"
+                    alt="User Profile"
+                  />
+                </div>
+                {isEditMode ? <FormControl type="text" value={userName} onChange={e => setUserName(e.target.value)} /> : <h4 className="mb-2">{userName}</h4>}
+                <span className="text-muted d-block mb-1">{userEmail}</span>
+              </CardHeader>
+              <ListGroup flush>
+                <ListGroupItem className="p-4">
+                  {isEditMode ? <FormControl type="text" value={userDescription} onChange={e => setUserDescription(e.target.value)} /> : <strong className="text-muted d-block mb-2">{userDescription}</strong>}
+                </ListGroupItem>
+              </ListGroup>
 
-            <span>
-              <Button variant="link" onClick={handleEditClick}>{isEditMode ? '취소' : '편집'}</Button>
-              {isEditMode && <Button variant="link" onClick={handleCompleteClick}>완료</Button>}
-            </span>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
-        <History displayToast={displayToastMessage} />
-
-        <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
-          <Toast.Body>{toastMessage}</Toast.Body>
-        </Toast>
-      </Row>
-    </Container>
+              <span>
+                <Button variant="link" onClick={handleEditClick}>{isEditMode ? '취소' : '편집'}</Button>
+                {isEditMode && <Button variant="link" onClick={handleCompleteClick}>완료</Button>}
+              </span>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <History displayToast={displayToastMessage} />
+        </Row>
+      </Container>
+      {showToast && (
+        <ToastWrapper
+          onClose={() => setShowToast(false)}
+          text={toastMessage}
+          bg="warning"
+          position="bottom-center"
+        />
+      )}
+    </>
   );
 }
 
