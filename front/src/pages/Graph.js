@@ -33,7 +33,8 @@ const options = {
   },
   yaxis: {
     title: {
-      text: '$ (thousands)'
+      text: '검출 수'
+
     }
   },
   fill: {
@@ -42,7 +43,7 @@ const options = {
   tooltip: {
     y: {
       formatter: function (val) {
-        return "$ " + val + " thousands"
+        return val + "개 검출"
       }
     }
   }
