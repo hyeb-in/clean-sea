@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ApexCharts from 'react-apexcharts';
 
 const options = {
@@ -12,50 +12,55 @@ const options = {
   xaxis: {
     categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
   },
-  options: {
-    chart: {
-      type: 'bar',
-      height: 350
+  chart: {
+    type: 'bar',
+    height: 350
+  },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      columnWidth: '55%',
+      endingShape: 'rounded'
     },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: '55%',
-        endingShape: 'rounded'
-      },
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ['transparent']
-    },
-    yaxis: {
-      title: {
-        text: '$ (thousands)'
-      }
-    },
-    fill: {
-      opacity: 1
-    },
-    tooltip: {
-      y: {
-        formatter: function (val) {
-          return "$ " + val + " thousands"
-        }
-      }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  stroke: {
+    show: true,
+    width: 2,
+    colors: ['transparent']
+  },
+  yaxis: {
+    title: {
+      text: '$ (thousands)'
     }
   },
+  fill: {
+    opacity: 1
+  },
+  tooltip: {
+    y: {
+      formatter: function (val) {
+        return "$ " + val + " thousands"
+      }
+    }
+  }
 };
 
 const Graph = () => {
+  const chartRef = useRef(null);
+
   useEffect(() => {
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    if (!chartRef.current) {
+      chartRef.current = new ApexCharts(document.querySelector("#chart"), options);
+      chartRef.current.render();
+    }
+
     return () => {
-      chart.destroy();
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
     };
   }, []);
 
