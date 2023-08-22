@@ -8,6 +8,7 @@ interface IReview extends Document {
     author?: string;
     uploadFile?: [string];
     comments?: Types.ObjectId[];
+    likeCount? : number;
 }
 
 const ReviewSchema : Schema<IReview> = new Schema({
@@ -35,6 +36,10 @@ const ReviewSchema : Schema<IReview> = new Schema({
           ref: 'Comment',
         },
       ],
+      likeCount : {
+        type :Number,
+        default : 0,
+      },
     },
 
     {
