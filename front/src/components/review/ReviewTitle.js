@@ -5,14 +5,14 @@ import { Button, Col, Container } from "react-bootstrap";
 import Avatar from "../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { ModalVisibleContext, UserStateContext } from "../../App";
-import { MODAL_ACTION, MODAL_TYPE } from "../../constants";
+import { MODAL_TYPE } from "../../constants";
 
 const ReviewTitle = ({ children, review }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const { setModalVisible } = useContext(ModalVisibleContext);
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
-
+  console.log(review);
   return (
     <Container className="d-flex align-items-center justify-space-between link">
       <Col sm="auto" onClick={() => navigate(`/users/${review?.author}`)}>
@@ -36,6 +36,7 @@ const ReviewTitle = ({ children, review }) => {
                 isVisible: true,
                 data: {
                   reviewId: review._id,
+                  review, // edit form 초기값을 위해서 필요
                 },
               })
             }

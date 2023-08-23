@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 
 const ReviewTextForm = ({ title, content, review, setReview, onSubmit }) => {

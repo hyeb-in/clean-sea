@@ -12,7 +12,7 @@ const allowedFileTypes = ["png", "jpeg"];
 
 const MAX_FILE_COUNT = 5;
 
-const DragAndDropnPreview = ({ preview, setPreview, review, setReview }) => {
+const DragDropContainer = ({ preview, setPreview, review, setReview }) => {
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
   const fileUploaderIndicator = !preview ? (
     <DragAndDrop />
@@ -72,4 +72,4 @@ const DragAndDropnPreview = ({ preview, setPreview, review, setReview }) => {
   );
 };
 
-export default DragAndDropnPreview;
+export default DragDropContainer;

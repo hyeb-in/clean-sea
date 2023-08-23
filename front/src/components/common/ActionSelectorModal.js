@@ -33,7 +33,7 @@ import * as Api from "../../Api";
 const ActionSelectorModal = () => {
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
   // user가 있는지, 유저 author인지 확인하는 로직은 모달로 넘어오기 전에 판단한다
-
+  // 굳이 이 컴포넌트에까지 유저 정보를 가져오지 않도록!
   const deleteById = async (data) => {
     try {
       const { reviewId, commentId } = data;
@@ -48,7 +48,8 @@ const ActionSelectorModal = () => {
         isVisible: false,
         data: null,
         // to do: set reviews state  ||  set comments state ????
-        // 전역으로 관리 해야하는 건가?
+        // 요청 후 reviews 기존 레이아웃에 반영하기
+        // reviews 값을 전역으로 관리 해야하는 건가?
       });
       alert("성공");
     } catch (error) {
@@ -59,26 +60,37 @@ const ActionSelectorModal = () => {
 
   return (
     <Modal
-      show={modalVisible.isVisible}
-      onHide={() =>
-        setModalVisible({ type: null, isVisible: false, data: null })
-      }
+      show={modalVisible.type === MODAL_TYPE.actionSelector}
+      onHide={() => {
+        // 수정 클릭시 현재 가지고있는 data를 edit form에 전달해줘야함!
+        // review 상세 메뉴 클릭 (review에 관한 data 전달) => (현재) => (<EditForm />에 전달)
+        setModalVisible({
+          type: null,
+          isVisible: false,
+          data: modalVisible.data,
+        });
+      }}
       backdrop="true"
       keyboard={false}
-      aria-labelledby="contained-modal-title-vcenter" //??????
+      aria-labelledby="contained-modal-title-vcenter" // to do: 정체가 뭐임
       centered
     >
-      {/* to do: refactoring */}
       <ListGroup className="text-center">
         <ListGroup.Item
           key="edit"
           action
-          onClick={() =>
+          onClick={() => {
+            // 수정하기 위해서 review 혹은 review id가 필요
+            // review list -> ellipsis 클릭할 때 (<ReviewTitle /> 내부에서) data를 포함시켜서 건내준다
+            // 받은 정보 + 여기서 필요한 정보를 추가해서 보내준다
+            console.log(modalVisible.data);
             setModalVisible({
               ...modalVisible,
               type: MODAL_TYPE.editReview,
-            })
-          }
+              // ActionSelector -> 실제 수정 가능한 모달 창으로 이동
+              // <EditReview />
+            });
+          }}
         >
           수정
         </ListGroup.Item>
@@ -87,7 +99,6 @@ const ActionSelectorModal = () => {
           action
           className="delete"
           onClick={() => {
-            // edit인지 delete인지 판단하는 로직 필요할 수도 ??
             if (!modalVisible.data.commentId && !modalVisible.data.reviewId) {
               // 어떤 로직으로 들어온 건지 찾아서 에러메세지 띄워주기
               alert("아무 정보가 없음. 지우거나 수정 불가");
@@ -106,7 +117,7 @@ const ActionSelectorModal = () => {
           삭제
         </ListGroup.Item>
         <ListGroup.Item
-          key="cancel"
+          key="cancel" // to do: key값 필요함 ??
           action
           onClick={() => {
             setModalVisible({ type: null, isVisible: false, data: null });

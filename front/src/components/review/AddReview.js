@@ -115,6 +115,8 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
                   <DragAndDropnPreview
                     preview={preview}
                     setPreview={setPreview}
+                    review={review}
+                    setReview={setReview}
                   />
                 </Col>
                 {/* 리뷰 제목, 내용에 대한 인풋 */}

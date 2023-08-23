@@ -65,6 +65,7 @@ const Reviews = ({ reviews, setReviews }) => {
       {modalVisible.type === MODAL_TYPE.floatingReview && (
         <Modal show={true} centered>
           <FloatingReview />
+          {/* to do: Modal은 FloatingReview 내부로 옮겨도 될 듯 */}
         </Modal>
       )}
       {/* 수정하기 폼 모달 띄우기 */}
