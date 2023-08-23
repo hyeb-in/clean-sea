@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, FormControl, Button, Modal } from "react-bootstrap";
+import { Row, FormControl, Button, Modal, Card } from "react-bootstrap";
 import * as Api from "../../Api";
 
 const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }) => {
@@ -48,31 +48,33 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
   return (
     <>
       <Row>
-        <h5>
-          {isEditing
-            ? <FormControl type="text" value={editedTravel.beachId} onChange={e => setEditedTravel({ ...editedTravel, beachId: e.target.value })} />
-            : travelData.beachId
-          }
-        </h5>
-        <p>
-          {isEditing
-            ? <FormControl type="text" value={editedTravel.date} onChange={e => setEditedTravel({ ...editedTravel, date: new Date(e.target.value) })} />
-            : travelData.date
-          }
-        </p>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-          {isEditing ? (
-            <>
+        {!isEditing && (
+          <Card style={{ width: '100%', marginBottom: '15px' }}>
+            <Card.Body>
+              <Card.Title>{travelData.beachId}</Card.Title>
+              <Card.Text>{travelData.date}</Card.Text>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <Button variant="link" onClick={() => setIsEditing(true)}>편집</Button>
+                <Button variant="link" onClick={handleShowDeleteModal}>삭제</Button>
+              </div>
+            </Card.Body>
+          </Card>
+        )}
+
+        {isEditing && (
+          <>
+            <h5>
+              <FormControl type="text" value={editedTravel.beachId} onChange={e => setEditedTravel({ ...editedTravel, beachId: e.target.value })} />
+            </h5>
+            <p>
+              <FormControl type="text" value={editedTravel.date} onChange={e => setEditedTravel({ ...editedTravel, date: new Date(e.target.value) })} />
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
               <Button variant="link" onClick={() => setIsEditing(false)}>취소</Button>
               <Button variant="link" onClick={handleUpdateTravel}>업데이트</Button>
-            </>
-          ) : (
-            <>
-              <Button variant="link" onClick={() => setIsEditing(true)}>편집</Button>
-              <Button variant="link" onClick={handleShowDeleteModal}>삭제</Button>
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
 
         <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
           <Modal.Header closeButton>
