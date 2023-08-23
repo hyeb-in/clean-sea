@@ -12,7 +12,7 @@ const commentSchema = new Schema<IComment>(
     {
         postId : {
             type : Schema.Types.ObjectId,
-            ref : 'Post',
+            ref : 'Review',
             required : true,
         },
         userId : {
@@ -38,5 +38,5 @@ const commentSchema = new Schema<IComment>(
     },
 );
 
-const CommentModel = model<IComment>('comment', commentSchema);
+const CommentModel = model<IComment>('Comment', commentSchema);
 export { CommentModel, IComment };
