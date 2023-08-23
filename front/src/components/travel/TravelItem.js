@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Row, FormControl, Button, Modal, Card } from "react-bootstrap";
+import { FormControl, Button, Modal, Card, Col } from "react-bootstrap";
 import * as Api from "../../Api";
 
-const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }) => {
+const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast, travelImage }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -45,19 +45,27 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
     handleCloseDeleteModal();
   };
 
+  // 기본 이미지
+  const defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+
   return (
     <>
-      <Row>
+      <div className="row g-0">
         {!isEditing && (
           <Card style={{ width: '100%', marginBottom: '15px' }}>
-            <Card.Body>
-              <Card.Title>{travelData.beachId}</Card.Title>
-              <Card.Text>{travelData.date}</Card.Text>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                <Button variant="link" onClick={() => setIsEditing(true)}>편집</Button>
-                <Button variant="link" onClick={handleShowDeleteModal}>삭제</Button>
-              </div>
-            </Card.Body>
+            <Col md={2}>
+              <Card.Img src={travelImage || defaultImage} alt="travelImage" />
+            </Col>
+            <Col md={8}>
+              <Card.Body>
+                <Card.Title>{travelData.beachId}</Card.Title>
+                <Card.Text>{travelData.date}</Card.Text>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                  <Button variant="link" onClick={() => setIsEditing(true)}>편집</Button>
+                  <Button variant="link" onClick={handleShowDeleteModal}>삭제</Button>
+                </div>
+              </Card.Body>
+            </Col>
           </Card>
         )}
 
@@ -86,7 +94,7 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
             <Button variant="danger" onClick={handleDeleteClick}>삭제</Button>
           </Modal.Footer>
         </Modal>
-      </Row>
+      </div>
     </>
   );
 };
