@@ -1,17 +1,16 @@
-import React, { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ActionSelectorModal from "../common/ActionSelectorModal";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container } from "react-bootstrap";
 import Avatar from "../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
-import { EditingDataContext, UserStateContext } from "../../App";
+import { ModalVisibleContext, UserStateContext } from "../../App";
+import { MODAL_ACTION, MODAL_TYPE } from "../../constants";
 
-const ReviewTitle = ({ children, review, setReviews, className }) => {
+const ReviewTitle = ({ children, review }) => {
   const navigate = useNavigate();
-  const { setEditingData } = useContext(EditingDataContext);
   const { user: loggedInUser } = useContext(UserStateContext);
-  const [isActionModalVisible, setIsActionModalVisible] = useState(false);
+  const { setModalVisible } = useContext(ModalVisibleContext);
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
 
   return (
@@ -31,24 +30,19 @@ const ReviewTitle = ({ children, review, setReviews, className }) => {
           <Button
             variant="link"
             className="black"
-            onClick={() => {
-              setIsActionModalVisible(true);
-              setEditingData(review);
-            }}
+            onClick={() =>
+              setModalVisible({
+                type: MODAL_TYPE.actionSelector,
+                isVisible: true,
+                data: {
+                  reviewId: review._id,
+                },
+              })
+            }
           >
             <FontAwesomeIcon icon={faEllipsis} />
           </Button>
         )}
-        {/* '수정, 삭제' 선택하는 모달 창 */}
-        <ActionSelectorModal
-          show={isActionModalVisible}
-          reviewId={review?._id}
-          authorId={review?.authorId}
-          handleClose={() => setIsActionModalVisible(false)}
-          isActionModalVisible={isActionModalVisible}
-          setIsActionModalVisible={setIsActionModalVisible}
-          setReviews={setReviews}
-        />
       </Col>
       {children && (
         <Col xs="auto" className="flex-row-center-center p-4">

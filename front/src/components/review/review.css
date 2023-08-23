@@ -27,6 +27,39 @@
 .comment__title {
   margin-right: 10px;
 }
+.comment__form {
+  /* display: flex;
+  flex-direction: column; */
+  position: relative;
+}
 .comment__content {
   color: grey;
+}
+.comment__input {
+  background-color: none;
+  border: none;
+  /* Remove outline */
+  outline: none;
+  /* Reset padding and margin */
+  padding: 0;
+  margin: 0;
+  /* Reset background */
+  background: none;
+  /* Reset font styles */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  /* Reset other styles */
+  color: inherit;
+  line-height: inherit;
+  width: 100%;
+  border-bottom: 1px solid gray;
+  padding: 5px;
+  margin: 10px;
+}
+.comment__button {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  border: none;
 }

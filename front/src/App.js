@@ -11,41 +11,41 @@ import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
 import Footer from "./components/common/Footer";
 import NavBar from "./components/common/NavBar";
-import Reviews from "./pages/Reviews";
-import * as Api from "./Api";
+import Reviews from "./components/review/Reviews";
 import { loginReducer } from "./Reducer";
 import "./Main.css";
 import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
-import ReviewForm from "./components/review/ReviewForm";
+import AddReview from "./components/review/AddReview";
 import PageNotFound from "./pages/PageNotFound";
-import ToastWrapper from "./components/common/ToastWrapper";
 import ResponseIndicator from "./components/common/ResponseIndicator";
 import axios from "axios";
-import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from "./constants";
+import * as Api from "./Api";
+import { MODAL_TYPE } from "./constants";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
-export const UploadFormContext = createContext(false);
-export const EditFormContext = createContext(false);
-export const EditingDataContext = createContext(null);
-export const IsReviewModalVisibleContext = createContext(null);
 export const HandlerEnabledContext = createContext(null);
 export const ModalOptionContext = createContext(null);
+export const ModalVisibleContext = createContext(null);
 
 function App() {
-  // const [tastMsg, setToastMsg] = useState("");
   const [isHandlerEnabled, setIsHandlerEnabled] = useState(true);
   const [modalOptions, setModalOptions] = useState({
     state: false,
     description: null,
     title: null,
   });
-  // 모든 요청에 isHandlerEnabled를 함께
+  const [modalVisible, setModalVisible] = useState({
+    type: null,
+    isVisible: false,
+    data: null,
+  });
+  // 모든 요청에 isHandlerEnabled(상태 관리)를 함께 보낸다
   axios.interceptors.request.use((config) => {
     if (config.isHandlerEnabled) {
-      // setToastMsg("Sending Request");
+      console.log("from App.js REQ.use isHandlerEnabled", isHandlerEnabled);
     }
     return config;
   });
@@ -53,9 +53,12 @@ function App() {
   axios.interceptors.response.use(
     (response) => {
       if (response.config.isHandlerEnabled) {
+        console.log(
+          `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`
+        );
         setModalOptions({
           state: true,
-          description: `Request done successfully: ${response.config.url}`,
+          description: `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`,
           title: "Request succeeded!",
         });
       }
@@ -64,8 +67,9 @@ function App() {
     (error) => {
       // 서버 에러 -> 인터셉터 -> 유저에게 노출
       // to do: 에러 핸들링 세분화 작업
-      if (!error) return;
+      // if (!error) return;
       if (error.config.isHandlerEnabled) {
+        console.log("from app.js, ", isHandlerEnabled);
         setModalOptions({
           state: true,
           description: `Unfortunately error happened during request: ${error.config.url}`,
@@ -82,10 +86,6 @@ function App() {
   });
 
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
-  const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
-  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
-  const [editingData, setEditingData] = useState(null);
-  const [isReviewModalVisible, setIsReviewModalVisible] = useState(false);
 
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
@@ -102,7 +102,7 @@ function App() {
   const fetchCurrentUser = async () => {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
-      const res = await axios.get("/users/current");
+      const res = await Api.get("users/current");
       const currentUser = res.data;
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
       dispatch({
@@ -127,82 +127,55 @@ function App() {
   }
 
   return (
-    <HandlerEnabledContext.Provider
-      value={{ isHandlerEnabled, setIsHandlerEnabled }}
-    >
-      <ModalOptionContext.Provider value={{ modalOptions, setModalOptions }}>
-        <UploadFormContext.Provider
-          value={{ isUploadFormVisible, setIsUploadFormVisible }}
-        >
-          <EditFormContext.Provider
-            value={{ isEditFormVisible, setIsEditFormVisible }}
+    // to do: 구조.................?
+    <UserStateContext.Provider value={userState}>
+      <HandlerEnabledContext.Provider
+        value={{ isHandlerEnabled, setIsHandlerEnabled }}
+      >
+        <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
+          <ModalOptionContext.Provider
+            value={{ modalOptions, setModalOptions }}
           >
-            <EditingDataContext.Provider
-              value={{ editingData, setEditingData }}
-            >
-              <DispatchContext.Provider value={dispatch}>
-                <UserStateContext.Provider value={userState}>
-                  <IsReviewModalVisibleContext.Provider
-                    value={{ isReviewModalVisible, setIsReviewModalVisible }}
-                  >
-                    <Interceptor>
-                      {!is404Page && <NavBar />}
-                      {(isUploadFormVisible || isEditFormVisible) && (
-                        <ReviewForm
-                          headerTitle={
-                            isUploadFormVisible
-                              ? "새 게시물 작성하기"
-                              : "게시물 수정하기"
-                          }
-                          reviews={reviews}
-                          setReviews={setReviews}
-                        />
-                      )}
-                      <Routes>
-                        <Route path="/" exact element={<Main />} />
-                        <Route path="/login" exact element={<Login />} />
-                        <Route path="/signup" exact element={<SignUp />} />
-                        <Route
-                          path="/users/:id"
-                          exact
-                          element={<MyProfile />}
-                        />
-                        <Route path="/search" exact element={<Search />} />
-                        <Route
-                          path="/reviews"
-                          exact
-                          element={
-                            <Reviews
-                              reviews={reviews}
-                              setReviews={setReviews}
-                            />
-                          }
-                        />
-                        <Route path="/graph" exact element={<Graph />} />
-                        {/* 404 페이지 */}
-                        <Route path="*" element={<PageNotFound />} />
-                      </Routes>
-                      {/* {toast && (
-                        <ToastWrapper
-                          toast={toast}
-                          onClose={() => setToast(null)}
-                        />
-                      )} */}
-
-                      <ResponseIndicator
-                        modalOptions={modalOptions}
-                        setModalOptions={setModalOptions}
-                      />
-                      {!is404Page && <Footer />}
-                    </Interceptor>
-                  </IsReviewModalVisibleContext.Provider>
-                </UserStateContext.Provider>
-              </DispatchContext.Provider>
-            </EditingDataContext.Provider>
-          </EditFormContext.Provider>
-        </UploadFormContext.Provider>
-      </ModalOptionContext.Provider>
-    </HandlerEnabledContext.Provider>
+            <DispatchContext.Provider value={dispatch}>
+              <Interceptor>
+                {!is404Page && <NavBar />}
+                {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
+                {modalVisible.isVisible &&
+                  modalVisible.type === MODAL_TYPE.addReview && (
+                    <AddReview
+                      headerTitle="새 게시물 작성하기"
+                      reviews={reviews}
+                      setReviews={setReviews}
+                    />
+                  )}
+                <Routes>
+                  <Route path="/" exact element={<Main />} />
+                  <Route path="/login" exact element={<Login />} />
+                  <Route path="/signup" exact element={<SignUp />} />
+                  <Route path="/users/:id" exact element={<MyProfile />} />
+                  <Route path="/search" exact element={<Search />} />
+                  <Route
+                    path="/reviews"
+                    exact
+                    element={
+                      <Reviews reviews={reviews} setReviews={setReviews} />
+                    }
+                  />
+                  <Route path="/graph" exact element={<Graph />} />
+                  {/* 404 페이지 */}
+                  <Route path="*" element={<PageNotFound />} />
+                </Routes>
+                <ResponseIndicator
+                  modalOptions={modalOptions}
+                  setModalOptions={setModalOptions}
+                />
+                {!is404Page && <Footer />}
+              </Interceptor>
+            </DispatchContext.Provider>
+          </ModalOptionContext.Provider>
+        </ModalVisibleContext.Provider>
+      </HandlerEnabledContext.Provider>
+    </UserStateContext.Provider>
   );
 }
 

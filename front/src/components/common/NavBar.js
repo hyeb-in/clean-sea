@@ -3,6 +3,7 @@ import {
   UserStateContext,
   DispatchContext,
   UploadFormContext,
+  ModalVisibleContext,
 } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,12 +18,13 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Avatar from "./Avatar";
+import { MODAL_TYPE } from "../../constants";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
-  const { setIsUploadFormVisible } = useContext(UploadFormContext);
+  const { setModalVisible } = useContext(ModalVisibleContext);
   const isLogin = !!loggedInUser;
 
   const logout = () => {
@@ -71,7 +73,15 @@ const NavBar = () => {
 
             {isLogin ? (
               <>
-                <Nav.Link onClick={() => setIsUploadFormVisible(true)}>
+                <Nav.Link
+                  onClick={() =>
+                    setModalVisible({
+                      type: MODAL_TYPE.addReview,
+                      isVisible: true,
+                      data: null,
+                    })
+                  }
+                >
                   <OverlayTrigger
                     placement="bottom"
                     overlay={<Tooltip id="upload">업로드</Tooltip>}
