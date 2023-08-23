@@ -1,27 +1,38 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, Container } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import Avatar from "../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { ModalVisibleContext, UserStateContext } from "../../App";
 import { MODAL_TYPE } from "../../constants";
 
-const ReviewTitle = ({ children, review }) => {
+const ReviewTitle = ({ children, review, onEditReview }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { setModalVisible } = useContext(ModalVisibleContext);
+  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
-  console.log(review);
+
   return (
-    <Container className="d-flex align-items-center justify-space-between link">
-      <Col sm="auto" onClick={() => navigate(`/users/${review?.author}`)}>
-        {/* to do: 유저 프로필 모달로 보여주기 */}
-        {/* to do: get user's info -> avatar url */}
-        <Avatar width="50" />
-      </Col>
-      <Col xs="10" className="d-flex align-items-center px-2">
-        {review?.userName}
+    <Container className="d-flex align-items-center justify-content-between link px-0">
+      <Col sm="auto">
+        <Row>
+          <Col
+            sm="auto"
+            className="px-0"
+            onClick={() => navigate(`/users/${review?.author}`)}
+          >
+            {/* to do: 유저 프로필 모달로 보여주기 */}
+            {/* to do: get user's info -> avatar url */}
+            <Avatar width="40" />
+          </Col>
+          <Col
+            xs="10"
+            className="d-flex align-items-center text-author editForm__author"
+          >
+            {review?.userName}
+          </Col>
+        </Row>
       </Col>
       {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
       {/* 클릭하면 수정, 삭제 선택하는 모달 창을 띄운다 */}
@@ -41,7 +52,20 @@ const ReviewTitle = ({ children, review }) => {
               })
             }
           >
-            <FontAwesomeIcon icon={faEllipsis} />
+            {/* 게시글 수정 화면이 아니라면 ... 대신 '완료'버튼을 보여준다 */}
+            {modalVisible.type !== MODAL_TYPE.editReview && (
+              <FontAwesomeIcon icon={faEllipsis} />
+            )}
+            {modalVisible.type === MODAL_TYPE.editReview && (
+              <Button
+                onClick={onEditReview}
+                variant="outline-primary"
+                type="submit"
+                className="submit-btn mx-0"
+              >
+                완료
+              </Button>
+            )}
           </Button>
         )}
       </Col>

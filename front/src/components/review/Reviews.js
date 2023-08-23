@@ -70,7 +70,11 @@ const Reviews = ({ reviews, setReviews }) => {
       )}
       {/* 수정하기 폼 모달 띄우기 */}
       {modalVisible.type === MODAL_TYPE.editReview && (
-        <EditReview headerTitle="수정하기" setReviews={setReviews} />
+        <EditReview
+          headerTitle="수정하기"
+          reviews={reviews}
+          setReviews={setReviews}
+        />
       )}
     </>
   );

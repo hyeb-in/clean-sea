@@ -103,7 +103,13 @@ position: TOAST_POPUP_POSITION.middleCenter,
           onChange={(e) => setReview({ ...review, content: e.target.value })}
         />
       </Form.Group>
-      <small className={content.length < 300 ? "text-muted" : "delete"}>
+      <small
+        className={
+          content.length < 300
+            ? "text-muted flex-justify-end"
+            : "delete flex-justify-end"
+        }
+      >
         {content ? content.length : "0"}/300
       </small>
     </Form>

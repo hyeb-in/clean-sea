@@ -1,8 +1,15 @@
+/* 상태 표시해주는 모달창 --> to do: 외부로 뺄 것 */
 .noReviewIndicator {
   min-height: 400px;
   display: flex;
   align-items: center;
   justify-items: center;
+}
+.indicator-success {
+  width: 70px;
+  height: 70px;
+  color: blue;
+  padding: 50px;
 }
 
 /* review form */
@@ -14,13 +21,11 @@
 .delete {
   color: red;
 }
-.indicator-success {
-  width: 70px;
-  height: 70px;
-  color: blue;
-  padding: 50px0;
+.editForm__author {
+  width: auto;
 }
 
+/* 커맨트 */
 .comment__author {
   font-weight: 600;
 }
