@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
+import { errorGenerator } from "../utils/errorGenerator";
 import { IRequest, IUser } from "user";
 
 export const jwtAuthentication = async (
@@ -12,19 +13,27 @@ export const jwtAuthentication = async (
       "jwt",
       { session: false },
       (error: Error, user: IUser, info: any) => {
-        if (error) throw error;
-        if (info) {
-          if (info.message === "jwt expired")
-            return res.status(401).json("토큰 만료");
-
-          if (info.message === "No auth token")
-            return res.status(401).json("토큰 없음");
-
-          if (info.message === "user not exist")
-            return res.status(404).json("User Not Found!");
+        if (error) {
+          throw errorGenerator(error.message, 403);
         }
-          req.user = user;
-          next();
+        if (info) {
+          if (info.message === "jwt expired") {
+            const err = errorGenerator("토큰 만료", 401);
+            next(err);
+          }
+
+          if (info.message === "No auth token") {
+            const err = errorGenerator("토큰 없음", 401);
+            next(err);
+          }
+
+          if (info.message === "user not exist") {
+            const err = errorGenerator("User Not Found!", 404);
+            next(err);
+          }
+        }
+        req.user = user;
+        next();
       }
     )(req, res, next);
   } catch (error) {

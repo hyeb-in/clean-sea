@@ -3,7 +3,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { findUserByEmail, findUserById } from "../db/models/User";
 import bcrypt from "bcrypt";
-import { IUser } from "user";
+//import { errorGenerator } from "../utils/errorGenerator";
 
 const localOptions = {
   usernameField: "email",
@@ -14,9 +14,8 @@ const localCallback = async (email: string, password: string, done: any) => {
   try {
     const user = await findUserByEmail(email);
     if (!user) {
-      return done(null, false, { message: "회원이 존재하지 않습니다." });
+      return done(null, false, { message: "회원이 존재하지 않습니다.!" });
     }
-    bcrypt.genSalt;
 
     const isMatched = await bcrypt.compare(password, user.password);
 
@@ -24,8 +23,8 @@ const localCallback = async (email: string, password: string, done: any) => {
       return done(null, false, { message: "비밀번호가 일치하지 않습니다." });
     }
     return done(null, user);
-  } catch (err) {
-    done(err);
+  } catch (error) {
+    done(error);
   }
 };
 
@@ -44,9 +43,8 @@ const jwtCallback = async (payload: any, done: any) => {
     }
 
     return done(null, user);
-  } catch (err) {
-    console.error(err);
-    done(err);
+  } catch (error) {
+    done(error);
   }
 };
 
