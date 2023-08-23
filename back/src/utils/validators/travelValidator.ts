@@ -7,13 +7,13 @@ export const postTravelValidator = async (
     res : Response,
     next : NextFunction
 ) => {
-    const { date } = req.body;
+    const { author, beachId, date } = req.body;
     const schema = joi.object({
         author : joi.required(),
         beachId: joi.required(),
         date : joi.date().iso().required(),
     });
-    const { value, error } = schema.validate({ date });
+    const { value, error } = schema.validate({ author, beachId, date });
 
     if (error) {
         next(error.details[0].message);
@@ -27,12 +27,12 @@ export const putTravelValidator = async (
     res : Response,
     next : NextFunction
 ) => {
-    const { date } = req.body;
+    const { beachId, date } = req.body;
     const schema = joi.object({
         beachId: joi.required(),
         date : joi.date().iso().required(),
     });
-    const { value, error } = schema.validate({ date });
+    const { value, error } = schema.validate({ beachId, date });
 
     if (error) {
         next(error.details[0].message);

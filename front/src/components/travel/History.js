@@ -5,6 +5,7 @@ import {
 import * as Api from "../../Api";
 import { UserStateContext } from "../../App";
 import TravelItem from './TravelItem';
+import SearchInput from "./SearchInput";
 
 const History = ({ displayToast }) => {
   const [travels, setTravels] = useState([]);
@@ -15,6 +16,10 @@ const History = ({ displayToast }) => {
     beachId: '',
     date: ''
   });
+
+  const handleBeachIdChange = (selectedId) => {
+    setNewTravel({ ...newTravel, beachId: selectedId });
+  };
 
   const handleModalClose = () => setShowModal(false);
   const handleModalOpen = () => setShowModal(true);
@@ -32,6 +37,7 @@ const History = ({ displayToast }) => {
     try {
       const travelData = { ...newTravel, date: new Date(newTravel.date) };
       await Api.post('travels/register', travelData);
+      displayToast('방문 로그 등록 성공.');
     } catch (error) {
       displayToast('방문 로그 등록 실패.');
     }
@@ -90,12 +96,7 @@ const History = ({ displayToast }) => {
             <Modal.Title>새 방문 로그 작성</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <FormControl
-              type="text"
-              placeholder="해수욕장 id"
-              value={newTravel.beachId}
-              onChange={(e) => setNewTravel({ ...newTravel, beachId: e.target.value })}
-            />
+            <SearchInput onIdSelected={handleBeachIdChange} />
             <FormControl
               type="date"
               className="mt-2"
