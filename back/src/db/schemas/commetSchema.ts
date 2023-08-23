@@ -5,14 +5,14 @@ interface IComment extends Document {
     userId : mongoose.Types.ObjectId;
     content : string;
     userName : string;
-    date : Date;
+    date? : Date;
 }
 
 const commentSchema = new Schema<IComment>(
     {
         postId : {
             type : Schema.Types.ObjectId,
-            ref : 'Post',
+            ref : 'Review',
             required : true,
         },
         userId : {
@@ -30,7 +30,7 @@ const commentSchema = new Schema<IComment>(
         },
         date : {
             type : Date,
-            required : true,
+            default : Date.now,
         },
     },
     {
@@ -38,5 +38,5 @@ const commentSchema = new Schema<IComment>(
     },
 );
 
-const CommentModel = model<IComment>('comment', commentSchema);
+const CommentModel = model<IComment>('Comment', commentSchema);
 export { CommentModel, IComment };

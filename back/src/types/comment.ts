@@ -5,7 +5,7 @@ interface IComment extends Document {
     userId : mongoose.Types.ObjectId;
     content : string;
     userName : string;
-    date : Date;
+    date? : Date;
 }
 
 export { IComment };
