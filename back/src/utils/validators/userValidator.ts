@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express";
 import joi from "joi";
 import { IRequest } from "user";
+import { errorGenerator } from "../errorGenerator";
 
 const nameReg: RegExp = /^[a-zA-Z가-힣]+$/;
 const passwordReg: RegExp = /^[a-zA-Z0-9!@#;:'-_=+,./?]+$/;
@@ -20,7 +21,8 @@ export const validateSignUp = async (
   const { value, error } = schema.validate({ name, email, password });
 
   if (error) {
-    next(error.details[0].message);
+    const err = errorGenerator(error.details[0].message, 400);
+    next(err);
   }
 
   next();
@@ -41,7 +43,8 @@ export const validateLogin = (
   const { value, error } = schema.validate({ email, password });
 
   if (error) {
-    next(error.details[0].message);
+    const err = errorGenerator(error.details[0].message, 400);
+    next(err);
   }
 
   next();
@@ -64,7 +67,8 @@ export const validateUpdateUser = (
   const { value, error } = schema.validate(updateValue);
   console.log(value);
   if (error) {
-    next(error);
+    const err = errorGenerator(error.details[0].message, 400);
+    next(err);
   }
   next();
 };
