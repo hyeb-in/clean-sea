@@ -68,7 +68,7 @@ function errorMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  logger.error(error.message);
+  logger.error(error.message + "statusCode" + error.statusCode);
   res.status(error.statusCode).send(error.message);
 }
 

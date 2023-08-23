@@ -21,15 +21,13 @@ export const signUpUser = async (
   next: NextFunction
 ) => {
   try {
-    //throw new Error("에러야");
     const { name, email, password } = req.body;
 
     const newUser = await createUserService(name, email, password);
 
     res.status(200).json(newUser);
   } catch (error) {
-    const err = errorGenerator(error.message, 400);
-    next(err);
+    next(error);
   }
 };
 
@@ -43,7 +41,6 @@ export const getRandomUser = async (
 ) => {
   try {
     const randomUser = await getRandomUserService();
-    console.log(randomUser);
 
     res.status(200).json(randomUser);
   } catch (error) {
@@ -115,8 +112,7 @@ export const resetPassword = async (
     const { email } = req.body;
     const user = await findUserByEmail(email);
 
-    if (!user) throw errorGenerator("해당 이메일은 존재하지 않습니다.", 400);
-
+    if (!user) throw errorGenerator("해당 이메일은 존재하지 않습니다.", 403);
     const userId = user._id;
     const resetedUser = await resetPasswordService(userId, email);
 

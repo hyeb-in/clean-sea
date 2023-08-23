@@ -21,7 +21,7 @@ userRouter.get("/tokentest", jwtAuthentication);
 
 userRouter.get("/current", jwtAuthentication, getUser);
 
-userRouter.get("/randomlist", getRandomUser);
+userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
 
