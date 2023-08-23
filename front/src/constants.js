@@ -19,37 +19,24 @@ export const colors = {
 };
 export const FOOTER_HEIGHT = "200";
 
-// 서버 에러 상태코드
-// 403 : 인증 에러 권한 없음
-// 400 : 클라이언트가 잘못된 값 전달
-// 500 : 서버 에러
-
-// 상태코드 사용할 수도 있을 거 같은데
+// 프론트엔드 측 오류, 상태 알림 팝업
 export const TOAST_POPUP_STATUS = {
   error: {
-    // code: '',
-    title: "Oops!",
     bgColor: colors.red,
     color: colors.white,
     icon: <FontAwesomeIcon icon={faXmark} />,
   },
   alert: {
-    // code:'',
-    title: "Alert!",
     bgColor: colors.yellow,
     color: colors.black,
     icon: <FontAwesomeIcon icon={faTriangleExclamation} />,
   },
   success: {
-    // code:400,
-    title: "",
     bgColor: colors.green,
     color: colors.white,
     icon: <FontAwesomeIcon icon={faCheck} />,
   },
   info: {
-    // code: 200,
-    title: "Success!",
     bgColor: colors.blue,
     color: colors.white,
     icon: <FontAwesomeIcon icon={faCircleExclamation} />,

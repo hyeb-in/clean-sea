@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { ListGroup, Modal } from "react-bootstrap";
 import * as Api from "../../Api";
 import { EditFormContext, UserStateContext } from "../../App";
-import ToastWrapper from "./ToastWrapper";
 
 /**
  * @param "취소, 수정, 삭제" 등 유저 입력을 받는 모달창
@@ -17,7 +16,6 @@ const ActionSelectorModal = ({
 }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { setIsEditFormVisible } = useContext(EditFormContext);
-  // const [toastMsg, setToastMsg] = useState("");
 
   // 결과 토스트 팝업 알림: 삭제 성공 혹은 에러
   const deleteReview = async (reviewId) => {

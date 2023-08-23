@@ -36,11 +36,11 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const [selectedReview, setSelectedReview] = useState(false);
   const [comment, setComment] = useState("");
-  const [toast, setToast] = useState({
-    text: "",
-    position: null,
-    status: null,
-  });
+  // const [toast, setToast] = useState({
+  //   text: "",
+  //   position: null,
+  //   status: null,
+  // });
   //  text, position, status
   // get user avatar >> get 'users/id' ?
 
@@ -60,22 +60,22 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
     try {
       if (!loggedInUser) {
         // to do: 유저 없음 ?? 로그인화면으로 이동
-        return setToast({
-          text: "로그인 한 유저만 작성할 수 있습니다",
-          status: TOAST_POPUP_STATUS.alert,
-          position: TOAST_POPUP_POSITION.middleCenter,
-        });
+        // return setToast({
+        //   text: "로그인 한 유저만 작성할 수 있습니다",
+        //   status: TOAST_POPUP_STATUS.alert,
+        //   position: TOAST_POPUP_POSITION.middleCenter,
+        // });
       }
       // 글자수 제한: 1글자이상 100자이하
       if (!isValid) {
-        return setToast({
-          text:
-            comment === ""
-              ? "1글자 이상 입력해주세요"
-              : "100자 이하로 입력해주세요",
-          status: TOAST_POPUP_STATUS.alert,
-          position: TOAST_POPUP_POSITION.middleCenter,
-        });
+        // return setToast({
+        //   text:
+        //     comment === ""
+        //       ? "1글자 이상 입력해주세요"
+        //       : "100자 이하로 입력해주세요",
+        //   status: TOAST_POPUP_STATUS.alert,
+        //   position: TOAST_POPUP_POSITION.middleCenter,
+        // });
       }
       const res = await Api.post(`comments/${reviewId}`, { content: comment });
       console.log(res);

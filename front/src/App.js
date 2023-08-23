@@ -35,7 +35,7 @@ export const HandlerEnabledContext = createContext(null);
 export const ModalOptionContext = createContext(null);
 
 function App() {
-  const [toast, setToast] = useState(null);
+  // const [tastMsg, setToastMsg] = useState("");
   const [isHandlerEnabled, setIsHandlerEnabled] = useState(true);
   const [modalOptions, setModalOptions] = useState({
     state: false,
@@ -45,11 +45,7 @@ function App() {
   // 모든 요청에 isHandlerEnabled를 함께
   axios.interceptors.request.use((config) => {
     if (config.isHandlerEnabled) {
-      setToast({
-        text: "Sending Request",
-        position: TOAST_POPUP_POSITION.bottomEnd,
-        status: TOAST_POPUP_STATUS.success,
-      });
+      // setToastMsg("Sending Request");
     }
     return config;
   });
@@ -186,14 +182,13 @@ function App() {
                         {/* 404 페이지 */}
                         <Route path="*" element={<PageNotFound />} />
                       </Routes>
-                      {toast && (
+                      {/* {toast && (
                         <ToastWrapper
                           toast={toast}
                           onClose={() => setToast(null)}
                         />
-                      )}
-                      {/* 서버에서 에러나 상태 관련 메세지를 받아서 유저에게
-                    모달창으로 알려준다 */}
+                      )} */}
+
                       <ResponseIndicator
                         modalOptions={modalOptions}
                         setModalOptions={setModalOptions}

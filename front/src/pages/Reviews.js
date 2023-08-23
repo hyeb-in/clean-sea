@@ -13,7 +13,7 @@ const Reviews = ({ reviews, setReviews }) => {
     HandlerEnabledContext
   );
   const [isLoaded, setIsLoaded] = useState(false);
-  const { toast, setToast } = useState();
+  // const { toast, setToast } = useState();
 
   const [showingReview, setShowingReview] = useState(null);
   // const { isReviewModalVisible } = useContext(IsReviewModalVisibleContext);
@@ -23,13 +23,7 @@ const Reviews = ({ reviews, setReviews }) => {
       try {
         const res = await Api.get("reviews/reviewList");
         // to do: 서버에러 -> 모달창으로 바꾸기
-        if (!res) {
-          return setToast({
-            text: "서버 에러 ",
-            status: TOAST_POPUP_STATUS.alert,
-            position: TOAST_POPUP_POSITION.middleCenter,
-          });
-        }
+
         setIsHandlerEnabled(true);
         setReviews(res.data);
         setIsLoaded(true);
@@ -38,7 +32,7 @@ const Reviews = ({ reviews, setReviews }) => {
       }
     };
     fetchData();
-  }, [setToast, setReviews, isHandlerEnabled, setIsHandlerEnabled]);
+  }, [setIsHandlerEnabled, setReviews]);
 
   return (
     <>
@@ -63,7 +57,7 @@ const Reviews = ({ reviews, setReviews }) => {
           {isLoaded && reviews?.length === 0 && <NoReviewIndicator />}
         </Row>
       </Container>
-      {toast && isHandlerEnabled && <ToastWrapper toast={toast} />}
+      {/* {toast && isHandlerEnabled && <ToastWrapper toast={toast} />} */}
     </>
   );
 };

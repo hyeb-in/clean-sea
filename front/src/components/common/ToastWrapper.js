@@ -11,15 +11,11 @@ import { Col, Container, Row, Toast, ToastContainer } from "react-bootstrap";
  * @example
  * <ToastWrapper text={text} onClose={onClose} status={TOAST_POPUP_STATUS.alert} />
  */
-const ToastWrapper = ({ toast, onClose }) => {
-  // to do: bg(부트스트랩) -> (custom css) status, text 조합으로 바꾸기
-
-  const { text, position, status } = toast;
+const ToastWrapper = ({ text, onClose, status, position }) => {
   return (
     <ToastContainer>
       <Toast
         className="toast-popup"
-        // bg={bg}
         animation={true}
         onClose={onClose}
         position={position}
@@ -31,7 +27,10 @@ const ToastWrapper = ({ toast, onClose }) => {
             <Col
               xs="auto"
               className="toast-popup__icon flex-row-center-center"
-              style={{ backgroundColor: status?.bgColor, color: status?.color }}
+              style={{
+                backgroundColor: status?.bgColor,
+                color: status?.color,
+              }}
             >
               {status?.icon}
             </Col>
@@ -39,7 +38,7 @@ const ToastWrapper = ({ toast, onClose }) => {
               <Row className="toast-popup__title flex-row-center-center">
                 {status?.title}
               </Row>
-              <Row className="flex-row-center-center">{text}</Row>
+              <Row className="flex-row-center-center">{status?.text}</Row>
             </Col>
           </Row>
         </Container>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Col, Modal, Row, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,6 +20,8 @@ import * as Api from "../../Api";
 import SpinnerWrapper from "../common/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 import ConfirmModal from "../common/ConfirmModal";
+import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from "../../constants";
+
 const allowedFileTypes = ["png", "jpeg"];
 
 const MAX_FILE_COUNT = 5;
@@ -45,42 +47,48 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     title: currentFormData?.title || "",
     content: currentFormData?.content || "",
     location: currentFormData?.location || "",
-    imageUrls: currentFormData?.imageUrls || [],
+    uploadFile: currentFormData?.uploadFile || [],
+    // 서버에서 오는 값 안바뀌나 ??
   });
 
-  const {
-    title,
-    content,
-    //  location,
-    imageUrls,
-  } = review;
-  const [toastMsg, setToastMsg] = useState("");
+  const { title, content, uploadFile } = review;
+
+  // const [toast, setToast] = useState({
+  //   text: "",
+  //   position: "",
+  //   status: "",
+  // });
   const [searchTerm, setSearchTerm] = useState("");
   // const [searchResults, setSearchResults] = useState([]);
   const [currentPosition, setCurrentPosition] = useState();
-  console.log(review);
+  const [preview, setPreview] = useState(null);
+
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const fileUploaderIndicator =
-    imageUrls.length === 0 ? (
-      <DragAndDrop />
-    ) : (
-      <Button className="mb-2">
-        <FontAwesomeIcon icon={faPlus} /> 추가하기
-      </Button>
-    );
+  const fileUploaderIndicator = !preview ? (
+    <DragAndDrop />
+  ) : (
+    <Button className="mb-2">
+      <FontAwesomeIcon icon={faPlus} /> 추가하기
+    </Button>
+  );
 
   // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
+  // 이름 확인해야함
   const handleFileChange = (files) => {
+    setReview(() => ({ ...review, uploadFile: files }));
     const blobUrls = [];
-    const isFileCountValid = imageUrls.length + files.length <= MAX_FILE_COUNT;
-    if (!isFileCountValid) {
-      return setToastMsg(
-        `사진은 한번에 ${MAX_FILE_COUNT}개까지 업로드할 수 있습니다`
-      );
-    }
+    const isFileCountValid = preview?.length + files.length <= MAX_FILE_COUNT;
+    // if (!isFileCountValid) {
+    //   return alert("사진 한번에 5개까지 업로드");
+    // return setToast({
+    //   text: `사진은 한번에 ${MAX_FILE_COUNT}개까지 업로드할 수 있습니다`,
+    //   status: TOAST_POPUP_STATUS.alert,
+    //   position: TOAST_POPUP_POSITION.middleCenter,
+    // });
+    // }
     Array.prototype.forEach.apply(files, [
       (file) => {
         const blob = new Blob([file], { type: file.type });
@@ -88,30 +96,49 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         blobUrls.push(url);
       },
     ]);
-    setReview({
-      ...review,
-      imageUrls: [...imageUrls, ...blobUrls],
-    });
+    setPreview(blobUrls);
+    setReview({ title, content, uploadFile: files });
   };
+
   const handleSubmit = async (e) => {
+    //로그인 안했으면 submit 자체를 막아야 함
+    // submit 눌렀을 때 바로 상태 표시해주기 (토스트 팝업)
+    console.log(uploadFile);
     e.preventDefault();
     // to do: 백엔드랑 합쳐서 확인 필요
     // 이미지 없을 경우에 빈 배열이 아니라 그냥 데이터 안넣는 걸로 ?
     if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
 
     try {
-      if (title.length < 4)
-        return setToastMsg("제목을 4글자 이상 입력해주세요");
-      if (content.length < 4)
-        return setToastMsg("내용을 4글자 이상 입력해주세요");
-      if (content.length > 300) return;
+      if (title.length < 4) {
+        return alert("글자수 길게 4 이상");
+      }
+
+      if (content.length < 4) {
+        return alert("content length 4이상");
+      }
+
+      if (content.length > 300) {
+        return alert("content length 제한");
+      }
+
+      // return setToast({
+      //   text: "제목을 4글자 이상 입력해주세요",
+      //   status: TOAST_POPUP_STATUS.alert,
+      //   position: TOAST_POPUP_POSITION.middleCenter,
+      // });
+
+      // return setToast({
+      //   text: "내용을 4글자 이상 입력해주세요",
+      //   status: TOAST_POPUP_STATUS.alert,
+      //   position: TOAST_POPUP_POSITION.middleCenter,
+      // });
 
       // POST reviews
       if (FORM_STATUS.adding) {
         setIsUploading(true);
-        const res = await Api.post("reviews/register", {
-          ...review,
-        });
+        console.log(review, "업로드 될 review 형식 <<<<");
+        const res = await Api.post("reviews/register", review);
         // 에러 메세지 안가져와지는 거 같은뎅
         if (!res.status === 400) throw new Error("업로드에 실패했습니다");
         setReviews((currentReviews) => [...currentReviews, res.data]);
@@ -121,13 +148,15 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
       if (FORM_STATUS.editing) {
         const { author: authorId } = currentFormData;
         if (loggedInUser._id !== authorId) {
-          return setToastMsg("다른사람의 게시물을 수정할 수 없습니다");
+          // return setToast({
+          //   text: "다른사람의 게시물을 수정할 수 없습니다",
+          //   status: TOAST_POPUP_STATUS.alert,
+          //   position: TOAST_POPUP_POSITION.middleCenter,
+          // });
+          return alert("다른 사람의 게시물 수정할 수 없습니다");
         }
         setIsUploading(true);
-        const res = await Api.put(`reviews/${currentFormData._id}`, {
-          title,
-          content,
-        });
+        const res = await Api.put(`reviews/${currentFormData._id}`, review);
         if (!res.status === 400) throw new Error("업로드에 실패했습니다");
         setReviews((currentReviews) =>
           currentReviews.map((review) =>
@@ -138,12 +167,13 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         );
         setIsUploadFormVisible(false);
         setEditingData(null);
-        setReview({ title: "", content: "", imageUrls: [] });
+        setReview(null);
+        setPreview(null);
       }
     } catch (error) {
       console.error(error);
       setResult(RESULT_ENUM.FAIL);
-      setToastMsg(error);
+      // to do: 모달창 띄우기
     }
     setIsUploading(false);
     setResult(RESULT_ENUM.SUCCESS);
@@ -151,23 +181,19 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
 
   useEffect(() => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
-    if (!isUploadFormVisible && !isEditFormVisible && imageUrls.length > 0) {
+    if (!isUploadFormVisible && !isEditFormVisible && preview?.length > 0) {
       return () => {
-        imageUrls?.forEach((url) => URL.revokeObjectURL(url));
+        preview?.forEach((url) => URL.revokeObjectURL(url));
       };
     }
-  }, [imageUrls, isUploadFormVisible, isEditFormVisible]);
+  }, [preview, isUploadFormVisible, isEditFormVisible]);
 
   const closeReviewFormModal = () => {
     setIsUploadFormVisible(false);
     setIsEditFormVisible(false);
     setEditingData(null);
-    setReview({
-      title: "",
-      content: "",
-      imageUrls: [],
-    });
-    setToastMsg("");
+    setReview(null);
+    // setToast(null);
     setResult(null);
   };
   // 브라우저의 Geolocation API 기능을 사용해서 사용자의 위치 정보를 불러온다
@@ -182,11 +208,23 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         },
         (error) => {
           if (error.code === 1) {
-            setToastMsg("사용자가 위치 정보 사용을 거부했습니다");
+            // setToast({
+            //   text: "사용자가 위치 정보 사용을 거부했습니다",
+            //   status: TOAST_POPUP_STATUS.alert,
+            //   position: TOAST_POPUP_POSITION.middleCenter,
+            // });
           } else if (error.code === 2) {
-            setToastMsg("브라우저가 위치 정보 사용을 지원하지 않습니다");
+            // setToast({
+            //   text: "브라우저가 위치 정보 사용을 지원하지 않습니다",
+            //   status: TOAST_POPUP_STATUS.alert,
+            //   position: TOAST_POPUP_POSITION.middleCenter,
+            // });
           } else if (error.code === 3) {
-            setToastMsg("위치 정보를 가져올 수 없습니다");
+            // setToast({
+            //   text: "위치 정보를 가져올 수 없습니다",
+            //   status: TOAST_POPUP_STATUS.alert,
+            //   position: TOAST_POPUP_POSITION.middleCenter,
+            // });
           }
         }
       );
@@ -197,7 +235,11 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
     try {
       if (searchTerm === "") return;
       if (!currentPosition) {
-        return setToastMsg("사용자 위치를 찾을 수 없습니다");
+        // return setToast({
+        //   text: "사용자 위치를 찾을 수 없습니다",
+        //   status: TOAST_POPUP_STATUS.alert,
+        //   position: TOAST_POPUP_POSITION.middleCenter,
+        // });
       }
       console.log(searchTerm, currentPosition);
     } catch (error) {
@@ -210,7 +252,6 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
   }, []);
   const isLoading = !isUploading && !result;
   const isFetched = !isUploading && result;
-
   return (
     <>
       {/* 리뷰 입력 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
@@ -232,14 +273,13 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         // to do: space bar입력시 모달창 사라짐 버그 (윈도우..? 확인하기)
       >
         {/* validation 통과하지 못했다면 toast pop-up으로 유저에게 알려줌 */}
-        {toastMsg && (
+        {/* {toast && (
           <ToastWrapper
-            onClose={() => setToastMsg("")}
-            text={toastMsg}
+            onClose={() => setToast(null)}
+            text={toast}
             position="middle-center"
-            bg="warning"
           />
-        )}
+        )} */}
 
         {/* 모달창 내부: 입력 받는 공간 */}
         {!isUploading && !result && (
@@ -259,26 +299,27 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                     maxSize={1} // 최대 2MB 크기까지 허용
                     children={fileUploaderIndicator}
                   />
-                  {imageUrls.length > 0 && (
-                    <Carousel imageUrls={imageUrls} setReview={setReview} />
+                  {preview && preview.length > 0 && (
+                    <Carousel imageUrls={preview} setPreview={setPreview} />
                   )}
                 </Col>
                 {/* 리뷰 제목, 내용에 대한 인풋 */}
                 <Col xs={5}>
-                  <Form.Group>
-                    <Form.Label>제목</Form.Label>
-                    <Form.Control
-                      as="input"
-                      size="sm"
-                      value={title}
-                      onChange={(e) =>
-                        setReview({ ...review, title: e.target.value })
-                      }
-                    />
-                  </Form.Group>
-                  {/* 사용자 위치, 검색어 기반으로 위치 추가하기 */}
-                  {/* to do: cors 문제 해결한 후에 작업 */}
-                  {/* <Form.Group>
+                  <Form onSubmit={handleSubmit} controlId="formFile">
+                    <Form.Group>
+                      <Form.Label>제목</Form.Label>
+                      <Form.Control
+                        as="input"
+                        size="sm"
+                        value={title}
+                        onChange={(e) =>
+                          setReview({ ...review, title: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                    {/* 사용자 위치, 검색어 기반으로 위치 추가하기 */}
+                    {/* to do: cors 문제 해결한 후에 작업 */}
+                    {/* <Form.Group>
                     <Form.Control
                       placeholder="위치추가 미구현"
                       as="input"
@@ -286,8 +327,12 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                       value={searchTerm}
                       onChange={(e) => {
                         if (!currentPosition)
-                          return setToastMsg(
-                            "사용자의 위치를 찾을 수 없습니다"
+                          return setToast({
+                          text: "사용자의 위치를 찾을 수 없습니다",
+            status: TOAST_POPUP_STATUS.alert,
+            position: TOAST_POPUP_POSITION.middleCenter,
+                            
+                          }
                           );
                         setSearchTerm(e.target.value);
                       }}
@@ -295,22 +340,23 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
                     />
                   </Form.Group> */}
 
-                  <Form.Group>
-                    <Form.Label>내용</Form.Label>
-                    <Form.Control
-                      rows={6}
-                      as="textarea"
-                      value={content}
-                      onChange={(e) =>
-                        setReview({ ...review, content: e.target.value })
-                      }
-                    />
-                  </Form.Group>
-                  <small
-                    className={content.length < 300 ? "text-muted" : "delete"}
-                  >
-                    {content ? content.length : "0"}/300
-                  </small>
+                    <Form.Group>
+                      <Form.Label>내용</Form.Label>
+                      <Form.Control
+                        rows={6}
+                        as="textarea"
+                        value={content}
+                        onChange={(e) =>
+                          setReview({ ...review, content: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                    <small
+                      className={content.length < 300 ? "text-muted" : "delete"}
+                    >
+                      {content ? content.length : "0"}/300
+                    </small>
+                  </Form>
                 </Col>
               </Row>
             }
@@ -345,7 +391,7 @@ const ReviewForm = ({ headerTitle, setReviews }) => {
         {/* 리뷰 내용 입력 모달창 내부 footer */}
         {!isUploading && !result && (
           <Modal.Footer className="d-flex justify-content-end">
-            <Button onClick={handleSubmit} variant="primary" type="submit">
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
               {currentFormData ? "수정" : "공유"}
             </Button>
           </Modal.Footer>
