@@ -39,6 +39,7 @@ const getAllReview = async (
   next: NextFunction
 ) => {
   try {
+    
     const allReview = await getReview();
     return sendResponseWithData(res, StatusCodes.OK, allReview);
   } catch (err) {

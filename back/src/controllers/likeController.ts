@@ -7,6 +7,7 @@ import { updateLikeCount } from "../services/likeService";
 const toggleLike = async (req : IRequest, res : Response, next : NextFunction) => {
     try{
         const userId = req.user._id;
+        console.log(req.body);
         const { targetType, targetId } = req.body;
 
         const existingLike : ILike | null = await LikeModel.findOne({userId, targetType, targetId });

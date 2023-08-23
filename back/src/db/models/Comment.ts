@@ -1,8 +1,22 @@
 import { CommentModel } from "../schemas/commetSchema";
+import { ReviewModel } from "../schemas/reviewSchema";
 import { IComment } from "../../types/comment";
 
 async function createComment(toCreate : IComment) : Promise<IComment>{
+    const { content, userName, userId, postId } = toCreate;
+
+    const review = await ReviewModel.findById(postId);
+
     const newComment = await CommentModel.create(toCreate);
+    const saveComment = await newComment.save();
+    if(review){
+        review.comments.push(saveComment._id);
+        if(review.comments.length > 3){
+            review.comments.shift();
+            review.comments.push(saveComment._id);
+        }
+        await review.save();
+    }
     const newCommentObject = newComment.toObject();
     return newCommentObject as IComment;
 }
