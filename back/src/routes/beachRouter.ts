@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { 
-  getBeachByBeachName,
+  getBeachById,
   getBeachByRegion,
   getBeaches
 } from '../controllers/beachController';
@@ -10,7 +10,7 @@ import { jwtAuthentication } from "../middlewares/authenticateJwt";
 const beachRouter = Router();
 
 beachRouter
-  .get('/beachbyname/:name', validateBeachName, jwtAuthentication, getBeachByBeachName);
+  .get('/beachbyId/:_id', validateBeachName, jwtAuthentication, getBeachById);
 
 beachRouter
   .get('/beachesbyregion/:address', validateBeachAddress, jwtAuthentication, getBeachByRegion);

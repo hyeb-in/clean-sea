@@ -1,16 +1,18 @@
-import { BeachByBeachName, BeachByRegion, Beaches } from "../db/models/Beach";
+import { BeachByBeachId, BeachByRegion, Beaches } from "../db/models/Beach";
+import { Types } from "mongoose";
 import { IBeach } from '../types/beach';
 
 // 해수욕장 명칭 하나로 가져오기
-async function getBeachByBeachNameService(name: IBeach): Promise<IBeach[]> {
-  const beachDataOne = await BeachByBeachName(name);
+async function getBeachByIdService(_id: Types.ObjectId): Promise<IBeach[]> {
+  const beachDataOne = await BeachByBeachId(_id);
   return beachDataOne;
 }
 
+
 // 지역별 가져오기
-async function getBeachByRegionService(address: IBeach): Promise<IBeach[]> {
-  const beachDataRegion = await BeachByRegion(address);
-  return beachDataRegion;
+async function getBeachByRegionService(address: string): Promise<IBeach[]> {
+  const beachData = await BeachByRegion(address);
+  return beachData;
 }
 
 // 전체 가져오기
@@ -22,7 +24,7 @@ async function getBeachesService(): Promise<IBeach[]> {
 
   // 모든 이력을 배열로 변환
   const beachDataResult: IBeach[] = beachData.map(beach => ({
-    id: beach.id,
+    _id: beach._id,
     name: beach.name,
     address: beach.address,
     goodnessFit: beach.goodnessFit,
@@ -38,4 +40,4 @@ async function getBeachesService(): Promise<IBeach[]> {
 }
 
 
-export { getBeachByBeachNameService, getBeachByRegionService, getBeachesService };
+export { getBeachByIdService, getBeachByRegionService, getBeachesService };
