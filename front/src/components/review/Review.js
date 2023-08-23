@@ -5,12 +5,13 @@ import ReviewTitle from "./ReviewTitle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
-import Comment from "./Comment";
+import Comment from "./comment/Comment";
 import * as Api from "../../Api";
 import { UserStateContext } from "../../App";
+import Timestamp from "../common/Timestamp";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const ReviewCard = ({
+const Review = ({
   review,
   setReviews,
   setShowingReview,
@@ -28,22 +29,13 @@ const ReviewCard = ({
     comments,
     likeCount,
   } = review;
+
   const { user: loggedInUser } = useContext(UserStateContext);
-  const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState("");
   const isValid = comment.length > 0 && comment.length < 100;
   const [newComments, setNewComments] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const isContentReduced = content?.length > 25;
-
-  const currentTime = new Date(); // 현재 시간
-  const createdAtgg = new Date(createdAt); // 주어진 시간
-
-  const timeDifference = currentTime.getTime() - createdAtgg.getTime(); // 밀리초 단위의 차이
-
-  const minutesPassed = Math.floor(timeDifference / (1000 * 60));
-  const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60)); // 시간으로 변환
-  const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일자로 변환
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -73,6 +65,9 @@ const ReviewCard = ({
   const handleLikes = async (e) => {
     if (!loggedInUser) {
       return alert("로그인 유저 없음");
+    }
+    if (!loggedInUser._id !== authorId) {
+      return alert("다른 사람의 ~~");
     }
     // targetType, targetId
     try {
@@ -130,10 +125,7 @@ const ReviewCard = ({
             </Row>
           </Row>
           <Card.Text className="d-flex justify-content-end">
-            {minutesPassed < 1 && "방금 전"}
-            {minutesPassed < 60 && minutesPassed > 0 && `${minutesPassed}분 전`}
-            {minutesPassed >= 60 && hoursPassed < 24 && `${hoursPassed}시간 전`}
-            {minutesPassed >= 60 && hoursPassed >= 24 && `${daysPassed}일 전`}
+            <Timestamp createdAt={createdAt} />
           </Card.Text>
 
           {/* 댓글 모두보기: 클릭하면 모달창으로 리뷰 카드 띄우기 */}
@@ -142,7 +134,6 @@ const ReviewCard = ({
             <Card.Text
               onClick={() => {
                 setShowingReview(review);
-                setShowComments(review);
                 // to do: 댓글보기 모달창
               }}
               className="link"
@@ -199,4 +190,4 @@ const ReviewCard = ({
   );
 };
 
-export default ReviewCard;
+export default Review;

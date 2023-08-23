@@ -1,7 +1,7 @@
 import { CloseButton, Container, Modal, Row } from "react-bootstrap";
 import ReviewTitle from "./ReviewTitle";
 import CarouselWrapper from "../common/Carousel";
-import Comment from "./Comment";
+import Comment from "./comment/Comment";
 import { ModalVisibleContext } from "../../App";
 import { useContext } from "react";
 

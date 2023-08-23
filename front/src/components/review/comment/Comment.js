@@ -1,11 +1,12 @@
 import { Col, Container, Form, Row } from "react-bootstrap";
-import Avatar from "../common/Avatar";
+import Avatar from "../../common/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
-import { ModalVisibleContext, UserStateContext } from "../../App";
+import { ModalVisibleContext, UserStateContext } from "../../../App";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { MODAL_TYPE } from "../../constants";
+import { MODAL_TYPE } from "../../../constants";
+import Timestamp from "../../common/Timestamp";
 
 const Comment = ({ comment }) => {
   const navigate = useNavigate();
@@ -74,8 +75,7 @@ const Comment = ({ comment }) => {
               <div>
                 <strong>{userName}</strong> {content}
               </div>
-              {/* to do: 날짜 형식 변환 */}
-              <div className="">{date}</div>
+              <Timestamp createdAt={date} />
             </Col>
           )}
           {/* 댓글 수정 입력 인풋창 */}
@@ -113,14 +113,6 @@ const Comment = ({ comment }) => {
           )}
         </Row>
       </Container>
-      {/* {toastMsg && (
-        <ToastWrapper
-          onClose={() => setToastMsg("")}
-          text={toastMsg}
-          bg="warning"
-          position="middle-center"
-        />
-      )} */}
     </>
   );
 };

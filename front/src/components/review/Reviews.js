@@ -14,8 +14,6 @@ const Reviews = ({ reviews, setReviews }) => {
   const { setIsHandlerEnabled } = useContext(HandlerEnabledContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  console.log(modalVisible?.type === MODAL_TYPE.actionSelector);
-  console.log(modalVisible);
 
   useEffect(() => {
     const fetchData = async () => {
