@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { FormControl, Button, Modal, Card, Col } from "react-bootstrap";
 import * as Api from "../../Api";
+import TravelImageWithText from "./TravelImageWithText";
 
-const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast, travelImage }) => {
+const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -46,15 +47,15 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast, 
   };
 
   // 기본 이미지
-  const defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+  const defaultImage = process.env.PUBLIC_URL + '/stamp.png';
 
   return (
     <>
-      <div className="row g-0">
+      <div className="row g-1">
         {!isEditing && (
           <Card style={{ width: '100%', marginBottom: '15px' }}>
-            <Col md={2}>
-              <Card.Img src={travelImage || defaultImage} alt="travelImage" />
+            <Col md={3}>
+              <TravelImageWithText text={"테스트"} imageUrl={defaultImage} />
             </Col>
             <Col md={8}>
               <Card.Body>
