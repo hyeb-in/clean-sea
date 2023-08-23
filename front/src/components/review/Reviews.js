@@ -35,7 +35,7 @@ const Reviews = ({ reviews, setReviews }) => {
   return (
     <>
       <Container className="py-3">
-        <Row xs={1} md={2} lg={3}>
+        <Row xs={1}>
           {/* to do: 서버 에러 났을 경우 알려주기 -> 해결 방안 보여주기 */}
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&

@@ -33,6 +33,9 @@ const ReviewCard = ({
   const [comment, setComment] = useState("");
   const isValid = comment.length > 0 && comment.length < 100;
   const [newComments, setNewComments] = useState([]);
+  const [showMore, setShowMore] = useState(true);
+  const isContentReduced = content?.length > 25;
+
   const currentTime = new Date(); // 현재 시간
   const createdAtgg = new Date(createdAt); // 주어진 시간
 
@@ -93,31 +96,38 @@ const ReviewCard = ({
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=873&q=80",
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=873&q=80",
   ];
-
   return (
     <>
-      <Card bg="light" key={reviewId} sm="12" md="6" lg="4" className="mb-5">
+      <Card bg="light" key={reviewId} className="my-5 review-container">
         <Card.Header>
           <ReviewTitle review={review} setReviews={setReviews} />
         </Card.Header>
-        <Card.Body>
+        <Card.Body className="px-5 py-12">
           {uploadFile?.length === 0 && <CarouselWrapper imageUrls={url} />}
           {uploadFile?.length > 0 && <CarouselWrapper imageUrls={uploadFile} />}
           <Row>
             <Col className="comment__author">{userName}</Col>
             {likeCount > 0 && `좋아요 ${likeCount}개`}
           </Row>
-          <Row xs="auto">
+          <Row xs="auto" className="pb-3">
             <span className="comment__title">
               {`${title}  `}
-              <span className="comment__content">{content}</span>
+              <span className="comment__content">
+                {showMore && isContentReduced
+                  ? content.substring(0, 80) + "..."
+                  : content}
+              </span>
             </span>
-            {/* to do: 글자수 줄이기 >> 더보기 (...) */}
-            {/* 좋아요를 눌렀나 여부에 따라 solid 하트 or regular 하트 */}
-            <Col xs="auto" onClick={handleLikes}>
-              {<FontAwesomeIcon className="link" icon={farHeart} />}
-              {/* <FontAwesomeIcon icon={fasHeart} /> */}
-            </Col>
+            {/* to do: 좋아요를 눌렀나 여부에 따라 solid 하트 or regular 하트 */}
+            <Row className="d-flex w-100">
+              <Col className="link bold" onClick={() => setShowMore(!showMore)}>
+                더보기
+              </Col>
+              <Col onClick={handleLikes} className="flex-justify-end mx-0">
+                {<FontAwesomeIcon className="link" icon={farHeart} />}
+                {/* <FontAwesomeIcon icon={fasHeart} /> */}
+              </Col>
+            </Row>
           </Row>
           <Card.Text className="d-flex justify-content-end">
             {minutesPassed < 1 && "방금 전"}
@@ -127,13 +137,13 @@ const ReviewCard = ({
           </Card.Text>
 
           {/* 댓글 모두보기: 클릭하면 모달창으로 리뷰 카드 띄우기 */}
-          <div>더 보기... content 글자수 줄이기 to do</div>
+          <div>{}</div>
           {
             <Card.Text
               onClick={() => {
                 setShowingReview(review);
-
                 setShowComments(review);
+                // to do: 댓글보기 모달창
               }}
               className="link"
             >

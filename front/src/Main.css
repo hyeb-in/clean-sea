@@ -33,6 +33,9 @@ body {
 .text-author {
   font-weight: 600;
 }
+.bold {
+  font-weight: 600;
+}
 
 .h-100 {
   height: 100%;

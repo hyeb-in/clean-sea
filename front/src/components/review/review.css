@@ -11,6 +11,9 @@
   color: blue;
   padding: 50px;
 }
+.review-container {
+  max-width: 70%;
+}
 
 /* review form */
 .carousel-arrow-icon {
