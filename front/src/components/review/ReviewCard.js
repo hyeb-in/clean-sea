@@ -55,10 +55,11 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
   const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60)); // 시간으로 변환
   const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일자로 변환
 
-  const handleSubmit = async (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
       if (!loggedInUser) {
+        alert("유저 없음");
         // to do: 유저 없음 ?? 로그인화면으로 이동
         // return setToast({
         //   text: "로그인 한 유저만 작성할 수 있습니다",
@@ -68,6 +69,7 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
       }
       // 글자수 제한: 1글자이상 100자이하
       if (!isValid) {
+        alert("글자수 제한");
         // return setToast({
         //   text:
         //     comment === ""
@@ -81,9 +83,29 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
       console.log(res);
     } catch (error) {
       // 서버 error 핸들링
-      console.log(error);
+      alert(error);
     }
   };
+
+  const handleLikes = async (e) => {
+    if (!loggedInUser) {
+      return alert("로그인 유저 없음");
+    }
+
+    // targetType, targetId
+    try {
+      console.log(review);
+      const res = await Api.post(`api/like`, {
+        targetType: review,
+        targetId: reviewId,
+      });
+      // ValidationError: targetType: `64e569d0d895a5828a3e85f4` is not a valid enum value for path `targetType`.
+      console.log(res);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
   const url = [
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=873&q=80",
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=873&q=80",
@@ -101,12 +123,7 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
         <Row>
           <Col className="comment__author">{userName}</Col>
           <Col xs="auto">
-            <FontAwesomeIcon
-              icon={faHeart}
-              onClick={() => {
-                window.alert("좋아요 기능 추가하기");
-              }}
-            />
+            <FontAwesomeIcon icon={faHeart} onClick={handleLikes} />
           </Col>
           {likeCount.length > 0 && `좋아요 ${likeCount}개`}
         </Row>
@@ -141,7 +158,7 @@ const ReviewCard = ({ review, setReviews, setShowingReview }) => {
       </Card.Body>
       <Card.Footer>
         <Form.Label>댓글 달기...</Form.Label>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleCommentSubmit}>
           <Form.Control
             value={comment}
             onChange={(e) => setComment(e.target.value)}
