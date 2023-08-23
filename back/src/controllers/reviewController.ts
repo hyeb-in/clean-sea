@@ -6,7 +6,9 @@ import {
   setReview,
   deletedReview,
 } from "../services/reviewService";
+import { handleFileUpload } from "../middlewares/uploadMiddleware";
 import { IRequest } from "user";
+import { FileRequest } from "upload";
 
 const sendResponseWithData = function (res: Response, statusCode: number, data: any) {
   res.status(statusCode).json(data);
@@ -21,13 +23,27 @@ const createReview = async (
     const author = req.user._id;
     const userName = req.user.name;
 
-    console.log(req.body);
-    
-    const addMyReview = await addReview({
-      toCreate: { ...req.body, author, userName},
-    });
 
-    return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
+    handleFileUpload(req as FileRequest,res,async function (err : any) {
+      if (err){
+        return next(err);
+      }
+      console.log(req.body);
+
+      let uploadFile : string[] = [];
+
+      if (Array.isArray(req.files)) {
+        uploadFile = req.files.map(file => file.filename);
+      } else if (req.files?.imageUrls) {
+        uploadFile = req.files.imageUrls.map(file => file.filename);
+      }
+
+      const addMyReview = await addReview({
+        toCreate: { ...req.body, author, userName, uploadFile},
+      });
+
+      return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
+    })
   } catch (err) {
     next(err);
   }
@@ -54,12 +70,24 @@ const updateReview = async (
 ) => {
   try {
     const id = req.params.reviewId;
-    console.log(req.body);
-    const updatedReview = await setReview(id, {
-      toUpdate: { ...req.body },
-    });
 
-    return sendResponseWithData(res, StatusCodes.OK, updatedReview);
+    handleFileUpload(req as FileRequest,res,async function (err : any){
+      if (err){
+        return next(err);
+      }
+      let uploadFile : string[] = [];
+
+      if (Array.isArray(req.files)) {
+        uploadFile = req.files.map(file => file.filename);
+      } else if (req.files?.imageUrls) {
+        uploadFile = req.files.imageUrls.map(file => file.filename);
+      }
+      const updatedReview = await setReview(id, {
+        toUpdate: { ...req.body, uploadFile },
+      });
+  
+      return sendResponseWithData(res, StatusCodes.OK, updatedReview);
+    });
   } catch (err) {
     next(err);
   }

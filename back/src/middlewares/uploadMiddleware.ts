@@ -1,50 +1,79 @@
 import multer, { MulterError } from 'multer';
-import { FileAppender } from '../utils/uploads/upload';
+import { insertFile, replacePlaceholder } from '../utils/uploads/upload';
 import { Request, Response, NextFunction } from 'express';
-import { FileObject, FileRequest } from "../types/upload";
+import { FileObjects, FileRequest } from "../types/upload";
 import { imageUpload } from './fileUploadMiddleware';
 
-export function handleFileUpload(req: Request, res: Response, next: NextFunction) {
-    const appender = new FileAppender("VALUE");
+export function handleFileUpload(req: FileRequest, res: Response, next: NextFunction) {
+    const upload = imageUpload.array('imageUrls', 5);
 
-    imageUpload.single('uploadFile')(req, res, async function (err: any) {
+    upload(req as Request, res, async function (err: any) {
         try {
             if (err instanceof MulterError) {
                 return next(err);
             } else if (err) {
                 return next(err);
             }
+            if ((req as Request).method === 'POST') {
+                const fileUrls: string[] = [];
+                const fileObjects: FileObjects[] = [];
+                const files: FileObjects[] = ([] as FileObjects[]).concat(...Object.values(req.files));
+                const uploadFile = files.map(file => file.filename);
 
-            if(req.method === 'POST'){
-                const fileUrl = req.file.filename;
+                for (const file of files) {
+                    fileUrls.push(file.filename as string);
+                    fileObjects.push({
+                        fieldname: file.fieldname,
+                        originalname: file.originalname,
+                        encoding: file.encoding,
+                        mimetype: file.mimetype,
+                        size: file.size,
+                        destination: file.destination,
+                        filename: file.filename,
+                        path: file.filename
+                    });
+                    insertFile(file, {
+                        fieldname: file.fieldname,
+                        originalname: file.originalname,
+                        encoding: file.encoding,
+                        mimetype: file.mimetype,
+                        size: file.size,
+                        destination: file.destination,
+                        filename: file.filename,
+                        path: file.filename
+                    });
+                }
+                req.uploadFile = uploadFile;
+            } else if ((req as Request).method === 'PUT') {
+                const fileUrls: string[] = [];
+                const fileObjects: FileObjects[] = [];
+                const files: FileObjects[] = ([] as FileObjects[]).concat(...Object.values(req.files));
+                const uploadFile = files.map(file => file.filename);
 
-                const fileObject: FileObject = {
-                    fieldname: req.file.fieldname,
-                    originalname: req.file.originalname,
-                    encoding: req.file.encoding,
-                    mimetype: req.file.mimetype,
-                    size: req.file.size,
-                    destination: req.file.destination,
-                    filename: req.file.filename,
-                    path: fileUrl
-                };
-                appender.inserFile(req.file,fileObject);
-            }else if(req.method === 'PUT'){
-                const fileUrl = req.file.filename;
-
-                const fileObject: FileObject = {
-                    fieldname: req.file.fieldname,
-                    originalname: req.file.originalname,
-                    encoding: req.file.encoding,
-                    mimetype: req.file.mimetype,
-                    size: req.file.size,
-                    destination: req.file.destination,
-                    filename: req.file.filename,
-                    path: fileUrl
-                };
-                appender.replacePlaceholder(req.file, fileObject);
-            }else if (req.method === 'DELETE'){
-                appender.removeFile(req.file);
+                for (const file of files) {
+                    fileUrls.push(file.filename as string);
+                    fileObjects.push({
+                        fieldname: file.fieldname,
+                        originalname: file.originalname,
+                        encoding: file.encoding,
+                        mimetype: file.mimetype,
+                        size: file.size,
+                        destination: file.destination,
+                        filename: file.filename,
+                        path: file.filename
+                    });
+                    replacePlaceholder(file, {
+                        fieldname: file.fieldname,
+                        originalname: file.originalname,
+                        encoding: file.encoding,
+                        mimetype: file.mimetype,
+                        size: file.size,
+                        destination: file.destination,
+                        filename: file.filename,
+                        path: file.filename
+                    });
+                }
+                req.uploadFile = uploadFile;
             }
 
             next();
