@@ -20,8 +20,23 @@ const Main = () => {
       .then((mapData) => {
         // Prepare demo data
         const data = [
-          ['kr-4194', 10],
-          // Add more data points as needed
+          ['kr-kg', 11],
+          ['kr-cb', 12],
+          ['kr-kn', 13],
+          ['kr-2685', 14],
+          ['kr-pu', 15],
+          ['kr-2688', 16],
+          ['kr-sj', 17],
+          ['kr-tj', 18],
+          ['kr-ul', 19],
+          ['kr-in', 20],
+          ['kr-kw', 21],
+          ['kr-gn', 22],
+          ['kr-cj', 23],
+          ['kr-gb', 24],
+          ['kr-so', 25],
+          ['kr-tg', 1114],
+          ['kr-kj', 27]
         ];
 
         // Create the chart

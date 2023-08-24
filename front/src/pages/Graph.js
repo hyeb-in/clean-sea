@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from 'react-apexcharts';
 import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
-import axios from 'axios'; // Axios를 사용하여 API 요청을 보낼 수 있도록 import합니다.
+// import axios from 'axios'; // Axios를 사용하여 API 요청을 보낼 수 있도록 import합니다.
+import * as Api from "../Api";
 
 const Graph = () => {
   const chartRef = useRef(null);
@@ -75,7 +76,7 @@ const Graph = () => {
 
   const fetchData = (region, year) => {
     // API를 호출하여 데이터를 가져옵니다.
-    axios.get(`/beaches/beachesbyregion/${year}`)
+    axios.get(`/beaches/beachesbyregion/${region},${year}`)
       .then((response) => {
         // API 응답에서 데이터를 추출하고 상태에 저장합니다.
         const data = response.data; // API 응답에 따라 조정해야 할 수 있습니다.
