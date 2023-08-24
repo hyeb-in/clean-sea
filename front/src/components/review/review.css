@@ -89,3 +89,9 @@
   top: 5px;
   border: none;
 }
+.isLiked {
+  color: red;
+}
+.disLiked {
+  color: none;
+}

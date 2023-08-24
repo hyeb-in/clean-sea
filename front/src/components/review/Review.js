@@ -2,15 +2,12 @@ import React, { useContext, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import CarouselWrapper from "../common/Carousel";
 import ReviewTitle from "./ReviewTitle";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
-import Comment from "./comment/Comment";
 import * as Api from "../../Api";
 import { ModalVisibleContext, UserStateContext } from "../../App";
 import Timestamp from "../common/Timestamp";
 import { IS_LIKE, MODAL_TYPE } from "../../constants";
 import CommentsList from "./comment/CommentsList";
+import Like from "../common/Like";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
@@ -33,7 +30,8 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
   const [newComments, setNewComments] = useState([]);
   const [showDetails, setShowDetails] = useState(true);
   const isContentReduced = content?.length > 25;
-  const isLiked = loggedInUser && review.isLike === IS_LIKE.yes;
+  const isLiked = loggedInUser && review?.isLike === IS_LIKE.yes;
+  console.log(review);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -59,40 +57,6 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
     } catch (error) {
       // 서버 error 핸들링
       alert(error);
-    }
-  };
-
-  const handleLikes = async (e) => {
-    if (!loggedInUser) {
-      return alert("로그인 유저 없음");
-    }
-    // 좋아요 눌리면 하트 전환
-    // 좋아요 ++개
-    try {
-      const res = await Api.post("api/like", {
-        targetType: "review",
-        targetId: reviewId,
-      });
-
-      // !좋아요 눌리면 하트 전환
-      // 좋아요 --개
-      if (res.data.message === IS_LIKE.added) {
-        setReviews((current) => {
-          const newReviews = [...current];
-          newReviews.map((item) => (item.isLike = IS_LIKE.yes));
-        });
-        console.log("좋아요❤️");
-      }
-
-      if (res.data.message === IS_LIKE.removed) {
-        setReviews((current) => {
-          const newReviews = [...current];
-          newReviews.map((item) => (item.isLike = IS_LIKE.no));
-        });
-        console.log("좋아요 제거");
-      }
-    } catch (error) {
-      console.log(error.response.data);
     }
   };
 
@@ -125,17 +89,13 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
               >
                 {showDetails && "더보기"}
               </Col>
-
-              {/* to do: 좋아요를 눌렀나 여부에 따라 solid 하트 or regular 하트 */}
-              {
-                <Col onClick={handleLikes} className="flex-justify-end mx-0">
-                  {isLiked ? (
-                    <FontAwesomeIcon className="link" icon={farHeart} />
-                  ) : (
-                    <FontAwesomeIcon icon={fasHeart} />
-                  )}
-                </Col>
-              }
+              {loggedInUser && (
+                <Like
+                  isLiked={isLiked}
+                  reviewId={reviewId}
+                  setReviews={setReviews}
+                />
+              )}
             </Row>
           </Row>
           <Card.Text className="d-flex justify-content-end">
@@ -148,7 +108,7 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
             setSelectedReview={selectedReview}
             review={review}
           />
-          {/* 댓글 모두 보기 -> floatingReview 모달에 데이터 보내주기 */}
+          {/* 댓글 모두 보기 클릭시 floatingReview 모달에 데이터 보내주기 */}
           <Row
             onClick={() => {
               setModalVisible({

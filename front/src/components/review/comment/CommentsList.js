@@ -14,10 +14,9 @@ const CommentsList = ({
       {comments?.map(
         (comment, index) =>
           index < 3 && (
-            <Row>
+            <Row key={comment._id}>
               <Comment
                 comment={comment}
-                key={comment._id}
                 selectedReview={selectedReview}
                 setSelectedReview={setSelectedReview}
               />

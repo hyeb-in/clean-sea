@@ -25,6 +25,7 @@ const Reviews = ({ reviews, setReviews }) => {
     modalVisible?.type === MODAL_TYPE.floatingReview;
   const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
 
+  // to do: 너무 데이터가 한 방에 많이 자주 불러와지는 거 같음
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -1,10 +1,13 @@
 import axios from "axios";
 import { useContext, useEffect } from "react";
-import { ModalOptionContext, UserStateContext } from "./App";
+import { DispatchContext, ModalOptionContext, UserStateContext } from "./App";
+import { useNavigate } from "react-router-dom";
 
 const Interceptor = ({ children }) => {
+  const dispatch = useContext(DispatchContext);
   const { user } = useContext(UserStateContext);
   const { modalOptions, setModalOptions } = useContext(ModalOptionContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 모든 요청을 가로채서 do something
@@ -30,6 +33,11 @@ const Interceptor = ({ children }) => {
         // 403 : 인증 에러 권한 없음
         // 400 : 클라이언트가 잘못된 값 전달
         // 500 : 서버 에러
+        if (response.status === 403) {
+          sessionStorage.removeItem("userToken");
+          dispatch({ type: "LOGOUT" });
+          navigate("/");
+        }
         return response;
       },
       (error) => {
@@ -41,7 +49,7 @@ const Interceptor = ({ children }) => {
       axios.interceptors.request.eject(axiosInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, [user, modalOptions, setModalOptions]);
+  }, [user, modalOptions, setModalOptions, dispatch, navigate]);
   return children;
 };
 
