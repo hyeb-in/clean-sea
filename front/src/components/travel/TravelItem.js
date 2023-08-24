@@ -64,6 +64,34 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
 
   const defaultImage = process.env.PUBLIC_URL + '/stamp.png';
 
+  const formatDate = (date) => {
+    let d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    let year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  const formatDateWithoutTime = (date) => {
+    let d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    let year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
   return (
     <>
       <div className="row g-1">
@@ -75,10 +103,10 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
             <Col md={8}>
               <Card.Body>
                 <Card.Title>{beachName}</Card.Title>
-                <Card.Text>{travelData.date}</Card.Text>
+                <Card.Text>{formatDateWithoutTime(travelData.date)}</Card.Text>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                  <Button variant="link" onClick={() => setIsEditing(true)}>편집</Button>
-                  <Button variant="link" onClick={handleShowDeleteModal}>삭제</Button>
+                  <Button variant="outline-primary" onClick={() => setIsEditing(true)} className={"mx-1"}>편집</Button>
+                  <Button variant="outline-danger" onClick={handleShowDeleteModal}>삭제</Button>
                 </div>
               </Card.Body>
             </Col>
@@ -95,11 +123,14 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
               />
             </h5>
             <p>
-              <FormControl type="text" value={updatedTravel.date} onChange={e => setUpdatedTravel({ ...updatedTravel, date: new Date(e.target.value) })} />
-            </p>
+              <FormControl
+                type="date"
+                value={formatDate(updatedTravel.date)}
+                onChange={e => setUpdatedTravel({ ...updatedTravel, date: e.target.value })}
+              />            </p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-              <Button variant="link" onClick={() => setIsEditing(false)}>취소</Button>
-              <Button variant="link" onClick={handleUpdateTravel}>업데이트</Button>
+              <Button variant="secondary" onClick={() => setIsEditing(false)} className={"mx-1 mb-4"}>취소</Button>
+              <Button variant="primary" onClick={handleUpdateTravel} className={"mb-4"}>업데이트</Button>
             </div>
           </>
         )}
