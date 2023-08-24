@@ -20,4 +20,21 @@ async function updateLikeCount(targetType : TargetType, targetId : string, chang
     }
 }
 
-export { updateLikeCount };
+async function updateLikeValue(targetType : TargetType, userId : string, isLike : string){
+    try{
+        const updated = {
+            $set : {'Likes.$[elem].isLike' : isLike }
+        };
+        const arrayFilters = [{'elem.userId' : userId}];
+
+        if(targetType === TargetType.Beach){
+            //추가예정
+        }else if(targetType === TargetType.Review){
+            await ReviewModel.updateMany({},updated,{arrayFilters});
+        }
+    }catch(error){
+        throw error;
+    }
+}
+
+export { updateLikeCount, updateLikeValue };

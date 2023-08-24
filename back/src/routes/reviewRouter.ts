@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createReview,
   getAllReview,
+  getAllLogin,
   updateReview,
   deleteReview,
 } from "../controllers/reviewController";
@@ -11,7 +12,8 @@ const reviewAuthRouter = Router();
 
 reviewAuthRouter
     .post("/register", jwtAuthentication, postReviewValidator, createReview)
-    .get("/reviewList", getAllReview);
+    .get("/reviewList", getAllReview)
+    .get("/reviewListLogin", jwtAuthentication, getAllLogin);
 
 reviewAuthRouter
     .route("/:reviewId")

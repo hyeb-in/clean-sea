@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import {
   addReview,
   getReview,
+  getLoginReview,
   setReview,
   deletedReview,
 } from "../services/reviewService";
@@ -23,13 +24,10 @@ const createReview = async (
     const author = req.user._id;
     const userName = req.user.name;
 
-
-    handleFileUpload(req as FileRequest,res,async function (err : any) {
-      if (err){
-        return next(err);
+    handleFileUpload(req as FileRequest,res,async function (error : any) {
+      if (error){
+        return next(error);
       }
-      console.log(req.body);
-
       let uploadFile : string[] = [];
 
       if (Array.isArray(req.files)) {
@@ -44,8 +42,8 @@ const createReview = async (
 
       return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
     })
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -59,6 +57,21 @@ const getAllReview = async (
     const allReview = await getReview();
     return sendResponseWithData(res, StatusCodes.OK, allReview);
   } catch (err) {
+    next(err);
+  }
+};
+
+const getAllLogin = async (
+  req : IRequest,
+  res : Response,
+  next : NextFunction
+) => {
+  try{
+    const author = req.user._id;
+
+    const loginReview = await getLoginReview(author);
+    return sendResponseWithData(res, StatusCodes.OK, loginReview);
+  }catch(err){
     next(err);
   }
 };
@@ -106,4 +119,4 @@ const deleteReview = async (
   }
 };
 
-export { createReview, getAllReview, updateReview, deleteReview };
+export { createReview, getAllReview, getAllLogin, updateReview, deleteReview };

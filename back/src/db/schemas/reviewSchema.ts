@@ -1,4 +1,5 @@
 import mongoose, { Schema, model, Document, Types } from 'mongoose';
+import { ILike } from 'likes';
 
 interface IReview extends Document {
     title?: string;
@@ -9,6 +10,8 @@ interface IReview extends Document {
     uploadFile?: [string];
     comments?: Types.ObjectId[];
     likeCount? : number;
+    isLike: 'yes' | 'no';
+    Likes? : ILike[];
 }
 
 const ReviewSchema : Schema<IReview> = new Schema({
@@ -36,6 +39,19 @@ const ReviewSchema : Schema<IReview> = new Schema({
           ref: 'Comment',
         },
       ],
+      Likes : [
+      {
+        userId : {
+            type : String,
+            required : true,
+        },
+        isLike : {
+            type : String,
+            enum : ['yes', 'no'],
+            required : true,
+        },
+      },
+    ],
       likeCount : {
         type :Number,
         default : 0,
