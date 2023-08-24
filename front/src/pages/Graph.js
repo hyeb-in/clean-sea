@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from "react-apexcharts";
 import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import axios from "axios"; // Axios를 사용하여 API 요청을 보낼 수 있도록 import합니다.
+import * as Api from "../Api";
 
 const Graph = () => {
   const chartRef = useRef(null);
@@ -34,87 +35,93 @@ const Graph = () => {
   //   latitude?: number;
   //   longitude?: number;
   // }
-  const options = {
-    series: [
-      {
-        name: "대장균",
-        data: [22, 11, 44, 55, 57, 56, 61, 58, 63, 60, 66, 11],
-      },
-      {
-        name: "장구균",
-        data: [55, 44, 76, 85, 101, 98, 87, 105, 91, 114, 94, 23],
-      },
-    ],
-    xaxis: {
-      categories: [
-        "1월",
-        "2월",
-        "3월",
-        "4월",
-        "5월",
-        "6월",
-        "7월",
-        "8월",
-        "9월",
-        "10월",
-        "11월",
-        "12월",
-      ],
-    },
-    chart: {
-      type: "bar",
-      height: 350,
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "55%",
-        endingShape: "rounded",
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ["transparent"],
-    },
-    yaxis: {
-      title: {
-        text: "검출 수",
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    tooltip: {
-      y: {
-        formatter: function (val) {
-          return val + "개 검출";
-        },
-      },
-    },
-  };
+  // const options = {
+  //   series: [
+  //     {
+  //       name: "대장균",
+  //       data: [22, 11, 44, 55, 57, 56, 61, 58, 63, 60, 66, 11],
+  //     },
+  //     {
+  //       name: "장구균",
+  //       data: [55, 44, 76, 85, 101, 98, 87, 105, 91, 114, 94, 23],
+  //     },
+  //   ],
+  //   xaxis: {
+  //     categories: [
+  //       "1월",
+  //       "2월",
+  //       "3월",
+  //       "4월",
+  //       "5월",
+  //       "6월",
+  //       "7월",
+  //       "8월",
+  //       "9월",
+  //       "10월",
+  //       "11월",
+  //       "12월",
+  //     ],
+  //   },
+  //   chart: {
+  //     type: "bar",
+  //     height: 350,
+  //   },
+  //   plotOptions: {
+  //     bar: {
+  //       horizontal: false,
+  //       columnWidth: "55%",
+  //       endingShape: "rounded",
+  //     },
+  //   },
+  //   dataLabels: {
+  //     enabled: false,
+  //   },
+  //   stroke: {
+  //     show: true,
+  //     width: 2,
+  //     colors: ["transparent"],
+  //   },
+  //   yaxis: {
+  //     title: {
+  //       text: "검출 수",
+  //     },
+  //   },
+  //   fill: {
+  //     opacity: 1,
+  //   },
+  //   tooltip: {
+  //     y: {
+  //       formatter: function (val) {
+  //         return val + "개 검출";
+  //       },
+  //     },
+  //   },
+  // };
+
+  // app.ts 라우팅: app.use("/beaches", beachRouter);
+
+  // api path url
+  // '/beachesbyregion/:address/:year
+  // '/beachbyId/:_id'
+  // '/beaches'
 
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
-    fetchData(region, selectedYear);
+    // fetchData(region, selectedYear);
   };
 
   const handleYearSelect = (year) => {
     setSelectedYear(year);
-    fetchData(selectedRegion, year);
+    // fetchData(selectedRegion, year);
   };
 
-  const fetchData = (region, year) => {
+  const fetchData = () => {
     // API를 호출하여 데이터를 가져옵니다.
-    axios
-      .get(`/beaches/beachesbyregion/${year}`)
+    Api.get(`/beaches/beaches`)
       .then((response) => {
         // API 응답에서 데이터를 추출하고 상태에 저장합니다.
-        const data = response.data; // API 응답에 따라 조정해야 할 수 있습니다.
-        setChartData(data);
+        console.log(response);
+        // setChartData(data);
       })
       .catch((error) => {
         console.error("API 호출 중 오류 발생:", error);
@@ -122,20 +129,24 @@ const Graph = () => {
   };
 
   useEffect(() => {
-    if (!chartRef.current) {
-      chartRef.current = new ApexCharts(
-        document.querySelector("#chart"),
-        options
-      );
-      chartRef.current.render();
-    }
+    fetchData();
+  }, []);
 
-    return () => {
-      if (chartRef.current) {
-        // chartRef.current.destroy();
-      }
-    };
-  }, [options]);
+  // useEffect(() => {
+  //   if (!chartRef.current) {
+  //     chartRef.current = new ApexCharts(
+  //       document.querySelector("#chart"),
+  //       options
+  //     );
+  //     chartRef.current.render();
+  //   }
+
+  //   return () => {
+  //     if (chartRef.current) {
+  //       // chartRef.current.destroy();
+  //     }
+  //   };
+  // }, [options]);
 
   return (
     <Container>
@@ -168,14 +179,14 @@ const Graph = () => {
         </Col>
       </Row>
       <Row>
-        <div id="chart">
+        {/* <div id="chart">
           <ApexCharts
             options={options}
             series={chartData.series}
             type="bar"
             height={350}
           />
-        </div>
+        </div> */}
       </Row>
     </Container>
   );
