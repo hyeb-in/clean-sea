@@ -1,21 +1,22 @@
 import { Router } from 'express';
 import { 
-  getBeachByBeachName,
-  getBeachByRegion,
+  getBeachById,
+  getBeachByRegionAndYear,
   getBeaches
 } from '../controllers/beachController';
-import { validate, beachNameValidator, addressNameValidator } from '../utils/validators/beachValidator';
+import { validateBeachId, validateBeachAddress, validateBeachYear } from '../utils/validators/beachValidator';
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const beachRouter = Router();
 
 beachRouter
-  .get('/beachbyname/:name', validate(beachNameValidator()), jwtAuthentication, getBeachByBeachName);
+  .get('/beachbyId/:_id', getBeachById);
 
 beachRouter
-  .get('/beachesbyregion/:address', validate(addressNameValidator()), jwtAuthentication, getBeachByRegion);
+  .get('/beachesbyregion/:address/:year', getBeachByRegionAndYear);
+  // .get('/beachesbyregion/:address/:year', validateBeachAddress, jwtAuthentication, getBeachByRegionAndYear);
 
 beachRouter
-  .get('/beaches', jwtAuthentication, getBeaches);
+  .get('/beaches', getBeaches);
 
 export default beachRouter;

@@ -8,7 +8,7 @@ export const findUserById = async (userId: string): Promise<IUser> => {
 
 export const findUserByEmail = async (email: string): Promise<IUser> => {
   const user = await UserModel.findOne({ email });
-  console.log(user);
+
   return user;
 };
 
