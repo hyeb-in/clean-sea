@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { MODAL_TYPE } from "../../../constants";
 import Timestamp from "../../common/Timestamp";
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, review }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const [isEditing, setIsEditing] = useState(false);
@@ -18,6 +18,8 @@ const Comment = ({ comment }) => {
   const { postId, userId, content, userName, date } = comment;
   const isMyComment = loggedInUser && loggedInUser._id === userId;
   const isButtonsVisible = isMyComment && !isEditing;
+  const isCommentEditBtnVisible =
+    isMyComment && modalVisible.type === MODAL_TYPE.floatingReview;
 
   const editComment = async (e) => {
     e.preventDefault();
@@ -27,11 +29,6 @@ const Comment = ({ comment }) => {
     }
     try {
       // const res = await Api.put(`/comments/${postId}`);
-
-      // 성공시 데이터 반영
-      setIsEditing(false);
-      setNewComment(comment);
-      // setIsActionSelectorVisible(false);
     } catch (error) {
       console.log(error);
       // to do: 에러 메세지 핸들링
@@ -40,21 +37,11 @@ const Comment = ({ comment }) => {
 
   const deleteComment = async () => {
     if (!isMyComment) {
-      // return setToastMsg("다른 사람의 게시물을 수정할 수 없습니다");
       alert("다른 사람의 게시물");
     }
     console.log("삭제");
-    //   try {
     //     // const res = await Api.delete(`/comments/${postId}`);
     //     console.log(postId);
-    //     // 성공시 data 반영
-    //     setIsEditing(false);
-    //     setNewComment(comment);
-    // setIsActionSelectorVisible(false);
-    //   } catch (error) {
-    //     console.log(error);
-    //     // to do: error handling
-    //   }
   };
 
   return (
@@ -88,8 +75,9 @@ const Comment = ({ comment }) => {
           )}
           {/* to do: 내가 올린 거, 좋아요 누른 게시물이면 하트 solid */}
 
-          {/* 2. ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
-          {isMyComment && (
+          {/* 2. 댓글 목록에서 ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
+          {/* 댓글 -> 수정으로 들어가면 댓글 창을 띄울 거라서 reviewId, review 정보가 필요함 */}
+          {isCommentEditBtnVisible && (
             <Col
               xs="auto"
               onClick={() => {
@@ -97,8 +85,7 @@ const Comment = ({ comment }) => {
                   type: MODAL_TYPE.actionSelector,
                   isVisible: true,
                   data: {
-                    commentId: comment._id,
-                    comment,
+                    FLOATING_REVIEW_DATA: { review, commentId: comment._id },
                   },
                 });
               }}

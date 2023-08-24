@@ -10,6 +10,7 @@ import * as Api from "../../Api";
 import { ModalVisibleContext, UserStateContext } from "../../App";
 import Timestamp from "../common/Timestamp";
 import { IS_LIKE, MODAL_TYPE } from "../../constants";
+import CommentsList from "./comment/CommentsList";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
@@ -140,40 +141,23 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
           <Card.Text className="d-flex justify-content-end">
             <Timestamp createdAt={createdAt} />
           </Card.Text>
-          {/* 댓글 3개까지만 미리보기 */}
-          {comments?.map(
-            (comment, index) =>
-              index < 3 && (
-                <Row>
-                  <Comment
-                    comment={comment}
-                    key={comment._id}
-                    selectedReview={selectedReview}
-                    setSelectedReview={setSelectedReview}
-                  />
-                </Row>
-              )
-          )}
-          {/* 새로 작성될 커맨트 리스트 */}
-          {newComments && (
-            <Row>
-              {newComments.map((item) => (
-                <Comment
-                  comment={item}
-                  key={item._id}
-                  selectedReview={selectedReview}
-                  setSelectedReview={setSelectedReview}
-                />
-              ))}
-            </Row>
-          )}
-
+          <CommentsList
+            comments={comments}
+            newComments={newComments}
+            selectedReview={selectedReview}
+            setSelectedReview={selectedReview}
+            review={review}
+          />
+          {/* 댓글 모두 보기 -> floatingReview 모달에 데이터 보내주기 */}
           <Row
             onClick={() => {
               setModalVisible({
                 type: MODAL_TYPE.floatingReview,
                 isVisible: true,
-                data: review,
+                data: {
+                  reviewId,
+                  review,
+                },
               });
             }}
             className="link"

@@ -20,6 +20,11 @@ const Reviews = ({ reviews, setReviews }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { modalVisible } = useContext(ModalVisibleContext);
 
+  const isActionPopupOpen = modalVisible?.type === MODAL_TYPE.actionSelector;
+  const isCommentListPopupOpen =
+    modalVisible?.type === MODAL_TYPE.floatingReview;
+  const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,9 +55,10 @@ const Reviews = ({ reviews, setReviews }) => {
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&
-            reviews.map((review) => (
+            reviews.map((review, index) => (
               <Col
-                key={review._id}
+                // to do: key 중복 없애라는 경고가 계속 발생함
+                key={`${review._id}-${modalVisible?.type}-${index}`}
                 className="d-flex justify-content-center align-items-center"
               >
                 <Review review={review} setReviews={setReviews} />
@@ -66,16 +72,14 @@ const Reviews = ({ reviews, setReviews }) => {
       {/* 3. 커멘트 수정 -> ActionSelectorModal 없애고 -> FloatingReviewModal */}
 
       {/* 모달1. edit review 수정, 삭제, 취소 선택 모달창 띄우기 */}
-      {modalVisible.type === MODAL_TYPE.actionSelector && (
-        <ActionSelectorModal />
-      )}
+      {isActionPopupOpen && <ActionSelectorModal />}
 
       {/* 모달2. comments get, post, 댓글 전체 볼 수 있는 창 띄우기 */}
       {/* delete comment는 actionselector에서 처리한다 */}
-      {modalVisible.type === MODAL_TYPE.floatingReview && <FloatingReview />}
+      {isCommentListPopupOpen && <FloatingReview />}
 
       {/* 모달3. review 수정하기 폼 모달 */}
-      {modalVisible.type === MODAL_TYPE.editReview && (
+      {isEditReviewPopupOpen && (
         <EditReview
           headerTitle="수정하기"
           reviews={reviews}

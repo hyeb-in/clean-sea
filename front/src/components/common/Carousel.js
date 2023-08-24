@@ -41,9 +41,13 @@ const CarouselWrapper = ({ imageUrls, setReview }) => {
         // image 주소 바꾸기
         // db 데이터 (1692779441756.png) 라면 그대로 보여준다
         return (
-          <Carousel.Item key={img}>
+          // to do: 인덱스 바꾸기::::: img 주소로 넣어두면 중복때문에 에러 안없어져서 임시로 사용
+          <Carousel.Item key={img + "" + index}>
             <Image
-              src={isBlobURL(img) ? img : serverUrl + "uploads/" + img}
+              src={
+                img
+                // isBlobURL(img) ? img : serverUrl + "uploads/" + img
+              }
               fluid
             />
             {setReview && (

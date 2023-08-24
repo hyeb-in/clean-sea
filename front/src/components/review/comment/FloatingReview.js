@@ -6,10 +6,13 @@ import { useContext } from "react";
 import { MODAL_TYPE } from "../../../constants";
 import Comment from "./Comment";
 
+// 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
+// 그냥 Review를 볼 수 있는 컴포넌트와 다르게 생김 주의... 이름 바꿔야할 듯
+// 모든 커멘트 목록이 필요함
 const FloatingReview = () => {
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  const review = modalVisible?.data;
-  console.log(modalVisible);
+
+  console.log(modalVisible.data);
 
   return (
     <Modal
@@ -51,9 +54,9 @@ const FloatingReview = () => {
         <Col className="carousel-bg-white">
           <Container>
             <Row className="py-4 mx-2">
-              {review.comments?.map((comment) => (
+              {/* {comments?.map((comment) => (
                 <Comment comment={comment} />
-              ))}
+              ))} */}
             </Row>
           </Container>
         </Col>

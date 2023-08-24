@@ -76,12 +76,12 @@ const MyProfile = () => {
           <Card small className="mb-4 pt-3">
             <CardHeader className="border-bottom">
               <div className="mb-3 mx-auto">
-                <img
+                {/* <img
                   className="rounded-circle"
                   src={userProfileImage}
                   width="110"
                   alt="User Profile"
-                />
+                /> */}
               </div>
               {isEditMode ? (
                 <FormControl
