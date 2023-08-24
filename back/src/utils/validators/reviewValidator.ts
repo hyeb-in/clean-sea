@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express";
 import joi from "joi";
 import { IRequest } from "user";
+import { errorGenerator } from "../errorGenerator";
 
 export const postReviewValidator = async (
     req : IRequest,
@@ -22,9 +23,11 @@ export const postReviewValidator = async (
         location : joi.any(),
     });
 
-    const { value, error } = schema.validate({ title, content, imageUrls, location });
+    const { error } = schema.validate({ title, content, imageUrls, location });
     if (error) {
-        next(error.details[0].message);
+        const errorMessage = error.details[0].message;
+        const customError = errorGenerator(errorMessage, 400);
+        return res.status(customError.statusCode).json({error:customError.message});
     }
 
     next();
@@ -48,10 +51,12 @@ export const putReviewValidator = async (
         }),
     });
 
-    const { value, error } = schema.validate({ title, content });
+    const { error } = schema.validate({ title, content });
 
     if (error) {
-    next(error.details[0].message);
+        const errorMessage = error.details[0].message;
+        const customError = errorGenerator(errorMessage, 400);
+        return res.status(customError.statusCode).json({error:customError.message});
     }
 
     next();

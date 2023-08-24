@@ -1,4 +1,4 @@
-import multer, { MulterError } from 'multer';
+import { MulterError } from 'multer';
 import { insertFile, replacePlaceholder } from '../utils/uploads/upload';
 import { Request, Response, NextFunction } from 'express';
 import { FileObjects, FileRequest } from "../types/upload";
@@ -10,7 +10,6 @@ export function handleFileUpload(req: FileRequest, res: Response, next: NextFunc
         try {
             console.log(req.file);
             if (err instanceof MulterError) {
-
                 return next(err);
             } else if (err) {
                 return next(err);
@@ -22,8 +21,6 @@ export function handleFileUpload(req: FileRequest, res: Response, next: NextFunc
             if ((req as Request).method === 'POST') {
                 const fileUrls: string[] = [];
                 const fileObjects: FileObjects[] = [];
-                // const files: FileObjects[] = ([] as FileObjects[]).concat(...Object.values(req.files));
-                // const uploadFile = files.map(file => file.filename);
 
                 for (const file of files) {
                     fileUrls.push(file.filename as string);
@@ -51,8 +48,6 @@ export function handleFileUpload(req: FileRequest, res: Response, next: NextFunc
             } else if ((req as Request).method === 'PUT') {
                 const fileUrls: string[] = [];
                 const fileObjects: FileObjects[] = [];
-                // const files: FileObjects[] = ([] as FileObjects[]).concat(...Object.values(req.files));
-                // const uploadFile = files.map(file => file.filename);
 
                 for (const file of files) {
                     fileUrls.push(file.filename as string);
