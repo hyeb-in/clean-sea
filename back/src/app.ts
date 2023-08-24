@@ -18,8 +18,8 @@ import { mailSender } from "./utils/sendMail";
 const app: Express = express();
 app.use(cors());
 app.use(passport.initialize());
-localStrategy();
-jwtStrategy();
+// localStrategy();
+// jwtStrategy();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -1,38 +1,40 @@
 import { Request, Response, NextFunction } from "express";
 import {
-  getBeachByBeachNameService,
-  getBeachByRegionService,
+  getBeachByIdService,
+  getBeachByRegionAndYearService,
   getBeachesService,
 } from "../services/beachService";
-import { validate } from "../utils/validators/beachValidator";
 import { StatusCodes } from "http-status-codes";
-import { IBeach } from "beach";
+import { IBeach } from "../types/beach";
+import { Types } from "mongoose";
 
-const getBeachByBeachName = async (
+const getBeachById = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const name = req.params.name;
+    const _id = new Types.ObjectId(req.params._id); // _id 파라미터를 ObjectId로 변환
 
-    const result = await getBeachByBeachNameService({ name } as IBeach);
-    res.status(200).json(result);
+    const result = await getBeachByIdService(_id); // _id 값을 직접 전달
+    res.status(StatusCodes.OK).json(result);
   } catch (e) {
     next(e);
   }
 };
 
-const getBeachByRegion = async (
+const getBeachByRegionAndYear = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const address = req.params.address;
-
-    const result = await getBeachByRegionService({ address } as IBeach);
-    res.status(200).json(result);
+    const address = req.params.address; // 주소 파라미터를 받아옴
+    const year = req.params.year; // 연도 파라미터를 받아옴
+    console.log(address, year);
+    const result = await getBeachByRegionAndYearService(address, year); // 주소와 연도 값을 직접 전달
+    console.log(result);
+    res.status(StatusCodes.OK).json(result);
   } catch (e) {
     next(e);
   }
@@ -40,11 +42,12 @@ const getBeachByRegion = async (
 
 const getBeaches = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log(req, res);
     const result = await getBeachesService();
-    res.status(200).json(result);
+    res.status(StatusCodes.OK).json(result);
   } catch (e) {
     next(e);
   }
 };
 
-export { getBeachByBeachName, getBeachByRegion, getBeaches };
+export { getBeachById, getBeachByRegionAndYear, getBeaches };

@@ -1,20 +1,12 @@
-import joi, { Schema } from 'joi';
+import joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-export const beachNameValidator = (): Schema => {
-  return joi.object({
-    name: joi.string().required(),
+const validateBeachId = () => {
+  const schema = joi.object({
+    _id: joi.string().required(),
   });
-};
 
-export const addressNameValidator = (): Schema => {
-  return joi.object({
-    address: joi.string().required(),
-  });
-};
-
-function validate(schema: Schema) {
   return (
     req: Request, 
     res: Response, 
@@ -27,6 +19,47 @@ function validate(schema: Schema) {
       next();
     }
   };
-}
+};
 
-export { validate };
+const validateBeachAddress = () => {
+  const schema = joi.object({
+    address: joi.string().required(),
+  });
+
+  return (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+    ) => {
+    const { error } = schema.validate(req.params);
+    if (error) {
+      res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
+    } else {
+      next();
+    }
+  };
+};
+
+const validateBeachYear = () => {
+  const schema = joi.object({
+    address: joi.string().required(),
+  });
+
+  return (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+    ) => {
+    const { error } = schema.validate(req.params);
+    if (error) {
+      res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
+    } else {
+      next();
+    }
+  };
+};
+
+export { 
+  validateBeachYear,
+  validateBeachId, 
+  validateBeachAddress };
