@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { FormControl, Button, Modal, Card, Col } from "react-bootstrap";
 import * as Api from "../../Api";
 import TravelImageWithText from "./TravelImageWithText";
+import SearchInput from "./SearchInput";
 
 const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [beachName, setBeachName] = useState(""); // 해변 이름을 저장할 상태를 추가합니다.
-  const [beachAddress, setBeachAddress] = useState(""); // 해변 주소를 저장할 상태를 추가합니다.
-
+  const [beachName, setBeachName] = useState("");
+  const [beachAddress, setBeachAddress] = useState("");
   const [travelId, setTravelId] = useState({
     _id: travelData._id
   });
 
-  const [editedTravel, setEditedTravel] = useState({
+  const [updatedTravel, setUpdatedTravel] = useState({
     beachId: travelData.beachId,
     date: travelData.date
   });
@@ -42,8 +42,8 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
 
   const handleUpdateTravel = async () => {
     try {
-      await Api.put(`travels/${travelId._id}`, editedTravel);
-      onTravelUpdate(travelData._id, editedTravel);
+      await Api.put(`travels/${travelId._id}`, updatedTravel);
+      onTravelUpdate(travelData._id, updatedTravel);
       setIsEditing(false);
       displayToast('방문 로그가 성공적으로 업데이트 되었습니다.');
     } catch (error) {
@@ -62,7 +62,6 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
     handleCloseDeleteModal();
   };
 
-  // 기본 이미지
   const defaultImage = process.env.PUBLIC_URL + '/stamp.png';
 
   return (
@@ -89,10 +88,14 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
         {isEditing && (
           <>
             <h5>
-              <FormControl type="text" value={editedTravel.beachName} onChange={e => setEditedTravel({ ...editedTravel, beachName: e.target.value })} />
+              <SearchInput
+                beachName={beachName}
+                onBeachIdSelected={(id) => setUpdatedTravel({ ...updatedTravel, beachId: id })}
+                displayToast={displayToast}
+              />
             </h5>
             <p>
-              <FormControl type="text" value={editedTravel.date} onChange={e => setEditedTravel({ ...editedTravel, date: new Date(e.target.value) })} />
+              <FormControl type="text" value={updatedTravel.date} onChange={e => setUpdatedTravel({ ...updatedTravel, date: new Date(e.target.value) })} />
             </p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
               <Button variant="link" onClick={() => setIsEditing(false)}>취소</Button>
