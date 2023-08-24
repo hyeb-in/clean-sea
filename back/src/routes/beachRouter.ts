@@ -10,7 +10,7 @@ import { jwtAuthentication } from "../middlewares/authenticateJwt";
 const beachRouter = Router();
 
 beachRouter
-  .get('/beachbyId/:_id', validateBeachId, getBeachById);
+  .get('/beachbyId/:_id', getBeachById);
 
 beachRouter
   .get('/beachesbyregion/:address/:year', getBeachByRegionAndYear);
