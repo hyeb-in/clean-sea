@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { 
+import {
+  getBeachByBeachName,
   getBeachById,
   getBeachByRegionAndYear,
   getBeaches
@@ -11,6 +12,9 @@ const beachRouter = Router();
 
 beachRouter
   .get('/beachbyId/:_id', getBeachById);
+
+beachRouter
+.get('/beachbyname/:name', getBeachByBeachName);
 
 beachRouter
   .get('/beachesbyregion/:address/:year', getBeachByRegionAndYear);

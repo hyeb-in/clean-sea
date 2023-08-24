@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { FormControl, Button, Modal, Card, Col } from "react-bootstrap";
 import * as Api from "../../Api";
 import TravelImageWithText from "./TravelImageWithText";
@@ -6,6 +6,8 @@ import TravelImageWithText from "./TravelImageWithText";
 const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [beachName, setBeachName] = useState(""); // 해변 이름을 저장할 상태를 추가합니다.
+  const [beachAddress, setBeachAddress] = useState(""); // 해변 주소를 저장할 상태를 추가합니다.
 
   const [travelId, setTravelId] = useState({
     _id: travelData._id
@@ -15,6 +17,20 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
     beachId: travelData.beachId,
     date: travelData.date
   });
+
+  useEffect(() => {
+    const fetchBeachName = async () => {
+      try {
+        const response = await Api.get(`beaches/beachbyId/${travelData.beachId}`);
+        setBeachName(response.data.name);
+        setBeachAddress(response.data.address);
+      } catch (error) {
+        console.error('해변 이름을 가져오는데 실패했습니다.', error);
+      }
+    };
+
+    fetchBeachName();
+  }, [travelData.beachId]);
 
   const handleCloseDeleteModal = () => {
     setShowDeleteModal(false);
@@ -55,11 +71,11 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
         {!isEditing && (
           <Card style={{ width: '100%', marginBottom: '15px' }}>
             <Col md={2}>
-              <TravelImageWithText text={"테스트"} imageUrl={defaultImage} />
+              <TravelImageWithText text={beachAddress} imageUrl={defaultImage} />
             </Col>
             <Col md={8}>
               <Card.Body>
-                <Card.Title>{travelData.beachId}</Card.Title>
+                <Card.Title>{beachName}</Card.Title>
                 <Card.Text>{travelData.date}</Card.Text>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                   <Button variant="link" onClick={() => setIsEditing(true)}>편집</Button>
@@ -73,7 +89,7 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
         {isEditing && (
           <>
             <h5>
-              <FormControl type="text" value={editedTravel.beachId} onChange={e => setEditedTravel({ ...editedTravel, beachId: e.target.value })} />
+              <FormControl type="text" value={editedTravel.beachName} onChange={e => setEditedTravel({ ...editedTravel, beachName: e.target.value })} />
             </h5>
             <p>
               <FormControl type="text" value={editedTravel.date} onChange={e => setEditedTravel({ ...editedTravel, date: new Date(e.target.value) })} />
