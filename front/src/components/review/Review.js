@@ -39,7 +39,6 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
     try {
       if (!loggedInUser) {
         alert("유저 없음");
-        // to do: 유저 없음 ?? 로그인화면으로 이동
       }
       // 글자수 제한: 1글자이상 100자이하
       if (!isValid) {
@@ -84,12 +83,6 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
     }
   };
 
-  const imageUrls = [];
-  // files -> urls로 변경 후 carousel에 전달해준다
-  const getFileUrls = () => {
-    // uploadFile
-  };
-
   return (
     <>
       <Card bg="light" key={reviewId} className="my-5 review-container">
@@ -97,9 +90,6 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
           <ReviewTitle review={review} setReviews={setReviews} />
         </Card.Header>
         <Card.Body className="px-5 py-12">
-          {uploadFile?.length === 0 && (
-            <CarouselWrapper imageUrls={imageUrls} />
-          )}
           {uploadFile?.length > 0 && <CarouselWrapper imageUrls={uploadFile} />}
           <Row>
             <Col className="comment__author">{userName}</Col>

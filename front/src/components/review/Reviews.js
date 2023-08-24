@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import ReviewCard from "./Review";
+import Review from "./Review";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "./NoReviewIndicator";
 import * as Api from "../../Api";
@@ -14,7 +14,7 @@ const Reviews = ({ reviews, setReviews }) => {
   const { setIsHandlerEnabled } = useContext(HandlerEnabledContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-
+  console.log(reviews);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,7 +43,7 @@ const Reviews = ({ reviews, setReviews }) => {
                 key={review._id}
                 className="d-flex justify-content-center align-items-center"
               >
-                <ReviewCard review={review} setReviews={setReviews} />
+                <Review review={review} setReviews={setReviews} />
               </Col>
             ))}
           {isLoaded && reviews?.length === 0 && <NoReviewIndicator />}
