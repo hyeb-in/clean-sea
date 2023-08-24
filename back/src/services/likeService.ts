@@ -1,5 +1,6 @@
 import { ReviewModel } from '../db/schemas/reviewSchema';
 import { BeachModel } from "../db/schemas/beachSchema";
+import { array } from 'joi';
 enum TargetType {
     Beach = 'beach',
     Review = 'review',
@@ -20,17 +21,36 @@ async function updateLikeCount(targetType : TargetType, targetId : string, chang
     }
 }
 
-async function updateLikeValue(targetType : TargetType, userId : string, isLike : string){
+async function updateLikeValue(targetType : TargetType, userId : string, targetId : string, isLike : string){
     try{
-        const updated = {
-            $set : {'Likes.$[elem].isLike' : isLike }
-        };
-        const arrayFilters = [{'elem.userId' : userId}];
-
         if(targetType === TargetType.Beach){
             //추가예정
         }else if(targetType === TargetType.Review){
-            await ReviewModel.updateMany({},updated,{arrayFilters});
+            const existingLike = await ReviewModel.findOne({ _id: targetId, 'Likes.userId': userId });
+
+        if (existingLike) {
+            const pullUpdate = {
+                $pull: { Likes: { userId: userId } }
+            };
+            await ReviewModel.findOneAndUpdate({ _id: targetId }, pullUpdate);
+            const newLike = {
+                userId: userId,
+                isLike: isLike
+            };
+            const pushUpdate = {
+                $push: { Likes: newLike }
+            };
+            await ReviewModel.findOneAndUpdate({ _id: targetId }, pushUpdate);
+        } else {
+            const newLike = {
+                userId: userId,
+                isLike: isLike
+            };
+            const pushUpdate = {
+                $push: { Likes: newLike }
+            };
+            await ReviewModel.findOneAndUpdate({ _id: targetId }, pushUpdate);
+        }
         }
     }catch(error){
         throw error;

@@ -10,7 +10,6 @@ interface IReview extends Document {
     uploadFile?: [string];
     comments?: Types.ObjectId[];
     likeCount? : number;
-    isLike: 'yes' | 'no';
     Likes? : ILike[];
 }
 
@@ -43,12 +42,10 @@ const ReviewSchema : Schema<IReview> = new Schema({
       {
         userId : {
             type : String,
-            required : true,
         },
         isLike : {
             type : String,
             enum : ['yes', 'no'],
-            required : true,
         },
       },
     ],

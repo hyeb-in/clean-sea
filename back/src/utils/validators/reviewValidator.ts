@@ -23,9 +23,7 @@ export const postReviewValidator = async (
     });
 
     const { value, error } = schema.validate({ title, content, imageUrls, location });
-    console.log(1111111);
     if (error) {
-        console.log(error);
         next(error.details[0].message);
     }
 
