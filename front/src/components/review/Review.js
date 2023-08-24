@@ -29,7 +29,6 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
   const isValid = comment.length > 0 && comment.length < 100;
   const [newComments, setNewComments] = useState([]);
   const [showDetails, setShowDetails] = useState(true);
-  const isContentReduced = content?.length > 25;
   const isLiked = loggedInUser && review?.isLike === IS_LIKE.yes;
   console.log(review);
 
@@ -76,8 +75,8 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
             <span className="comment__title">
               {title}
               <span className="comment__content">
-                {showDetails && isContentReduced
-                  ? content.substring(0, 80) + "..."
+                {showDetails && content?.length > 10
+                  ? content.slice(0, 10) + "..."
                   : content}
               </span>
             </span>
