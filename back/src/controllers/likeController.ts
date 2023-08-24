@@ -11,19 +11,19 @@ const toggleLike = async (req : IRequest, res : Response, next : NextFunction) =
         const { targetType, targetId } = req.body;
 
         const existingLike : ILike | null = await LikeModel.findOne({userId, targetType, targetId });
-
         if(existingLike){
+
             await existingLike.deleteOne({ _id : existingLike._id});
-            await updateLikeValue(targetType, userId, "no");
+            await updateLikeValue(targetType, userId, targetId,  "no");
             await updateLikeCount(targetType, targetId, -1);
 
             return res.status(200).json({message : 'Like removed'});
         }else{
             const newLike = new LikeModel({ userId, targetType, targetId });
             await newLike.save();
-            await updateLikeValue(targetType, userId, "yes");
+            await updateLikeValue(targetType, userId, targetId, "yes");
             await updateLikeCount(targetType, targetId, 1);
-            return res.status(201).json({message : 'Like added'});
+            return res.status(200).json({message : 'Like added'});
         }
     }catch(err){
         next(err);

@@ -36,6 +36,9 @@ const ActionSelectorModal = () => {
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
   // user가 있는지, 유저 author인지 확인하는 로직은 모달로 넘어오기 전에 판단한다
   // 굳이 이 컴포넌트에까지 유저 정보를 가져오지 않도록한다
+  const isReviewEditing = modalVisible?.data?.reviewId;
+  const isCommentEditing = modalVisible?.data?.commentId;
+
   const deleteById = async (data) => {
     try {
       const { reviewId, commentId } = data;
@@ -85,17 +88,21 @@ const ActionSelectorModal = () => {
             // 수정하기 위해서 review 혹은 review id가 필요
             // review list -> ellipsis 클릭할 때 (<ReviewTitle /> 내부에서) data를 포함시켜서 건내준다
             // 받은 정보 + 여기서 필요한 정보를 추가해서 보내준다
+            if (isReviewEditing) {
+              // edit review인지 comment인지 구분해서 라우팅
+              setModalVisible({
+                ...modalVisible, // 받은 정보에 추가한다
+                type: MODAL_TYPE.editReview,
+              });
+            } else if (isCommentEditing) {
+              setModalVisible({
+                ...modalVisible,
+                type: MODAL_TYPE.floatingReview,
+              });
+            }
 
-            // edit review인지 comment인지 구분해서 라우팅
-            setModalVisible({
-              ...modalVisible,
-              type: modalVisible.data.reviewId
-                ? MODAL_TYPE.editReview
-                : MODAL_TYPE.editComment,
-
-              // ActionSelector -> 실제 수정 가능한 모달 창으로 이동
-              // <EditReview />
-            });
+            // ActionSelector -> 실제 수정 가능한 모달 창으로 이동
+            // <EditReview />
           }}
         >
           수정

@@ -7,6 +7,7 @@ import {
   deletedTravel,
 } from "../services/travelService";
 import { IRequest } from "user";
+import { errorGenerator } from "../utils/errorGenerator";
 
 const sendResponse = function (res: Response, statusCode: number, data: any) {
   if (statusCode >= 400) {
@@ -28,8 +29,9 @@ const createTravel = async (
     });
 
     return sendResponse(res, StatusCodes.CREATED, addMyTravel);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    const customError = errorGenerator(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
@@ -40,9 +42,10 @@ const getMyTravel = async (
 ) => {
   try {
     const myTravel = await getTravel(req.user._id);
-    return sendResponse(res, StatusCodes.OK, myTravel);
+    return sendResponse(res, StatusCodes.CREATED, myTravel);
   } catch (err) {
-    next(err);
+    const customError = errorGenerator("Failed to retrieve travels", StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
@@ -54,9 +57,10 @@ const getUserTravel = async (
   try {
     const userTravel = await getTravel(req.params.userId);
 
-    return sendResponse(res, StatusCodes.OK, userTravel);
+    return sendResponse(res, StatusCodes.CREATED, userTravel);
   } catch (err) {
-    next(err);
+    const customError = errorGenerator("Failed to retrieve user travels", StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
@@ -72,9 +76,10 @@ const updateTravel = async (
       toUpdate: { ...req.body },
     });
 
-    return sendResponse(res, StatusCodes.OK, updatedTravel);
+    return sendResponse(res, StatusCodes.CREATED, updatedTravel);
   } catch (err) {
-    next(err);
+    const customError = errorGenerator("Failed to update travels", StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
@@ -86,9 +91,10 @@ const deleteTravel = async (
   try {
     const deleteTravel = await deletedTravel(req.params.travelId);
 
-    return sendResponse(res, StatusCodes.OK, deleteTravel);
+    return sendResponse(res, StatusCodes.CREATED, deleteTravel);
   } catch (err) {
-    next(err);
+    const customError = errorGenerator("Failed to delete travels", StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 

@@ -24,6 +24,7 @@ const DragDropContainer = ({
   ) : (
     <Button className="mb-2">
       <FontAwesomeIcon icon={faPlus} /> 추가하기
+      {/* 실제 submit 버튼 아님!! >> 사진을 추가하는 버튼 */}
     </Button>
   );
   let fileCount = preview && preview.length;

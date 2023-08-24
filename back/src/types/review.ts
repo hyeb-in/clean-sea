@@ -8,7 +8,7 @@ interface IReview extends Document {
   location? : string;
   author?: string;
   uploadFile?: [string];
-  isLike: 'yes' | 'no';
+  isLike?: 'yes' | 'no';
   Likes? : ILike[];
 }
 

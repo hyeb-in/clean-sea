@@ -16,17 +16,11 @@ const Comment = ({ comment }) => {
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
   const [targetId, setTargetId] = useState(null);
   const { postId, userId, content, userName, date } = comment;
-  // get user avatarUrl
   const isMyComment = loggedInUser && loggedInUser._id === userId;
   const isButtonsVisible = isMyComment && !isEditing;
-  //  && isActionSelectorVisible;
-
-  console.log(modalVisible);
 
   const editComment = async (e) => {
     e.preventDefault();
-
-    console.log(modalVisible.data);
     if (!isMyComment) {
       // return setToastMsg("다른 사람의 게시물을 수정할 수 없습니다");
       alert("다른사람 게시물 수정못함");
@@ -85,18 +79,17 @@ const Comment = ({ comment }) => {
               <Form onSubmit={(e) => editComment(e)}>
                 <Form.Control
                   value={newComment.content}
-                  onChange={(e) => {
-                    // put api 요청 보내기
-                    setNewComment({ ...comment, content: e.target.value });
-                  }}
+                  onChange={(e) =>
+                    setNewComment({ ...comment, content: e.target.value })
+                  }
                 />
               </Form>
             </Col>
           )}
           {/* to do: 내가 올린 거, 좋아요 누른 게시물이면 하트 solid */}
 
-          {/* 2.\\ MODAL_TYPE.actionSelector: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
-          {isMyComment && modalVisible.type === MODAL_TYPE.actionSelector && (
+          {/* 2. ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
+          {isMyComment && (
             <Col
               xs="auto"
               onClick={() => {
