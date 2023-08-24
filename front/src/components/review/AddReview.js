@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Button, Col, Modal, Row } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBomb, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { ModalVisibleContext, UserStateContext } from "../../App";
@@ -7,8 +7,8 @@ import * as Api from "../../Api";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 import ConfirmModal from "../common/popup/ConfirmModal";
-import ReviewTextForm from "./ReviewTextForm";
-import DragAndDropnPreview from "../common/DragDropContainer";
+import ReviewForm from "./ReviewForm";
+import DragDropContainer from "../common/DragDropContainer";
 import { MODAL_TYPE } from "../../constants";
 
 const RESULT_ENUM = {
@@ -20,16 +20,21 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
 
-  const [review, setReview] = useState({ title: "", content: "" });
+  const [review, setReview] = useState({
+    title: "",
+    content: "",
+    uploadFile: null,
+  });
   const { title, content } = review;
   const [preview, setPreview] = useState(null);
+  const [files, setFiles] = useState(null);
 
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // 게시글 업로드
-  const addReview = async (e) => {
+  const onAddReview = async (e) => {
     e.preventDefault();
     if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
 
@@ -47,7 +52,10 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       }
       setIsUploading(true);
       console.log(review, "업로드 될 review 형식 <<<<");
-      const res = await Api.post("reviews/register", review);
+      const res = await Api.post("reviews/register", {
+        ...review,
+        uploadFile: files,
+      });
       // error 처리
       if (!res.data) {
         return alert("노노");
@@ -74,7 +82,6 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       data: null,
     });
     setReview(null);
-    // setToast(null);
     setResult(null);
   };
 
@@ -105,32 +112,22 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
         {/* 모달창 내부: 입력 받는 공간 */}
         {!isUploading && !result && (
           <ModalBodyWrapper title={headerTitle}>
-            {
-              <Row className="align-items-center">
-                {/* 드래그앤 드롭으로 파일 업로드 받을 수 있는 구역 */}
-                <Col
-                  xs={7}
-                  className="d-flex flex-column align-items-center h-100"
-                >
-                  <DragAndDropnPreview
-                    preview={preview}
-                    setPreview={setPreview}
-                    review={review}
-                    setReview={setReview}
-                  />
-                </Col>
-                {/* 리뷰 제목, 내용에 대한 인풋 */}
-                <Col xs={5}>
-                  <ReviewTextForm
-                    title={title}
-                    content={content}
-                    review={review}
-                    setReview={setReview}
-                    onSubmit={addReview}
-                  />
-                </Col>
-              </Row>
-            }
+            <ReviewForm
+              title={title}
+              content={content}
+              review={review}
+              setReview={setReview}
+              onSubmit={onAddReview}
+            >
+              <DragDropContainer
+                preview={preview}
+                setPreview={setPreview}
+                review={review}
+                setReview={setReview}
+                blobURLsExpired={isFetched}
+                setFiles={setFiles}
+              />
+            </ReviewForm>
           </ModalBodyWrapper>
         )}
         {/* 아래의 로직은 여기 있는 게 아니라 부모로 나가고, 전역적으로 사용되어야 할 것 같음 */}
@@ -163,11 +160,7 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
         {/* 리뷰 내용 입력 모달창 내부 footer */}
         {!isUploading && !result && (
           <Modal.Footer className="d-flex justify-content-end">
-            <Button
-              variant="primary"
-              type="submit"
-              onClick={addReview ? addReview : null}
-            >
+            <Button variant="primary" type="submit" onClick={onAddReview}>
               공유
             </Button>
           </Modal.Footer>

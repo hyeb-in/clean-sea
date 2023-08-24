@@ -1,6 +1,4 @@
-import { Form } from "react-bootstrap";
-
-const ReviewTextForm = ({ title, content, review, setReview, onSubmit }) => {
+const SearchLocationByTerm = () => {
   // const [searchTerm, setSearchTerm] = useState("");
   // const [searchResults, setSearchResults] = useState([]);
   // const [currentPosition, setCurrentPosition] = useState();
@@ -61,16 +59,7 @@ const ReviewTextForm = ({ title, content, review, setReview, onSubmit }) => {
   // }, []);
 
   return (
-    <Form onSubmit={onSubmit}>
-      <Form.Group>
-        <Form.Label>제목</Form.Label>
-        <Form.Control
-          as="input"
-          size="sm"
-          value={title}
-          onChange={(e) => setReview({ ...review, title: e.target.value })}
-        />
-      </Form.Group>
+    <>
       {/* 사용자 위치, 검색어 기반으로 위치 추가하기 */}
       {/* to do: cors 문제 해결한 후에 작업 */}
       {/* <Form.Group>
@@ -93,27 +82,7 @@ position: TOAST_POPUP_POSITION.middleCenter,
   className="my-2"
 />
 </Form.Group> */}
-
-      <Form.Group>
-        <Form.Label>내용</Form.Label>
-        <Form.Control
-          rows={6}
-          as="textarea"
-          value={content}
-          onChange={(e) => setReview({ ...review, content: e.target.value })}
-        />
-      </Form.Group>
-      <small
-        className={
-          content.length < 300
-            ? "text-muted flex-justify-end"
-            : "delete flex-justify-end"
-        }
-      >
-        {content ? content.length : "0"}/300
-      </small>
-    </Form>
+    </>
   );
 };
-
-export default ReviewTextForm;
+export default SearchLocationByTerm;

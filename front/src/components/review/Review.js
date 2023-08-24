@@ -12,13 +12,7 @@ import Timestamp from "../common/Timestamp";
 import { MODAL_TYPE } from "../../constants";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const Review = ({
-  review,
-  setReviews,
-  setShowingReview,
-  selectedReview,
-  setSelectedReview,
-}) => {
+const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
   const {
     _id: reviewId,
     author: authorId,
@@ -30,6 +24,7 @@ const Review = ({
     comments,
     likeCount,
   } = review;
+  console.log(review);
 
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
@@ -89,10 +84,12 @@ const Review = ({
     }
   };
 
-  const url = [
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=873&q=80",
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=873&q=80",
-  ];
+  const imageUrls = [];
+  // files -> urls로 변경 후 carousel에 전달해준다
+  const getFileUrls = () => {
+    // uploadFile
+  };
+
   return (
     <>
       <Card bg="light" key={reviewId} className="my-5 review-container">
@@ -100,7 +97,9 @@ const Review = ({
           <ReviewTitle review={review} setReviews={setReviews} />
         </Card.Header>
         <Card.Body className="px-5 py-12">
-          {uploadFile?.length === 0 && <CarouselWrapper imageUrls={url} />}
+          {uploadFile?.length === 0 && (
+            <CarouselWrapper imageUrls={imageUrls} />
+          )}
           {uploadFile?.length > 0 && <CarouselWrapper imageUrls={uploadFile} />}
           <Row>
             <Col className="comment__author">{userName}</Col>

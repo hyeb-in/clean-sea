@@ -5,7 +5,7 @@ import { MODAL_TYPE } from "../../constants";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 import DragDropContainer from "../common/DragDropContainer";
 import ReviewTitle from "./ReviewTitle";
-import ReviewTextForm from "./ReviewTextForm";
+import ReviewTextForm from "./ReviewForm";
 import * as Api from "../../Api";
 
 // <ReviewTitle/>에서  '...' 버튼을 클릭 => id, review 값 modalVisible 컨텍스트에 전달
