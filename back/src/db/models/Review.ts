@@ -1,5 +1,6 @@
 import { ReviewModel } from '../schemas/reviewSchema';
 import { IReview } from '../../types/review';
+const mongoose = require('mongoose');
 
 async function createReview(toCreate: IReview): Promise<IReview> {
   const newReview = await ReviewModel.create(toCreate);
@@ -27,14 +28,19 @@ async function findUserReviews(author:string): Promise<IReview[]>{
       })
       .sort({createdAt : -1})
       .exec();
-  
 
-  const userReviewsObjects = userReviews.map(review =>{
-    const isLike = review.Likes.some(like=>like.userId === author && like.isLike === 'yes');
-    const reviewObject = review.toObject() as IReview;
-    reviewObject.isLike = isLike ? 'yes' : 'no';
-    return reviewObject;
-  });
+    const authorString = author.toString();
+    console.log(authorString);
+    const userReviewsObjects = userReviews.map(review =>{
+      const isLike = review.Likes.some(like=>like.userId === authorString && like.isLike === 'yes');
+      const reviewObject = review.toObject() as IReview;
+      if (isLike) {
+        reviewObject.isLike = 'yes';
+      }else{
+        reviewObject.isLike = 'no';
+      }
+      return reviewObject;
+    });
   return userReviewsObjects;
 }
 
