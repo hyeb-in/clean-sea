@@ -96,7 +96,7 @@ const History = ({ displayToast }) => {
             <Modal.Title>새 방문 로그 작성</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <SearchInput onIdSelected={handleBeachIdChange} />
+            <SearchInput onBeachIdSelected={handleBeachIdChange} displayToast={displayToast} />
             <FormControl
               type="date"
               className="mt-2"

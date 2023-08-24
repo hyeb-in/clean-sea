@@ -1,7 +1,7 @@
 import { BeachModel, IBeach } from "../schemas/beachSchema";
 
 async function BeachByBeachName(name: IBeach): Promise<IBeach[]> {
-  const getBeaches = await BeachModel.findOne({ name : name }) as IBeach[];
+  const getBeaches = await BeachModel.findOne(name) as IBeach[];
   return getBeaches;
 }
 
