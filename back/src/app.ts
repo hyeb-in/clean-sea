@@ -41,7 +41,7 @@ app.use("/auth", authRouter);
 app.use("/comments", commentAuthRouter);
 app.use("/api", likeAuthRouter);
 
-app.use('/uploads', express.static('imageUpload'));
+app.use("/uploads", express.static("imageUpload"));
 
 app.use(errorMiddleware);
 

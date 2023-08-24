@@ -1,11 +1,4 @@
-import {
-  Button,
-  CloseButton,
-  Col,
-  Container,
-  Modal,
-  Row,
-} from "react-bootstrap";
+import { CloseButton, Col, Container, Modal, Row } from "react-bootstrap";
 import ReviewTitle from "../ReviewTitle";
 import CarouselWrapper from "../../common/Carousel";
 import { ModalVisibleContext } from "../../../App";

@@ -10,6 +10,7 @@ import ConfirmModal from "../common/popup/ConfirmModal";
 import ReviewForm from "./ReviewForm";
 import DragDropContainer from "../common/DragDropContainer";
 import { MODAL_TYPE } from "../../constants";
+import axios from "axios";
 
 const RESULT_ENUM = {
   SUCCESS: "성공",
@@ -20,12 +21,7 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
 
-  const [review, setReview] = useState({
-    title: "",
-    content: "",
-    uploadFile: null,
-  });
-  const { title, content } = review;
+  const [review, setReview] = useState({ title: "", content: "" });
   const [preview, setPreview] = useState(null);
   const [files, setFiles] = useState(null);
 
@@ -39,23 +35,35 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
     if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
 
     try {
-      if (title.length < 4) {
+      if (review?.title.length < 4) {
         return alert("글자수 길게 4 이상");
       }
 
-      if (content.length < 4) {
+      if (review?.content.length < 4) {
         return alert("content length 4이상");
       }
 
-      if (content.length > 300) {
+      if (review?.content.length > 300) {
         return alert("content length 제한");
       }
+      let formData = new FormData(files);
+      if (files) {
+        formData.append("uploadFile", formData);
+      }
       setIsUploading(true);
-      console.log(review, "업로드 될 review 형식 <<<<");
-      const res = await Api.post("reviews/register", {
-        ...review,
-        uploadFile: files,
-      });
+      console.log(files, formData, "업로드 될 review 형식 <<<<");
+      // const res = await Api.post("reviews/register", formData);
+      // console.log(res);
+      const res = await axios.post(
+        "http://localhost:5001/reviews/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+          },
+        }
+      );
       // error 처리
       if (!res.data) {
         return alert("노노");
@@ -69,7 +77,6 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
         isVisible: false,
         data: null,
       });
-      // to do: 모달창 띄우기
     }
     setIsUploading(false);
     setResult(RESULT_ENUM.SUCCESS);
@@ -97,11 +104,11 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
         onHide={() => {
           // 모달창 제거
           // title과 content가 비어있다면(날아갈 데이터가 없다면) 유저에게 묻지 않고 모달창 제거
-          if (title !== "" || content !== "") {
+          if (review.title !== "" || review.content !== "") {
             // 내용이 있다면 다시 한 번 확인하는 모달창에 표시한다
             setShowConfirmModal(true);
           }
-          if (title === "" && content === "") {
+          if (review.title === "" && review.content === "") {
             return closeReviewFormModal();
           }
         }}
@@ -113,12 +120,13 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
         {!isUploading && !result && (
           <ModalBodyWrapper title={headerTitle}>
             <ReviewForm
-              title={title}
-              content={content}
+              title={review.title}
+              content={review.content}
               review={review}
               setReview={setReview}
               onSubmit={onAddReview}
             >
+              {/* children으로 바로 넣어주기 가능? */}
               <DragDropContainer
                 preview={preview}
                 setPreview={setPreview}
@@ -127,6 +135,9 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
                 blobURLsExpired={isFetched}
                 setFiles={setFiles}
               />
+              {/* <Button onSubmit={onAddReview} type="submit">
+                button
+              </Button> */}
             </ReviewForm>
           </ModalBodyWrapper>
         )}
@@ -158,15 +169,15 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
           />
         )}
         {/* 리뷰 내용 입력 모달창 내부 footer */}
-        {!isUploading && !result && (
+        {/* {!isUploading && !result && (
           <Modal.Footer className="d-flex justify-content-end">
             <Button variant="primary" type="submit" onClick={onAddReview}>
               공유
             </Button>
           </Modal.Footer>
-        )}
+        )} */}
         {/* 입력 도중에 화면 이탈할 경우 confirm 모달창 띄운다 */}
-        {(content !== "" || title !== "") && (
+        {(review?.content !== "" || review?.title !== "") && (
           <ConfirmModal
             show={showConfirmModal}
             setShowConfirmModal={setShowConfirmModal}

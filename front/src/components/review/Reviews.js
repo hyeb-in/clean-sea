@@ -4,7 +4,11 @@ import Review from "./Review";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "./NoReviewIndicator";
 import * as Api from "../../Api";
-import { HandlerEnabledContext, ModalVisibleContext } from "../../App";
+import {
+  HandlerEnabledContext,
+  ModalVisibleContext,
+  UserStateContext,
+} from "../../App";
 import ActionSelectorModal from "../common/popup/ActionSelectorModal";
 import { MODAL_TYPE } from "../../constants";
 import EditReview from "./EditReview";
@@ -12,23 +16,31 @@ import FloatingReview from "./comment/FloatingReview";
 
 const Reviews = ({ reviews, setReviews }) => {
   const { setIsHandlerEnabled } = useContext(HandlerEnabledContext);
+  const { user: loggedInUser } = useContext(UserStateContext);
   const [isLoaded, setIsLoaded] = useState(false);
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  console.log(reviews);
+  const { modalVisible } = useContext(ModalVisibleContext);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await Api.get("reviews/reviewList");
-        // to do: 서버에러 -> 모달창으로 바꾸기
+        if (!loggedInUser) {
+          const res = await Api.get("reviews/reviewList");
+          setIsHandlerEnabled(true);
+          setReviews(res.data);
+          setIsLoaded(true);
+          return;
+        }
+        const getLoggedInUsersList = await Api.get("reviews/reviewListLogin");
+        console.log(getLoggedInUsersList);
         setIsHandlerEnabled(true);
-        setReviews(res.data);
+        setReviews(getLoggedInUsersList.data);
         setIsLoaded(true);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [setIsHandlerEnabled, setReviews]);
+  }, [setIsHandlerEnabled, setReviews, loggedInUser]);
 
   return (
     <>
@@ -49,20 +61,20 @@ const Reviews = ({ reviews, setReviews }) => {
           {isLoaded && reviews?.length === 0 && <NoReviewIndicator />}
         </Row>
       </Container>
-      {/* {} */}
       {/* 1. isActionSelectorVisible, setActionSelectorVisible 상태관리 useContext */}
       {/* 2. 삭제, 취소, 수정 띄우는 ActionSelectorModal */}
       {/* 3. 커멘트 수정 -> ActionSelectorModal 없애고 -> FloatingReviewModal */}
 
-      {/* 액션 셀렉터 - 수정, 삭제, 취소 모달창 띄우기 */}
+      {/* 모달1. edit review 수정, 삭제, 취소 선택 모달창 띄우기 */}
       {modalVisible.type === MODAL_TYPE.actionSelector && (
         <ActionSelectorModal />
       )}
 
-      {/* 댓글 전체 볼 수 있는 창 띄우기 */}
+      {/* 모달2. comments get, post, 댓글 전체 볼 수 있는 창 띄우기 */}
+      {/* delete comment는 actionselector에서 처리한다 */}
       {modalVisible.type === MODAL_TYPE.floatingReview && <FloatingReview />}
 
-      {/* 수정하기 폼 모달 띄우기 */}
+      {/* 모달3. review 수정하기 폼 모달 */}
       {modalVisible.type === MODAL_TYPE.editReview && (
         <EditReview
           headerTitle="수정하기"
