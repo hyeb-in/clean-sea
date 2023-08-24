@@ -14,7 +14,7 @@ export const postTravelValidator = async (
         beachId: joi.required(),
         date : joi.date().iso().required(),
     });
-    const { error } = schema.validate({ date });
+    const { error } = schema.validate({ author, beachId, date });
 
     if (error) {
         const errorMessage = error.details[0].message;

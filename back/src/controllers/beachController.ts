@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { getBeachByBeachNameService, getBeachByIdService, getBeachByRegionAndYearService, getBeachesService } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
-import { IBeach } from '../types/beach';
+import { IBeach } from 'beach';
 import { Types } from "mongoose";
 
 const getBeachByBeachName = async (
