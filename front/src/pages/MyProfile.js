@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom';
 import History from "../components/travel/History";
 import CardHeader from "react-bootstrap/CardHeader";
 import * as Api from "../Api";
-import ToastWrapper from "../components/common/ToastWrapper";
-import { TOAST_POPUP_STATUS } from "../constants";
+import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from "../constants";
+import ToastWrapper from "../components/common/popup/ToastWrapper";
 
 const MyProfile = () => {
   const { id } = useParams();
@@ -131,11 +131,9 @@ const MyProfile = () => {
       </Container>
       {showToast && (
         <ToastWrapper
-          toast={{
-            text: toastMessage,
-            position: "top-center",
-            status: TOAST_POPUP_STATUS.info
-          }}
+          text={toastMessage}
+          position={TOAST_POPUP_POSITION.topCenter}
+          status={TOAST_POPUP_STATUS.info}
           onClose={() => setShowToast(false)}
         />
       )}
