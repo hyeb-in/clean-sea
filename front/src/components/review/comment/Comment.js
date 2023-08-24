@@ -94,8 +94,9 @@ const Comment = ({ comment }) => {
             </Col>
           )}
           {/* to do: 내가 올린 거, 좋아요 누른 게시물이면 하트 solid */}
-          {/* ellipsis 아이콘: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
-          {isMyComment && (
+
+          {/* 2.\\ MODAL_TYPE.actionSelector: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
+          {isMyComment && modalVisible.type === MODAL_TYPE.actionSelector && (
             <Col
               xs="auto"
               onClick={() => {
@@ -103,6 +104,7 @@ const Comment = ({ comment }) => {
                   type: MODAL_TYPE.actionSelector,
                   isVisible: true,
                   data: {
+                    commentId: comment._id,
                     comment,
                   },
                 });

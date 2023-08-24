@@ -1,6 +1,6 @@
 import { FileUploader } from "react-drag-drop-files";
 import CarouselWrapper from "./Carousel";
-import DragAndDrop from "./DragAndDrop";
+import DropZone from "./DropZone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import { useContext, useEffect } from "react";
@@ -15,7 +15,7 @@ const DragDropContainer = ({ preview, setPreview, review, setReview }) => {
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
 
   const fileUploaderIndicator = !preview ? (
-    <DragAndDrop />
+    <DropZone />
   ) : (
     <Button className="mb-2">
       <FontAwesomeIcon icon={faPlus} /> 추가하기

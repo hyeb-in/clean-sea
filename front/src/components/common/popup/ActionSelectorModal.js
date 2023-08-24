@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { ListGroup, Modal } from "react-bootstrap";
-import { ModalVisibleContext } from "../../App";
-import { MODAL_TYPE } from "../../constants";
-import * as Api from "../../Api";
+import { ModalVisibleContext } from "../../../App";
+import { MODAL_TYPE } from "../../../constants";
+import * as Api from "../../../Api";
 
 // export const MODAL_TYPE = {
 //   floatingReview: "FLOATING_REVIEW",
@@ -31,9 +31,11 @@ import * as Api from "../../Api";
  * 
  */
 const ActionSelectorModal = () => {
+  // commentId가 있다면 comment를 삭제
+  // reviewId가 있다면 reviewId를 삭제
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
   // user가 있는지, 유저 author인지 확인하는 로직은 모달로 넘어오기 전에 판단한다
-  // 굳이 이 컴포넌트에까지 유저 정보를 가져오지 않도록!
+  // 굳이 이 컴포넌트에까지 유저 정보를 가져오지 않도록한다
   const deleteById = async (data) => {
     try {
       const { reviewId, commentId } = data;
@@ -83,10 +85,14 @@ const ActionSelectorModal = () => {
             // 수정하기 위해서 review 혹은 review id가 필요
             // review list -> ellipsis 클릭할 때 (<ReviewTitle /> 내부에서) data를 포함시켜서 건내준다
             // 받은 정보 + 여기서 필요한 정보를 추가해서 보내준다
-            console.log(modalVisible.data);
+
+            // edit review인지 comment인지 구분해서 라우팅
             setModalVisible({
               ...modalVisible,
-              type: MODAL_TYPE.editReview,
+              type: modalVisible.data.reviewId
+                ? MODAL_TYPE.editReview
+                : MODAL_TYPE.editComment,
+
               // ActionSelector -> 실제 수정 가능한 모달 창으로 이동
               // <EditReview />
             });
@@ -101,17 +107,11 @@ const ActionSelectorModal = () => {
           onClick={() => {
             if (!modalVisible.data.commentId && !modalVisible.data.reviewId) {
               // 어떤 로직으로 들어온 건지 찾아서 에러메세지 띄워주기
-              alert("아무 정보가 없음. 지우거나 수정 불가");
-            } else {
-              // commentId가 있다면 comment를 삭제
-              deleteById(modalVisible.data);
+              return alert("아무 정보가 없음. 지우거나 수정 불가");
             }
-            // 정보를 가져오지 못해서 실패할지라도 모달 제거를 위해서 업데이트해준다
-            setModalVisible({
-              type: null,
-              isVisible: false,
-              data: null,
-            });
+            // commentId가 있다면 comment를 삭제
+            // reviewId가 있다면 reviewId를 삭제
+            deleteById(modalVisible.data);
           }}
         >
           삭제

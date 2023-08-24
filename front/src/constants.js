@@ -61,4 +61,19 @@ export const MODAL_TYPE = {
   addReview: "ADD_REVIEW",
   editReview: "EDIT_REVIEW_FORM",
   deleteReview: "DELETE_REVIEW",
+  editComment: "EDIT_COMMENT",
+  deleteComment: "DELETE_COMMENT",
 };
+
+// export const MODAL_OPTIONS = {
+//   FLOATING_REVIEW: {
+//     type: MODAL_TYPE.floatingReview,
+//     isVisible: false, // >> type이 있어서 굳이 필요한가 싶은데
+//     data: (data) => data,
+//   },
+//   DESTROY_MODAL: {
+//     type: null,
+//     isVisible: false,
+//     data: null,
+//   },
+// };

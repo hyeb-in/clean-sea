@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Container, Modal, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import ReviewCard from "./Review";
-import SpinnerWrapper from "../common/Spinner";
+import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "./NoReviewIndicator";
 import * as Api from "../../Api";
 import { HandlerEnabledContext, ModalVisibleContext } from "../../App";
-import ActionSelectorModal from "../common/ActionSelectorModal";
+import ActionSelectorModal from "../common/popup/ActionSelectorModal";
 import { MODAL_TYPE } from "../../constants";
-import FloatingReview from "./FloatingReview";
 import EditReview from "./EditReview";
+import FloatingReview from "./comment/FloatingReview";
 
 const Reviews = ({ reviews, setReviews }) => {
   const { setIsHandlerEnabled } = useContext(HandlerEnabledContext);
@@ -60,12 +60,8 @@ const Reviews = ({ reviews, setReviews }) => {
       )}
 
       {/* 댓글 전체 볼 수 있는 창 띄우기 */}
-      {modalVisible.type === MODAL_TYPE.floatingReview && (
-        <Modal show={true} centered>
-          <FloatingReview />
-          {/* to do: Modal은 FloatingReview 내부로 옮겨도 될 듯 */}
-        </Modal>
-      )}
+      {modalVisible.type === MODAL_TYPE.floatingReview && <FloatingReview />}
+
       {/* 수정하기 폼 모달 띄우기 */}
       {modalVisible.type === MODAL_TYPE.editReview && (
         <EditReview

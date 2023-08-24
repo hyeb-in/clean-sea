@@ -19,7 +19,7 @@ import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
 import AddReview from "./components/review/AddReview";
 import PageNotFound from "./pages/PageNotFound";
-import ResponseIndicator from "./components/common/ResponseIndicator";
+import ResponseIndicator from "./components/common/indicators/ResponseIndicator";
 import axios from "axios";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./constants";

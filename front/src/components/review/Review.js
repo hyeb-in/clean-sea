@@ -7,8 +7,9 @@ import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 import Comment from "./comment/Comment";
 import * as Api from "../../Api";
-import { UserStateContext } from "../../App";
+import { ModalVisibleContext, UserStateContext } from "../../App";
 import Timestamp from "../common/Timestamp";
+import { MODAL_TYPE } from "../../constants";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const Review = ({
@@ -31,10 +32,11 @@ const Review = ({
   } = review;
 
   const { user: loggedInUser } = useContext(UserStateContext);
+  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
   const [comment, setComment] = useState("");
   const isValid = comment.length > 0 && comment.length < 100;
   const [newComments, setNewComments] = useState([]);
-  const [showMore, setShowMore] = useState(true);
+  const [showDetails, setShowDetails] = useState(true);
   const isContentReduced = content?.length > 25;
 
   const handleCommentSubmit = async (e) => {
@@ -108,16 +110,23 @@ const Review = ({
             <span className="comment__title">
               {`${title}  `}
               <span className="comment__content">
-                {showMore && isContentReduced
+                {showDetails && isContentReduced
                   ? content.substring(0, 80) + "..."
                   : content}
               </span>
             </span>
-            {/* to do: 좋아요를 눌렀나 여부에 따라 solid 하트 or regular 하트 */}
+            {/* 더 보기 누르면 모달창으로 details 띄운다 - 어떤 review의 정보인지 전달 */}
             <Row className="d-flex w-100">
-              <Col className="link bold" onClick={() => setShowMore(!showMore)}>
-                더보기
+              <Col
+                className="link bold"
+                onClick={() => {
+                  setShowDetails(!showDetails);
+                }}
+              >
+                {showDetails && "더보기"}
               </Col>
+
+              {/* to do: 좋아요를 눌렀나 여부에 따라 solid 하트 or regular 하트 */}
               <Col onClick={handleLikes} className="flex-justify-end mx-0">
                 {<FontAwesomeIcon className="link" icon={farHeart} />}
                 {/* <FontAwesomeIcon icon={fasHeart} /> */}
@@ -127,20 +136,6 @@ const Review = ({
           <Card.Text className="d-flex justify-content-end">
             <Timestamp createdAt={createdAt} />
           </Card.Text>
-
-          {/* 댓글 모두보기: 클릭하면 모달창으로 리뷰 카드 띄우기 */}
-          <div>{}</div>
-          {
-            <Card.Text
-              onClick={() => {
-                setShowingReview(review);
-                // to do: 댓글보기 모달창
-              }}
-              className="link"
-            >
-              {comments?.length > 3 && `댓글 ${comments.length}개 모두 보기`}
-            </Card.Text>
-          }
           {/* 댓글 3개까지만 미리보기 */}
           {comments?.map(
             (comment, index) =>
@@ -167,6 +162,20 @@ const Review = ({
               ))}
             </Row>
           )}
+
+          <Row
+            onClick={() => {
+              setModalVisible({
+                type: MODAL_TYPE.floatingReview,
+                isVisible: true,
+                data: review,
+              });
+            }}
+            className="link"
+          >
+            {comments?.length > 3 && `댓글 ${comments.length}개 모두 보기`}
+          </Row>
+
           <Form onSubmit={handleCommentSubmit} className="comment__form">
             <input
               value={comment}

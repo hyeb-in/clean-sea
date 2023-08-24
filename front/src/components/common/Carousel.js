@@ -11,6 +11,7 @@ const CarouselWrapper = ({ imageUrls, setReview }) => {
   };
   return (
     <Carousel
+      className="carousel px-0"
       interval={null}
       variant="dark"
       indicators={imageUrls.length > 1}
