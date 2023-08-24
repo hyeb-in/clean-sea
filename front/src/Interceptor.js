@@ -7,14 +7,12 @@ const Interceptor = ({ children }) => {
   const { modalOptions, setModalOptions } = useContext(ModalOptionContext);
 
   useEffect(() => {
-    // 모든 응답에 대한 인터셉터 설정  request interceptors
+    // 모든 요청을 가로채서 do something
     const axiosInterceptor = axios.interceptors.request.use((config) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
-      }
-      // 요청 성공시 보여줄 modal
+      // 요청에 isHandlerEnabled이 있다면 (App.js에서 넣어주고있음)
       if (config.isHandlerEnabled) {
+        // 모달 창 옵션을 설정한다
+        console.log(config);
         modalOptions({
           state: true,
           description: `Request done successfully: ${config.url}`,

@@ -2,7 +2,7 @@ import { faImages } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Col, Container, Row } from "react-bootstrap";
 
-const DragAndDrop = () => {
+const DropZone = () => {
   return (
     <Container className="flex-d flex-column">
       <Row className="h-100 flex-column">
@@ -18,4 +18,4 @@ const DragAndDrop = () => {
   );
 };
 
-export default DragAndDrop;
+export default DropZone;

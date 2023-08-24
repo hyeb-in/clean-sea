@@ -8,10 +8,34 @@ async function createReview(toCreate: IReview): Promise<IReview> {
 }
 
 async function findAllReviews(): Promise<IReview[]> {
-  // const userReviews = await ReviewModel.find();
-  const userReviews = await ReviewModel.find().sort({createdAt : -1});
+  const userReviews = await ReviewModel.find()
+      .populate({
+        path : 'comments',
+        options : { sort : { createdAt : -1}, limit : 3}
+      })
+      .sort({createdAt : -1})
+      .exec();
   const userReviewsObjects = userReviews.map(review => review.toObject());
   return userReviewsObjects as IReview[];
+}
+
+async function findUserReviews(author:string): Promise<IReview[]>{
+  const userReviews = await ReviewModel.find()
+      .populate({
+        path : 'comments',
+        options : { sort : { createdAt : -1}, limit : 3}
+      })
+      .sort({createdAt : -1})
+      .exec();
+  
+
+  const userReviewsObjects = userReviews.map(review =>{
+    const isLike = review.Likes.some(like=>like.userId === author && like.isLike === 'yes');
+    const reviewObject = review.toObject() as IReview;
+    reviewObject.isLike = isLike ? 'yes' : 'no';
+    return reviewObject;
+  });
+  return userReviewsObjects;
 }
 
 async function findUserReview(reviewId: string): Promise<IReview | null> {
@@ -46,4 +70,4 @@ async function deleteReview(reviewId: string): Promise<IReview | null> {
   return null;
 }
 
-export { createReview, findAllReviews, findUserReview, updateReview, deleteReview };
+export { createReview, findAllReviews, findUserReviews, findUserReview, updateReview, deleteReview };

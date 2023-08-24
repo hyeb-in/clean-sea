@@ -44,6 +44,7 @@ const SignUp = () => {
       navigate("/login");
     } catch (err) {
       console.log("회원가입에 실패하셨습니다.", err);
+      window.alert(err.response.data);
     }
   };
 
@@ -87,7 +88,7 @@ const SignUp = () => {
             }}
           >
             <div className="form-group">
-              <label style={{ fontSize: "18px" }}>Name</label>
+              <label style={{ fontSize: "18px" }}>이름</label>
               <input
                 type="text"
                 className="form-control"
@@ -95,14 +96,14 @@ const SignUp = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-              {!isNameValid && (
+              {!isNameValid && name.length > 0 && (
                 <div className="text-danger">
                   이름은 2글자 이상으로 설정해 주세요.
                 </div>
               )}
             </div>
             <div className="form-group">
-              <label style={{ fontSize: "18px" }}>Email</label>
+              <label style={{ fontSize: "18px" }}>이메일</label>
               <input
                 type="text"
                 className="form-control"
@@ -110,14 +111,14 @@ const SignUp = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              {!isEmailValid && (
+              {!isEmailValid && email.length > 0 && (
                 <div className="text-danger">
                   이메일 형식이 올바르지 않습니다.
                 </div>
               )}
             </div>
             <div className="form-group">
-              <label style={{ fontSize: "18px" }}>Password</label>
+              <label style={{ fontSize: "18px" }}>비밀번호</label>
               <input
                 type="password"
                 className="form-control"
@@ -125,14 +126,14 @@ const SignUp = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {!isPasswordValid && (
+              {!isPasswordValid && password.length > 0 && (
                 <div className="text-danger">
                   비밀번호는 4글자 이상으로 설정해 주세요.
                 </div>
               )}
             </div>
             <div className="form-group">
-              <label style={{ fontSize: "18px" }}>Confirm Password</label>
+              <label style={{ fontSize: "18px" }}>비밀번호 확인</label>
               <input
                 type="password"
                 className="form-control"
@@ -140,7 +141,7 @@ const SignUp = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              {!isPasswordValid && (
+              {!isPasswordValid && confirmPassword.length > 0 && (
                 <div className="text-danger">
                   비밀번호가 일치한지 확인해 주세요.
                 </div>

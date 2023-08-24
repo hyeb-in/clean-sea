@@ -3,12 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import {
   addReview,
   getReview,
+  getLoginReview,
   setReview,
   deletedReview,
 } from "../services/reviewService";
+import { handleFileUpload } from "../middlewares/uploadMiddleware";
 import { IRequest } from "user";
-import { saveAndManageImage } from '../utils/uploads/uploadHelper';
-// import fetch from 'node-fetch';
+import { FileRequest } from "upload";
 
 const sendResponseWithData = function (res: Response, statusCode: number, data: any) {
   res.status(statusCode).json(data);
@@ -23,40 +24,26 @@ const createReview = async (
     const author = req.user._id;
     const userName = req.user.name;
 
-    console.log(req.body);
-    console.log(req.body.imageUrls);
-    
-      // const { imageUrls } = req.body as { imageUrls : string[] };
-      // if(imageUrls){
-      //   // const fetchModule = await import('node-fetch');
-      //   const imagePaths = await Promise.all(imageUrls.map(async (blobUrl) => {
-      //     console.log(blobUrl);
-      //     const fetch = await import('node-fetch');
-      //     const imageResponse = await fetch.default(blobUrl);
-      //     if (!imageResponse.ok) {
-      //       throw new Error('Failed to fetch image');
-      //     }
-      //     console.log(imageResponse);
-      //     const imageBuffer = await imageResponse.arrayBuffer();
-      //     const imageBufferUint8 = new Uint8Array(imageBuffer);
-    
-      //   return saveAndManageImage(imageBufferUint8);
-    
-      //   }));
-      //   const addMyReview = await addReview({
-      //     toCreate: { ...req.body, author, userName, uploadFile : imagePaths },
-      //   });
-    
-      //   return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
-        
-      // }
-    const addMyReview = await addReview({
-      toCreate: { ...req.body, author, userName},
-    });
+    handleFileUpload(req as FileRequest,res,async function (error : any) {
+      if (error){
+        return next(error);
+      }
+      let uploadFile : string[] = [];
 
-    return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
-  } catch (err) {
-    next(err);
+      if (Array.isArray(req.files)) {
+        uploadFile = req.files.map(file => file.filename);
+      } else if (req.files?.imageUrls) {
+        uploadFile = req.files.imageUrls.map(file => file.filename);
+      }
+
+      const addMyReview = await addReview({
+        toCreate: { ...req.body, author, userName, uploadFile},
+      });
+
+      return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
+    })
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -66,9 +53,25 @@ const getAllReview = async (
   next: NextFunction
 ) => {
   try {
+    
     const allReview = await getReview();
     return sendResponseWithData(res, StatusCodes.OK, allReview);
   } catch (err) {
+    next(err);
+  }
+};
+
+const getAllLogin = async (
+  req : IRequest,
+  res : Response,
+  next : NextFunction
+) => {
+  try{
+    const author = req.user._id;
+
+    const loginReview = await getLoginReview(author);
+    return sendResponseWithData(res, StatusCodes.OK, loginReview);
+  }catch(err){
     next(err);
   }
 };
@@ -80,42 +83,24 @@ const updateReview = async (
 ) => {
   try {
     const id = req.params.reviewId;
-    // const schema = ReviewValidator.putReview();
-    // const validationResult = schema.validate(req.body);
 
-    // if (validationResult.error) {
-    //   return sendResponseWithError(res, StatusCodes.BAD_REQUEST, validationResult.error.details[0].message);
-    // }
-    console.log(req.body);
-    console.log(req.body.imageUrls);
-    const { imageUrls } =req.body as { imageUrls : string[] };
-    if(imageUrls){
-      const imagePaths = await Promise.all(imageUrls.map(async (blobUrl) => {
-        console.log(blobUrl);
-        const imageResponse = await fetch(blobUrl);
-        console.log(imageResponse);
-        if (!imageResponse.ok) {
-          console.log(1111111111111111);
-          throw new Error('Failed to fetch image');
-        }
-        const imageBuffer = await imageResponse.arrayBuffer();
-        const imageBufferUint8 = new Uint8Array(imageBuffer);
-    
-        return saveAndManageImage(imageBufferUint8);
-    
-        }));
-  
+    handleFileUpload(req as FileRequest,res,async function (err : any){
+      if (err){
+        return next(err);
+      }
+      let uploadFile : string[] = [];
+
+      if (Array.isArray(req.files)) {
+        uploadFile = req.files.map(file => file.filename);
+      } else if (req.files?.imageUrls) {
+        uploadFile = req.files.imageUrls.map(file => file.filename);
+      }
       const updatedReview = await setReview(id, {
-        toUpdate: { ...req.body, uploadFile: imagePaths },
+        toUpdate: { ...req.body, uploadFile },
       });
   
       return sendResponseWithData(res, StatusCodes.OK, updatedReview);
-    }
-    const updatedReview = await setReview(id, {
-      toUpdate: { ...req.body },
     });
-
-    return sendResponseWithData(res, StatusCodes.OK, updatedReview);
   } catch (err) {
     next(err);
   }
@@ -134,4 +119,4 @@ const deleteReview = async (
   }
 };
 
-export { createReview, getAllReview, updateReview, deleteReview };
+export { createReview, getAllReview, getAllLogin, updateReview, deleteReview };

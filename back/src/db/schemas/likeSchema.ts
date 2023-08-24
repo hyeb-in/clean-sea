@@ -9,6 +9,7 @@ interface ILike extends Document {
   userId: string;
   targetType: TargetType;
   targetId: string;
+  isLike : 'yes' | 'no';
 }
 
 const LikeSchema: Schema<ILike> = new Schema({
@@ -25,6 +26,11 @@ const LikeSchema: Schema<ILike> = new Schema({
     type: String,
     required: true,
   },
+  isLike : {
+    type : String,
+    enum : ['yes', 'no'],
+    required : true,
+  }
 });
 
 const LikeModel = model<ILike>('like', LikeSchema);

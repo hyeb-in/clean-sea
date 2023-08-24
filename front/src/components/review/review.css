@@ -1,8 +1,18 @@
+/* 상태 표시해주는 모달창 --> to do: 외부로 뺄 것 */
 .noReviewIndicator {
   min-height: 400px;
   display: flex;
   align-items: center;
   justify-items: center;
+}
+.indicator-success {
+  width: 70px;
+  height: 70px;
+  color: blue;
+  padding: 50px;
+}
+.review-container {
+  max-width: 70%;
 }
 
 /* review form */
@@ -14,19 +24,68 @@
 .delete {
   color: red;
 }
-.indicator-success {
-  width: 70px;
-  height: 70px;
-  color: blue;
-  padding: 50px0;
+.editForm__author {
+  width: auto;
 }
 
+/* image carousel */
+.carousel__container {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+.carousel__close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.carousel-bg-black {
+  background-color: black;
+}
+.carousel-bg-white {
+  background-color: white;
+}
+
+/* 커맨트 */
 .comment__author {
   font-weight: 600;
 }
 .comment__title {
   margin-right: 10px;
 }
+.comment__form {
+  /* display: flex;
+  flex-direction: column; */
+  position: relative;
+}
 .comment__content {
   color: grey;
+}
+.comment__input {
+  background-color: none;
+  border: none;
+  /* Remove outline */
+  outline: none;
+  /* Reset padding and margin */
+  padding: 0;
+  margin: 0;
+  /* Reset background */
+  background: none;
+  /* Reset font styles */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  /* Reset other styles */
+  color: inherit;
+  line-height: inherit;
+  width: 100%;
+  border-bottom: 1px solid gray;
+  padding: 5px;
+  margin: 10px;
+}
+.comment__button {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  border: none;
 }

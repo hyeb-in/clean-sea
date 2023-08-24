@@ -7,7 +7,7 @@ export const postReviewValidator = async (
     res : Response,
     next : NextFunction
 )=>{
-    const { title, content } = req.body;
+    const { title, content, imageUrls, location } = req.body;
     const schema = joi.object({
         title : joi.string().min(4).required().messages({
             'string.base' : "문자여야합니다.",
@@ -18,12 +18,15 @@ export const postReviewValidator = async (
             'string.min' : '4글자이상이여야합니다.',
             'string.max' : '300글자이하이여야합니다.',
         }),
+        imageUrls: joi.any(),
+        location : joi.any(),
     });
 
-    const { value, error } = schema.validate({ title, content });
-
+    const { value, error } = schema.validate({ title, content, imageUrls, location });
+    console.log(1111111);
     if (error) {
-    next(error.details[0].message);
+        console.log(error);
+        next(error.details[0].message);
     }
 
     next();

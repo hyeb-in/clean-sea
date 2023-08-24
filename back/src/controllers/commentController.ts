@@ -6,7 +6,8 @@ import {
     setComment,
     deletedComment,
 } from '../services/commentService';
-// 유효성검사추가예정
+import { ReviewModel } from '../db/schemas/reviewSchema';
+import { CommentModel } from '../db/schemas/commetSchema';
 import { IRequest } from "user";
   
 const sendResponseWithData = function (res: Response, statusCode: number, data: any) {
@@ -20,7 +21,7 @@ const createComment = async (
 ) => {
     try{
         const userId = req.user._id;
-        const userName = req.user.name;
+        const userName = req.user.name; 
         const postId = req.params.reviewId;
 
         const addMyComment = await addComment({

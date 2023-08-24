@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { UploadFormContext, UserStateContext } from "../../App";
+import { ModalVisibleContext, UserStateContext } from "../../App";
+import { MODAL_TYPE } from "../../constants";
 
 const NoReviewIndicator = () => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { setIsUploadFormVisible } = useContext(UploadFormContext);
+  const { setModalVisible } = useContext(ModalVisibleContext);
   return (
     <Card.Body className="flex-column-center-center card noReviewIndicator">
       <Card.Title>작성된 리뷰가 없습니다</Card.Title>
@@ -16,7 +17,13 @@ const NoReviewIndicator = () => {
         <Button
           variant="primary"
           className="mt-4"
-          onClick={() => setIsUploadFormVisible(true)}
+          onClick={() =>
+            setModalVisible({
+              type: MODAL_TYPE.addReview,
+              isVisible: false,
+              data: null,
+            })
+          }
         >
           글 작성하기
         </Button>
