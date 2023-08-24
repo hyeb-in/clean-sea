@@ -1,14 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
-import { getBeachByBeachNameService, getBeachByRegionService, getBeachesService } from "../services/beachService";
-import { validate } from '../utils/validators/beachValidator'
+import { Request, Response, NextFunction } from "express";
+import {
+  getBeachByBeachNameService,
+  getBeachByRegionService,
+  getBeachesService,
+} from "../services/beachService";
+import { validate } from "../utils/validators/beachValidator";
 import { StatusCodes } from "http-status-codes";
-import { IBeach } from 'beach';
+import { IBeach } from "beach";
 
 const getBeachByBeachName = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
-  ) => {
+) => {
   try {
     const name = req.params.name;
 
@@ -20,10 +24,10 @@ const getBeachByBeachName = async (
 };
 
 const getBeachByRegion = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
-  ) => {
+) => {
   try {
     const address = req.params.address;
 
@@ -34,11 +38,7 @@ const getBeachByRegion = async (
   }
 };
 
-const getBeaches = async (
-  req: Request, 
-  res: Response, 
-  next: NextFunction
-  ) => {
+const getBeaches = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await getBeachesService();
     res.status(200).json(result);

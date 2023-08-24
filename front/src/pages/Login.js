@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import * as Api from "../Api";
-import { DispatchContext, HandlerEnabledContext } from "../App";
+import { DispatchContext } from "../App";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -87,7 +86,7 @@ const Login = () => {
             }}
           >
             <div className="form-group">
-              <label style={{ fontSize: "18px" }}>Email</label>
+              <label style={{ fontSize: "18px" }}>이메일</label>
               <input
                 type="text"
                 className="form-control"
@@ -95,14 +94,17 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              {!isEmailValid && (
+              {!isEmailValid && email.length > 0 && (
+                // 이메일값이 있고 유효하지않을 때 띄우기
+                // email length > 0
+                // 클릭 하기 전을 정의(내게 뭐가 필요한지 고민)
                 <div className="text-danger">
                   이메일 형식이 올바르지 않습니다.
                 </div>
               )}
             </div>
             <div className="form-group">
-              <label style={{ fontSize: "18px" }}>Password</label>
+              <label style={{ fontSize: "18px" }}>비밀번호</label>
               <input
                 type="password"
                 className="form-control"
@@ -110,7 +112,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {!isPasswordValid && (
+              {!isPasswordValid && password.length > 0 && (
                 <div className="text-danger" style={{ color: "#FF6347" }}>
                   비밀번호는 4글자 이상입니다.
                 </div>
