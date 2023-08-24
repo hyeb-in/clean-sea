@@ -2,7 +2,8 @@ import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
 import morgan from "morgan";
 import path from "path";
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
+import { IError } from "error";
 
 const logDir = "logs";
 const infoLogDir = path.join(logDir, "info"); // info 로그를 저장할 폴더 경로
@@ -62,14 +63,13 @@ morgan.token("body", (req: Request, res: Response) => {
 });
 
 function errorMiddleware(
-  error: Error,
+  error: IError,
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
-  logger.error(error);
-  console.log("\x1b[33m%s\x1b[0m", error);
-  res.status(400).send(error.message);
+  logger.error(error.message + "statusCode" + error.statusCode);
+  res.status(error.statusCode).send(error.message);
 }
 
 if (process.env.NODE_ENV !== "production") {

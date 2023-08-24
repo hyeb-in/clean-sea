@@ -11,10 +11,6 @@ async function createComment(toCreate : IComment) : Promise<IComment>{
     const saveComment = await newComment.save();
     if(review){
         review.comments.push(saveComment._id);
-        if(review.comments.length > 3){
-            review.comments.shift();
-            review.comments.push(saveComment._id);
-        }
         await review.save();
     }
     const newCommentObject = newComment.toObject();

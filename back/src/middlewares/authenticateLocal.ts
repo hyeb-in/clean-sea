@@ -2,8 +2,9 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import { NextFunction, Response } from "express";
 import { IRequest, IUser } from "user";
+import { errorGenerator } from "../utils/errorGenerator";
 
-export const localAuthentication = async (
+export const localAuthentication = (
   req: IRequest,
   res: Response,
   next: NextFunction
@@ -13,9 +14,16 @@ export const localAuthentication = async (
     passport.authenticate(
       "local",
       { session: false },
-      async (error: Error, user: IUser, info: any) => {
-        if (error) throw error;
-        if (!user) return res.status(400).json({ message: info.message });
+      (error: Error, user: IUser, info: any) => {
+        if (error) {
+          const err = errorGenerator(error.message, 403);
+          next(err);
+        }
+
+        if (info) {
+          const err = errorGenerator(info.message, 400);
+          next(err);
+        }
         //토큰 테스트하려고 짧게해둔 변경할 것
         const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
           expiresIn: "30m",
@@ -25,7 +33,7 @@ export const localAuthentication = async (
         next();
       }
     )(req, res, next);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };

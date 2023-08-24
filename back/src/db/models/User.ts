@@ -31,6 +31,7 @@ export const create = async (
   return newUser;
 };
 
+//TODO  하나하나 체크하고 업데이트하기.
 export const update = async (userId: string, inputData: Partial<IUser>) => {
   const updatedUser = await UserModel.findByIdAndUpdate(userId, inputData, {
     new: true,
@@ -38,7 +39,13 @@ export const update = async (userId: string, inputData: Partial<IUser>) => {
 
   return updatedUser;
 };
+
 export const deleteById = async (userId: string) => {
   const user = await UserModel.findByIdAndDelete(userId);
   return user;
+};
+
+export const getRandomUser = async () => {
+  const randomUser = await UserModel.aggregate([{ $sample: { size: 5 } }]);
+  return randomUser;
 };
