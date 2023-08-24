@@ -14,6 +14,10 @@ interface IBeach {
   enteScore?: number;
   latitude?: number;
   longitude?: number;
+  eschGlobalAvg?: number;
+  enteGlobalAvg?: number;
+  eschAvgGlobalScore?: number;
+  enteAvgGlobalScore?: number;
 }
 
 const BeachSchema = new Schema<IBeach>(
@@ -66,6 +70,22 @@ const BeachSchema = new Schema<IBeach>(
       type: Number,
       required: false,
     },
+    eschGlobalAvg: {
+      type: Number,
+      required: false,
+    },
+    enteGlobalAvg: {
+      type: Number,
+      required: false,
+    },
+    eschAvgGlobalScore: {
+      type: Number,
+      required: false,
+    },
+    enteAvgGlobalScore: {
+      type: Number,
+      required: false,
+    }
   },
   {
     timestamps: true,
