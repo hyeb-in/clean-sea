@@ -33,14 +33,16 @@ const Interceptor = ({ children }) => {
         // 403 : 인증 에러 권한 없음
         // 400 : 클라이언트가 잘못된 값 전달
         // 500 : 서버 에러
-        if (response.status === 403) {
+        return response;
+      },
+      (error) => {
+        // 백엔드에 정확히 물어보기!
+        if (error.statusCode === 401 || error.message === "토큰 만료") {
+          console.log("error");
           sessionStorage.removeItem("userToken");
           dispatch({ type: "LOGOUT" });
           navigate("/");
         }
-        return response;
-      },
-      (error) => {
         return Promise.reject(error);
       }
     );

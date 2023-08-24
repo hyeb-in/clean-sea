@@ -39,7 +39,7 @@ const ActionSelectorModal = () => {
   const isReviewEditing = modalVisible?.data?.reviewId;
   const isCommentEditing = modalVisible?.data?.FLOATING_REVIEW_DATA;
   console.log(modalVisible.data);
-  const commentId = modalVisible.data.FLOATING_REVIEW_DATA.commentId;
+  const commentId = modalVisible.data?.FLOATING_REVIEW_DATA?.commentId;
 
   const deleteById = async (data) => {
     try {

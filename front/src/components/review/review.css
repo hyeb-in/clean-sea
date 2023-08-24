@@ -50,8 +50,9 @@
 .comment__author {
   font-weight: 600;
 }
-.comment__title {
-  margin-right: 10px;
+.comment__avatar {
+  position: absolute;
+  top: 20px;
 }
 .comment__form {
   /* display: flex;
@@ -60,6 +61,7 @@
 }
 .comment__content {
   color: grey;
+  word-break: break-all;
 }
 .comment__input {
   background-color: none;
@@ -89,6 +91,15 @@
   top: 5px;
   border: none;
 }
+.position-rel {
+  position: relative;
+}
+.comment__avatar {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .isLiked {
   color: red;
 }

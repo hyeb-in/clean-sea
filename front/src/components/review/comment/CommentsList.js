@@ -13,19 +13,19 @@ const CommentsList = ({
       {/* 댓글 3개까지만 미리보기 */}
       {comments?.map(
         (comment, index) =>
-          index < 3 && (
-            <Row key={comment._id}>
+          index < 2 && (
+            <div key={comment._id}>
               <Comment
                 comment={comment}
                 selectedReview={selectedReview}
                 setSelectedReview={setSelectedReview}
               />
-            </Row>
+            </div>
           )
       )}
       {/* 새로 작성될 커맨트 리스트 */}
       {newComments && (
-        <Row>
+        <div>
           {newComments.map((item) => (
             <Comment
               comment={item}
@@ -35,7 +35,7 @@ const CommentsList = ({
               review={review}
             />
           ))}
-        </Row>
+        </div>
       )}
     </>
   );

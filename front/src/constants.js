@@ -84,3 +84,7 @@ export const IS_LIKE = {
 //     data: null,
 //   },
 // };
+
+export const truncate = (content) => {
+  return content?.length > 10 ? content.slice(0, 10) + "..." : content;
+};

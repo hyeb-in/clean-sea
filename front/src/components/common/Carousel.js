@@ -26,7 +26,7 @@ const CarouselWrapper = ({ imageUrls, setReview }) => {
 
   return (
     <Carousel
-      className="carousel px-0"
+      className="carousel__container px-0"
       interval={null}
       variant="dark"
       indicators={imageUrls.length > 1}
@@ -45,7 +45,7 @@ const CarouselWrapper = ({ imageUrls, setReview }) => {
           <Carousel.Item key={img + "" + index}>
             <Image
               src={
-                img
+                imageUrls
                 // isBlobURL(img) ? img : serverUrl + "uploads/" + img
               }
               fluid

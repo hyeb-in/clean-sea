@@ -14,7 +14,7 @@ import { MODAL_TYPE } from "../../constants";
 import EditReview from "./EditReview";
 import FloatingReview from "./comment/FloatingReview";
 
-const Reviews = ({ reviews, setReviews }) => {
+const ReviewsList = ({ reviews, setReviews }) => {
   const { setIsHandlerEnabled } = useContext(HandlerEnabledContext);
   const { user: loggedInUser } = useContext(UserStateContext);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -91,4 +91,4 @@ const Reviews = ({ reviews, setReviews }) => {
   );
 };
 
-export default Reviews;
+export default ReviewsList;

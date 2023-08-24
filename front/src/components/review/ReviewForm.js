@@ -15,13 +15,13 @@ const ReviewForm = ({
       method="POST"
       enctype="multipart/form-data"
     >
-      {/* <Row className="align-items-center"> */}
-      {/* <Col xs={7} className="d-flex flex-column align-items-center h-100"> */}
-      {/* 드래그앤 드롭으로 파일 업로드 받을 수 있는 구역 */}
-      {dargdrop}
-      {/* </Col> */}
-      {/* 리뷰 제목, 내용 입력 받는 인풋 */}
-      {/* <Col xs={5}>
+      <Row className="align-items-center">
+        <Col xs={7} className="d-flex flex-column align-items-center h-100">
+          드래그앤 드롭으로 파일 업로드 받을 수 있는 구역
+          {dargdrop}
+        </Col>
+        {/* 리뷰 제목, 내용 입력 받는 인풋 */}
+        <Col xs={5}>
           <Form.Group>
             <Form.Label>제목</Form.Label>
             <Form.Control
@@ -54,16 +54,16 @@ const ReviewForm = ({
             }
           >
             {content ? content.length : "0"}/300
-          </small> */}
-      <button
-        form="uploadForm"
-        type="submit"
-        // onClick={onSubmit}
-      >
-        buttonwwwww
-      </button>
-      {/* </Col>
-      </Row>  */}
+          </small>
+          <button
+            form="uploadForm"
+            type="submit"
+            // onClick={onSubmit}
+          >
+            buttonwwwww
+          </button>
+        </Col>
+      </Row>
     </form>
   );
 };

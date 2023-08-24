@@ -11,7 +11,7 @@ import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
 import Footer from "./components/common/Footer";
 import NavBar from "./components/common/NavBar";
-import Reviews from "./components/review/Reviews";
+import ReviewsList from "./components/review/ReviewsList";
 import { loginReducer } from "./Reducer";
 import "./Main.css";
 import Graph from "./pages/Graph";
@@ -158,7 +158,7 @@ function App() {
                     path="/reviews"
                     exact
                     element={
-                      <Reviews reviews={reviews} setReviews={setReviews} />
+                      <ReviewsList reviews={reviews} setReviews={setReviews} />
                     }
                   />
                   <Route path="/graph" exact element={<Graph />} />

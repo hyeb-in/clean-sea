@@ -46,19 +46,26 @@ const Comment = ({ comment, review }) => {
 
   return (
     <>
-      <Container>
-        <Row className="flex-row-center-center">
-          <Col xs="auto" onClick={() => navigate(`/users/${userId}`)}>
-            <Avatar width="50" />
-          </Col>
-          {!isEditing && (
-            <Col className="py-2">
+      <Container className="flex">
+        <Row>
+          <Avatar
+            className="comment__avatar"
+            width="30"
+            onClick={() => navigate(`/users/${userId}`)}
+          />
+          <Col>
+            {!isEditing && (
               <div>
-                <strong>{userName}</strong> {content}
+                <div className="py-1 px-0 flex-space-between line-break">
+                  <span className="comment__content">
+                    <bold>{userName}</bold> {content}
+                    wkejfhwkefhwkeufhekwufheuwkfhewkfhekwfhewkfhwefjlwjeflwefjlefjwlefkjwleel
+                  </span>
+                </div>
+                <Timestamp createdAt={date} />
               </div>
-              <Timestamp createdAt={date} />
-            </Col>
-          )}
+            )}
+          </Col>
           {/* 댓글 수정 입력 인풋창 */}
           {isMyComment && isEditing && (
             <Col className="pr-2 py-2">
@@ -73,8 +80,6 @@ const Comment = ({ comment, review }) => {
               </Form>
             </Col>
           )}
-          {/* to do: 내가 올린 거, 좋아요 누른 게시물이면 하트 solid */}
-
           {/* 2. 댓글 목록에서 ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
           {/* 댓글 -> 수정으로 들어가면 댓글 창을 띄울 거라서 reviewId, review 정보가 필요함 */}
           {isCommentEditBtnVisible && (

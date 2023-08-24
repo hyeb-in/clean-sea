@@ -17,16 +17,12 @@ const Like = ({ isLiked, reviewId, setReviews }) => {
       return alert("로그인 유저 없음");
     }
     try {
-      // 좋아요 눌리면 하트 전환
-      // 좋아요 ++개 <<<<<<
       const res = await Api.post("api/like", {
         targetType: "review",
         targetId: reviewId,
       });
       console.log(res.data.message);
 
-      // !좋아요 눌리면 하트 전환
-      // 좋아요 --개
       if (res.data.message === IS_LIKE.added) {
         setReviews((current) => {
           const newReviews = [...current];
