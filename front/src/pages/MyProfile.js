@@ -17,6 +17,7 @@ const MyProfile = () => {
   const [userDescription, setUserDescription] = useState("설명이 아직 없습니다. 추가해주세요");
   const [userProfileImage, setUserProfileImage] = useState("https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png");
   const [isEditMode, setIsEditMode] = useState(false);
+  const [randomUsers, setRandomUsers] = useState([]);
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -44,7 +45,21 @@ const MyProfile = () => {
     fetchUserData();
   }, [id]);
 
-  const handleEditClick = () => {
+  useEffect(() => {
+    const fetchRandomUsers = async () => {
+      try {
+        const response = await Api.get('users/randomlist');
+        setRandomUsers(response.data);
+      } catch (error) {
+        displayToastMessage('랜덤 유저 정보를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchRandomUsers();
+  }, []);
+
+
+    const handleEditClick = () => {
     setIsEditMode(!isEditMode);
   };
 
@@ -69,7 +84,7 @@ const MyProfile = () => {
     <>
       <Container>
         <Row>
-          <Col>
+          <Col sm={8}>
             <Card small className="mb-4 mt-4 pt-3">
               <CardHeader className="border-bottom">
                 <div className="mb-3 mx-auto">
@@ -94,10 +109,24 @@ const MyProfile = () => {
                 {isEditMode && <Button variant="link" onClick={handleCompleteClick}>완료</Button>}
               </span>
             </Card>
+
+            <History displayToast={displayToastMessage} />
           </Col>
-        </Row>
-        <Row>
-          <History displayToast={displayToastMessage} />
+          <Col sm={4}>
+            {randomUsers.map(user => (
+              <Card key={user._id} className="mb-4 mt-4 pt-3">
+                <CardHeader className="border-bottom">
+                  <h4 className="mb-2">{user.name}</h4>
+                  <span className="text-muted d-block mb-1">{user.email}</span>
+                </CardHeader>
+                <ListGroup flush>
+                  <ListGroupItem className="p-4">
+                    <strong className="text-muted d-block mb-2">{user.description}</strong>
+                  </ListGroupItem>
+                </ListGroup>
+              </Card>
+            ))}
+          </Col>
         </Row>
       </Container>
       {showToast && (
