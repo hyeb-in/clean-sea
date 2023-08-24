@@ -54,7 +54,7 @@ const TravelItem = ({ travelData, onTravelUpdate, onTravelDelete, displayToast }
       <div className="row g-1">
         {!isEditing && (
           <Card style={{ width: '100%', marginBottom: '15px' }}>
-            <Col md={3}>
+            <Col md={2}>
               <TravelImageWithText text={"테스트"} imageUrl={defaultImage} />
             </Col>
             <Col md={8}>
