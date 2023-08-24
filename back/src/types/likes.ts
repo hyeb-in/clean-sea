@@ -9,6 +9,7 @@ enum TargetType {
     userId: string;
     targetType: TargetType;
     targetId: string;
+    isLike : 'yes' | 'no';
   }
 
   export { ILike };

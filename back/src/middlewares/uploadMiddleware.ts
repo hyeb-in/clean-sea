@@ -6,19 +6,24 @@ import { imageUpload } from './fileUploadMiddleware';
 
 export function handleFileUpload(req: FileRequest, res: Response, next: NextFunction) {
     const upload = imageUpload.array('imageUrls', 5);
-
     upload(req as Request, res, async function (err: any) {
         try {
+            console.log(req.file);
             if (err instanceof MulterError) {
+
                 return next(err);
             } else if (err) {
                 return next(err);
             }
+
+            const files: FileObjects[] = req.files ? ([] as FileObjects[]).concat(...Object.values(req.files)) : [];
+            const uploadFile = files.map(file => file.filename);
+
             if ((req as Request).method === 'POST') {
                 const fileUrls: string[] = [];
                 const fileObjects: FileObjects[] = [];
-                const files: FileObjects[] = ([] as FileObjects[]).concat(...Object.values(req.files));
-                const uploadFile = files.map(file => file.filename);
+                // const files: FileObjects[] = ([] as FileObjects[]).concat(...Object.values(req.files));
+                // const uploadFile = files.map(file => file.filename);
 
                 for (const file of files) {
                     fileUrls.push(file.filename as string);
@@ -43,12 +48,11 @@ export function handleFileUpload(req: FileRequest, res: Response, next: NextFunc
                         path: file.filename
                     });
                 }
-                req.uploadFile = uploadFile;
             } else if ((req as Request).method === 'PUT') {
                 const fileUrls: string[] = [];
                 const fileObjects: FileObjects[] = [];
-                const files: FileObjects[] = ([] as FileObjects[]).concat(...Object.values(req.files));
-                const uploadFile = files.map(file => file.filename);
+                // const files: FileObjects[] = ([] as FileObjects[]).concat(...Object.values(req.files));
+                // const uploadFile = files.map(file => file.filename);
 
                 for (const file of files) {
                     fileUrls.push(file.filename as string);
@@ -73,8 +77,9 @@ export function handleFileUpload(req: FileRequest, res: Response, next: NextFunc
                         path: file.filename
                     });
                 }
-                req.uploadFile = uploadFile;
             }
+
+            req.uploadFile = uploadFile;
 
             next();
         } catch (error) {
