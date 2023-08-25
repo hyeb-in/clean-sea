@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { FileObjects, FileRequest } from "../types/upload";
 import { imageUpload } from './fileUploadMiddleware';
 
-export function handleImageUpload(req: FileRequest, res: Response, next: NextFunction) {
+export function handleFileUpload(req: FileRequest, res: Response, next: NextFunction) {
     
     const upload = imageUpload.array('uploadFile', 5);
     upload(req as Request, res, async function (err: any) {

@@ -7,7 +7,7 @@ import {
   setReview,
   deletedReview,
 } from "../services/reviewService";
-import { handleImageUpload } from "../middlewares/uploadMiddleware";
+import { handleFileUpload } from "../middlewares/uploadMiddleware";
 import { IRequest } from "user";
 import { errorGenerator } from "../utils/errorGenerator";
 import { FileRequest } from "upload";
@@ -26,12 +26,12 @@ const createReview = async (
     const author = req.user._id;
     const userName = req.user.name;
 
-    await handleImageUpload(req as FileRequest, next);
+    // await handleImageUpload(req as FileRequest, res, next);
 
-    // handleFileUpload(req as FileRequest,res,async function (error : any) {
-    //   if (error){
-    //     return next(error);
-    //   }
+    handleFileUpload(req as FileRequest,res,async function (error : any) {
+      if (error){
+        return next(error);
+      }
       // postReviewValidator(req, res,async function (validationError: any) {
       //   if (validationError) {
       //     return next(validationError);
@@ -50,7 +50,7 @@ const createReview = async (
 
       return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
     // });
-    // });
+    });
   } catch (error) {
     const customError = errorGenerator(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
     return res.status(customError.statusCode).json({ error: customError.message });
@@ -94,10 +94,10 @@ const updateReview = async (
   try {
     const id = req.params.reviewId;
 
-    // handleFileUpload(req as FileRequest,res,async function (err : any){
-    //   if (err){
-    //     return next(err);
-    //   }
+    handleFileUpload(req as FileRequest,res,async function (err : any){
+      if (err){
+        return next(err);
+      }
       let uploadFile : string[] = [];
 
       if (Array.isArray(req.files)) {
@@ -106,17 +106,17 @@ const updateReview = async (
         uploadFile = req.files.uploadFile.map(file => file.filename);
       }
 
-      putReviewValidator(req, res, function (validationError: any) {
-        if (validationError) {
-          return;
-      }});
+      // putReviewValidator(req, res, function (validationError: any) {
+      //   if (validationError) {
+      //     return;
+      // }});
 
       const updatedReview = await setReview(id, {
         toUpdate: { ...req.body, uploadFile },
       });
   
       return sendResponseWithData(res, StatusCodes.CREATED, updatedReview);
-    // });
+    });
   } catch (err) {
     const customError = errorGenerator("Failed to update login reviews", StatusCodes.INTERNAL_SERVER_ERROR);
     return res.status(customError.statusCode).json({ error: customError.message });
