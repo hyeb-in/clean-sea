@@ -89,7 +89,6 @@ const Graph = () => {
         .then((response) => {
           // API 응답에서 데이터를 추출하고 상태에 저장합니다.
           const data = response.data[selectedYear];
-          console.log(typeof data);
           const eschAvgData = data.map((item) => item.eschAvg); // 대장균 데이터
           const enteAvgData = data.map((item) => item.enteAvg); // 장구균 데이터
 
