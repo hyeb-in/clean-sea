@@ -2,3 +2,5 @@ node_modules
 package-lock.js
 logs/*
 dist
+.env
+idea
