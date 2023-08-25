@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ILike } from "likes";
+import { ILike } from "liketype";
 import { LikeModel } from "../db/schemas/likeSchema";
 import { IRequest } from "user";
 import { updateLikeCount, updateLikeValue } from "../services/likeService";
