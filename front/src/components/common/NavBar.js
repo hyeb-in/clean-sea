@@ -69,7 +69,6 @@ const NavBar = () => {
               </OverlayTrigger>
             </Nav.Link>
             {/* 로그인 한 유저에게만 보이기 */}
-
             {isLogin ? (
               <>
                 <Nav.Link

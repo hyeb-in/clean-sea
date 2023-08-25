@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Review from "./Review";
 import SpinnerWrapper from "../common/indicators/Spinner";
-import NoReviewIndicator from "./NoReviewIndicator";
+import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
 import * as Api from "../../Api";
 import {
   HandlerEnabledContext,

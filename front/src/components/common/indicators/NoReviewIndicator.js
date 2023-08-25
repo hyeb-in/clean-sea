@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { ModalVisibleContext, UserStateContext } from "../../App";
-import { MODAL_TYPE } from "../../constants";
+import { ModalVisibleContext, UserStateContext } from "../../../App";
+import { MODAL_TYPE } from "../../../constants";
 
 const NoReviewIndicator = () => {
   const navigate = useNavigate();

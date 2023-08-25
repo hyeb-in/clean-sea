@@ -49,17 +49,11 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       let formData = new FormData();
       // FormData 생성자의 첫 번째 매개변수로는 HTMLFormElement 객체가 필요함
       // FileList는 HTMLFormElement가 아니기때문에 일단 매개변수 없이 생성 후 append로 추가한다
-      Array.from(files).forEach((file, index) => {
-        formData.append("uploadFile", files);
-        formData.append("title", review.title);
-        formData.append("content", review.content);
-      });
-
+      formData.append("uploadFile", files);
+      formData.append("title", review.title);
+      formData.append("content", review.content);
       setUploadStatus(RESULT_ENUM.UPLOADING);
       console.log(files, formData, "업로드 될 review 형식 <<<<");
-      // const res = await Api.post("reviews/register", formData);
-      // console.log(res);
-
       const res = await axios.post(
         "http://localhost:5001/reviews/register",
         formData,
@@ -103,6 +97,7 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
     <>
       {/* 리뷰 입력 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
       <Modal
+        className="modal lg"
         centered
         show={modalVisible.type === MODAL_TYPE.addReview}
         onHide={() => {
@@ -123,7 +118,7 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       >
         {/* 모달창 내부: 입력 받는 공간 */}
         <ModalBodyWrapper title={headerTitle}>
-          <Form onSubmit={addReview}>
+          <Form onSubmit={addReview} className="addReview__form">
             <DragDropContainer
               preview={preview}
               setPreview={setPreview}

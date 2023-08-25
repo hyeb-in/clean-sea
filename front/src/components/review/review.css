@@ -14,7 +14,16 @@
 .review-container {
   max-width: 70%;
 }
-
+.addReview__form {
+  display: flex;
+  width: 100%;
+}
+.addReview-container__lg {
+  width: 100%;
+  flex-direction: column;
+}
+.addReview-container__sm {
+}
 /* review form */
 .carousel-arrow-icon {
   background-color: black;
@@ -108,12 +117,13 @@
 }
 
 /* 드래그 앤 드랍 */
+.upload-container {
+  display: flex;
+  width: 100%;
+}
 .upload-area {
   border: 2px dashed #ccc;
   padding: 10px;
-  text-align: center;
-  position: absolute;
-  left: 0;
   background-color: white;
 }
 .upload-label {
@@ -124,6 +134,7 @@
   display: none;
 }
 .drag-drop-area {
+  width: 100%;
   border: 2px dashed #aaa;
   padding: 20px;
   color: #aaa;
