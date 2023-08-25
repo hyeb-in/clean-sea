@@ -19,8 +19,8 @@ interface IBeach {
 interface BeachData {
 [year: string]: 
 { 
-  esch: number, 
-  ente: number 
+  eschAvg: number, 
+  enteAvg: number 
 }[];
 }
 
