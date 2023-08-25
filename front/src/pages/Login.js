@@ -43,6 +43,7 @@ const Login = () => {
       navigate("/", { replace: true });
     } catch (err) {
       console.log("로그인에 실패하셨습니다.\n", err);
+      window.alert(err.response.data);
     }
   };
 

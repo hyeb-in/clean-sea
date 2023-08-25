@@ -20,23 +20,16 @@ const Main = () => {
       .then((mapData) => {
         // Prepare demo data
         const data = [
-          ['kr-kg', 11],
-          ['kr-cb', 12],
-          ['kr-kn', 13],
-          ['kr-2685', 14],
-          ['kr-pu', 15],
-          ['kr-2688', 16],
-          ['kr-sj', 17],
-          ['kr-tj', 18],
-          ['kr-ul', 19],
-          ['kr-in', 20],
-          ['kr-kw', 21],
-          ['kr-gn', 22],
-          ['kr-cj', 23],
-          ['kr-gb', 24],
-          ['kr-so', 25],
-          ['kr-tg', 1114],
-          ['kr-kj', 27]
+          ['kr-cb', 11],         //전북
+          ['kr-kn', 13],        //경남
+          ['kr-2685', 14],      //전남
+          ['kr-pu', 15],        //부산
+          ['kr-2688', 16],      //경북
+          ['kr-ul', 19],        //울산
+          ['kr-in', 20],        //인천
+          ['kr-kw', 21],        //강원
+          ['kr-gn', 22],        //충남
+          ['kr-cj', 23],        //제주
         ];
 
         // Create the chart
@@ -46,7 +39,7 @@ const Main = () => {
           },
 
           title: {
-            text: "Highcharts Maps basic demo",
+            text: "지역 해수욕장 평균 수질적합도",
           },
 
           subtitle: {
@@ -61,13 +54,16 @@ const Main = () => {
           },
 
           colorAxis: {
-            min: 0,
+            stops: [
+              [0, "#0000FF"], // Start color for higher values
+              [1, "#FFFFFF"], // End color for lower values
+            ],
           },
 
           series: [
             {
               data: data,
-              name: "Random data",
+              name: "수질적합도",
               states: {
                 hover: {
                   color: "#BADA55",
