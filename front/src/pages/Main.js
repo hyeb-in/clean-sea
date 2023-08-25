@@ -20,16 +20,16 @@ const Main = () => {
       .then((mapData) => {
         // Prepare demo data
         const data = [
-          ["kr-cb", 11], //전북
-          ["kr-kn", 13], //경남
-          ["kr-2685", 14], //전남
-          ["kr-pu", 15], //부산
-          ["kr-2688", 16], //경북
-          ["kr-ul", 19], //울산
-          ["kr-in", 20], //인천
-          ["kr-kw", 21], //강원
-          ["kr-gn", 22], //충남
-          ["kr-cj", 23], //제주
+          ["kr-cb", 0.32], //전북
+          ["kr-kn", 4.93], //경남
+          ["kr-2685", 0.68], //전남
+          ["kr-pu", 5.05], //부산
+          ["kr-2688", 0.96], //경북
+          ["kr-ul", 3.52], //울산
+          ["kr-in", 7.96], //인천
+          ["kr-kw", 0.75], //강원
+          ["kr-gn", 0.60], //충남
+          ["kr-cj", 1.12], //제주
         ];
 
         // Create the chart
@@ -55,7 +55,7 @@ const Main = () => {
 
           colorAxis: {
             stops: [
-              [0, "#0000FF"], // Start color for higher values
+              [0, "#00B9FF"], // Start color for higher values
               [1, "#FFFFFF"], // End color for lower values
             ],
           },
