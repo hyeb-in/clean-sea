@@ -31,7 +31,6 @@ export const create = async (
   return newUser;
 };
 
-//TODO  하나하나 체크하고 업데이트하기.
 export const update = async (userId: string, changedValue: Partial<IUser>) => {
   const updatedUser = await UserModel.findByIdAndUpdate(userId, changedValue, {
     new: true,

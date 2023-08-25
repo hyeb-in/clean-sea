@@ -28,7 +28,7 @@ userRouter.post("/reset-password", resetPassword);
 userRouter
   .route("/:userId")
   .get(jwtAuthentication, getUser)
-  .put(validateUpdateUser, jwtAuthentication, updateUser)
+  .put(jwtAuthentication, validateUpdateUser, updateUser)
   .delete(jwtAuthentication, deleteUser);
 
 export default userRouter;
