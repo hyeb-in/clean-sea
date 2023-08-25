@@ -10,6 +10,8 @@ import { IUser } from "user";
 import { generateRandomPassword } from "../utils/randomPassword";
 import { mailSender } from "../utils/sendMail";
 import { errorGenerator } from "../utils/errorGenerator";
+import UserModel from "../db/schemas/userSchema";
+import { error } from "winston";
 
 /**
  * @param {*} email
@@ -37,8 +39,22 @@ export const updateUserService = async (
   userId: string,
   inputData: Partial<IUser>
 ) => {
-  const updatedUser = await update(userId, inputData);
-  if (!updatedUser) throw errorGenerator("유저가 존재하지 않습니다.", 403);
+  //1. 먼저 db에 있는 user정보를 가져온다.
+  const user = await UserModel.findById(userId);
+  if (!user) throw errorGenerator("유저가 존재하지 않습니다.", 403);
+
+  //2. 하나씩 비교한다.
+  const changedValue: Partial<IUser> = {};
+  let key: keyof IUser;
+  for (key in inputData) {
+    if (user[key] !== inputData[key]) {
+      changedValue[key] = inputData[key];
+    }
+  }
+
+  //3.일부분만 업데이트 해준다.
+  const updatedUser = await update(userId, changedValue);
+  if (!updatedUser) throw errorGenerator("업데이트에 실패했습니다.", 403);
   return updatedUser;
 };
 

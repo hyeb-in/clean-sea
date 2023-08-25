@@ -10,7 +10,15 @@ const options: swaggerJsdoc.Options = {
     },
     host: "localhost:5001",
     basePath: "/",
+    securityDefinitions: {
+      api_key: {
+        type: "Authorization",
+        in: "header",
+        name: "jwtToken",
+      },
+    },
   },
+
   apis: ["./src/swagger/*.ts", "./swagger/*"],
 };
 

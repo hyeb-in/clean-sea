@@ -13,8 +13,11 @@ export const validateSignUp = async (
 ) => {
   const { name, email, password } = req.body;
   const schema = joi.object({
-    name: joi.string().min(2).max(20).required().pattern(nameReg),
-    email: joi.string().required().email(),
+    name: joi.string().min(5).max(20).required().pattern(nameReg),
+    email: joi.string().min(5).max(30).required().email().messages({
+      "string.min": "Email은 최소 5자 이하로 입력해주세요",
+      "string.max": "Email은 30자 이하로 써주세요  ",
+    }),
     password: joi.string().min(4).max(30).required().pattern(passwordReg),
   });
 
@@ -59,7 +62,6 @@ export const validateUpdateUser = (
 
   const schema = joi.object({
     name: joi.string().min(2).max(20).required().pattern(nameReg),
-    email: joi.string().required().email(),
     description: joi.string().optional(),
     profileImage: joi.string().optional(),
   });

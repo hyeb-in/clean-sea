@@ -11,6 +11,7 @@ const validateSchema = (schema : joi.ObjectSchema) => {
         const customError = errorGenerator(errorMessage, 400);
         return res.status(customError.statusCode).json({error:customError.message});
         }
+        next();
     }
 }
 

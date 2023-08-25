@@ -25,7 +25,6 @@ export const postReviewValidator = validateSchema (
         'string.min': '4글자이상이여야합니다.',
         'string.max': '300글자이하이여야합니다.',
       }),
-      imageUrls: joi.any(),
       location: joi.any(),
     })
 );
@@ -42,5 +41,7 @@ export const putReviewValidator = validateSchema (
         'string.min': '4글자이상이여야합니다.',
         'string.max': '300글자이하이여야합니다.',
       }),
+      uploadFile: joi.any(),
+      location: joi.any(),
     })
   );
