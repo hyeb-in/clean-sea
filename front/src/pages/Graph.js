@@ -85,10 +85,11 @@ const Graph = () => {
 
   useEffect(() => {
     const fetchData = () => {
-      Api.get("beaches", `${selectedYear}/`)
+      Api.get("beaches/beaches", `${selectedYear}`)
         .then((response) => {
           // API 응답에서 데이터를 추출하고 상태에 저장합니다.
-          const data = response.data;
+          const data = response.data[selectedYear];
+          console.log(typeof data);
           const eschAvgData = data.map((item) => item.eschAvg); // 대장균 데이터
           const enteAvgData = data.map((item) => item.enteAvg); // 장구균 데이터
 
@@ -225,7 +226,7 @@ const Graph = () => {
               title={selectedYear}
               onSelect={handleYearSelect}
             >
-              {[2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023].map(
+              {[2015, 2017, 2019, 2021, 2022, 2023].map(
                 (year) => (
                   <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
                 )
