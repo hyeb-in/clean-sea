@@ -1,4 +1,3 @@
-import { Row } from "react-bootstrap";
 import Comment from "./Comment";
 
 const CommentsList = ({

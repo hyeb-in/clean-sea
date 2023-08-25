@@ -1,14 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
-import ReviewTitle from "./ReviewTitle";
-import * as Api from "../../Api";
 import { ModalVisibleContext, UserStateContext } from "../../App";
+import { Card } from "react-bootstrap";
+import ReviewTitle from "./ReviewTitle";
 import Timestamp from "../common/Timestamp";
-import { IS_LIKE, MODAL_TYPE } from "../../constants";
 import CommentsList from "./comment/CommentsList";
 import Like from "../common/Like";
 import ReviewContents from "./comment/ReviewContents";
-import Avatar from "../common/Avatar";
+import { IS_LIKE, MODAL_TYPE } from "../../constants";
 
 export const IMAGE_URLS = [
   "https://img.freepik.com/free-photo/beautiful-beach-and-sea_74190-6620.jpg?t=st=1691935043~exp=1691935643~hmac=7d32dd31eda2acee9b8c0a03ff9d29d591c8e105715746b9643e2600cd4b2b70",
@@ -33,7 +31,7 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
   const { setModalVisible } = useContext(ModalVisibleContext);
   const [newComments, setNewComments] = useState([]);
   const [showDetails, setShowDetails] = useState(hasCommentsMoreThanThree);
-  const isLiked = loggedInUser && review?.isLike === IS_LIKE.yes;
+  const iLiked = loggedInUser && review.isLike === IS_LIKE.yes;
 
   return (
     <>
@@ -60,7 +58,8 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
             </div>
             {loggedInUser && (
               <Like
-                isLiked={isLiked}
+                isLiked={iLiked && iLiked}
+                // isLiked 값은 "yes" || "no" 이기때문에 boolean 값으로 변환한 후 보내준다
                 reviewId={reviewId}
                 setReviews={setReviews}
               />

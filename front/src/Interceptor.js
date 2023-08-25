@@ -1,7 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect } from "react";
 import { DispatchContext, ModalOptionContext, UserStateContext } from "./App";
-import { useNavigate } from "react-router-dom";
 
 const Interceptor = ({ children }) => {
   const dispatch = useContext(DispatchContext);
@@ -36,12 +36,16 @@ const Interceptor = ({ children }) => {
         return response;
       },
       (error) => {
-        // 백엔드에 정확히 물어보기!
         if (error.statusCode === 401 || error.message === "토큰 만료") {
           console.log("error");
           sessionStorage.removeItem("userToken");
           dispatch({ type: "LOGOUT" });
-          navigate("/");
+          // 서버에서 401과 함께 토큰 만료 응답이 들어와도 화면에 반영이 되지 않습니다
+          navigate("/login");
+        }
+
+        if (error.response && error.response.statusCode === 401) {
+          navigate.push("/login");
         }
         return Promise.reject(error);
       }

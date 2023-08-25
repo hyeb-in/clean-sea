@@ -10,7 +10,7 @@ import { UserStateContext } from "../../App";
 // isLiked가 reviews list에서 받아오는 값
 const Like = ({ isLiked, reviewId, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const [isLikedState, setIsLikedState] = useState(isLiked === IS_LIKE.yes);
+  const [isLikedState, setIsLikedState] = useState(isLiked);
 
   const handleLikes = async (e) => {
     if (!loggedInUser) {

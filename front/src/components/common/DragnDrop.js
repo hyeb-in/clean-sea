@@ -1,7 +1,7 @@
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 const CustomDragnDrop = ({ setSelectedFiles, handleFileChange }) => {
   const [isDragging, setIsDragging] = useState(false);
