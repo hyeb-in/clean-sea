@@ -106,3 +106,28 @@
 .disLiked {
   color: none;
 }
+
+/* 드래그 앤 드랍 */
+.upload-area {
+  border: 2px dashed #ccc;
+  padding: 10px;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  background-color: white;
+}
+.upload-label {
+  display: block;
+  margin-bottom: 10px;
+}
+.file-input {
+  display: none;
+}
+.drag-drop-area {
+  border: 2px dashed #aaa;
+  padding: 20px;
+  color: #aaa;
+}
+.active {
+  background-color: black;
+}

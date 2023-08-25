@@ -1,4 +1,4 @@
-import { Modal, Row } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 const ModalBodyWrapper = ({ children, title, onHide, content }) => {
   return (
@@ -8,7 +8,7 @@ const ModalBodyWrapper = ({ children, title, onHide, content }) => {
       </Modal.Header>
       {content && (
         <Modal.Body className="d-flex justify-content-center align-items-center">
-          <Row>{content}</Row>
+          {content}
         </Modal.Body>
       )}
       <Modal.Footer>{children}</Modal.Footer>

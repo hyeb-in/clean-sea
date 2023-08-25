@@ -34,7 +34,7 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
   const [newComments, setNewComments] = useState([]);
   const [showDetails, setShowDetails] = useState(true);
   const isLiked = loggedInUser && review?.isLike === IS_LIKE.yes;
-  console.log(review);
+
   return (
     <>
       <Card bg="light" key={reviewId} className="my-5 review-container">

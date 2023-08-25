@@ -7,6 +7,7 @@ import DragDropContainer from "../common/DragDropContainer";
 import ReviewTitle from "./ReviewTitle";
 import ReviewTextForm from "./ReviewForm";
 import * as Api from "../../Api";
+import { IMAGE_URLS } from "./Review";
 
 // <ReviewTitle/>에서  '...' 버튼을 클릭 => id, review 값 modalVisible 컨텍스트에 전달
 // => <ActionSelectorModal />에서 그 값을 받아서
@@ -47,6 +48,7 @@ const EditReview = () => {
         isVisible: false,
         data: null,
       });
+      // to do: custom hook ???
     } catch (error) {
       alert(error);
       console.log(error.response);
