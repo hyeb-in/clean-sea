@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from "react-apexcharts";
 import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import * as Api from "../Api";
-import * as Api from "../Api";
-
 const Graph = () => {
   const chartRef = useRef(null);
   // const [selectedRegion, setSelectedRegion] = useState("지역을 선택해주세요");
@@ -12,14 +10,14 @@ const Graph = () => {
   const [chartData, setChartData] = useState({
     series: [
       {
-        name: '대장균',
-        data: []
+        name: "대장균",
+        data: [],
       },
       {
-        name: '장구균',
-        data: []
-      }
-    ]
+        name: "장구균",
+        data: [],
+      },
+    ],
   });
 
   //  해변 interface
@@ -38,7 +36,18 @@ const Graph = () => {
   const options = {
     series: chartData.series,
     xaxis: {
-      categories: ['강원', '경남', '경북', '인천', '울산', '부산', '전남', '전북', '제주', '충남'],
+      categories: [
+        "강원",
+        "경남",
+        "경북",
+        "인천",
+        "울산",
+        "부산",
+        "전남",
+        "전북",
+        "제주",
+        "충남",
+      ],
     },
     chart: {
       type: "bar",
@@ -61,8 +70,8 @@ const Graph = () => {
     },
     yaxis: {
       title: {
-        text: '검출 수'
-      }
+        text: "검출 수",
+      },
     },
     fill: {
       opacity: 1,
@@ -87,7 +96,6 @@ const Graph = () => {
       .catch((err) => console.log(err));
   }, []);
 
-
   useEffect(() => {
     const fetchData = () => {
       Api.get("beaches", `${selectedYear}/`)
@@ -100,16 +108,16 @@ const Graph = () => {
           const updatedChartData = {
             series: [
               {
-                name: '대장균',
-                data: eschAvgData
+                name: "대장균",
+                data: eschAvgData,
               },
               {
-                name: '장구균',
-                data: enteAvgData
-              }
-            ]
+                name: "장구균",
+                data: enteAvgData,
+              },
+            ],
           };
-          
+
           setChartData(updatedChartData); // 상태를 업데이트합니다.
         })
         .catch((error) => {
@@ -118,95 +126,95 @@ const Graph = () => {
     };
     if (selectedYear) {
       fetchData();
-    //   // mocking
-    //   const yearsData = {
-    //     "2023": [
-    //         {
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     },{
-    //         eschAvg: 10,
-    //         enteAvg: 11,
-    //     }
-    //     ],
-    //     "2014": [{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     },{
-    //         eschAvg: 40,
-    //         enteAvg: 50,
-    //     }]
-    //     }
-    //   const data = yearsData[selectedYear]
-    //   console.log(data);
-    //   console.log(yearsData);
-    //   console.log(selectedYear);
-    //   console.log(typeof selectedYear);
-    // const eschAvgData = data.map((item) => item.eschAvg); // 대장균 데이터
-    //       const enteAvgData = data.map((item) => item.enteAvg); // 장구균 데이터
-          
-    //       const updatedChartData = {
-    //         series: [
-    //           {
-    //             name: '대장균',
-    //             data: eschAvgData
-    //           },
-    //           {
-    //             name: '장구균',
-    //             data: enteAvgData
-    //           }
-    //         ]
-    //       };
-          
-    //       setChartData(updatedChartData); // 상태를 업데이트합니다.;
+      //   // mocking
+      //   const yearsData = {
+      //     "2023": [
+      //         {
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     },{
+      //         eschAvg: 10,
+      //         enteAvg: 11,
+      //     }
+      //     ],
+      //     "2014": [{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     },{
+      //         eschAvg: 40,
+      //         enteAvg: 50,
+      //     }]
+      //     }
+      //   const data = yearsData[selectedYear]
+      //   console.log(data);
+      //   console.log(yearsData);
+      //   console.log(selectedYear);
+      //   console.log(typeof selectedYear);
+      // const eschAvgData = data.map((item) => item.eschAvg); // 대장균 데이터
+      //       const enteAvgData = data.map((item) => item.enteAvg); // 장구균 데이터
+
+      //       const updatedChartData = {
+      //         series: [
+      //           {
+      //             name: '대장균',
+      //             data: eschAvgData
+      //           },
+      //           {
+      //             name: '장구균',
+      //             data: enteAvgData
+      //           }
+      //         ]
+      //       };
+
+      //       setChartData(updatedChartData); // 상태를 업데이트합니다.;
     }
   }, [selectedYear]);
 
@@ -231,8 +239,10 @@ const Graph = () => {
               onSelect={handleYearSelect}
             >
               {[2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023].map(
-                (year) => (<Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>))
-                }
+                (year) => (
+                  <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
+                )
+              )}
             </DropdownButton>
           </Dropdown>
         </Col>
