@@ -71,11 +71,13 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
         throw new Error("nono");
       }
 
-      // 성공시
       setReviews([...reviews, res.data]);
       setUploadStatus(RESULT_ENUM.SUCCESS);
     } catch (error) {
-      console.error(error);
+      console.error(error.response.data.error); // 메세지 뜸
+      console.log(error.response.status);
+
+      // data.status 에 코드가 있는데 undefined로 뜸
       setUploadStatus(RESULT_ENUM.FAIL);
       setModalVisible({
         type: null,

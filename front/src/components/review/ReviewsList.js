@@ -37,9 +37,9 @@ const ReviewsList = ({ reviews, setReviews }) => {
           if (res.data) return;
         }
         const res = await Api.get("reviews/reviewListLogin");
-        if (!res) {
-          throw new Error("데이터를 불러오지 못했습니다");
-        }
+        // if (!res) {
+        //   throw new Error("데이터를 불러오지 못했습니다");
+        // }
         setIsHandlerEnabled(true);
         setReviews(res.data);
         setIsLoaded(true);

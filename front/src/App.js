@@ -42,6 +42,7 @@ function App() {
     isVisible: false,
     data: null,
   });
+
   // 모든 요청에 isHandlerEnabled(상태 관리)를 함께 보낸다
   axios.interceptors.request.use((config) => {
     if (config.isHandlerEnabled) {

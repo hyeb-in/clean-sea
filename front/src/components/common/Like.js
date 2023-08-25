@@ -21,7 +21,6 @@ const Like = ({ isLiked, reviewId, setReviews }) => {
         targetType: "review",
         targetId: reviewId,
       });
-      console.log(res.data.message);
 
       if (res.data.message === IS_LIKE.added) {
         setReviews((current) => {
@@ -52,7 +51,8 @@ const Like = ({ isLiked, reviewId, setReviews }) => {
       }
       setIsLikedState(!isLikedState);
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.statusCode);
+      alert(error.statusCode);
     }
   };
 

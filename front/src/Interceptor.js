@@ -7,6 +7,7 @@ const Interceptor = ({ children }) => {
   const dispatch = useContext(DispatchContext);
   const { user } = useContext(UserStateContext);
   const { modalOptions, setModalOptions } = useContext(ModalOptionContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,17 +37,19 @@ const Interceptor = ({ children }) => {
         return response;
       },
       (error) => {
-        if (error.statusCode === 401 || error.message === "토큰 만료") {
-          console.log("error");
+        const errorMessage = error.response.data.error;
+        const status = error.response.status;
+
+        console.log(errorMessage, status);
+        if (errorMessage === "토큰 만료" || status === 401) {
+          console.log(error.response);
           sessionStorage.removeItem("userToken");
           dispatch({ type: "LOGOUT" });
-          // 서버에서 401과 함께 토큰 만료 응답이 들어와도 화면에 반영이 되지 않습니다
           navigate("/login");
+          // 모달창 띄워서 알려주기
+          return;
         }
-
-        if (error.response && error.response.statusCode === 401) {
-          navigate.push("/login");
-        }
+        // status 401인데 로그아웃 안됨
         return Promise.reject(error);
       }
     );
