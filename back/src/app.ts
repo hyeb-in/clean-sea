@@ -2,16 +2,18 @@ import userRouter from "./routes/userRouter";
 import reviewAuthRouter from "./routes/reviewRouter";
 import travelAuthRouter from "./routes/travelRouter";
 import beachRouter from "./routes/beachRouter";
+import commentAuthRouter from "./routes/commentRouter";
+import likeAuthRouter from "./routes/likeRouter";
 import { errorMiddleware, httpLogger } from "./config/logger";
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import passport from "passport";
 import { jwtStrategy, localStrategy } from "./config/passport";
 import authRouter from "./routes/authRouter";
+import { swaggerUi, specs } from "./swagger/swagger";
 
-const { swaggerUi, specs } = require("./swagger/swagger");
-
-require("./db/index");
+import "./db";
+import { mailSender } from "./utils/sendMail";
 
 const app: Express = express();
 app.use(cors());
@@ -36,6 +38,10 @@ app.use("/reviews", reviewAuthRouter);
 app.use("/travels", travelAuthRouter);
 app.use("/beaches", beachRouter);
 app.use("/auth", authRouter);
+app.use("/comments", commentAuthRouter);
+app.use("/api", likeAuthRouter);
+
+app.use("/uploads", express.static("imageUpload"));
 
 app.use(errorMiddleware);
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import ApexCharts from 'react-apexcharts';
+import ApexCharts from "react-apexcharts";
 import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
+import * as Api from "../Api";
 import * as Api from "../Api";
 
 const Graph = () => {
@@ -21,29 +22,42 @@ const Graph = () => {
     ]
   });
 
+  //  해변 interface
+  // interface IBeach {
+  //   id: number;
+  //   name: string;
+  //   address: string;
+  //   goodnessFit?: boolean;
+  //   eschScore?: number,
+  //   enteScore?: number,
+  //   ente?: number;
+  //   esch?: number;
+  //   latitude?: number;
+  //   longitude?: number;
+  // }
   const options = {
     series: chartData.series,
     xaxis: {
       categories: ['강원', '경남', '경북', '인천', '울산', '부산', '전남', '전북', '제주', '충남'],
     },
     chart: {
-      type: 'bar',
-      height: 350
+      type: "bar",
+      height: 350,
     },
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: '55%',
-        endingShape: 'rounded'
+        columnWidth: "55%",
+        endingShape: "rounded",
       },
     },
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     stroke: {
       show: true,
       width: 2,
-      colors: ['transparent']
+      colors: ["transparent"],
     },
     yaxis: {
       title: {
@@ -51,20 +65,27 @@ const Graph = () => {
       }
     },
     fill: {
-      opacity: 1
+      opacity: 1,
     },
     tooltip: {
       y: {
         formatter: function (val) {
-          return val + "개 검출"
-        }
-      }
-    }
+          return val + "개 검출";
+        },
+      },
+    },
   };
 
   const handleYearSelect = (year) => {
     setSelectedYear(year);
   };
+  // beaches/beachesbyregion/강원/2015
+
+  useEffect(() => {
+    Api.get("beaches/beaches")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  }, []);
 
 
   useEffect(() => {
@@ -191,7 +212,10 @@ const Graph = () => {
 
   useEffect(() => {
     if (!chartRef.current) {
-      chartRef.current = new ApexCharts(document.querySelector("#chart"), options);
+      chartRef.current = new ApexCharts(
+        document.querySelector("#chart"),
+        options
+      );
       chartRef.current.render();
     }
   }, [options]);
@@ -215,7 +239,12 @@ const Graph = () => {
       </Row>
       <Row>
         <div id="chart">
-          <ApexCharts options={options} series={chartData.series} type="bar" height={350} />
+          <ApexCharts
+            options={options}
+            series={chartData.series}
+            type="bar"
+            height={350}
+          />
         </div>
       </Row>
     </Container>

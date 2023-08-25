@@ -1,12 +1,16 @@
-import { Request, Response, NextFunction } from 'express';
-import { getBeachByIdService, getBeachByRegionAndYearService, getBeachesService } from "../services/beachService";
+import { Request, Response, NextFunction } from "express";
+import {
+  getBeachByIdService,
+  getBeachByRegionAndYearService,
+  getBeachesService,
+} from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
-import { IBeach } from '../types/beach';
+import { IBeach } from "../types/beach";
 import { Types } from "mongoose";
 
 const getBeachById = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -20,8 +24,8 @@ const getBeachById = async (
 };
 
 const getBeachByRegionAndYear = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -36,14 +40,9 @@ const getBeachByRegionAndYear = async (
   }
 };
 
-
-const getBeaches = async (
-  req: Request, 
-  res: Response, 
-  next: NextFunction
-  ) => {
+const getBeaches = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log(req, res)
+    console.log(req, res);
     const result = await getBeachesService();
     res.status(StatusCodes.OK).json(result);
   } catch (e) {

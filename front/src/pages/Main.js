@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import Highcharts from "highcharts";
-import HighchartsMap from "highcharts/modules/map";
-import ExportingModule from "highcharts/modules/exporting";
-import ExportDataModule from "highcharts/modules/export-data";
-import AccessibilityModule from "highcharts/modules/accessibility";
+import React, { useEffect, useRef, useState } from "react";
+import ApexCharts from "react-apexcharts";
+import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
+import axios from "axios"; // Axios를 사용하여 API 요청을 보낼 수 있도록 import합니다.
+import * as Api from "../Api";
 
 // Initialize Highcharts modules
 HighchartsMap(Highcharts);
@@ -79,22 +77,54 @@ const Main = () => {
       });
 
     return () => {
-      // Clean up Highcharts when the component unmounts
-      Highcharts.charts.forEach((chart) => {
-        if (chart) {
-          chart.destroy();
-        }
-      });
+      if (chartRef.current) {
+        // chartRef.current.destroy();
+      }
     };
-  }, []);
+  }, [chartOptions]);
 
   return (
-    <Container fluid style={{ height: "100vh" }}>
-      <Row style={{ height: "100%" }}>
-        <Col id="container"></Col>
+    <Container>
+      <Row>
+        <Col xs={4} className="px-0">
+          <Dropdown>
+            <DropdownButton
+              id="region-dropdown"
+              title={selectedRegion}
+              onSelect={handleRegionSelect} // onSelect에 이벤트 핸들러 함수를 연결합니다.
+            >
+              <Dropdown.Item eventKey="강원">강원</Dropdown.Item>
+              <Dropdown.Item eventKey="부산">부산</Dropdown.Item>
+              <Dropdown.Item eventKey="충남">충남</Dropdown.Item>
+            </DropdownButton>
+          </Dropdown>
+        </Col>
+        <Col xs={4} className="px-0">
+          <Dropdown>
+            <DropdownButton
+              id="year-dropdown"
+              title={selectedYear}
+              onSelect={handleYearSelect}
+            >
+              <Dropdown.Item eventKey="2014">2014년</Dropdown.Item>
+              <Dropdown.Item eventKey="2015">2015년</Dropdown.Item>
+              <Dropdown.Item eventKey="2016">2016년</Dropdown.Item>
+            </DropdownButton>
+          </Dropdown>
+        </Col>
+      </Row>
+      <Row>
+        <div id="chart">
+          <ApexCharts
+            options={options}
+            series={chartData.series}
+            type="bar"
+            height={350}
+          />
+        </div>
       </Row>
     </Container>
   );
 };
 
-export default Main;
+export default Graph;

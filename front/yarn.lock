@@ -2780,7 +2780,7 @@ anymatch@^3.0.3, anymatch@~3.1.2:
 
 apexcharts@^3.41.1:
   version "3.41.1"
-  resolved "https://registry.npmjs.org/apexcharts/-/apexcharts-3.41.1.tgz"
+  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.41.1.tgz#69669ae6225d4e7a32bdfd9750157e236d56b6e6"
   integrity sha512-kta8fhXrfZYqW7K9kF7FqZ6imQaC6moyRgcUZjwIky/oeHVVISSN/2rjUIvZXnwxWHiSdDHMqLy+TqJhB4DXFA==
   dependencies:
     svg.draggable.js "^2.2.2"
@@ -7926,7 +7926,7 @@ react-dom@^18.2.0:
 
 react-drag-drop-files@^2.3.10:
   version "2.3.10"
-  resolved "https://registry.npmjs.org/react-drag-drop-files/-/react-drag-drop-files-2.3.10.tgz"
+  resolved "https://registry.yarnpkg.com/react-drag-drop-files/-/react-drag-drop-files-2.3.10.tgz#3f6ea316f8ad66a6f76b312cc4108c7c14065b06"
   integrity sha512-Fv614W9+OtXFB5O+gjompTxQZLYGO7wJeT4paETGiXtiADB9yPOMGYD4A3PMCTY9Be874/wcpl+2dm3MvCIRzg==
   dependencies:
     prop-types "^15.7.2"
