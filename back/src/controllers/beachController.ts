@@ -9,20 +9,7 @@ import { StatusCodes } from "http-status-codes";
 import { IBeach } from 'beach';
 import { Types } from "mongoose";
 
-const getBeachByBeachName = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const name = req.params.name;
 
-    const result = await getBeachByBeachNameService({ name } as IBeach);
-    res.status(200).json(result);
-  } catch (e) {
-    next(e);
-  }
-};
 
 const getBeachById = async (
   req: Request,
