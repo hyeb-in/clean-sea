@@ -1,17 +1,5 @@
-import mongoose, { Schema, model, Document, Types } from 'mongoose';
-import { ILike } from 'likes';
-
-interface IReview extends Document {
-    title?: string;
-    content?: string;
-    userName? : string;
-    location? : string;
-    author?: string;
-    uploadFile?: [string];
-    comments?: Types.ObjectId[];
-    likeCount? : number;
-    Likes? : ILike[];
-}
+import mongoose, { Schema, model } from 'mongoose';
+import { IReview } from 'review';
 
 const ReviewSchema : Schema<IReview> = new Schema({
     userName : {
