@@ -1,9 +1,7 @@
-import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Image } from "react-bootstrap";
+import { Image } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
-import { serverUrl } from "../../Api";
 
 const CarouselWrapper = ({ preview, setReview }) => {
   // 블롭이라면 그냥 src,
@@ -17,17 +15,25 @@ const CarouselWrapper = ({ preview, setReview }) => {
 
   return (
     <Carousel
-      className="carousel__container px-0"
+      className={`carousel__container px-0`}
       interval={null}
       variant="dark"
       indicators={preview?.length > 1}
       prevIcon={
-        <FontAwesomeIcon icon={faArrowLeft} className="carousel-arrow-icon" />
+        preview?.length > 1 && (
+          <FontAwesomeIcon icon={faArrowLeft} className="carousel-arrow-icon" />
+        )
       }
       nextIcon={
-        <FontAwesomeIcon icon={faArrowRight} className="carousel-arrow-icon" />
+        preview?.length > 1 && (
+          <FontAwesomeIcon
+            icon={faArrowRight}
+            className="carousel-arrow-icon"
+          />
+        )
       }
     >
+      {/* to do: 미리보기 수정 가능하게 버튼 넣어주기 */}
       {preview?.map((img, index) => {
         // image 주소 바꾸기
         // db 데이터 (1692779441756.png) 라면 그대로 보여준다

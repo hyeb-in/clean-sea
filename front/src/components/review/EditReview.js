@@ -5,7 +5,7 @@ import { MODAL_TYPE } from "../../constants";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 import DragDropContainer from "../common/DragDropContainer";
 import ReviewTitle from "./ReviewTitle";
-import ReviewTextForm from "./ReviewForm";
+import ReviewTextForm from "./ReviewFormBody";
 import * as Api from "../../Api";
 import { IMAGE_URLS } from "./Review";
 

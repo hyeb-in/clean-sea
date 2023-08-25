@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBomb, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
@@ -6,7 +6,7 @@ import { ModalVisibleContext, UserStateContext } from "../../App";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 import ConfirmModal from "../common/popup/ConfirmModal";
-import ReviewForm from "./ReviewForm";
+import ReviewFormBody from "./ReviewFormBody";
 import DragDropContainer from "../common/DragDropContainer";
 import { MODAL_TYPE } from "../../constants";
 import axios from "axios";
@@ -97,8 +97,9 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
     <>
       {/* 리뷰 입력 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
       <Modal
-        className="modal lg"
         centered
+        dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
+        className="px-5"
         show={modalVisible.type === MODAL_TYPE.addReview}
         onHide={() => {
           // 모달창 제거
@@ -111,29 +112,47 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
           if (review.title === "" && review.content === "") {
             return closeReviewFormModal();
           }
+          setModalVisible({
+            type: null,
+            isVisible: false,
+            data: null,
+          });
         }}
         onClick={(e) => e.stopPropagation()}
         // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
         // to do: space bar입력시 모달창 사라짐 버그 (브라우저에 따라서 다른 듯? 확인하기)
       >
         {/* 모달창 내부: 입력 받는 공간 */}
-        <ModalBodyWrapper title={headerTitle}>
+        <ModalBodyWrapper
+          title={headerTitle}
+          content={
+            <div className="addReview__form flexible-col">
+              <DragDropContainer
+                preview={preview}
+                setPreview={setPreview}
+                review={review}
+                setReview={setReview}
+                blobURLsExpired={isFetched}
+                setFiles={setFiles}
+              />
+              {/* 아래 Form 내부로 들어가는 body */}
+              <ReviewFormBody
+                title={review.title}
+                content={review.content}
+                review={review}
+                setReview={setReview}
+              />
+            </div>
+          }
+        >
+          {/* 미디어 쿼리 적용(flexible-col class): 작은 화면에선 flex column, 큰 화면에선 row로 보여준다 */}
           <Form onSubmit={addReview} className="addReview__form">
-            <DragDropContainer
-              preview={preview}
-              setPreview={setPreview}
-              review={review}
-              setReview={setReview}
-              blobURLsExpired={isFetched}
-              setFiles={setFiles}
-            />
-            <ReviewForm
-              title={review.title}
-              content={review.content}
-              review={review}
-              setReview={setReview}
-            />
-            <Button type="submit" onClick={addReview}>
+            <Button
+              className="addreview__btn"
+              variant="outline-primary"
+              type="submit"
+              onClick={addReview}
+            >
               확인
             </Button>
           </Form>
@@ -156,7 +175,7 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
                 ? "게시물이 공유되었습니다"
                 : "게시물을 업로드하지 못했습니다"
             }
-            onHide={() => closeReviewFormModal()}
+            onHide={closeReviewFormModal}
             content={
               <FontAwesomeIcon
                 icon={RESULT_ENUM.SUCCESS ? faCircleCheck : faBomb}
