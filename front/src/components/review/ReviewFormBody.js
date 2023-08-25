@@ -1,12 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 
-const ReviewFormBody = ({
-  children: dargdrop,
-  title,
-  content,
-  review,
-  setReview,
-}) => {
+const ReviewFormBody = ({ title, content, review, setReview }) => {
   return (
     // state로 값을 관리할 거면 굳이 form 사용 안해도 되는 듯 -> 확인 필요
     <Container className="w-100">

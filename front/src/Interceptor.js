@@ -1,12 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect } from "react";
 import { DispatchContext, ModalOptionContext, UserStateContext } from "./App";
-import { useNavigate } from "react-router-dom";
 
 const Interceptor = ({ children }) => {
   const dispatch = useContext(DispatchContext);
   const { user } = useContext(UserStateContext);
   const { modalOptions, setModalOptions } = useContext(ModalOptionContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,13 +37,19 @@ const Interceptor = ({ children }) => {
         return response;
       },
       (error) => {
-        // 백엔드에 정확히 물어보기!
-        if (error.statusCode === 401 || error.message === "토큰 만료") {
-          console.log("error");
+        const errorMessage = error.response.data.error;
+        const status = error.response.status;
+
+        console.log(errorMessage, status);
+        if (errorMessage === "토큰 만료" || status === 401) {
+          console.log(error.response);
           sessionStorage.removeItem("userToken");
           dispatch({ type: "LOGOUT" });
-          navigate("/");
+          navigate("/login");
+          // 모달창 띄워서 알려주기
+          return;
         }
+        // status 401인데 로그아웃 안됨
         return Promise.reject(error);
       }
     );

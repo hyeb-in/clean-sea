@@ -66,7 +66,7 @@ export const MODAL_TYPE = {
 };
 
 export const IS_LIKE = {
-  like: "yes",
+  yes: "yes",
   no: "no",
   removed: "Like removed",
   added: "Like added",

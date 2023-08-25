@@ -4,14 +4,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBomb, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { ModalVisibleContext, UserStateContext } from "../../App";
 import SpinnerWrapper from "../common/indicators/Spinner";
-import ModalBodyWrapper from "../common/ModalBodyWrapper";
+import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
 import ConfirmModal from "../common/popup/ConfirmModal";
 import ReviewFormBody from "./ReviewFormBody";
 import DragDropContainer from "../common/DragDropContainer";
 import { MODAL_TYPE } from "../../constants";
 import axios from "axios";
 
-const RESULT_ENUM = {
+export const RESULT_ENUM = {
   NOT_YET: "작성중",
   UPLOADING: "업로드 중",
   SUCCESS: "성공",
@@ -53,7 +53,9 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       formData.append("title", review.title);
       formData.append("content", review.content);
       setUploadStatus(RESULT_ENUM.UPLOADING);
-      console.log(files, formData, "업로드 될 review 형식 <<<<");
+      console.log(formData, "formData 형식");
+      console.log(files, "uploadFile 형식");
+
       const res = await axios.post(
         "http://localhost:5001/reviews/register",
         formData,
@@ -69,11 +71,13 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
         throw new Error("nono");
       }
 
-      // 성공시
       setReviews([...reviews, res.data]);
       setUploadStatus(RESULT_ENUM.SUCCESS);
     } catch (error) {
-      console.error(error);
+      console.error(error.response.data.error); // 메세지 뜸
+      console.log(error.response.status);
+
+      // data.status 에 코드가 있는데 undefined로 뜸
       setUploadStatus(RESULT_ENUM.FAIL);
       setModalVisible({
         type: null,

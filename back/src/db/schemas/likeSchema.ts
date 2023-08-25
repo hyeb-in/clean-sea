@@ -1,16 +1,5 @@
-import { Schema, model, Document } from 'mongoose';
-
-enum TargetType {
-  Beach = 'beach',
-  Review = 'review',
-}
-
-interface ILike extends Document {
-  userId: string;
-  targetType: TargetType;
-  targetId: string;
-  isLike? : 'yes' | 'no';
-}
+import { Schema, model } from 'mongoose';
+import { ILike, TargetType } from '../../types/liketype';
 
 const LikeSchema: Schema<ILike> = new Schema({
   userId: {

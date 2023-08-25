@@ -9,8 +9,8 @@ import Main from "./pages/Main";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
-import Footer from "./components/common/Footer";
-import NavBar from "./components/common/NavBar";
+import Footer from "./components/common/layout/Footer";
+import NavBar from "./components/common/layout/NavBar";
 import ReviewsList from "./components/review/ReviewsList";
 import { loginReducer } from "./Reducer";
 import "./Main.css";
@@ -42,6 +42,7 @@ function App() {
     isVisible: false,
     data: null,
   });
+
   // 모든 요청에 isHandlerEnabled(상태 관리)를 함께 보낸다
   axios.interceptors.request.use((config) => {
     if (config.isHandlerEnabled) {

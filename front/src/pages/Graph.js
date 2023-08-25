@@ -2,26 +2,25 @@ import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from "react-apexcharts";
 import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import * as Api from "../Api";
+import * as Api from "../Api";
 
 const Graph = () => {
   const chartRef = useRef(null);
-  const [selectedRegion, setSelectedRegion] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(null);
-  // API로부터 받은 데이터를 저장할 상태
+  // const [selectedRegion, setSelectedRegion] = useState("지역을 선택해주세요");
+  const [selectedYear, setSelectedYear] = useState("2023");
+
   const [chartData, setChartData] = useState({
     series: [
       {
-        name: "대장균",
-        data: [22, 11, 44, 55, 57, 56, 61, 58, 63, 60, 66, 11],
+        name: '대장균',
+        data: []
       },
       {
-        name: "장구균",
-        data: [55, 44, 76, 85, 101, 98, 87, 105, 91, 114, 94, 23],
-      },
-    ],
+        name: '장구균',
+        data: []
+      }
+    ]
   });
-
-  console.log(selectedRegion, selectedYear);
 
   //  해변 interface
   // interface IBeach {
@@ -37,31 +36,9 @@ const Graph = () => {
   //   longitude?: number;
   // }
   const options = {
-    series: [
-      {
-        name: "대장균",
-        data: [22, 11, 44, 55, 57, 56, 61, 58, 63, 60, 66, 11],
-      },
-      {
-        name: "장구균",
-        data: [55, 44, 76, 85, 101, 98, 87, 105, 91, 114, 94, 23],
-      },
-    ],
+    series: chartData.series,
     xaxis: {
-      categories: [
-        "1월",
-        "2월",
-        "3월",
-        "4월",
-        "5월",
-        "6월",
-        "7월",
-        "8월",
-        "9월",
-        "10월",
-        "11월",
-        "12월",
-      ],
+      categories: ['강원', '경남', '경북', '인천', '울산', '부산', '전남', '전북', '제주', '충남'],
     },
     chart: {
       type: "bar",
@@ -84,8 +61,8 @@ const Graph = () => {
     },
     yaxis: {
       title: {
-        text: "검출 수",
-      },
+        text: '검출 수'
+      }
     },
     fill: {
       opacity: 1,
@@ -99,21 +76,8 @@ const Graph = () => {
     },
   };
 
-  // app.ts 라우팅: app.use("/beaches", beachRouter);
-
-  // api path url
-  // '/beachesbyregion/:address/:year
-  // '/beachbyId/:_id'
-  // '/beaches'
-
-  const handleRegionSelect = (region) => {
-    setSelectedRegion(region);
-    // fetchData(region, selectedYear);
-  };
-
   const handleYearSelect = (year) => {
     setSelectedYear(year);
-    // fetchData(selectedRegion, year);
   };
   // beaches/beachesbyregion/강원/2015
 
@@ -123,23 +87,128 @@ const Graph = () => {
       .catch((err) => console.log(err));
   }, []);
 
+
   useEffect(() => {
     const fetchData = () => {
-      // API를 호출하여 데이터를 가져옵니다.
-      Api.get("beaches/beachesbyregion", `${selectedRegion}/${selectedYear}`)
+      Api.get("beaches", `${selectedYear}/`)
         .then((response) => {
           // API 응답에서 데이터를 추출하고 상태에 저장합니다.
-          console.log(response);
-          // setChartData(data);
+          const data = response.data;
+          const eschAvgData = data.map((item) => item.eschAvg); // 대장균 데이터
+          const enteAvgData = data.map((item) => item.enteAvg); // 장구균 데이터
+
+          const updatedChartData = {
+            series: [
+              {
+                name: '대장균',
+                data: eschAvgData
+              },
+              {
+                name: '장구균',
+                data: enteAvgData
+              }
+            ]
+          };
+          
+          setChartData(updatedChartData); // 상태를 업데이트합니다.
         })
         .catch((error) => {
           console.error("API 호출 중 오류 발생:", error);
         });
     };
-    if (selectedRegion && selectedYear) {
+    if (selectedYear) {
       fetchData();
+    //   // mocking
+    //   const yearsData = {
+    //     "2023": [
+    //         {
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     },{
+    //         eschAvg: 10,
+    //         enteAvg: 11,
+    //     }
+    //     ],
+    //     "2014": [{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     },{
+    //         eschAvg: 40,
+    //         enteAvg: 50,
+    //     }]
+    //     }
+    //   const data = yearsData[selectedYear]
+    //   console.log(data);
+    //   console.log(yearsData);
+    //   console.log(selectedYear);
+    //   console.log(typeof selectedYear);
+    // const eschAvgData = data.map((item) => item.eschAvg); // 대장균 데이터
+    //       const enteAvgData = data.map((item) => item.enteAvg); // 장구균 데이터
+          
+    //       const updatedChartData = {
+    //         series: [
+    //           {
+    //             name: '대장균',
+    //             data: eschAvgData
+    //           },
+    //           {
+    //             name: '장구균',
+    //             data: enteAvgData
+    //           }
+    //         ]
+    //       };
+          
+    //       setChartData(updatedChartData); // 상태를 업데이트합니다.;
     }
-  }, [selectedRegion, selectedYear]);
+  }, [selectedYear]);
 
   useEffect(() => {
     if (!chartRef.current) {
@@ -149,12 +218,6 @@ const Graph = () => {
       );
       chartRef.current.render();
     }
-
-    return () => {
-      if (chartRef.current) {
-        // chartRef.current.destroy();
-      }
-    };
   }, [options]);
 
   return (
@@ -163,26 +226,13 @@ const Graph = () => {
         <Col xs={4} className="px-0">
           <Dropdown>
             <DropdownButton
-              id="region-dropdown"
-              title={selectedRegion}
-              onSelect={handleRegionSelect}
-            >
-              <Dropdown.Item eventKey="강원">강원</Dropdown.Item>
-              <Dropdown.Item eventKey="부산">부산</Dropdown.Item>
-              <Dropdown.Item eventKey="충남">충남</Dropdown.Item>
-            </DropdownButton>
-          </Dropdown>
-        </Col>
-        <Col xs={4} className="px-0">
-          <Dropdown>
-            <DropdownButton
               id="year-dropdown"
               title={selectedYear}
               onSelect={handleYearSelect}
             >
-              <Dropdown.Item eventKey="2014">2014년</Dropdown.Item>
-              <Dropdown.Item eventKey="2015">2015년</Dropdown.Item>
-              <Dropdown.Item eventKey="2016">2016년</Dropdown.Item>
+              {[2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023].map(
+                (year) => (<Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>))
+                }
             </DropdownButton>
           </Dropdown>
         </Col>
