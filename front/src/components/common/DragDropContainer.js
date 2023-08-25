@@ -1,7 +1,7 @@
 import CarouselWrapper from "./Carousel";
 import { useContext, useEffect, useState } from "react";
 import { ModalVisibleContext } from "../../App";
-import CustomDragnDrop from "./CustomDragnDrop";
+import DragnDrop from "./DragnDrop";
 
 const MAX_FILE_COUNT = 5;
 const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB, 최대 총 크기
@@ -69,7 +69,7 @@ const DragDropContainer = ({ preview, setPreview, setFiles, formRef }) => {
       {preview && preview.length > 0 ? (
         <CarouselWrapper preview={preview} setPreview={setPreview} />
       ) : (
-        <CustomDragnDrop
+        <DragnDrop
           selectedFiles={selectedFiles}
           setSelectedFiles={setSelectedFiles}
           handleFileChange={handleFileChange}

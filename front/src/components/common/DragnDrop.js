@@ -1,7 +1,7 @@
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col } from "react-bootstrap";
+import { Button, Col } from "react-bootstrap";
 
 const CustomDragnDrop = ({ setSelectedFiles, handleFileChange }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -23,7 +23,7 @@ const CustomDragnDrop = ({ setSelectedFiles, handleFileChange }) => {
   };
 
   return (
-    <Col>
+    <div>
       <div
         className={`upload-area ${isDragging ? "active" : ""}`}
         onDragOver={handleDragOver}
@@ -31,8 +31,12 @@ const CustomDragnDrop = ({ setSelectedFiles, handleFileChange }) => {
         onDrop={handleDrop}
       >
         <label htmlFor="file-input" className="upload-label">
-          파일 선택
+          최대 10MB / jpeg, png 첨부 가능
         </label>
+        <div className="upload-label-bottom-text">
+          파일을 여기로 드래그하세요
+        </div>
+        <FontAwesomeIcon icon={faImage} className="upload-icon" />
         <input
           type="file"
           id="file-input"
@@ -42,10 +46,12 @@ const CustomDragnDrop = ({ setSelectedFiles, handleFileChange }) => {
           accept="image/png, image/jpeg"
         />
         <div className="drag-drop-area">
-          <FontAwesomeIcon icon={faImage} />
+          <div className="drag-drop-area__btn-container">
+            <Button variant="outline-primary">이미지 가져오기</Button>
+          </div>
         </div>
       </div>
-    </Col>
+    </div>
   );
 };
 
