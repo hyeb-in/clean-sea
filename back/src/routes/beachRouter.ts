@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { 
   getBeachById,
   getBeachByRegionAndYear,
-  getBeaches
+  getBeaches,
+  getBeachByRegionAndYearSpecific
 } from '../controllers/beachController';
 import { beachValidator } from '../utils/validators/beachValidator';
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
@@ -18,6 +19,10 @@ beachRouter
   // .get('/beachesbyregion/:address/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
 
 beachRouter
-  .get('/beaches',jwtAuthentication, getBeaches);
+  .get('/beaches/:year', getBeachByRegionAndYearSpecific);
+  // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+
+beachRouter
+  .get('/beaches', getBeaches);
 
 export default beachRouter;
