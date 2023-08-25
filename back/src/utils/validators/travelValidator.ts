@@ -17,6 +17,8 @@ const validateSchema = (schema : joi.ObjectSchema) => {
 
 export const postTravelValidator = validateSchema (
     joi.object({
+        author : joi.required(),
+        beachId: joi.required(),
         date : joi.date().iso().required(),
     }),
 );
@@ -24,6 +26,7 @@ export const postTravelValidator = validateSchema (
 
 export const putTravelValidator = validateSchema (
     joi.object({
+        beachId: joi.required(),
         date : joi.date().iso().optional(),
     }),
 );

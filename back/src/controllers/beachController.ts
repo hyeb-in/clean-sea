@@ -1,12 +1,23 @@
-import { Request, Response, NextFunction } from "express";
-import {
-  getBeachByIdService,
-  getBeachByRegionAndYearService,
-  getBeachesService,
-} from "../services/beachService";
+import { Request, Response, NextFunction } from 'express';
+import { getBeachByBeachNameService, getBeachByIdService, getBeachByRegionAndYearService, getBeachesService } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
-import { IBeach } from "../types/beach";
+import { IBeach } from 'beach';
 import { Types } from "mongoose";
+
+const getBeachByBeachName = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const name = req.params.name;
+
+    const result = await getBeachByBeachNameService({ name } as IBeach);
+    res.status(200).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
 
 const getBeachById = async (
   req: Request,
@@ -40,9 +51,14 @@ const getBeachByRegionAndYear = async (
   }
 };
 
-const getBeaches = async (req: Request, res: Response, next: NextFunction) => {
+
+const getBeaches = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+  ) => {
   try {
-    console.log(req, res);
+    console.log(req, res)
     const result = await getBeachesService();
     res.status(StatusCodes.OK).json(result);
   } catch (e) {
@@ -50,4 +66,4 @@ const getBeaches = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { getBeachById, getBeachByRegionAndYear, getBeaches };
+export { getBeachByBeachName, getBeachById, getBeachByRegionAndYear, getBeaches };

@@ -38,7 +38,7 @@ const ToastWrapper = ({ text, onClose, status, position }) => {
               <Row className="toast-popup__title flex-row-center-center">
                 {status?.title}
               </Row>
-              <Row className="flex-row-center-center">{status?.text}</Row>
+              <Row className="flex-row-center-center">{text}</Row>
             </Col>
           </Row>
         </Container>
