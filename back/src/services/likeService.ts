@@ -1,6 +1,5 @@
 import { ReviewModel } from '../db/schemas/reviewSchema';
 import { BeachModel } from "../db/schemas/beachSchema";
-import { array } from 'joi';
 enum TargetType {
     Beach = 'beach',
     Review = 'review',
@@ -17,7 +16,7 @@ async function updateLikeCount(targetType : TargetType, targetId : string, chang
             await ReviewModel.updateOne(count, update);
         }
     }catch(error){
-        throw error;
+        throw new Error(`Failed to update like count: ${error.message}`);
     }
 }
 
@@ -53,7 +52,7 @@ async function updateLikeValue(targetType : TargetType, userId : string, targetI
         }
         }
     }catch(error){
-        throw error;
+        throw new Error(`Failed to toggle like value: ${error.message}`);
     }
 }
 

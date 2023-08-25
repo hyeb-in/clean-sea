@@ -1,6 +1,6 @@
 import { ReviewModel } from '../schemas/reviewSchema';
 import { IReview } from '../../types/review';
-const mongoose = require('mongoose');
+import { errorGenerator } from "../../utils/errorGenerator";
 
 async function createReview(toCreate: IReview): Promise<IReview> {
   const newReview = await ReviewModel.create(toCreate);
@@ -44,13 +44,13 @@ async function findUserReviews(author:string): Promise<IReview[]>{
   return userReviewsObjects;
 }
 
-async function findUserReview(reviewId: string): Promise<IReview | null> {
+async function findReview(reviewId: string): Promise<IReview | null> {
   const review = await ReviewModel.findOne({ _id: reviewId });
   if (review) {
     const reviewObject = review.toObject();
     return reviewObject as IReview;
   }
-  return null;
+  throw errorGenerator("해당 데이터가 존재하지않습니다.", 404);
 }
 
 async function updateReview(id: string, toUpdate: Partial<IReview>): Promise<IReview | null> {
@@ -63,7 +63,7 @@ async function updateReview(id: string, toUpdate: Partial<IReview>): Promise<IRe
     const updatedReviewObject = updatedReview.toObject();
     return updatedReviewObject as IReview;
   }
-  return null;
+  throw errorGenerator("해당 데이터가 존재하지않습니다.", 500);
 }
 
 async function deleteReview(reviewId: string): Promise<IReview | null> {
@@ -73,7 +73,7 @@ async function deleteReview(reviewId: string): Promise<IReview | null> {
     const deletedReviewObject = deletedReview.toObject();
     return deletedReviewObject as IReview;
   }
-  return null;
+  throw errorGenerator("해당 데이터가 존재하지않습니다.", 500);
 }
 
-export { createReview, findAllReviews, findUserReviews, findUserReview, updateReview, deleteReview };
+export { createReview, findAllReviews, findUserReviews, findReview, updateReview, deleteReview };

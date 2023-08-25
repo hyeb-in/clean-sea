@@ -1,6 +1,7 @@
 import { CommentModel } from "../schemas/commetSchema";
 import { ReviewModel } from "../schemas/reviewSchema";
 import { IComment } from "../../types/comment";
+import { errorGenerator } from "../../utils/errorGenerator";
 
 async function createComment(toCreate : IComment) : Promise<IComment>{
     const { content, userName, userId, postId } = toCreate;
@@ -32,7 +33,7 @@ async function updateComment(commentId : string, toUpdate: Partial<IComment>): P
         const updatedCommentObject = updatedComment.toObject();
         return updatedCommentObject as IComment;
     }
-    return null;
+    throw errorGenerator("해당 데이터가 존재하지않습니다.", 500);
 }
 
 async function deleteComment(commentId : string) : Promise<IComment | null>{
@@ -41,7 +42,7 @@ async function deleteComment(commentId : string) : Promise<IComment | null>{
         const deletedCommentObject = deletedComment.toObject();
         return deletedCommentObject as IComment;
       }
-      return null;
+    throw errorGenerator("해당 데이터가 존재하지않습니다.", 500);
 }
 
 export { createComment, findReviewComment, updateComment, deleteComment };
