@@ -65,6 +65,13 @@ export const MODAL_TYPE = {
   deleteComment: "DELETE_COMMENT",
 };
 
+export const IS_LIKE = {
+  like: "yes",
+  no: "no",
+  removed: "Like removed",
+  added: "Like added",
+};
+
 // export const MODAL_OPTIONS = {
 //   FLOATING_REVIEW: {
 //     type: MODAL_TYPE.floatingReview,
@@ -78,9 +85,6 @@ export const MODAL_TYPE = {
 //   },
 // };
 
-export const IS_LIKE = {
-  like: "yes",
-  no: "no",
-  removed: "Like removed",
-  added: "Like added",
+export const truncate = (content) => {
+  return content?.length > 10 ? content.slice(0, 10) + "..." : content;
 };

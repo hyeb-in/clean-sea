@@ -1,3 +1,7 @@
+input:focus,
+textarea:focus {
+  outline: none;
+} /* outline 테두리 없애기 */
 /* 상태 표시해주는 모달창 --> to do: 외부로 뺄 것 */
 .noReviewIndicator {
   min-height: 400px;
@@ -14,8 +18,37 @@
 .review-container {
   max-width: 70%;
 }
+.review__ .addReview__form {
+  display: flex;
+  width: 100%;
+}
+.addreview__modalWrapper {
+  max-width: 100% !important;
+}
+.addreview__btn {
+  height: max-content;
+}
 
-/* review form */
+@media (max-width: 600px) {
+  .addReview__form.flexible-col,
+  .review.flexible-col {
+    display: flex;
+    flex-direction: column;
+  }
+}
+/* 큰 화면에서 flex-row 스타일 적용 */
+@media (min-width: 601px) {
+  .addReview__form.flexible-col,
+  .review.flexible-col {
+    display: flex;
+    flex-direction: row;
+  }
+}
+.review.flexible-col {
+  min-width: 350px;
+  width: 100%;
+}
+
 .carousel-arrow-icon {
   background-color: black;
   padding: 5px;
@@ -30,7 +63,7 @@
 
 /* image carousel */
 .carousel__container {
-  width: auto;
+  width: 100%;
   height: 100%;
   object-fit: contain;
 }
@@ -49,9 +82,13 @@
 /* 커맨트 */
 .comment__author {
   font-weight: 600;
+  min-width: 100%;
+  display: inline-block;
+  white-space: nowrap;
 }
-.comment__title {
-  margin-right: 10px;
+.comment__avatar {
+  position: absolute;
+  top: 20px;
 }
 .comment__form {
   /* display: flex;
@@ -60,6 +97,7 @@
 }
 .comment__content {
   color: grey;
+  word-break: break-all;
 }
 .comment__input {
   background-color: none;
@@ -88,4 +126,46 @@
   right: 0;
   top: 5px;
   border: none;
+}
+.position-rel {
+  position: relative;
+}
+.comment__avatar {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.isLiked {
+  color: red;
+}
+.disLiked {
+  color: none;
+}
+
+/* 드래그 앤 드랍 */
+.upload-area {
+  width: 100%;
+  border: 2px dashed #ccc;
+  background-color: white;
+  align-items: center;
+  justify-items: center;
+}
+.upload-label {
+  display: block;
+}
+.file-input {
+  display: none;
+}
+.drag-drop-area {
+  /* position: absolute; */
+  /* top: 0; */
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  color: #aaa;
+}
+.active {
+  background-color: #e6e6e6;
 }

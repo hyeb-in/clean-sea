@@ -56,16 +56,6 @@ const ReviewTitle = ({ children, review, onEditReview }) => {
             {modalVisible.type !== MODAL_TYPE.editReview && (
               <FontAwesomeIcon icon={faEllipsis} />
             )}
-            {modalVisible.type === MODAL_TYPE.editReview && (
-              <Button
-                onClick={onEditReview}
-                variant="outline-primary"
-                type="submit"
-                className="submit-btn mx-0"
-              >
-                완료
-              </Button>
-            )}
           </Button>
         )}
       </Col>

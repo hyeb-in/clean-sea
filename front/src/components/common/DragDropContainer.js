@@ -1,83 +1,80 @@
-import { FileUploader } from "react-drag-drop-files";
 import CarouselWrapper from "./Carousel";
-import DropZone from "./DropZone";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "react-bootstrap";
-import { useContext, useEffect } from "react";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useContext, useEffect, useState } from "react";
 import { ModalVisibleContext } from "../../App";
-
-const allowedFileTypes = ["png", "jpeg"];
+import CustomDragnDrop from "./CustomDragnDrop";
 
 const MAX_FILE_COUNT = 5;
+const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB, 최대 총 크기
 
-const DragDropContainer = ({
-  preview,
-  setPreview,
-  blobURLsExpired,
-  setFiles,
-}) => {
+const DragDropContainer = ({ preview, setPreview, setFiles, formRef }) => {
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
+  const { selectedFiles, setSelectedFiles } = useState([]);
 
-  const fileUploaderIndicator = !preview ? (
-    <DropZone />
-  ) : (
-    <Button className="mb-2">
-      <FontAwesomeIcon icon={faPlus} /> 추가하기
-      {/* 실제 submit 버튼 아님!! >> 사진을 추가하는 버튼 */}
-    </Button>
-  );
-  let fileCount = preview && preview.length;
+  let fileCount = 0;
+  let totalSize = 0;
 
   // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
   // 파일 => blob => image url로 변경 => preview에 저장해서 이미지 슬라이드로 띄운다
   const handleFileChange = (files) => {
-    setFiles(files);
-    fileCount += files?.length;
+    const targetFileList = files.target.files;
+    setFiles(targetFileList);
+    fileCount += targetFileList.length;
+    // FileList는 유사배열이기때문에 targetFileList.forEach 이런식으로 배열의 메소드를 사용할 수 없다
+    // 배열 메소드 사용하려면 변환 후 사용하거나 apply call 사용해야함
+    if (targetFileList.length > 0) {
+      Array.from(targetFileList).forEach((file) => {
+        totalSize += file.size;
+      });
+    } else {
+      totalSize = targetFileList[0].size;
+    }
     const fileCountValid = fileCount <= MAX_FILE_COUNT;
     const blobUrls = [];
-    // 1. 데이터 => 이미지 슬라이드 미리보기 먼저 구현
+    console.log(fileCount, "files length counter");
+    console.log(totalSize, "files size counter");
     // 2. 추가, 삭제 로직 <<<
     // 3. 새로 파일 업로드 해도 기존 데이터 유지시키고 삭제하려면 버튼으로 삭제한다
     if (!fileCountValid) {
-      throw new Error("사진 한번에 5개까지 업로드");
+      alert("사진 한번에 5개까지 업로드 가능합니다");
     }
-
-    // blob-> url 유사배열이기 때문에 apply로 배열의 메소드 적용
-    Array.prototype?.forEach.apply(files, [
-      (file) => {
-        const blob = new Blob([file], { type: file.type });
-        const url = URL.createObjectURL(blob);
-        blobUrls.push(url);
-      },
-    ]);
+    if (totalSize > MAX_TOTAL_SIZE) {
+      // 추가된 파일 크기 알려주기
+      alert(
+        `최대 ${
+          MAX_TOTAL_SIZE / (10 * 1024 * 1024)
+        }MB까지 업로드할 수 있습니다.`
+      );
+      return;
+    }
+    // blob-> url 유사배열이기 때문에 Array로 변환 후 forEach 혹은 apply로 배열의 메소드 적용
+    Array.from(targetFileList).forEach((file) => {
+      const blob = new Blob([file], { type: file.type });
+      const url = URL.createObjectURL(blob);
+      blobUrls.push(url);
+    });
     setPreview(blobUrls);
   };
 
   useEffect(() => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
-    if (blobURLsExpired) {
-      const hasEnded = !modalVisible.isVisible;
-      if (hasEnded && preview?.length > 0) {
-        return () => {
-          preview?.forEach((url) => URL.revokeObjectURL(url));
-        };
-      }
+    if (!modalVisible?.isVisible && preview?.length > 0) {
+      return () => {
+        preview?.forEach((url) => URL.revokeObjectURL(url));
+      };
     }
-  }, [preview, modalVisible, blobURLsExpired]);
+  }, [preview, modalVisible]);
 
   return (
     <>
-      <FileUploader
-        handleChange={handleFileChange}
-        name="uploadFile"
-        types={allowedFileTypes}
-        multiple={true}
-        maxSize={1} // 최대 2MB 크기까지 허용
-        children={fileUploaderIndicator}
-      />
-      {preview && preview.length > 0 && (
-        <CarouselWrapper imageUrls={preview} setPreview={setPreview} />
+      {preview && preview.length > 0 ? (
+        <CarouselWrapper preview={preview} setPreview={setPreview} />
+      ) : (
+        <CustomDragnDrop
+          selectedFiles={selectedFiles}
+          setSelectedFiles={setSelectedFiles}
+          handleFileChange={handleFileChange}
+          formRef={formRef}
+        />
       )}
     </>
   );

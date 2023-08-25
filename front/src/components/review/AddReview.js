@@ -1,18 +1,19 @@
 import React, { useContext, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBomb, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { ModalVisibleContext, UserStateContext } from "../../App";
-import * as Api from "../../Api";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import ModalBodyWrapper from "../common/ModalBodyWrapper";
 import ConfirmModal from "../common/popup/ConfirmModal";
-import ReviewForm from "./ReviewForm";
+import ReviewFormBody from "./ReviewFormBody";
 import DragDropContainer from "../common/DragDropContainer";
 import { MODAL_TYPE } from "../../constants";
 import axios from "axios";
 
 const RESULT_ENUM = {
+  NOT_YET: "작성중",
+  UPLOADING: "업로드 중",
   SUCCESS: "성공",
   FAIL: "실패",
 };
@@ -24,36 +25,35 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
   const [review, setReview] = useState({ title: "", content: "" });
   const [preview, setPreview] = useState(null);
   const [files, setFiles] = useState(null);
-
-  const [isUploading, setIsUploading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState(RESULT_ENUM.NOT_YET);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
+  const isPosting = !uploadStatus === RESULT_ENUM.NOT_YET;
+  const isFetched =
+    uploadStatus === RESULT_ENUM.SUCCESS || uploadStatus === RESULT_ENUM.FAIL;
+
   // 게시글 업로드
-  const onAddReview = async (e) => {
+  const addReview = async (e) => {
     e.preventDefault();
     if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
-
     try {
       if (review?.title.length < 4) {
-        return alert("글자수 길게 4 이상");
+        throw new Error("글자수 길게 4 이상");
       }
-
       if (review?.content.length < 4) {
-        return alert("content length 4이상");
+        throw new Error("content length 4이상");
       }
-
       if (review?.content.length > 300) {
-        return alert("content length 제한");
+        throw new Error("content length 제한");
       }
-      let formData = new FormData(files);
-      if (files) {
-        formData.append("uploadFile", formData);
-      }
-      setIsUploading(true);
+      let formData = new FormData();
+      // FormData 생성자의 첫 번째 매개변수로는 HTMLFormElement 객체가 필요함
+      // FileList는 HTMLFormElement가 아니기때문에 일단 매개변수 없이 생성 후 append로 추가한다
+      formData.append("uploadFile", files);
+      formData.append("title", review.title);
+      formData.append("content", review.content);
+      setUploadStatus(RESULT_ENUM.UPLOADING);
       console.log(files, formData, "업로드 될 review 형식 <<<<");
-      // const res = await Api.post("reviews/register", formData);
-      // console.log(res);
       const res = await axios.post(
         "http://localhost:5001/reviews/register",
         formData,
@@ -66,20 +66,21 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       );
       // error 처리
       if (!res.data) {
-        return alert("노노");
+        throw new Error("nono");
       }
+
+      // 성공시
       setReviews([...reviews, res.data]);
+      setUploadStatus(RESULT_ENUM.SUCCESS);
     } catch (error) {
       console.error(error);
-      setResult(RESULT_ENUM.FAIL);
+      setUploadStatus(RESULT_ENUM.FAIL);
       setModalVisible({
         type: null,
         isVisible: false,
         data: null,
       });
     }
-    setIsUploading(false);
-    setResult(RESULT_ENUM.SUCCESS);
   };
 
   const closeReviewFormModal = () => {
@@ -89,17 +90,16 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       data: null,
     });
     setReview(null);
-    setResult(null);
+    setUploadStatus(null);
   };
-
-  const isLoading = !isUploading && !result;
-  const isFetched = !isUploading && result;
 
   return (
     <>
       {/* 리뷰 입력 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
       <Modal
         centered
+        dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
+        className="px-5"
         show={modalVisible.type === MODAL_TYPE.addReview}
         onHide={() => {
           // 모달창 제거
@@ -107,26 +107,26 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
           if (review.title !== "" || review.content !== "") {
             // 내용이 있다면 다시 한 번 확인하는 모달창에 표시한다
             setShowConfirmModal(true);
+            setModalVisible(null); // confirm modal도 modalVisible로직으로 옮길 때 작업 필요
           }
           if (review.title === "" && review.content === "") {
             return closeReviewFormModal();
           }
+          setModalVisible({
+            type: null,
+            isVisible: false,
+            data: null,
+          });
         }}
         onClick={(e) => e.stopPropagation()}
         // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
-        // to do: space bar입력시 모달창 사라짐 버그 (윈도우..? 확인하기)
+        // to do: space bar입력시 모달창 사라짐 버그 (브라우저에 따라서 다른 듯? 확인하기)
       >
         {/* 모달창 내부: 입력 받는 공간 */}
-        {!isUploading && !result && (
-          <ModalBodyWrapper title={headerTitle}>
-            <ReviewForm
-              title={review.title}
-              content={review.content}
-              review={review}
-              setReview={setReview}
-              onSubmit={onAddReview}
-            >
-              {/* children으로 바로 넣어주기 가능? */}
+        <ModalBodyWrapper
+          title={headerTitle}
+          content={
+            <div className="addReview__form flexible-col">
               <DragDropContainer
                 preview={preview}
                 setPreview={setPreview}
@@ -135,16 +135,32 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
                 blobURLsExpired={isFetched}
                 setFiles={setFiles}
               />
-              {/* <Button onSubmit={onAddReview} type="submit">
-                button
-              </Button> */}
-            </ReviewForm>
-          </ModalBodyWrapper>
-        )}
+              {/* 아래 Form 내부로 들어가는 body */}
+              <ReviewFormBody
+                title={review.title}
+                content={review.content}
+                review={review}
+                setReview={setReview}
+              />
+            </div>
+          }
+        >
+          {/* 미디어 쿼리 적용(flexible-col class): 작은 화면에선 flex column, 큰 화면에선 row로 보여준다 */}
+          <Form onSubmit={addReview} className="addReview__form">
+            <Button
+              className="addreview__btn"
+              variant="outline-primary"
+              type="submit"
+              onClick={addReview}
+            >
+              확인
+            </Button>
+          </Form>
+        </ModalBodyWrapper>
         {/* 아래의 로직은 여기 있는 게 아니라 부모로 나가고, 전역적으로 사용되어야 할 것 같음 */}
         {/* 리뷰 내용 입력 모달창 내부 */}
         {/* submit 후 업로드 중 -> 1. loading indicator */}
-        {isUploading && (
+        {isPosting && (
           <ModalBodyWrapper
             title="게시물을 업로드하는 중입니다"
             content={<SpinnerWrapper />}
@@ -159,7 +175,7 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
                 ? "게시물이 공유되었습니다"
                 : "게시물을 업로드하지 못했습니다"
             }
-            onHide={() => closeReviewFormModal()}
+            onHide={closeReviewFormModal}
             content={
               <FontAwesomeIcon
                 icon={RESULT_ENUM.SUCCESS ? faCircleCheck : faBomb}
@@ -168,14 +184,6 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
             }
           />
         )}
-        {/* 리뷰 내용 입력 모달창 내부 footer */}
-        {/* {!isUploading && !result && (
-          <Modal.Footer className="d-flex justify-content-end">
-            <Button variant="primary" type="submit" onClick={onAddReview}>
-              공유
-            </Button>
-          </Modal.Footer>
-        )} */}
         {/* 입력 도중에 화면 이탈할 경우 confirm 모달창 띄운다 */}
         {(review?.content !== "" || review?.title !== "") && (
           <ConfirmModal

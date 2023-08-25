@@ -1,15 +1,19 @@
 import React, { useContext, useState } from "react";
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import CarouselWrapper from "../common/Carousel";
+import { Card, Col, Row } from "react-bootstrap";
 import ReviewTitle from "./ReviewTitle";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
-import Comment from "./comment/Comment";
 import * as Api from "../../Api";
 import { ModalVisibleContext, UserStateContext } from "../../App";
 import Timestamp from "../common/Timestamp";
 import { IS_LIKE, MODAL_TYPE } from "../../constants";
+import CommentsList from "./comment/CommentsList";
+import Like from "../common/Like";
+import ReviewContents from "./comment/ReviewContents";
+import Avatar from "../common/Avatar";
+
+export const IMAGE_URLS = [
+  "https://img.freepik.com/free-photo/beautiful-beach-and-sea_74190-6620.jpg?t=st=1691935043~exp=1691935643~hmac=7d32dd31eda2acee9b8c0a03ff9d29d591c8e105715746b9643e2600cd4b2b70",
+  "https://png.pngtree.com/thumb_back/fh260/png-vector/20200530/ourmid/pngtree-beach-png-image_2215226.jpg",
+];
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
@@ -24,180 +28,86 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
     comments,
     likeCount,
   } = review;
-
+  const hasCommentsMoreThanThree = comments?.length > 3;
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  const [comment, setComment] = useState("");
-  const isValid = comment.length > 0 && comment.length < 100;
+  const { setModalVisible } = useContext(ModalVisibleContext);
   const [newComments, setNewComments] = useState([]);
-  const [showDetails, setShowDetails] = useState(true);
-  const isContentReduced = content?.length > 25;
-  const isLiked = loggedInUser && review.isLike === IS_LIKE.yes;
-
-  const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (!loggedInUser) {
-        alert("유저 없음");
-      }
-
-      // 글자수 제한: 1글자이상 100자이하
-      if (!isValid) {
-        alert("글자수 제한");
-      }
-      // review id로 해당 리뷰를 찾아서 review.Likes id가 있나? 값으로 갱신한다??
-      // isLikes에 userId가 저장되어있음
-      const res = await Api.post(`comments/${reviewId}`, { content: comment });
-      if (!res.data) {
-        return alert("요청 실패");
-      }
-
-      setReviews((current) => [...current, res.data]);
-      setNewComments([...newComments, res.data]);
-      setComment("");
-    } catch (error) {
-      // 서버 error 핸들링
-      alert(error);
-    }
-  };
-
-  const handleLikes = async (e) => {
-    if (!loggedInUser) {
-      return alert("로그인 유저 없음");
-    }
-    // 좋아요 눌리면 하트 전환
-    // 좋아요 ++개
-    try {
-      const res = await Api.post("api/like", {
-        targetType: "review",
-        targetId: reviewId,
-      });
-
-      // !좋아요 눌리면 하트 전환
-      // 좋아요 --개
-      if (res.data.message === IS_LIKE.added) {
-        setReviews((current) => {
-          const newReviews = [...current];
-          newReviews.map((item) => (item.isLike = IS_LIKE.yes));
-        });
-        console.log("좋아요❤️");
-      }
-
-      if (res.data.message === IS_LIKE.removed) {
-        setReviews((current) => {
-          const newReviews = [...current];
-          newReviews.map((item) => (item.isLike = IS_LIKE.no));
-        });
-        console.log("좋아요 제거");
-      }
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  };
+  const [showDetails, setShowDetails] = useState(hasCommentsMoreThanThree);
+  const isLiked = loggedInUser && review?.isLike === IS_LIKE.yes;
 
   return (
     <>
-      <Card bg="light" key={reviewId} className="my-5 review-container">
+      <Card
+        bg="light"
+        key={reviewId}
+        className="my-5 review-container review flexible-col "
+      >
         <Card.Header>
           <ReviewTitle review={review} setReviews={setReviews} />
         </Card.Header>
-        <Card.Body className="px-5 py-12">
-          {uploadFile?.length > 0 && <CarouselWrapper imageUrls={uploadFile} />}
-          <Row>
-            <Col className="comment__author">{userName}</Col>
-            {likeCount > 0 && `좋아요 ${likeCount}개`}
-          </Row>
-          <Row xs="auto" className="pb-3">
-            <span className="comment__title">
-              {title}
-              <span className="comment__content">
-                {showDetails && isContentReduced
-                  ? content.substring(0, 80) + "..."
-                  : content}
-              </span>
-            </span>
-            {/* 더 보기 누르면 모달창으로 details 띄운다 - 어떤 review의 정보인지 전달 */}
-            <Row className="d-flex w-100">
-              <Col
-                className="link bold"
-                onClick={() => setShowDetails(!showDetails)}
-              >
-                {showDetails && "더보기"}
-              </Col>
-
-              {/* to do: 좋아요를 눌렀나 여부에 따라 solid 하트 or regular 하트 */}
-              {
-                <Col onClick={handleLikes} className="flex-justify-end mx-0">
-                  {isLiked ? (
-                    <FontAwesomeIcon className="link" icon={farHeart} />
-                  ) : (
-                    <FontAwesomeIcon icon={fasHeart} />
-                  )}
-                </Col>
-              }
-            </Row>
-          </Row>
-          <Card.Text className="d-flex justify-content-end">
-            <Timestamp createdAt={createdAt} />
-          </Card.Text>
-          {/* 댓글 3개까지만 미리보기 */}
-          {comments?.map(
-            (comment, index) =>
-              index < 3 && (
-                <Row>
-                  <Comment
-                    comment={comment}
-                    key={comment._id}
-                    selectedReview={selectedReview}
-                    setSelectedReview={setSelectedReview}
-                  />
-                </Row>
-              )
-          )}
-          {/* 새로 작성될 커맨트 리스트 */}
-          {newComments && (
-            <Row>
-              {newComments.map((item) => (
-                <Comment
-                  comment={item}
-                  key={item._id}
-                  selectedReview={selectedReview}
-                  setSelectedReview={setSelectedReview}
-                />
-              ))}
-            </Row>
-          )}
-
-          <Row
-            onClick={() => {
-              setModalVisible({
-                type: MODAL_TYPE.floatingReview,
-                isVisible: true,
-                data: review,
-              });
-            }}
-            className="link"
-          >
-            {comments?.length > 3 && `댓글 ${comments.length}개 모두 보기`}
-          </Row>
-
-          <Form onSubmit={handleCommentSubmit} className="comment__form">
-            <input
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="댓글 달기..."
-              className="comment__input"
-            />
-            {comment?.length > 0 && (
-              <Button
-                onClick={handleCommentSubmit}
-                variant="outline-primary"
-                className="comment__button"
-              >
-                게시
-              </Button>
+        <Card.Body className="px-0 py-12 pt-0">
+          <div xs="auto" className="pb-3 ">
+            {/* {IMAGE_URLS?.length > 0 && (
+              <Avatar width="40" imageUrls={IMAGE_URLS} />
+            )} */}
+            <div className="d-flex flex-column">
+              {/* <div className="comment__author">{userName}</div> */}
+              <ReviewContents
+                title={title}
+                showDetails={showDetails}
+                content={content}
+              />
+            </div>
+            {loggedInUser && (
+              <Like
+                isLiked={isLiked}
+                reviewId={reviewId}
+                setReviews={setReviews}
+              />
             )}
-          </Form>
+            <div className="d-flex justify-content-end">
+              <Timestamp createdAt={createdAt} />
+              {showDetails && (
+                <div
+                  onClick={() => setShowDetails(!showDetails)}
+                  className="text-timestamp mx-3 link"
+                >
+                  더보기
+                </div>
+              )}
+              <div className="text-timestamp flex-justify-end mx-2">
+                {likeCount > 0 && `좋아요 ${likeCount}개`}
+              </div>
+            </div>
+            <div>
+              <CommentsList
+                comments={comments}
+                newComments={newComments}
+                selectedReview={selectedReview}
+                setSelectedReview={selectedReview}
+                review={review}
+              />
+            </div>
+            {/* ::::댓글 모두 보기:::: 클릭시 floatingReview 모달에 데이터 보내주기 */}
+            <div
+              onClick={() =>
+                setModalVisible({
+                  type: MODAL_TYPE.floatingReview,
+                  isVisible: true,
+                  data: {
+                    reviewId,
+                    review,
+                    setNewComments,
+                    setReviews,
+                  },
+                })
+              }
+              className="link"
+            >
+              {/* 임시로 2개!! 원래 3개임 */}
+              {showDetails && `댓글 ${comments.length}개 모두 보기`}
+            </div>
+          </div>
         </Card.Body>
       </Card>
     </>
