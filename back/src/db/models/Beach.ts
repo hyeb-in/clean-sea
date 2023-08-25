@@ -25,13 +25,13 @@ async function BeachByRegionAndYearSpecific(year: string): Promise<BeachData> {
     const matchingBeach = getBeaches.find(beach => beach.address === region);
     if (matchingBeach) {
       modifiedBeaches[year].push({
-        esch: matchingBeach.esch || 0,
-        ente: matchingBeach.ente || 0
+        eschAvg: matchingBeach.eschAvg ? Math.floor(matchingBeach.eschAvg) : 0,
+        enteAvg: matchingBeach.enteAvg ? Math.floor(matchingBeach.enteAvg) : 0
       });
     } else {
       modifiedBeaches[year].push({
-        esch: 0,
-        ente: 0
+        eschAvg: 0,
+        enteAvg: 0
       });
     }
   }
