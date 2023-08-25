@@ -28,11 +28,11 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
     comments,
     likeCount,
   } = review;
-
+  const hasCommentsMoreThanThree = comments?.length > 3;
   const { user: loggedInUser } = useContext(UserStateContext);
   const { setModalVisible } = useContext(ModalVisibleContext);
   const [newComments, setNewComments] = useState([]);
-  const [showDetails, setShowDetails] = useState(true);
+  const [showDetails, setShowDetails] = useState(hasCommentsMoreThanThree);
   const isLiked = loggedInUser && review?.isLike === IS_LIKE.yes;
 
   return (
@@ -101,7 +101,7 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
                 className="link"
               >
                 {/* 임시로 2개!! 원래 3개임 */}
-                {comments?.length > 2 && `댓글 ${comments.length}개 모두 보기`}
+                {showDetails && `댓글 ${comments.length}개 모두 보기`}
               </Col>
             </Row>
           </Container>
