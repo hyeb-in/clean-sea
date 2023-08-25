@@ -18,7 +18,7 @@ textarea:focus {
 .review-container {
   max-width: 70%;
 }
-.addReview__form {
+.review__ .addReview__form {
   display: flex;
   width: 100%;
 }
@@ -30,17 +30,23 @@ textarea:focus {
 }
 
 @media (max-width: 600px) {
-  .addReview__form.flexible-col {
+  .addReview__form.flexible-col,
+  .review.flexible-col {
     display: flex;
     flex-direction: column;
   }
 }
 /* 큰 화면에서 flex-row 스타일 적용 */
 @media (min-width: 601px) {
-  .addReview__form.flexible-col {
+  .addReview__form.flexible-col,
+  .review.flexible-col {
     display: flex;
     flex-direction: row;
   }
+}
+.review.flexible-col {
+  min-width: 350px;
+  width: 100%;
 }
 
 .carousel-arrow-icon {
@@ -76,6 +82,9 @@ textarea:focus {
 /* 커맨트 */
 .comment__author {
   font-weight: 600;
+  min-width: 100%;
+  display: inline-block;
+  white-space: nowrap;
 }
 .comment__avatar {
   position: absolute;

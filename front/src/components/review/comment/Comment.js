@@ -45,62 +45,62 @@ const Comment = ({ comment, review }) => {
   };
 
   return (
-    <>
-      <Container className="flex">
-        <Row>
-          <Avatar
-            className="comment__avatar"
-            width="30"
-            onClick={() => navigate(`/users/${userId}`)}
-          />
-          <Col>
-            {!isEditing && (
-              <div>
-                <div className="py-1 px-0 flex-space-between line-break">
-                  <span className="comment__content">
-                    <bold>{userName}</bold> {content}
-                    wkejfhwkefhwkeufhekwufheuwkfhewkfhekwfhewkfhwefjlwjeflwefjlefjwlefkjwleel
-                  </span>
+    <Container className="flex">
+      <Row>
+        <div>
+          {!isEditing && (
+            <div>
+              <div className="py-1 px-0 flex-space-between line-break">
+                <div className="comment__content d-flex w-100 flex-col">
+                  <Avatar
+                    className="comment__avatar"
+                    width="30"
+                    onClick={() => navigate(`/users/${userId}`)}
+                  />
+                  <div className="text-author mx-2">{userName}</div> {content}
                 </div>
-                <Timestamp createdAt={date} />
               </div>
-            )}
-          </Col>
-          {/* 댓글 수정 입력 인풋창 */}
-          {isMyComment && isEditing && (
-            <Col className="pr-2 py-2">
-              {/* to do: 인풋 레이아웃. pr, px 적용 안됨 */}
-              <Form onSubmit={(e) => editComment(e)}>
-                <Form.Control
-                  value={newComment.content}
-                  onChange={(e) =>
-                    setNewComment({ ...comment, content: e.target.value })
-                  }
-                />
-              </Form>
-            </Col>
+              <Timestamp
+                createdAt={date}
+                className="text-timestamp comment__timestamp flex-justify-end"
+              />
+            </div>
           )}
-          {/* 2. 댓글 목록에서 ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
-          {/* 댓글 -> 수정으로 들어가면 댓글 창을 띄울 거라서 reviewId, review 정보가 필요함 */}
-          {isCommentEditBtnVisible && (
-            <Col
-              xs="auto"
-              onClick={() => {
-                setModalVisible({
-                  type: MODAL_TYPE.actionSelector,
-                  isVisible: true,
-                  data: {
-                    FLOATING_REVIEW_DATA: { review, commentId: comment._id },
-                  },
-                });
-              }}
-            >
-              <FontAwesomeIcon icon={faEllipsis} />
-            </Col>
-          )}
-        </Row>
-      </Container>
-    </>
+        </div>
+        {/* 댓글 수정 입력 인풋창 */}
+        {isMyComment && isEditing && (
+          <div className="pr-2 py-2">
+            {/* to do: 인풋 레이아웃. pr, px 적용 안됨 */}
+            <Form onSubmit={(e) => editComment(e)}>
+              <Form.Control
+                value={newComment.content}
+                onChange={(e) =>
+                  setNewComment({ ...comment, content: e.target.value })
+                }
+              />
+            </Form>
+          </div>
+        )}
+        {/* 2. 댓글 목록에서 ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
+        {/* 댓글 -> 수정으로 들어가면 댓글 창을 띄울 거라서 reviewId, review 정보가 필요함 */}
+        {isCommentEditBtnVisible && (
+          <div
+            xs="auto"
+            onClick={() => {
+              setModalVisible({
+                type: MODAL_TYPE.actionSelector,
+                isVisible: true,
+                data: {
+                  FLOATING_REVIEW_DATA: { review, commentId: comment._id },
+                },
+              });
+            }}
+          >
+            <FontAwesomeIcon icon={faEllipsis} />
+          </div>
+        )}
+      </Row>
+    </Container>
   );
 };
 export default Comment;
