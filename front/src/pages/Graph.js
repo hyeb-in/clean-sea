@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from "react-apexcharts";
 import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import * as Api from "../Api";
+
 const Graph = () => {
   const chartRef = useRef(null);
-  // const [selectedRegion, setSelectedRegion] = useState("지역을 선택해주세요");
   const [selectedYear, setSelectedYear] = useState("2023");
 
   const [chartData, setChartData] = useState({
@@ -20,19 +20,6 @@ const Graph = () => {
     ],
   });
 
-  //  해변 interface
-  // interface IBeach {
-  //   id: number;
-  //   name: string;
-  //   address: string;
-  //   goodnessFit?: boolean;
-  //   eschScore?: number,
-  //   enteScore?: number,
-  //   ente?: number;
-  //   esch?: number;
-  //   latitude?: number;
-  //   longitude?: number;
-  // }
   const options = {
     series: chartData.series,
     xaxis: {
