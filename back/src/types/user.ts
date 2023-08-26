@@ -13,4 +13,5 @@ export interface IUser {
 export interface IRequest extends Request {
   user: IUser;
   token: string;
+  uploadFile?: string[];
 }

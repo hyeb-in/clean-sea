@@ -1,15 +1,19 @@
-import { MulterError } from 'multer';
-import { insertFile, replacePlaceholder } from '../utils/uploads/upload';
-import { Request, Response, NextFunction } from 'express';
-import { FileObjects, FileRequest } from "../types/upload";
+import { FileRequest, FileObjects } from "../types/upload";
 import { imageUpload } from './fileUploadMiddleware';
+import { insertFile, replacePlaceholder } from "../utils/uploads/upload";
+import { MulterError } from "multer";
+import { Request } from 'express';
+import { RequestHandler } from "express-serve-static-core";
 
-export function handleFileUpload(req: FileRequest, res: Response, next: NextFunction) {
-    
+export const handleFileUpload : RequestHandler<FileRequest> = (req, res, next) => {
+    console.log(req.files);
+    console.log(111111111);
+    console.log(req.body);
     const upload = imageUpload.array('uploadFile', 5);
     upload(req as Request, res, async function (err: any) {
         try {
             if (err instanceof MulterError) {
+
                 return next(err);
             } else if (err) {
                 return next(err);
@@ -72,9 +76,7 @@ export function handleFileUpload(req: FileRequest, res: Response, next: NextFunc
                     });
                 }
             }
-
-            req.uploadFile = uploadFile;
-
+            req.body.uploadFile = uploadFile;
             next();
         } catch (error) {
             next(error);

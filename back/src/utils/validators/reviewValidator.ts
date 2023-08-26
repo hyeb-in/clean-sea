@@ -11,6 +11,7 @@ const validateSchema = (schema : joi.ObjectSchema) => {
         const customError = errorGenerator(errorMessage, 400);
         return res.status(customError.statusCode).json({error:customError.message});
         }
+        next();
     }
 }
 
@@ -26,6 +27,7 @@ export const postReviewValidator = validateSchema (
         'string.max': '300글자이하이여야합니다.',
       }),
       location: joi.any(),
+      uploadFile : joi.any(),
     })
 );
   
