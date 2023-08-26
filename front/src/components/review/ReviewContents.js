@@ -1,6 +1,6 @@
-import { truncate } from "../../../constants";
+import { truncate } from "../../constants";
 
-const Contents = ({ title, showDetails, content }) => {
+const ReviewContents = ({ title, showDetails, content }) => {
   return (
     <div className="comment__title">
       <span className="mx-2">{title}</span>
@@ -12,4 +12,4 @@ const Contents = ({ title, showDetails, content }) => {
   );
 };
 
-export default Contents;
+export default ReviewContents;

@@ -35,11 +35,10 @@ const ReviewsList = ({ reviews, setReviews }) => {
           setReviews(res.data);
           setIsLoaded(true);
           if (res.data) return;
+          // 로그인 유저가 없다면 reviewList로 전체 리뷰를 받아온다
         }
+        // 로그인 한 유저가 있다면 내가 좋아요를 누른 리뷰인지에 대한 정보가 포함된 데이터를 받아온다
         const res = await Api.get("reviews/reviewListLogin");
-        // if (!res) {
-        //   throw new Error("데이터를 불러오지 못했습니다");
-        // }
         setIsHandlerEnabled(true);
         setReviews(res.data);
         setIsLoaded(true);

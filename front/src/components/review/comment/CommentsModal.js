@@ -7,7 +7,7 @@ import {
   Modal,
   Row,
 } from "react-bootstrap";
-import ReviewTitle from "../ReviewTitle";
+import ReviewTitle from "../ReviewHeader";
 import CarouselWrapper from "../../common/Carousel";
 import { ModalVisibleContext, UserStateContext } from "../../../App";
 import { useContext, useState } from "react";

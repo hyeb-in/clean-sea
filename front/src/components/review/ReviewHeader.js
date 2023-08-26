@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import Avatar from "../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { ModalVisibleContext, UserStateContext } from "../../App";
@@ -14,29 +14,25 @@ const ReviewTitle = ({ children, review, onEditReview }) => {
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
 
   return (
-    <Container className="d-flex align-items-center justify-content-between link px-0">
-      <Col sm="auto">
-        <Row>
-          <Col
-            sm="auto"
-            className="px-0"
-            onClick={() => navigate(`/users/${review?.author}`)}
-          >
-            {/* to do: 유저 프로필 모달로 보여주기 */}
-            {/* to do: get user's info -> avatar url */}
-            <Avatar width="40" />
-          </Col>
-          <Col
+    <div className="d-flex align-items-center justify-content-between link px-0">
+      <div sm="auto d-flex">
+        <div
+          sm="auto"
+          className="px-0"
+          onClick={() => navigate(`/users/${review?.author}`)}
+        >
+          <Avatar width="40" />
+          <div
             xs="10"
-            className="d-flex align-items-center text-author editForm__author"
+            className="px-2 pm-2 d-flex align-items-center text-author editForm__author"
           >
             {review?.userName}
-          </Col>
-        </Row>
-      </Col>
+          </div>
+        </div>
+      </div>
       {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
       {/* 클릭하면 수정, 삭제 선택하는 모달 창을 띄운다 */}
-      <Col className="flex-row-center-center" sm="auto">
+      <div className="flex-row-center-center" sm="auto">
         {isMyReview && (
           <Button
             variant="link"
@@ -58,13 +54,13 @@ const ReviewTitle = ({ children, review, onEditReview }) => {
             )}
           </Button>
         )}
-      </Col>
+      </div>
       {children && (
-        <Col xs="auto" className="flex-row-center-center p-4">
+        <div xs="auto" className="flex-row-center-center p-4">
           {children}
-        </Col>
+        </div>
       )}
-    </Container>
+    </div>
   );
 };
 

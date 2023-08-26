@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
-import { ModalVisibleContext, UserStateContext } from "../../App";
+import { UserStateContext } from "../../App";
 import { Card } from "react-bootstrap";
-import ReviewTitle from "./ReviewTitle";
+import ReviewTitle from "./ReviewHeader";
 import Timestamp from "../common/Timestamp";
 import CommentsList from "./comment/CommentsList";
 import Like from "../common/Like";
-import ReviewContents from "./comment/ReviewContents";
-import { IS_LIKE, MODAL_TYPE } from "../../constants";
+import ReviewContents from "./ReviewContents";
+import { IS_LIKE } from "../../constants";
+import CarouselWrapper from "../common/Carousel";
 
 export const IMAGE_URLS = [
   "https://img.freepik.com/free-photo/beautiful-beach-and-sea_74190-6620.jpg?t=st=1691935043~exp=1691935643~hmac=7d32dd31eda2acee9b8c0a03ff9d29d591c8e105715746b9643e2600cd4b2b70",
@@ -21,14 +22,12 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
     title,
     content,
     createdAt,
-    userName,
     uploadFile,
     comments,
     likeCount,
   } = review;
   const hasCommentsMoreThanThree = comments?.length > 3;
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { setModalVisible } = useContext(ModalVisibleContext);
   const [newComments, setNewComments] = useState([]);
   const [showDetails, setShowDetails] = useState(hasCommentsMoreThanThree);
   const iLiked = loggedInUser && review.isLike === IS_LIKE.yes;
@@ -42,14 +41,11 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
       >
         <Card.Header>
           <ReviewTitle review={review} setReviews={setReviews} />
+          <CarouselWrapper preview={IMAGE_URLS} />
         </Card.Header>
         <Card.Body className="px-0 py-12 pt-0">
           <div xs="auto" className="pb-3 ">
-            {/* {IMAGE_URLS?.length > 0 && (
-              <Avatar width="40" imageUrls={IMAGE_URLS} />
-            )} */}
             <div className="d-flex flex-column">
-              {/* <div className="comment__author">{userName}</div> */}
               <ReviewContents
                 title={title}
                 showDetails={showDetails}
@@ -85,26 +81,11 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
                 selectedReview={selectedReview}
                 setSelectedReview={selectedReview}
                 review={review}
+                reviewId={reviewId}
+                setNewComments={setNewComments}
+                setReviews={setReviews}
+                showDetails={showDetails}
               />
-            </div>
-            {/* ::::댓글 모두 보기:::: 클릭시 floatingReview 모달에 데이터 보내주기 */}
-            <div
-              onClick={() =>
-                setModalVisible({
-                  type: MODAL_TYPE.floatingReview,
-                  isVisible: true,
-                  data: {
-                    reviewId,
-                    review,
-                    setNewComments,
-                    setReviews,
-                  },
-                })
-              }
-              className="link"
-            >
-              {/* 임시로 2개!! 원래 3개임 */}
-              {showDetails && `댓글 ${comments.length}개 모두 보기`}
             </div>
           </div>
         </Card.Body>
