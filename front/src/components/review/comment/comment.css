@@ -2,3 +2,6 @@
   width: 100%;
   text-align: right;
 }
+.commentModal__title {
+  background-color: white;
+}

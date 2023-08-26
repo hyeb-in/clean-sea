@@ -20,7 +20,7 @@ const NoReviewIndicator = () => {
           onClick={() =>
             setModalVisible({
               type: MODAL_TYPE.addReview,
-              isVisible: false,
+              isVisible: true,
               data: null,
             })
           }

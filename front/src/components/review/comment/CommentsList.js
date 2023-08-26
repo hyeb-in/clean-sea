@@ -1,20 +1,20 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import Comment from "../../common/microComponents/Comment";
 import { ModalVisibleContext } from "../../../App";
 import { MODAL_TYPE } from "../../../constants";
+import useModal from "../../../hooks/useModal";
 
 const CommentsList = ({
   comments,
-  newComments,
   selectedReview,
   setSelectedReview,
   review,
-  reviewId,
-  setNewComments,
   setReviews,
+  newComments,
+  setNewComments,
 }) => {
-  const { setModalVisible } = useContext(ModalVisibleContext);
-
+  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
+  const displayedComments = comments || modalVisible?.data?.comments;
   return (
     <>
       {/* 댓글 3개까지만 미리보기 */}
@@ -52,7 +52,6 @@ const CommentsList = ({
             type: MODAL_TYPE.floatingReview,
             isVisible: true,
             data: {
-              reviewId,
               review,
               setNewComments,
               setReviews,

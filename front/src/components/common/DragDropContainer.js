@@ -6,27 +6,33 @@ import DragnDrop from "./DragnDrop";
 const MAX_FILE_COUNT = 5;
 const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB, 최대 총 크기
 
-const DragDropContainer = ({ preview, setPreview, setFiles, formRef }) => {
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  const { selectedFiles, setSelectedFiles } = useState([]);
+const DragDropContainer = ({
+  preview,
+  setPreview,
+  setFormDataFiles,
+  formRef,
+}) => {
+  const { modalVisible } = useContext(ModalVisibleContext);
 
   let fileCount = 0;
   let totalSize = 0;
 
   // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
   // 파일 => blob => image url로 변경 => preview에 저장해서 이미지 슬라이드로 띄운다
-  const handleFileChange = (files) => {
-    const targetFileList = files.target.files;
-    setFiles(targetFileList);
+  const handleFileChange = (e) => {
+    const files = e.target.files;
+    if (!files) return alert("파일이 선택되지 않았습니다");
+    const targetFileList = Array.from(files);
+    setFormDataFiles(targetFileList);
     fileCount += targetFileList.length;
     // FileList는 유사배열이기때문에 targetFileList.forEach 이런식으로 배열의 메소드를 사용할 수 없다
     // 배열 메소드 사용하려면 변환 후 사용하거나 apply call 사용해야함
+    console.log(typeof targetFileList[0].size);
     if (targetFileList.length > 0) {
-      Array.from(targetFileList).forEach((file) => {
+      targetFileList.forEach((file) => {
         totalSize += file.size;
       });
     } else {
-      // !!!: length가 0일 때 필요한 로직인데, targetFileList[0]은 무조건 undefined일 것임
       totalSize = targetFileList[0].size;
     }
     const fileCountValid = fileCount <= MAX_FILE_COUNT;
@@ -70,12 +76,7 @@ const DragDropContainer = ({ preview, setPreview, setFiles, formRef }) => {
       {preview && preview.length > 0 ? (
         <CarouselWrapper preview={preview} setPreview={setPreview} />
       ) : (
-        <DragnDrop
-          selectedFiles={selectedFiles}
-          setSelectedFiles={setSelectedFiles}
-          handleFileChange={handleFileChange}
-          formRef={formRef}
-        />
+        <DragnDrop handleFileChange={handleFileChange} formRef={formRef} />
       )}
     </>
   );

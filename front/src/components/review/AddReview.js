@@ -24,7 +24,7 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
 
   const [review, setReview] = useState({ title: "", content: "" });
   const [preview, setPreview] = useState(null);
-  const [files, setFiles] = useState(null);
+  const [formDataFiles, setFormDataFiles] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(RESULT_ENUM.NOT_YET);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -49,22 +49,22 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       let formData = new FormData();
       // FormData 생성자의 첫 번째 매개변수로는 HTMLFormElement 객체가 필요함
       // FileList는 HTMLFormElement가 아니기때문에 일단 매개변수 없이 생성 후 append로 추가한다
-      formData.append("uploadFile", files);
+      formData.append("uploadFile", formDataFiles);
       formData.append("title", review.title);
       formData.append("content", review.content);
       setUploadStatus(RESULT_ENUM.UPLOADING);
       console.log(formData, "formData 형식");
-      console.log(files, "uploadFile 형식");
+      console.log(formDataFiles, "변경 전 형식");
 
       const res = await axios.post(
         "http://localhost:5001/reviews/register",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
-          },
-        }
+        formData
+        // {
+        //   headers: {
+        //     "Content-Type": "multipart/form-data",
+        //     Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+        //   },
+        // }
       );
       // error 처리
       if (!res.data) {
@@ -137,7 +137,7 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
                 review={review}
                 setReview={setReview}
                 blobURLsExpired={isFetched}
-                setFiles={setFiles}
+                setFormDataFiles={setFormDataFiles}
               />
               {/* 아래 Form 내부로 들어가는 body */}
               <ReviewFormBody
