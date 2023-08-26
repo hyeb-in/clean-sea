@@ -3,7 +3,6 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { findUserByEmail, findUserById } from "../db/models/User";
 import bcrypt from "bcrypt";
-//import { errorGenerator } from "../utils/errorGenerator";
 
 const localOptions = {
   usernameField: "email",
