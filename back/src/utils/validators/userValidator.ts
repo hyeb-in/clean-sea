@@ -61,7 +61,7 @@ export const validateUpdateUser = (
   const updateValue = req.body;
 
   const schema = joi.object({
-    name: joi.string().min(2).max(20).required().pattern(nameReg),
+    name: joi.string().min(2).max(20).optional().pattern(nameReg),
     description: joi.string().optional(),
     profileImage: joi.string().optional(),
   });

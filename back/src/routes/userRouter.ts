@@ -1,13 +1,13 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import {
   deleteUser,
   getRandomUser,
   getUser,
   resetPassword,
   signUpUser,
-  updateUser,
-} from "../controllers/userController";
-import { jwtAuthentication } from "../middlewares/authenticateJwt";
+  updateUser, updateUserProfile,
+} from '../controllers/userController'
+import { jwtAuthentication } from '../middlewares/authenticateJwt'
 import {
   validateSignUp,
   validateUpdateUser,
@@ -24,6 +24,8 @@ userRouter.get("/current", jwtAuthentication, getUser);
 userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
+
+userRouter.put('/photo', express.static("profileImage"), updateUserProfile)
 
 userRouter
   .route("/:userId")
