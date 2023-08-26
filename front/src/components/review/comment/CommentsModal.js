@@ -13,7 +13,7 @@ import { ModalVisibleContext, UserStateContext } from "../../../App";
 import { useContext, useState } from "react";
 import { MODAL_TYPE } from "../../../constants";
 import * as Api from "../../../Api";
-import Comment from "./Comment";
+import Comment from "../../common/microComponents/Comment";
 
 // 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
 // 그냥 Review를 볼 수 있는 컴포넌트와 다르게 생김 주의... 이름 바꿔야할 듯

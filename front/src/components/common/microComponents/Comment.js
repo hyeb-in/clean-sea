@@ -1,12 +1,12 @@
 import { Container, Form, Row } from "react-bootstrap";
-import Avatar from "../../common/Avatar";
+import Avatar from "../Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
 import { ModalVisibleContext, UserStateContext } from "../../../App";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { MODAL_TYPE } from "../../../constants";
-import Timestamp from "../../common/Timestamp";
+import Timestamp from "./Timestamp";
 
 const Comment = ({ comment, review }) => {
   const navigate = useNavigate();

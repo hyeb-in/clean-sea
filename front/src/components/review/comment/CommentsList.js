@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Comment from "./Comment";
+import Comment from "../../common/microComponents/Comment";
 import { ModalVisibleContext } from "../../../App";
 import { MODAL_TYPE } from "../../../constants";
 

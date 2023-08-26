@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import Review from "./Review";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
 import * as Api from "../../Api";
@@ -13,6 +12,7 @@ import ActionSelectorModal from "../common/popup/ActionSelectorModal";
 import { MODAL_TYPE } from "../../constants";
 import EditReview from "./EditReview";
 import CommentsModal from "./comment/CommentsModal";
+import Review from "./Review";
 
 const ReviewsList = ({ reviews, setReviews }) => {
   const { setIsHandlerEnabled } = useContext(HandlerEnabledContext);
@@ -25,21 +25,20 @@ const ReviewsList = ({ reviews, setReviews }) => {
     modalVisible?.type === MODAL_TYPE.floatingReview;
   const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
 
+  const fetchPrivateReviews = async () =>
+    await Api.get("reviews/reviewListLogin");
+  const fetchPublicReviews = async () => await Api.get("reviews/reviewList");
+
   // to do: 너무 데이터가 한 방에 많이 자주 불러와지는 거 같음
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // 로그인 유저가 없다면 reviewList로 전체 리뷰를 받아온다
         if (!loggedInUser) {
-          const res = await Api.get("reviews/reviewList");
-          setIsHandlerEnabled(true);
-          setReviews(res.data);
-          setIsLoaded(true);
-          if (res.data) return;
-          // 로그인 유저가 없다면 reviewList로 전체 리뷰를 받아온다
+          const res = await fetchPublicReviews();
+          return setReviews(res.data);
         }
-        // 로그인 한 유저가 있다면 내가 좋아요를 누른 리뷰인지에 대한 정보가 포함된 데이터를 받아온다
-        const res = await Api.get("reviews/reviewListLogin");
-        setIsHandlerEnabled(true);
+        const res = await fetchPrivateReviews();
         setReviews(res.data);
         setIsLoaded(true);
       } catch (error) {
@@ -47,7 +46,7 @@ const ReviewsList = ({ reviews, setReviews }) => {
       }
     };
     fetchData();
-  }, [setIsHandlerEnabled, setReviews, loggedInUser]);
+  }, [loggedInUser, setReviews]);
 
   return (
     <>
