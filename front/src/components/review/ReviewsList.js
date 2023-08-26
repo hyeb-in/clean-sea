@@ -33,14 +33,18 @@ const ReviewsList = ({ reviews, setReviews }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 로그인 유저가 없다면 reviewList로 전체 리뷰를 받아온다
-        if (!loggedInUser) {
+        // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
+        if (loggedInUser) {
+          const res = await fetchPrivateReviews();
+          if (!res.data) alert("로그인 유저의 데이터를 불러올 수 없습니다");
+          setReviews(res.data);
+          setIsLoaded(true);
+        } else {
           const res = await fetchPublicReviews();
-          return setReviews(res.data);
+          if (!res.data) alert("공개된 데이터를 불러올 수 없습니다");
+          setReviews(res.data);
+          setIsLoaded(true);
         }
-        const res = await fetchPrivateReviews();
-        setReviews(res.data);
-        setIsLoaded(true);
       } catch (error) {
         console.log(error);
       }
@@ -53,6 +57,7 @@ const ReviewsList = ({ reviews, setReviews }) => {
       <Container className="py-3">
         <div xs={1}>
           {/* to do: 서버 에러 났을 경우 알려주기 -> 해결 방안 보여주기 */}
+          {/* 응답 상태에 관한 메세지는 전체 하나로 합치기 */}
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&

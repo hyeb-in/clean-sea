@@ -26,6 +26,7 @@ const DragDropContainer = ({ preview, setPreview, setFiles, formRef }) => {
         totalSize += file.size;
       });
     } else {
+      // !!!: length가 0일 때 필요한 로직인데, targetFileList[0]은 무조건 undefined일 것임
       totalSize = targetFileList[0].size;
     }
     const fileCountValid = fileCount <= MAX_FILE_COUNT;
