@@ -17,12 +17,23 @@ interface IBeach {
 }
 
 interface BeachData {
-[year: string]: 
-{ 
-  eschAvg: number, 
-  enteAvg: number 
-}[];
+  [year: string]: 
+  { 
+    eschAvg: number, 
+    enteAvg: number 
+  }[];
 }
 
+type BeachDataAvg = {
+  [year: string]: 
+  { 
+    eschAvgRelative: number,
+    enteAvgRelative: number,
+    avgRelativeScore: number
+  }[];
+};
 
-export { IBeach, BeachData }
+  
+
+
+export { IBeach, BeachData, BeachDataAvg }

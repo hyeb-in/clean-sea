@@ -19,6 +19,10 @@ beachRouter
   // .get('/beachesbyregion/:address/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
 
 beachRouter
+  .get('/beachesavg/:year', getBeachByRegionAndYearSpecific);
+  // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+
+beachRouter
   .get('/beaches/:year', getBeachByRegionAndYearSpecific);
   // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
 
