@@ -30,7 +30,7 @@ userRouter.put('/photo', express.static("profileImage"), updateUserProfile)
 userRouter
   .route("/:userId")
   .get(jwtAuthentication, getUser)
-  .put(validateUpdateUser, jwtAuthentication, updateUser)
+  .put(jwtAuthentication, validateUpdateUser, updateUser)
   .delete(jwtAuthentication, deleteUser);
 
 export default userRouter;
