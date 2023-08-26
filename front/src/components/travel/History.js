@@ -23,9 +23,6 @@ const History = ({ displayToast }) => {
     setNewTravel({ ...newTravel, beachId: selectedId });
   };
 
-  const handleModalClose = () => setShowModal(false);
-  const handleModalOpen = () => setShowModal(true);
-
   const fetchTravelList = async () => {
     try {
       const response = await Api.get("travels/travelList");
@@ -45,7 +42,7 @@ const History = ({ displayToast }) => {
     }
 
     await fetchTravelList();
-    handleModalClose();
+    setShowModal();
   };
 
   useEffect(() => {
@@ -70,7 +67,7 @@ const History = ({ displayToast }) => {
               <Col xs={6} className="d-flex justify-content-end">
                 <Button
                   size="sm" style={{ marginTop: "5px", marginBottom: "5px" }}
-                  onClick={handleModalOpen}
+                  onClick={setShowModal}
                 >
                   로그 작성
                 </Button>
@@ -96,7 +93,7 @@ const History = ({ displayToast }) => {
           </Card.Body>
         </Card>
 
-        <Modal show={showModal} onHide={handleModalClose}>
+        <Modal show={showModal} onHide={setShowModal}>
           <Modal.Header closeButton>
             <Modal.Title>새 방문 로그 작성</Modal.Title>
           </Modal.Header>
@@ -112,7 +109,7 @@ const History = ({ displayToast }) => {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleModalClose}>
+            <Button variant="secondary" onClick={setShowModal}>
               취소
             </Button>
             <Button variant="primary" onClick={handleNewTravelSubmit}>

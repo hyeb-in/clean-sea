@@ -40,14 +40,6 @@ const TravelItem = ({
     fetchBeachName();
   }, [travelData.beachId]);
 
-  const handleCloseDeleteModal = () => {
-    setShowDeleteModal(false);
-  };
-
-  const handleShowDeleteModal = () => {
-    setShowDeleteModal(true);
-  };
-
   const handleUpdateTravel = async () => {
     try {
       await Api.put(`travels/${travelId._id}`, updatedTravel);
@@ -67,7 +59,7 @@ const TravelItem = ({
     } catch (error) {
       displayToast("오류가 발생했습니다. 다시 시도해주세요.");
     }
-    handleCloseDeleteModal();
+    setShowDeleteModal();
   };
 
   const defaultImage = process.env.PUBLIC_URL + "/stamp.png";
@@ -118,10 +110,10 @@ const TravelItem = ({
                   justifyContent: "flex-start"
                 }}>
                   <Button variant="outline-primary"
-                          onClick={() => setIsEditing(true)}
+                          onClick={setIsEditing}
                           className={"mx-1"}>편집</Button>
                   <Button variant="outline-danger"
-                          onClick={handleShowDeleteModal}>삭제</Button>
+                          onClick={setShowDeleteModal}>삭제</Button>
                 </div>
               </Card.Body>
             </Col>
@@ -150,7 +142,7 @@ const TravelItem = ({
               alignItems: "center",
               justifyContent: "flex-start"
             }}>
-              <Button variant="secondary" onClick={() => setIsEditing(false)}
+              <Button variant="secondary" onClick={setIsEditing}
                       className={"mx-1 mb-4"}>취소</Button>
               <Button variant="primary" onClick={handleUpdateTravel}
                       className={"mb-4"}>업데이트</Button>
@@ -158,14 +150,14 @@ const TravelItem = ({
           </>
         )}
 
-        <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal show={showDeleteModal} onHide={setShowDeleteModal}>
           <Modal.Header closeButton>
             <Modal.Title>삭제 확인</Modal.Title>
           </Modal.Header>
           <Modal.Body>정말 삭제하시겠습니까?</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary"
-                    onClick={handleCloseDeleteModal}>취소</Button>
+                    onClick={setShowDeleteModal}>취소</Button>
             <Button variant="danger" onClick={handleDeleteClick}>삭제</Button>
           </Modal.Footer>
         </Modal>

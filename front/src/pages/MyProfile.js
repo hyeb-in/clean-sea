@@ -38,7 +38,7 @@ const MyProfile = () => {
 
   const displayToastMessage = (message) => {
     setToastMessage(message);
-    setShowToast(true);
+    setShowToast();
   };
 
   useEffect(() => {
@@ -94,7 +94,6 @@ const MyProfile = () => {
   };
 
   const handleSubmitProfileImage = useCallback(() => {
-
     const inputFile = fileRef.current;
     console.log("inputFile  :", inputFile.files);
     const formData = new FormData();
@@ -156,7 +155,7 @@ const MyProfile = () => {
                                        onClick={handleCompleteClick}>완료</Button>}
                 {isEditMode &&
                   <Button variant="link" onClick={toggleProfileModal}>프로필 이미지
-                    편집'</Button>}
+                    편집</Button>}
               </span>
             </Card>
 
@@ -180,7 +179,7 @@ const MyProfile = () => {
           </Col>
         </Row>
       </Container>
-      <Modal show={isShowProfileModal}>
+      <Modal show={isShowProfileModal} onHide={toggleProfileModal}>
         <Modal.Header closeButton>
           <Modal.Title>프로필 이미지 편집</Modal.Title>
         </Modal.Header>
@@ -205,7 +204,7 @@ const MyProfile = () => {
           text={toastMessage}
           position={TOAST_POPUP_POSITION.topCenter}
           status={TOAST_POPUP_STATUS.info}
-          onClose={() => setShowToast(false)}
+          onClose={setShowToast}
         />
       )}
     </>
