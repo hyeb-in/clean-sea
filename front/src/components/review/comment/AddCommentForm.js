@@ -11,7 +11,7 @@ const AddCommentForm = ({ review, setNewComments, setReviews }) => {
   //   setReviews,
 
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
+  const { modalVisible } = useContext(ModalVisibleContext);
   // const {
   //   data: { reviewId, review, setNewComments, setReviews },
   // } = modalVisible;
@@ -19,9 +19,7 @@ const AddCommentForm = ({ review, setNewComments, setReviews }) => {
 
   const [comment, setComment] = useState("");
   const isValid = comment.length > 0 && comment.length <= 100;
-
-  console.log(modalVisible.data);
-
+  console.log(comment);
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -45,6 +43,7 @@ const AddCommentForm = ({ review, setNewComments, setReviews }) => {
       setComment("");
     } catch (error) {
       // 서버 error 핸들링
+      // 인터셉터가 핸들링 하면 여긴 비워놔도 되는 건가?
     }
   };
   return (

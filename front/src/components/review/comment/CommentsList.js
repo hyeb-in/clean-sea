@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Comment from "../../common/microComponents/Comment";
 import { ModalVisibleContext } from "../../../App";
 import { MODAL_TYPE } from "../../../constants";
@@ -12,16 +12,16 @@ const CommentsList = ({
   reviewId,
   setNewComments,
   setReviews,
-  showDetails,
 }) => {
   const { setModalVisible } = useContext(ModalVisibleContext);
 
   return (
     <>
       {/* 댓글 3개까지만 미리보기 */}
+      {/* 추가된 커맨트까지 갯수가 3개 이상이 된다면 이전 커맨트는 사라지게 해준다 */}
       {comments?.map(
         (comment, index) =>
-          index < 2 && (
+          index < 3 && (
             <div key={comment._id}>
               <Comment
                 comment={comment}
@@ -62,7 +62,7 @@ const CommentsList = ({
         className="link"
       >
         {/* 임시로 2개!! 원래 3개임 */}
-        {showDetails && `댓글 ${comments.length}개 모두 보기`}
+        {comments?.length > 2 && `댓글 ${comments.length}개 모두 보기`}
       </div>
     </>
   );
