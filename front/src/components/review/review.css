@@ -51,6 +51,17 @@ textarea:focus {
   min-width: 350px;
   width: 100%;
 }
+
+@media (max-width: 600) {
+  .review__flexible-child {
+    width: 100%;
+  }
+}
+@media (min-width: 601px) {
+  .review__flexible-child {
+    max-width: 50%;
+  }
+}
 .carousel-arrow-icon {
   background-color: black;
   padding: 5px;

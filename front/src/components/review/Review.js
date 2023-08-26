@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Card } from "react-bootstrap";
 import ReviewTitle from "./ReviewHeader";
-import CommentsList from "./comment/CommentsList";
+import CurrentComments from "./comment/CurrentComment";
 import ReviewContents from "./ReviewContents";
 import CarouselWrapper from "../common/Carousel";
 import AddCommentForm from "./comment/AddCommentForm";
@@ -13,19 +13,19 @@ export const IMAGE_URLS = [
 ];
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
+const Review = ({ review, setReviews, selectedReview }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { _id: reviewId, comments } = review;
-  const [newComments, setNewComments] = useState([]);
+  const [commentList, setCommentList] = useState(review.comments);
+  const [newCommentsList, setNewCommentsList] = useState([]);
 
   return (
     <>
       <Card
         bg="light"
-        key={reviewId}
+        key={review._id}
         className="my-5 review-container review flexible-col "
       >
-        <Card.Header>
+        <Card.Header className="review__flexible-child">
           <ReviewTitle review={review} setReviews={setReviews} />
           <CarouselWrapper preview={IMAGE_URLS} />
           {/* 사진이 없는 형식일 경우에 레이아웃이 망가지는데 어떡해야할지 모르겠음! */}
@@ -39,23 +39,22 @@ const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
             />
 
             <div>
-              {/* comments에 관한 state, review에 관한 state로 나눠서 두 개만 받을 수 있을 듯 */}
-              <CommentsList
-                comments={comments}
-                newComments={newComments}
-                setNewComments={setNewComments}
+              <CurrentComments
                 review={review}
                 selectedReview={selectedReview}
                 setSelectedReview={selectedReview}
                 setReviews={setReviews}
+                commentList={commentList}
+                setCommentList={setCommentList}
+                newCommentsList={newCommentsList}
               />
             </div>
             {/* 댓글 다는 창이 있다? reviewId가 필요함  */}
             {loggedInUser && (
               <AddCommentForm
-                setNewComments={setNewComments}
                 review={review}
                 setReviews={setReviews}
+                setNewCommentsList={setNewCommentsList}
               />
             )}
           </div>

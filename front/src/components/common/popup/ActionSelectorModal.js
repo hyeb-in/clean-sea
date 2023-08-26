@@ -4,31 +4,12 @@ import { ModalVisibleContext } from "../../../App";
 import * as Api from "../../../Api";
 import { MODAL_TYPE } from "../../../hooks/useModal";
 
-// export const MODAL_TYPE = {
-//   floatingReview: "FLOATING_REVIEW",
-//   actionSelector: "ACTION_SELECTOR",
-//   addReview: "ADD_REVIEW",
-//   editReview: "EDIT_REVIEW_FORM",
-// };
-
 /**
- * 수정, 삭제, 취소 선택하는 모달창
- *  초기값
- *  const [modalVisible, setModalVisible] = useState({
- *   type: MODAL_TYPE.floatingReview,      // 위의 MODAL_TYPE enum 참고
- *   isVisible: false, // 모달창 show 판단 기준
- *   data: null,  // 다른 곳으로 보내줄 데이터를 객체 형식으로 작성
- *  });
- * 
- * 사용 예시 const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
- * 
- *   setModalVisible({
-          type: null,
-          isVisible: false,
-          data: null,
-            })
- * 
- * 
+ * 수정, 삭제, 취소 선택하는 모달창 --- 수정 중
+ *
+ *
+ *
+ *
  */
 const ActionSelectorModal = () => {
   // commentId가 있다면 comment를 삭제
@@ -101,7 +82,7 @@ const ActionSelectorModal = () => {
             } else if (isCommentEditing) {
               setModalVisible({
                 ...modalVisible,
-                type: MODAL_TYPE.floatingReview,
+                type: MODAL_TYPE.commentsList,
               });
             }
 

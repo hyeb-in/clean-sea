@@ -15,14 +15,12 @@ import Review from "./Review";
 import { MODAL_TYPE } from "../../hooks/useModal";
 
 const ReviewsList = ({ reviews, setReviews }) => {
-  const { setIsHandlerEnabled } = useContext(HandlerEnabledContext);
   const { user: loggedInUser } = useContext(UserStateContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const { modalVisible } = useContext(ModalVisibleContext);
 
   const isActionPopupOpen = modalVisible?.type === MODAL_TYPE.actionSelector;
-  const isCommentListPopupOpen =
-    modalVisible?.type === MODAL_TYPE.floatingReview;
+  const isCommentListPopupOpen = modalVisible?.type === MODAL_TYPE.commentsList;
   const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
 
   const fetchPrivateReviews = async () =>
