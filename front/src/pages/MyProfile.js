@@ -73,10 +73,6 @@ const MyProfile = () => {
     fetchRandomUsers();
   }, []);
 
-  const handleEditClick = useCallback(() => {
-    setIsEditMode(prevState => !prevState);
-  }, []);
-
   const handleCompleteClick = async () => {
     setIsEditMode();
 
@@ -148,7 +144,7 @@ const MyProfile = () => {
               </ListGroup>
 
               <span>
-                <Button variant="link" onClick={handleEditClick}>{isEditMode
+                <Button variant="link" onClick={setIsEditMode}>{isEditMode
                   ? "취소"
                   : "편집"}</Button>
                 {isEditMode && <Button variant="link"
