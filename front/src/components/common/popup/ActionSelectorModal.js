@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { ListGroup, Modal } from "react-bootstrap";
 import { ModalVisibleContext } from "../../../App";
-import { MODAL_TYPE } from "../../../constants";
 import * as Api from "../../../Api";
+import { MODAL_TYPE } from "../../../hooks/useModal";
 
 // export const MODAL_TYPE = {
 //   floatingReview: "FLOATING_REVIEW",

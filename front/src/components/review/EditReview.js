@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { ModalVisibleContext, UserStateContext } from "../../App";
-import { MODAL_TYPE } from "../../constants";
 import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
 import DragDropContainer from "../common/DragDropContainer";
 import * as Api from "../../Api";
 import ReviewFormBody from "./ReviewFormBody";
 import { RESULT_ENUM } from "./AddReview";
+import { MODAL_TYPE } from "../../hooks/useModal";
 
 // add review랑 형태가 같음 -> 하나로 합쳐도 될 듯?
 

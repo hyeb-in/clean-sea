@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import Avatar from "../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { ModalVisibleContext, UserStateContext } from "../../App";
-import { MODAL_TYPE } from "../../constants";
+import { MODAL_TYPE } from "../../hooks/useModal";
 
 // children 사용처 어디?? 왜만든 건지 모르겠음
 const ReviewTitle = ({ children, review, onEditReview }) => {

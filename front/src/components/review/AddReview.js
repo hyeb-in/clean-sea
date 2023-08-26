@@ -8,8 +8,8 @@ import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
 import ConfirmModal from "../common/popup/ConfirmModal";
 import ReviewFormBody from "./ReviewFormBody";
 import DragDropContainer from "../common/DragDropContainer";
-import { MODAL_TYPE } from "../../constants";
 import axios from "axios";
+import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -21,12 +21,12 @@ export const RESULT_ENUM = {
 const AddReview = ({ headerTitle, reviews, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-
   const [review, setReview] = useState({ title: "", content: "" });
   const [preview, setPreview] = useState(null);
   const [formDataFiles, setFormDataFiles] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(RESULT_ENUM.NOT_YET);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const { cloaseModal } = useModal();
 
   const isPosting = !uploadStatus === RESULT_ENUM.NOT_YET;
   const isFetched =
@@ -59,12 +59,6 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
       const res = await axios.post(
         "http://localhost:5001/reviews/register",
         formData
-        // {
-        //   headers: {
-        //     "Content-Type": "multipart/form-data",
-        //     Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
-        //   },
-        // }
       );
       // error 처리
       if (!res.data) {
@@ -73,10 +67,10 @@ const AddReview = ({ headerTitle, reviews, setReviews }) => {
 
       setReviews([...reviews, res.data]);
       setUploadStatus(RESULT_ENUM.SUCCESS);
+      cloaseModal();
     } catch (error) {
-      console.error(error.response.data.error); // 메세지 뜸
-      console.log(error.response.status);
-
+      console.error(error.response?.data.error); // 메세지 뜸 / 에러날 때도 있음
+      console.log(error.response?.status);
       // data.status 에 코드가 있는데 undefined로 뜸
       setUploadStatus(RESULT_ENUM.FAIL);
       setModalVisible({

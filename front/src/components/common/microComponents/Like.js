@@ -2,10 +2,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 import { Col } from "react-bootstrap";
-import { IS_LIKE } from "../../../constants";
 import * as Api from "../../../Api";
 import { useContext, useState } from "react";
 import { UserStateContext } from "../../../App";
+import { IS_LIKE } from "../../../constants";
 
 // isLiked가 reviews list에서 받아오는 값
 const Like = ({ isLiked, reviewId, setReviews }) => {

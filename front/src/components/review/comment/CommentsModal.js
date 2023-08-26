@@ -3,10 +3,9 @@ import ReviewTitle from "../ReviewHeader";
 import CarouselWrapper from "../../common/Carousel";
 import { ModalVisibleContext } from "../../../App";
 import { useContext, useState } from "react";
-import { MODAL_TYPE } from "../../../constants";
 import Comment from "../../common/microComponents/Comment";
 import AddCommentForm from "./AddCommentForm";
-import useModal from "../../../hooks/useModal";
+import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 
 // 리뷰와 함께 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
 // 모든 커멘트 목록이 필요함

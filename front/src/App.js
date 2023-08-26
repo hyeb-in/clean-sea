@@ -22,7 +22,7 @@ import PageNotFound from "./pages/PageNotFound";
 import ResponseIndicator from "./components/common/indicators/ResponseIndicator";
 import axios from "axios";
 import * as Api from "./Api";
-import { MODAL_TYPE } from "./constants";
+import { MODAL_TYPE } from "./hooks/useModal";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);

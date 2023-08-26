@@ -5,8 +5,8 @@ import { useContext, useState } from "react";
 import { ModalVisibleContext, UserStateContext } from "../../../App";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { MODAL_TYPE } from "../../../constants";
 import Timestamp from "./Timestamp";
+import { MODAL_TYPE } from "../../../hooks/useModal";
 
 const Comment = ({ comment, review }) => {
   const navigate = useNavigate();

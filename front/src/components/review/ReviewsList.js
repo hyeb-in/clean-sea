@@ -9,10 +9,10 @@ import {
   UserStateContext,
 } from "../../App";
 import ActionSelectorModal from "../common/popup/ActionSelectorModal";
-import { MODAL_TYPE } from "../../constants";
 import EditReview from "./EditReview";
 import CommentsModal from "./comment/CommentsModal";
 import Review from "./Review";
+import { MODAL_TYPE } from "../../hooks/useModal";
 
 const ReviewsList = ({ reviews, setReviews }) => {
   const { setIsHandlerEnabled } = useContext(HandlerEnabledContext);

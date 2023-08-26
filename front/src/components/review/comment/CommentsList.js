@@ -1,8 +1,7 @@
 import { useContext } from "react";
 import Comment from "../../common/microComponents/Comment";
 import { ModalVisibleContext } from "../../../App";
-import { MODAL_TYPE } from "../../../constants";
-import useModal from "../../../hooks/useModal";
+import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 
 const CommentsList = ({
   comments,

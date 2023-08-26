@@ -55,16 +55,6 @@ export const TOAST_POPUP_POSITION = {
   bottomEnd: "bottom-end",
 };
 
-export const MODAL_TYPE = {
-  floatingReview: "FLOATING_REVIEW",
-  actionSelector: "ACTION_SELECTOR",
-  addReview: "ADD_REVIEW",
-  editReview: "EDIT_REVIEW_FORM",
-  deleteReview: "DELETE_REVIEW",
-  editComment: "EDIT_COMMENT",
-  deleteComment: "DELETE_COMMENT",
-};
-
 export const IS_LIKE = {
   yes: "yes",
   no: "no",
