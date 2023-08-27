@@ -17,10 +17,9 @@ import { TOAST_POPUP_STATUS } from "../../constants";
 // => 모달에 관한 컨텍스트만 변경 후 데이터를 현재 컴포넌트로 전달
 
 // to do: 불필요한 매개변수 지울 것
-const EditReview = ({}) => {
+const EditReview = () => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, closeModal, setModalVisible, editedReview } =
-    useModal();
+  const { modalVisible, closeModal } = useModal();
 
   const { review, setReviews } = modalVisible.data;
 
@@ -91,6 +90,7 @@ const EditReview = ({}) => {
         );
       });
       closeModal();
+      setUserInputValues({ title: "", content: "" });
     } catch (error) {
       showToastPopup("정보를 불러올 수 없습니다", TOAST_POPUP_STATUS.error);
       closeModal();
@@ -124,14 +124,12 @@ const EditReview = ({}) => {
                 preview={preview}
                 setPreview={setPreview}
                 review={review}
-                // setReview={setReview}
                 blobURLsExpired={isFetched}
                 files={files}
                 setFiles={setFiles}
               />
               <ReviewFormBody
                 review={review}
-                // setReview={setReview}
                 userInputValues={userInputValues}
                 setUserInputValues={setUserInputValues}
               />

@@ -12,7 +12,6 @@ const ReviewTitle = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { openModal, modalVisible } = useModal();
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
-  console.log(modalVisible);
   return (
     <div className="d-flex align-items-center justify-content-between link px-0 commentModal">
       <div

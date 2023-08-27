@@ -10,9 +10,7 @@ import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 import useToast from "../../hooks/useToast";
 import { TOAST_POPUP_STATUS } from "../../constants";
 import ToastWrapper from "../common/popup/ToastWrapper";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import { faBomb } from "@fortawesome/free-solid-svg-icons";
+import ConfirmDeleteModal from "../common/popup/ConfirmDeleteModal";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -21,22 +19,25 @@ export const RESULT_ENUM = {
   FAIL: "실패",
 };
 
-const AddReview = ({
-  reviews,
-  setReviews,
-  userInputValues,
-  setUserInputValues,
-}) => {
+const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, setModalVisible, closeModal } = useModal();
+  const {
+    modalVisible,
+    showServerErrorModal,
+    showSuccessMsgModal,
+    showDeleteConfirmModal,
+    closeModal,
+  } = useModal();
   const [preview, setPreview] = useState(null);
   const [formDataFiles, setFormDataFiles] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(RESULT_ENUM.NOT_YET);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const isPosting = !uploadStatus === RESULT_ENUM.NOT_YET;
-  const isFetched =
-    uploadStatus === RESULT_ENUM.SUCCESS || uploadStatus === RESULT_ENUM.FAIL;
+  const isPosting = uploadStatus === RESULT_ENUM.UPLOADING;
+  const isFailed = uploadStatus === RESULT_ENUM.FAIL;
+  const isSuccessful = uploadStatus === RESULT_ENUM.SUCCESS;
+  const isFetched = isFailed || isSuccessful;
+
   const {
     showToast,
     showToastPopup,
@@ -74,16 +75,28 @@ const AddReview = ({
       console.log(formData, "formData 형식");
       console.log(formDataFiles, "변경 전 형식");
 
+      setUploadStatus(RESULT_ENUM.UPLOADING);
       const res = await axios.post(
         "http://localhost:5001/reviews/register",
         formData
       );
+
+      setUploadStatus(RESULT_ENUM.UPLOADING);
+      if (!res.ok) {
+        return setUploadStatus(RESULT_ENUM.FAIL);
+      }
+
       setReviews((current) => [res.data, ...current]);
       setUploadStatus(RESULT_ENUM.SUCCESS);
+      setUserInputValues({ title: "", content: "" });
       closeModal();
     } catch (error) {
       // console.error(error.response?.data.error); // 메세지 뜸 / 에러날 때도 있음
       // console.log(error.response?.status);
+      if (error.status === 404) {
+        setUploadStatus(RESULT_ENUM.FAIL);
+        setShowConfirmModal(true);
+      }
     }
   };
 
@@ -110,6 +123,9 @@ const AddReview = ({
           if (userInputValues.title !== "" || userInputValues.content !== "") {
             // 내용이 있다면 다시 한 번 확인하는 모달창에 표시한다
             setShowConfirmModal(true);
+          } else {
+            closeModal();
+            setUserInputValues({ title: "", content: "" }); // 입력창 비워주기
           }
         }}
         onClick={(e) => e.stopPropagation()}
@@ -117,62 +133,65 @@ const AddReview = ({
         // to do: space bar입력시 모달창 사라짐 버그 (브라우저에 따라서 다른 듯? 확인하기)
       >
         {/* 모달창 내부: 입력 받는 공간 */}
-        <ModalBodyWrapper
-          title="글 작성하기"
-          content={
-            <div className="addReview__form flexible-col">
-              <DragDropContainer
-                preview={preview}
-                setPreview={setPreview}
-                blobURLsExpired={isFetched}
-                setFormDataFiles={setFormDataFiles}
-              />
-              {/* 아래 Form 내부로 들어가는 body */}
-              <ReviewFormBody
-                userInputValues={userInputValues}
-                setUserInputValues={setUserInputValues}
-              />
-            </div>
-          }
-        >
-          {/* 미디어 쿼리 적용(flexible-col class): 작은 화면에선 flex column, 큰 화면에선 row로 보여준다 */}
-          {/* to do: 폼... 위치...여기가 아닐텐데...? */}
-          <Form onSubmit={addReview} className="addReview__form">
-            <Button
-              className="addreview__btn"
-              variant="outline-primary"
-              type="submit"
-              onClick={addReview}
-            >
-              확인
-            </Button>
-          </Form>
-        </ModalBodyWrapper>
-
+        {!isPosting && (
+          <ModalBodyWrapper
+            title="글 작성하기"
+            content={
+              <div className="addReview__form flexible-col">
+                <DragDropContainer
+                  preview={preview}
+                  setPreview={setPreview}
+                  blobURLsExpired={isFetched}
+                  setFormDataFiles={setFormDataFiles}
+                />
+                {/* 아래 Form 내부로 들어가는 body */}
+                <ReviewFormBody
+                  userInputValues={userInputValues}
+                  setUserInputValues={setUserInputValues}
+                />
+              </div>
+            }
+          >
+            {/* 미디어 쿼리 적용(flexible-col class): 작은 화면에선 flex column, 큰 화면에선 row로 보여준다 */}
+            {/* to do: 폼... 위치...여기가 아닐텐데...? */}
+            <Form onSubmit={addReview} className="addReview__form">
+              <Button
+                className="addreview__btn"
+                variant="outline-primary"
+                type="submit"
+                onClick={addReview}
+              >
+                확인
+              </Button>
+            </Form>
+          </ModalBodyWrapper>
+        )}
         {isPosting && (
           <ModalBodyWrapper
+            show={isPosting}
+            onHide={() => {
+              if (
+                userInputValues.title !== "" ||
+                userInputValues.content !== ""
+              ) {
+                setShowConfirmModal(false);
+              }
+            }}
             title="게시물을 업로드하는 중입니다"
             content={<SpinnerWrapper />}
           />
         )}
         {/* submit 후 결과 -> 2. success or fail */}
         {/* to do: 버그수정. 공유되었습니다 모달창 뜬 후에 x 버튼이 아니라 바깥 창을 클릭하면 '게시글을 삭제하시겠어요?' 팝업이 뜸 */}
-        {isFetched && (
-          <ModalBodyWrapper
-            title={
-              RESULT_ENUM.SUCCESS
-                ? "게시물이 공유되었습니다"
-                : "게시물을 업로드하지 못했습니다"
-            }
-            // onHide={closeReviewFormModal}
-            content={
-              <FontAwesomeIcon
-                icon={RESULT_ENUM.SUCCESS ? faCircleCheck : faBomb}
-                className="indicator-success"
-              />
-            }
-          />
-        )}
+
+        {isFailed && showServerErrorModal(true)}
+        {isSuccessful && showSuccessMsgModal(isSuccessful)}
+        {showConfirmModal &&
+          showDeleteConfirmModal(
+            showDeleteConfirmModal,
+            setShowConfirmModal,
+            closeModal
+          )}
       </Modal>
     </>
   );

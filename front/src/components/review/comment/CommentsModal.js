@@ -6,6 +6,7 @@ import AddCommentForm from "./AddCommentForm";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import * as Api from "../../../Api";
 import { useEffect, useState } from "react";
+import ConfirmModal from "../../common/popup/ConfirmDeleteModal";
 
 // 리뷰와 함께 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
 // 업데이트시 해야할 일
@@ -14,7 +15,7 @@ import { useEffect, useState } from "react";
 // -> 모든 커멘트 목록이 필요
 const CommentsModal = () => {
   const { modalVisible } = useModal();
-  const { review, comments } = modalVisible.data;
+  const { review } = modalVisible.data;
   const { closeModal } = useModal();
   const [modalCommentList, setModalCommentList] = useState([]);
   // new comments list는 어디서 오는거고, 데이터 검사좀 하고 쓰자...
@@ -22,6 +23,7 @@ const CommentsModal = () => {
   // console.log(modalVisible.data);
   // reviews는 보내줄 필요 없음 modalVisible.data <<<< 필요없는 거 지우기  reviewId만 보내도 될듯
   // 값 어떻게 갱신할 건지?
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   try {
     useEffect(() => {
@@ -70,7 +72,11 @@ const CommentsModal = () => {
             <Row className="py-4 mx-2">
               {modalCommentList?.length > 0 &&
                 modalCommentList?.map((comment) => (
-                  <Comment comment={comment} key={comment._id} />
+                  <Comment
+                    comment={comment}
+                    key={comment._id}
+                    setModalCommentList={setModalCommentList}
+                  />
                 ))}
               {newCommentsList?.length > 0 &&
                 newCommentsList.map((comment) => (
@@ -78,12 +84,14 @@ const CommentsModal = () => {
                     <Comment comment={comment} />
                   </div>
                 ))}
-              <AddCommentForm
-                // setModalCommentList={setModalCommentList}
-                setNewCommentsList={setNewCommentsList}
-              />
+              <AddCommentForm setNewCommentsList={setNewCommentsList} />
             </Row>
           </Container>
+          <ConfirmModal
+            show={showConfirmModal}
+            setShowConfirmModal={setShowConfirmModal}
+            closeReviewFormModal={() => setShowConfirmModal(false)}
+          />
         </Col>
       </Row>
     </Modal>

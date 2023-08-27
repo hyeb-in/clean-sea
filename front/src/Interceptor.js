@@ -15,7 +15,7 @@ const Interceptor = ({ children }) => {
     const axiosInterceptor = axios.interceptors.request.use((config) => {
       const token = sessionStorage.getItem("userToken");
       // token이 있는지 확인 한 후에보내줘야함!! 없는 토큰을 넣어버리면 로그인 안됨 주의
-      // app.js에 로그인 부분이 있는 건 아는데, 테스트용!!
+      // app.js에 로그인 부분이 있음 >> 테스트용
       if (token) {
         config.headers = {
           Authorization: `Bearer ${token}`,
@@ -30,16 +30,6 @@ const Interceptor = ({ children }) => {
         config.headers["Content-Type"] = "application/json";
       }
 
-      // 요청에 isHandlerEnabled이 있다면 (App.js에서 넣어주고있음)
-      // if (config.isHandlerEnabled) {
-      //   // 모달 창 옵션을 설정한다
-      //   console.log(config);
-      //   modalOptions({
-      //     state: true,
-      //     description: `Request done successfully: ${config.url}`,
-      //     title: "SUCCESS",
-      //   });
-      // }
       return config;
     });
 
@@ -68,7 +58,6 @@ const Interceptor = ({ children }) => {
         const status = error.response.status;
         console.log(error.response.status, "from interceptor");
         console.log(error.response.data, "from interceptor");
-        // ???: 아직 백엔드 에러처리 작업이 끝나지 않아서 어떤 에러 형태이냐에따라서 에러 메세지가 찍히고 안찍히는 경우가 있는 것 같음
 
         const isTokenExpired = errorMessage === "토큰 만료" || status === 401;
 

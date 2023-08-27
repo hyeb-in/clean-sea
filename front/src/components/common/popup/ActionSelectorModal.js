@@ -15,20 +15,30 @@ const ActionSelectorModal = () => {
   // reviewId가 있다면 reviewId를 삭제
   const { closeModal, openModal, modalVisible } = useModal();
   const isEditingReview = modalVisible.data.target === MODAL_TYPE.editReview;
+  const isDeleteingReview =
+    modalVisible.data.target === MODAL_TYPE.deleteReview;
+
   const review = isEditingReview && modalVisible.data.review;
   const setReviews = isEditingReview && modalVisible.data.setReviews;
+  const commentId = modalVisible?.data?.commentId;
 
   const deleteById = async () => {
+    console.log(modalVisible.data);
     try {
-      const res = await Api.delete(`reviews/${review._id}`);
-      if (!res.status === 204) {
-        throw new Error("failed");
+      if (isDeleteingReview) {
+        const res = await Api.delete(`reviews/${review._id}`);
+        if (!res.status === 204) {
+          throw new Error("failed");
+        }
+        setReviews((current) => {
+          const currentReviews = [...current];
+          return currentReviews.filter((item) => item._id !== review._id);
+        });
+      } else if (commentId) {
+        // delete comment
+        console.log("hi");
       }
-      setReviews((current) => {
-        const currentReviews = [...current];
-        return currentReviews.filter((item) => item._id !== review._id);
-      });
-      alert("성공");
+      // alert("성공");
       closeModal();
     } catch (error) {
       alert(error);
@@ -56,7 +66,7 @@ const ActionSelectorModal = () => {
                 openModal(MODAL_TYPE.editReview, {
                   ...modalVisible.data,
                   review,
-                }); //여기서 데이터가 사라지나? 아닌데... 연결되어있는데??
+                });
               }
             }}
           >

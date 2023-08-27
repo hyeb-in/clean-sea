@@ -16,7 +16,6 @@ export const IMAGE_URLS = [
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const Review = ({ review, setReviews, setReview }) => {
-  console.log(review);
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useModal();
   const [commentList, setCommentList] = useState(

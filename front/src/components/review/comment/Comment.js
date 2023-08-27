@@ -13,7 +13,7 @@ import { MODAL_TYPE } from "../../../hooks/useModal";
 // 삭제 -> 삭제
 // 취소 -> 취소
 
-const Comment = ({ review, comment }) => {
+const Comment = ({ review, comment, setModalCommentList }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const [isEditing, setIsEditing] = useState(false);
@@ -59,7 +59,10 @@ const Comment = ({ review, comment }) => {
                 type: MODAL_TYPE.actionSelector,
                 isVisible: true,
                 data: {
-                  FLOATING_REVIEW_DATA: { commentId: comment._id },
+                  FLOATING_REVIEW_DATA: {
+                    commentId: comment._id,
+                    setModalCommentList,
+                  },
                 },
               });
             }}

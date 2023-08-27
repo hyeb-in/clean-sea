@@ -34,7 +34,7 @@ const ReviewFormBody = ({ userInputValues, setUserInputValues }) => {
         </Col>
         <small
           className={
-            userInputValues?.content.length < 300
+            userInputValues?.content?.length < 300
               ? "text-muted flex-justify-end"
               : "delete flex-justify-end"
           }
