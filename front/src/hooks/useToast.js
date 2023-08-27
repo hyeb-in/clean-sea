@@ -16,7 +16,7 @@ const useToast = () => {
       setToastMessage("");
       setShowToast(false);
       setToastStatus(null);
-    }, 2000); // Toast가 자동으로 닫히는 시간 설정 (2000ms = 2초)
+    }, 2000);
   };
 
   return {

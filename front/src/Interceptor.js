@@ -48,6 +48,9 @@ const Interceptor = ({ children }) => {
     const responseInterceptor = axios.interceptors.response.use(
       (response) => {
         console.log("✅ 응답: ", response);
+        if (response.data) {
+          response.ok = true;
+        }
 
         const requestMethod = response.config.method;
         if (requestMethod === "get") {

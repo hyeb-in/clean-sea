@@ -23,8 +23,6 @@ import ResponseIndicator from "./components/common/indicators/ResponseIndicator"
 import axios from "axios";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
-import { ToastContainer } from "react-bootstrap";
-import ToastWrapper from "./components/common/popup/ToastWrapper";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -169,8 +167,8 @@ function App() {
                     exact
                     element={
                       <ReviewsList
-                        review={review}
-                        setReview={setReview}
+                        // review={review}
+                        // setReview={setReview}
                         reviews={reviews}
                         setReviews={setReviews}
                       />

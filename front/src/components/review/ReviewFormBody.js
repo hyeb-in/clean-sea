@@ -11,7 +11,6 @@ const ReviewFormBody = ({ userInputValues, setUserInputValues }) => {
             type="input"
             value={userInputValues?.title}
             onChange={(e) => {
-              console.log(e.target.value);
               setUserInputValues({ ...userInputValues, title: e.target.value });
             }}
           />
@@ -21,7 +20,7 @@ const ReviewFormBody = ({ userInputValues, setUserInputValues }) => {
           <textarea
             className="w-100"
             rows={6}
-            value={userInputValues.content}
+            value={userInputValues?.content}
             onChange={(e) => {
               if (userInputValues?.content.length < 300) {
                 // 300 길이로 조건 걸어두면 300에서 멈춰서 글자가 지워지지도 않음

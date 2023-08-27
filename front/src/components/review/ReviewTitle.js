@@ -8,12 +8,12 @@ import { UserStateContext } from "../../App";
 import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 
 // children 사용처 어디?? 왜만든 건지 모르겠음
-const ReviewTitle = ({ review, setReview }) => {
+const ReviewTitle = ({ review, setReviews }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const { openModal, modalVisible } = useModal();
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
-
+  console.log(modalVisible);
   return (
     <div className="d-flex align-items-center justify-content-between link px-0 commentModal">
       <div
@@ -41,7 +41,7 @@ const ReviewTitle = ({ review, setReview }) => {
               const data = {
                 target: MODAL_TYPE.editReview,
                 review,
-                setReview,
+                setReviews,
               };
               openModal(MODAL_TYPE.actionSelector, data);
             }}

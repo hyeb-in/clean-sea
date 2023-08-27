@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBomb, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { UserStateContext } from "../../App";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
@@ -12,6 +10,9 @@ import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 import useToast from "../../hooks/useToast";
 import { TOAST_POPUP_STATUS } from "../../constants";
 import ToastWrapper from "../common/popup/ToastWrapper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import { faBomb } from "@fortawesome/free-solid-svg-icons";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -26,13 +27,13 @@ const AddReview = ({
   userInputValues,
   setUserInputValues,
 }) => {
-  console.log(userInputValues);
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, setModalVisible, closeModal } = useModal();
   const [preview, setPreview] = useState(null);
   const [formDataFiles, setFormDataFiles] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(RESULT_ENUM.NOT_YET);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const isPosting = !uploadStatus === RESULT_ENUM.NOT_YET;
   const isFetched =
     uploadStatus === RESULT_ENUM.SUCCESS || uploadStatus === RESULT_ENUM.FAIL;
@@ -44,11 +45,13 @@ const AddReview = ({
     toastStatus,
     toastPosition,
   } = useToast();
+
   // 게시글 업로드
   const addReview = async (e) => {
     e.preventDefault();
     try {
       if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
+      // edit review랑 중복임
       if (
         userInputValues.title.length < 4 ||
         userInputValues.content.length < 4
@@ -75,20 +78,18 @@ const AddReview = ({
         "http://localhost:5001/reviews/register",
         formData
       );
-
-      if (!res.statusCode >= 400) {
-        throw new Error("실패"); // 인터셉터에서 잡힘
-      }
       setReviews((current) => [res.data, ...current]);
       setUploadStatus(RESULT_ENUM.SUCCESS);
+      closeModal();
     } catch (error) {
-      console.error(error.response?.data.error); // 메세지 뜸 / 에러날 때도 있음
-      console.log(error.response?.status);
+      // console.error(error.response?.data.error); // 메세지 뜸 / 에러날 때도 있음
+      // console.log(error.response?.status);
     }
   };
 
   return (
     <>
+      {/* 클라이언트 단에서 오류 처리 */}
       {showToast && (
         <ToastWrapper
           setShowToast={setShowToast}
@@ -123,8 +124,6 @@ const AddReview = ({
               <DragDropContainer
                 preview={preview}
                 setPreview={setPreview}
-                // review={review}
-                // setReview={setReview}
                 blobURLsExpired={isFetched}
                 setFormDataFiles={setFormDataFiles}
               />
@@ -149,9 +148,7 @@ const AddReview = ({
             </Button>
           </Form>
         </ModalBodyWrapper>
-        {/* 아래의 로직은 여기 있는 게 아니라 부모로 나가고, 전역적으로 사용되어야 할 것 같음 */}
-        {/* 리뷰 내용 입력 모달창 내부 */}
-        {/* submit 후 업로드 중 -> 1. loading indicator */}
+
         {isPosting && (
           <ModalBodyWrapper
             title="게시물을 업로드하는 중입니다"
@@ -160,7 +157,7 @@ const AddReview = ({
         )}
         {/* submit 후 결과 -> 2. success or fail */}
         {/* to do: 버그수정. 공유되었습니다 모달창 뜬 후에 x 버튼이 아니라 바깥 창을 클릭하면 '게시글을 삭제하시겠어요?' 팝업이 뜸 */}
-        {/* {isFetched && (
+        {isFetched && (
           <ModalBodyWrapper
             title={
               RESULT_ENUM.SUCCESS
@@ -175,7 +172,7 @@ const AddReview = ({
               />
             }
           />
-        )} */}
+        )}
       </Modal>
     </>
   );
