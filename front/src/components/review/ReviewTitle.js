@@ -7,7 +7,6 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { UserStateContext } from "../../App";
 import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 
-// children 사용처 어디?? 왜만든 건지 모르겠음
 const ReviewTitle = ({ review, setReviews }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
@@ -53,12 +52,6 @@ const ReviewTitle = ({ review, setReviews }) => {
           </Button>
         )}
       </div>
-      {/* {children && (
-        <div xs="auto" className="flex-row-center-center p-4">
-          {children}
-        </div>
-      )} */}
-      {/* children  어디서 오는 건지 ???? */}
     </div>
   );
 };

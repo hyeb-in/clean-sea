@@ -113,6 +113,14 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
 
       {/* 모달3. review 수정하기 폼 모달 */}
       {/* >>>> Review 하위 컴포넌트로 이동 */}
+      {showToast && (
+        <ToastWrapper
+          setShowToast={setShowToast}
+          text={toastMessage}
+          status={toastStatus}
+          position={toastPosition}
+        />
+      )}
     </>
   );
 };

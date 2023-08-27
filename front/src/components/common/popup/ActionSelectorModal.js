@@ -16,14 +16,18 @@ const ActionSelectorModal = () => {
   const { closeModal, openModal, modalVisible } = useModal();
   const isEditingReview = modalVisible.data.target === MODAL_TYPE.editReview;
   const review = isEditingReview && modalVisible.data.review;
+  const setReviews = isEditingReview && modalVisible.data.setReviews;
 
   const deleteById = async () => {
     try {
       const res = await Api.delete(`reviews/${review._id}`);
-
       if (!res.status === 204) {
         throw new Error("failed");
       }
+      setReviews((current) => {
+        const currentReviews = [...current];
+        return currentReviews.filter((item) => item._id !== review._id);
+      });
       alert("성공");
       closeModal();
     } catch (error) {

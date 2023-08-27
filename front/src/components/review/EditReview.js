@@ -15,14 +15,16 @@ import { TOAST_POPUP_STATUS } from "../../constants";
 // <ReviewTitle/>에서  '...' 버튼을 클릭 => id, review 값 modalVisible 컨텍스트에 전달
 // => <ActionSelectorModal />에서 그 값을 받아서
 // => 모달에 관한 컨텍스트만 변경 후 데이터를 현재 컴포넌트로 전달
+
+// to do: 불필요한 매개변수 지울 것
 const EditReview = ({}) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, closeModal, setModalVisible, editedReview } =
     useModal();
 
   const { review, setReviews } = modalVisible.data;
-  console.log(review, setReviews, modalVisible.data);
-  //리뷰 초기값 필요한데 아직 들어오는 값이 없음
+
+  // 리뷰 title, content 초기값 설정을 위해 review 정보를 가져온다
   // <Review />에서 수정 버튼 클릭 할 때 review값을 modalVisible에 저장한다
   const [userInputValues, setUserInputValues] = useState({
     title: review?.title,
@@ -78,19 +80,20 @@ const EditReview = ({}) => {
       }
 
       const response = await Api.put(`reviews/${reviewId}`, userInputValues);
-
-      if (response.ok) {
-        setReviews((current) => {
-          const currentReviews = [...current];
-          return currentReviews.map((item) =>
-            item._id === review._id ? { ...review, ...userInputValues } : item
-          );
-        });
-        closeModal();
+      if (!response.ok) {
+        showToastPopup("데이터를 불러올 수 없습니다", TOAST_POPUP_STATUS.error);
       }
+      showToastPopup("요청 성공!", TOAST_POPUP_STATUS.success);
+      setReviews((current) => {
+        const currentReviews = [...current];
+        return currentReviews.map((item) =>
+          item._id === review._id ? { ...review, ...userInputValues } : item
+        );
+      });
+      closeModal();
     } catch (error) {
-      // showToastPopup(error, TOAST_POPUP_STATUS.error);
-      console.log(error);
+      showToastPopup("정보를 불러올 수 없습니다", TOAST_POPUP_STATUS.error);
+      closeModal();
     }
   };
 

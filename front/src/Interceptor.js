@@ -57,6 +57,7 @@ const Interceptor = ({ children }) => {
           // GET 요청 처리를 위한 스테이트
           setIsGetRequest(true);
         }
+
         // 403 : 인증 에러 권한 없음
         // 400 : 클라이언트가 잘못된 값 전달
         // 500 : 서버 에러
