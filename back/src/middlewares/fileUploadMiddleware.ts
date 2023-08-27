@@ -1,5 +1,6 @@
 import multer from 'multer';
 import path from 'path';
+
 const imageFilter = (req : any, file : Express.Multer.File, cb : any) =>{
     if( file.mimetype.startsWith('image/') && (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')){
         cb(null,true);
@@ -8,18 +9,18 @@ const imageFilter = (req : any, file : Express.Multer.File, cb : any) =>{
     }
 };
 
-
-const imageUpload = multer({
-    storage : multer.diskStorage({
-    destination: './imageUpload/',
+const storage = multer.diskStorage({
+    destination: '../imageUpload/',
     filename : function (req, file, cb) {
         const ext = path.extname(file.originalname);
-      const fileName = `${Date.now()}${ext}`;
+        const fileName = `${Date.now()}${ext}`;
         cb(null, fileName);
     },
-
-    }),
-    fileFilter : imageFilter,
 });
 
-export { imageUpload };
+const uploadMiddleware = multer({
+    storage : storage,
+    fileFilter : imageFilter,
+}).array('uploadFile[]',5);
+
+export { uploadMiddleware };
