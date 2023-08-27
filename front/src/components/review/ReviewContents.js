@@ -3,16 +3,18 @@ import Like from "../common/microComponents/Like";
 import Timestamp from "../common/microComponents/Timestamp";
 import { UserStateContext } from "../../App";
 import { IS_LIKE } from "../../constants";
+import useReview from "../../hooks/useReview";
 
 export const truncate = (content) => {
   return content?.length > 10 ? content.slice(0, 10) + "..." : content;
 };
 
-const ReviewContents = ({ review, className, setReviews }) => {
+const ReviewContents = ({ review, className }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const hasCommentsMoreThanThree = review.comments?.length > 3;
   const [showDetails, setShowDetails] = useState(hasCommentsMoreThanThree);
   const iLiked = loggedInUser && review.isLike === IS_LIKE.yes;
+  const { setReviews } = useReview();
 
   const {
     _id: reviewId,

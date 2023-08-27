@@ -3,7 +3,7 @@ import ModalBodyWrapper from "../layout/ModalBodyWrapper";
 import { Container, Modal } from "react-bootstrap";
 
 /**
- * @param 경고 팝업을 생성하는 리액트 컴포넌트(작성하던 글 삭제 하시겠어요? -> 삭제/취소 버튼)
+ * @param 경고 팝업을 생성하는 리액트 컴포넌트(작성하던 글 삭제 하시겠어요? -> 버튼)
  */
 const ConfirmModal = ({ show, setShowConfirmModal, closeReviewFormModal }) => {
   return (

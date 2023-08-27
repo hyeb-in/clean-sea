@@ -1,20 +1,17 @@
 import Comment from "./Comment";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
+import useReview from "../../../hooks/useReview";
 
 const CurrentComments = ({
   review,
-  setReviews,
   selectedReview,
   setSelectedReview,
   commentList,
-  setCommentList,
   newCommentsList,
   setNewCommentsList,
 }) => {
   const { openModal } = useModal();
-
-  console.log(commentList);
-
+  const { setReviews } = useReview();
   return (
     <>
       {/* 댓글 3개까지만 미리보기 */}

@@ -1,5 +1,5 @@
 import { CloseButton, Col, Container, Modal, Row } from "react-bootstrap";
-import ReviewHeader from "../ReviewHeader";
+import ReviewHeader from "../ReviewTitle";
 import CarouselWrapper from "../../common/Carousel";
 import Comment from "./Comment";
 import AddCommentForm from "./AddCommentForm";
@@ -28,7 +28,7 @@ const CommentsModal = () => {
       const getAllComments = async () => {
         const res = await Api.get(`comments/${review._id}`);
         if (!res.data) throw new Error("데이터를 가져올 수 없습니다");
-        console.log(res.data);
+        // console.log(res.data);
         setModalCommentList(res.data);
       };
       getAllComments();
@@ -79,7 +79,7 @@ const CommentsModal = () => {
                   </div>
                 ))}
               <AddCommentForm
-                setModalComments={comments}
+                // setModalCommentList={setModalCommentList}
                 setNewCommentsList={setNewCommentsList}
               />
             </Row>

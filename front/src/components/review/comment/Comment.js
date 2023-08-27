@@ -24,7 +24,7 @@ const Comment = ({ review, comment }) => {
   const isButtonsVisible = isMyComment && !isEditing;
   const isCommentEditBtnVisible =
     isMyComment && modalVisible.type === MODAL_TYPE.commentsList;
-  console.log(comment, "from comment compon");
+
   return (
     <Container className="flex">
       <Row>
@@ -59,7 +59,7 @@ const Comment = ({ review, comment }) => {
                 type: MODAL_TYPE.actionSelector,
                 isVisible: true,
                 data: {
-                  FLOATING_REVIEW_DATA: { review, commentId: comment._id },
+                  FLOATING_REVIEW_DATA: { commentId: comment._id },
                 },
               });
             }}

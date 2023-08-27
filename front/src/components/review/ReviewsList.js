@@ -2,27 +2,30 @@ import React, { useContext, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
-import * as Api from "../../Api";
 import { ModalVisibleContext, UserStateContext } from "../../App";
 import ActionSelectorModal from "../common/popup/ActionSelectorModal";
 import EditReview from "./EditReview";
 import CommentsModal from "./comment/CommentsModal";
 import Review from "./Review";
 import { MODAL_TYPE } from "../../hooks/useModal";
+import * as Api from "../../Api";
 
 const ReviewsList = ({ reviews, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const [isLoaded, setIsLoaded] = useState(false);
   const { modalVisible } = useContext(ModalVisibleContext);
+  // const { showToast, showToastPopup, toastText, toastStatus, toastPosition } =
+  //   useToast();
 
   const isActionPopupOpen = modalVisible?.type === MODAL_TYPE.actionSelector;
   const isCommentListPopupOpen = modalVisible?.type === MODAL_TYPE.commentsList;
   const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const fetchPrivateReviews = async () =>
     await Api.get("reviews/reviewListLogin");
   const fetchPublicReviews = async () => await Api.get("reviews/reviewList");
 
-  // to do: 너무 데이터가 한 방에 많이 자주 불러와지는 거 같음
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,7 +33,6 @@ const ReviewsList = ({ reviews, setReviews }) => {
         if (loggedInUser) {
           const res = await fetchPrivateReviews();
           if (!res.data) alert("로그인 유저의 데이터를 불러올 수 없습니다");
-          console.log(res.data);
           setReviews(res.data);
           setIsLoaded(true);
         } else {
@@ -61,7 +63,7 @@ const ReviewsList = ({ reviews, setReviews }) => {
                 key={`${review._id}-${modalVisible?.type}-${index}`}
                 className="d-flex justify-content-center align-items-center"
               >
-                <Review review={review} setReviews={setReviews} />
+                <Review review={review} />
               </div>
             ))}
           {isLoaded && reviews?.length === 0 && <NoReviewIndicator />}
@@ -79,13 +81,7 @@ const ReviewsList = ({ reviews, setReviews }) => {
       {isCommentListPopupOpen && <CommentsModal />}
 
       {/* 모달3. review 수정하기 폼 모달 */}
-      {isEditReviewPopupOpen && (
-        <EditReview
-          headerTitle="수정하기"
-          reviews={reviews}
-          setReviews={setReviews}
-        />
-      )}
+      {isEditReviewPopupOpen && <EditReview />}
     </>
   );
 };

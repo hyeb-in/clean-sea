@@ -3,13 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { ModalVisibleContext, UserStateContext } from "../../../App";
 import * as Api from "../../../Api";
 
-const AddCommentForm = ({
-  review,
-  setReviews,
-  setNewCommentsList,
-  modalCommentList,
-  setModalCommentList,
-}) => {
+const AddCommentForm = ({ review, setNewCommentsList }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
   // 부모 컴포넌트로부터 데이터를 받을 수 있다(리뷰 페이지에서 작성되는 경우)
@@ -37,13 +31,10 @@ const AddCommentForm = ({
       if (!updatedComment) {
         return alert("요청 실패");
       }
-      console.log(updatedComment, "응답 데이터");
 
       setNewCommentsList((current) => [...current, updatedComment]);
       setNewCommentValue("");
     } catch (error) {
-      // 서버 error 핸들링
-      // 인터셉터가 핸들링 하면 여긴 비워놔도 되는 건가?
       console.log(error);
     }
   };
@@ -52,11 +43,7 @@ const AddCommentForm = ({
       <input
         value={newCommentValue}
         onChange={(e) => {
-          if (setModalCommentList) {
-            setModalCommentList(e.target.value);
-          } else {
-            setNewCommentValue(e.target.value);
-          }
+          setNewCommentValue(e.target.value);
         }}
         placeholder="댓글 달기..."
         className="comment__input"

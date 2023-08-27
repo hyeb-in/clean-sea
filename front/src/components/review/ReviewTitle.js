@@ -4,14 +4,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import Avatar from "../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { ModalVisibleContext, UserStateContext } from "../../App";
-import { MODAL_TYPE } from "../../hooks/useModal";
+import { UserStateContext } from "../../App";
+import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 
 // children 사용처 어디?? 왜만든 건지 모르겠음
-const ReviewTitle = ({ children, review, onEditReview }) => {
+const ReviewTitle = ({ review, setReview }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
+  const { openModal, modalVisible } = useModal();
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
 
   return (
@@ -37,16 +37,14 @@ const ReviewTitle = ({ children, review, onEditReview }) => {
           <Button
             variant="link"
             className="black"
-            onClick={() =>
-              setModalVisible({
-                type: MODAL_TYPE.actionSelector,
-                isVisible: true,
-                data: {
-                  reviewId: review._id,
-                  review, // edit form 초기값을 위해서 필요
-                },
-              })
-            }
+            onClick={() => {
+              const data = {
+                target: MODAL_TYPE.editReview,
+                review,
+                setReview,
+              };
+              openModal(MODAL_TYPE.actionSelector, data);
+            }}
           >
             {/* 게시글 수정 화면이 아니라면 ... 대신 '완료'버튼을 보여준다 */}
             {modalVisible.type !== MODAL_TYPE.editReview && (

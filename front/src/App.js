@@ -23,6 +23,8 @@ import ResponseIndicator from "./components/common/indicators/ResponseIndicator"
 import axios from "axios";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
+import { ToastContainer } from "react-bootstrap";
+import ToastWrapper from "./components/common/popup/ToastWrapper";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -85,13 +87,18 @@ function App() {
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
-
+  const [review, setReview] = useState({ title: "", content: "" });
+  const [reviews, setReviews] = useState([]);
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
+  const [userInputValues, setUserInputValues] = useState({
+    title: "",
+    content: "",
+  });
 
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
-  const [reviews, setReviews] = useState(null);
+
   const path = location.pathname.split("/")[1];
   const is404Page =
     path !== "" &&
@@ -141,12 +148,14 @@ function App() {
               <Interceptor>
                 {!is404Page && <NavBar />}
                 {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
-                {modalVisible.isVisible &&
-                  modalVisible.type === MODAL_TYPE.addReview && (
+                {modalVisible?.isVisible &&
+                  modalVisible?.type === MODAL_TYPE.addReview && (
                     <AddReview
                       headerTitle="새 게시물 작성하기"
                       reviews={reviews}
                       setReviews={setReviews}
+                      userInputValues={userInputValues}
+                      setUserInputValues={setUserInputValues}
                     />
                   )}
                 <Routes>
@@ -159,11 +168,17 @@ function App() {
                     path="/reviews"
                     exact
                     element={
-                      <ReviewsList reviews={reviews} setReviews={setReviews} />
+                      <ReviewsList
+                        review={review}
+                        setReview={setReview}
+                        reviews={reviews}
+                        setReviews={setReviews}
+                      />
                     }
                   />
                   <Route path="/graph" exact element={<Graph />} />
                   {/* 404 페이지 */}
+
                   <Route path="*" element={<PageNotFound />} />
                 </Routes>
                 <ResponseIndicator
