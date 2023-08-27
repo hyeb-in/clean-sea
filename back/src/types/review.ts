@@ -1,5 +1,5 @@
 import { Document, Types } from 'mongoose';
-import { ILike } from 'liketype';
+import { ILike } from 'likes';
 
 interface IReview extends Document {
   title?: string;
