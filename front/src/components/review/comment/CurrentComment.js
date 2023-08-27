@@ -52,8 +52,6 @@ const CurrentComments = ({
         className="link"
       >
         {/* 임시로 2개!! 원래 3개임 */}
-        {/* 불러올 수 있는 게 3개까지밖에 없어서 '더보기' 못열어 ㅋㅋ 그럼 그냥 2개로 줄이자 */}
-        {/* 갖고있는 걸로 가능할까?? 근데 그러려면 api 또 여러번 쫘라라락 쏴야함 */}
         {commentList?.length > 2 && `댓글 ${commentList.length}개 모두 보기`}
       </div>
     </div>

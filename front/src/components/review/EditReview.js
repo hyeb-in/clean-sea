@@ -19,10 +19,16 @@ import { TOAST_POPUP_STATUS } from "../../constants";
 // to do: 불필요한 매개변수 지울 것
 const EditReview = () => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, closeModal } = useModal();
+  const {
+    modalVisible,
+    showServerErrorModal,
+    showSuccessMsgModal,
+    showDeleteConfirmModal,
+    closeModal,
+  } = useModal();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const { review, setReviews } = modalVisible.data;
-
   // 리뷰 title, content 초기값 설정을 위해 review 정보를 가져온다
   // <Review />에서 수정 버튼 클릭 할 때 review값을 modalVisible에 저장한다
   const [userInputValues, setUserInputValues] = useState({
@@ -57,7 +63,7 @@ const EditReview = () => {
         userInputValues.title.length < 4 ||
         userInputValues.content.length < 4
       ) {
-        showToastPopup(
+        return showToastPopup(
           "제목과 내용은 4글자 이상 작성해주세요",
           TOAST_POPUP_STATUS.alert
         );
@@ -109,10 +115,19 @@ const EditReview = () => {
       )}
       <Modal
         keyboard={false}
-        dialogClassName="addreview__modalWrapper"
+        dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
         className="px-5"
         show={modalVisible.type === MODAL_TYPE.editReview}
-        onHide={closeModal}
+        onHide={() => {
+          if (userInputValues.title !== "" || userInputValues.content !== "") {
+            // 내용이 있다면 다시 한 번 확인하는 모달창에 표시한다
+            setShowConfirmModal(true);
+          } else {
+            closeModal();
+            setUserInputValues({ title: "", content: "" }); // 입력창 비워주기
+          }
+        }}
+        onClick={(e) => e.stopPropagation()}
         centered
         backdrop="static"
       >
@@ -136,6 +151,14 @@ const EditReview = () => {
             </div>
           }
         >
+          {isFailed && showServerErrorModal(true)}
+          {isSuccessful && showSuccessMsgModal(isSuccessful)}
+          {showConfirmModal &&
+            showDeleteConfirmModal(
+              showDeleteConfirmModal,
+              setShowConfirmModal,
+              closeModal
+            )}
           {
             <Form onSubmit={onSubmit} className="addReview__form">
               <Button

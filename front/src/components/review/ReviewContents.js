@@ -3,18 +3,16 @@ import Like from "../common/microComponents/Like";
 import { UserStateContext } from "../../App";
 import { IS_LIKE } from "../../constants";
 import useReview from "../../hooks/useReview";
-import {
-  ShowMoreButton,
-  truncate,
-} from "../common/microComponents/ShowMoreButton";
 
 const ReviewContents = ({ review, className }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const hasCommentsMoreThanThree = review.comments?.length > 3;
+
   const [showDetails, setShowDetails] = useState(false);
   const iLiked = loggedInUser && review.isLike === IS_LIKE.yes;
   const { setReviews } = useReview();
-  console.log(showDetails);
+
+  const [likeCountState, setLikeCountState] = useState(review.comments?.length);
+  const hasCommentsMoreThanThree = review.comments?.length > 3;
 
   const { _id: reviewId, title, content, likeCount } = review;
   return (
@@ -33,13 +31,17 @@ const ReviewContents = ({ review, className }) => {
         )}
       </div>
       {/* 이름과 제목, 내용 */}
-      <div className={`comment__title ${className}`}>
+      <div className={`comment__title`}>
         <span className="">{title}</span>
-        <div className="text-overflow">{content}</div>
-        <ShowMoreButton
-          content={content}
-          onClick={() => setShowDetails(!showDetails)}
-        />
+        <div className={!showDetails && "text-overflow"}>{content}</div>
+        {!showDetails && (
+          <div
+            onClick={() => setShowDetails(true)}
+            className={`text-timestamp link show-more-btn`}
+          >
+            더보기
+          </div>
+        )}
       </div>
     </>
   );

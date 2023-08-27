@@ -113,6 +113,7 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
       {/* 리뷰 입력 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
       <Modal
         centered
+        keyboard={false}
         dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
         className="px-5"
         show={modalVisible.type === MODAL_TYPE.addReview}
@@ -128,6 +129,7 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
           }
         }}
         onClick={(e) => e.stopPropagation()}
+        backdrop="static"
         // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
         // to do: space bar입력시 모달창 사라짐 버그 (브라우저에 따라서 다른 듯? 확인하기)
       >
