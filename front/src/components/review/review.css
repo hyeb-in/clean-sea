@@ -29,7 +29,7 @@ textarea:focus {
   height: max-content;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .addReview__form.flexible-col,
   .review.flexible-col {
     display: flex;
@@ -37,7 +37,7 @@ textarea:focus {
   }
 }
 /* 큰 화면에서 flex-row 스타일 적용 */
-@media (min-width: 601px) {
+@media (min-width: 801px) {
   .addReview__form.flexible-col,
   .review.flexible-col {
     display: flex;
@@ -51,13 +51,15 @@ textarea:focus {
   min-width: 350px;
   width: 100%;
 }
-
-@media (max-width: 600) {
+.review__flexible-child {
+  padding: 0;
+}
+@media (max-width: 800) {
   .review__flexible-child {
     width: 100%;
   }
 }
-@media (min-width: 601px) {
+@media (min-width: 801px) {
   .review__flexible-child {
     max-width: 50%;
   }
@@ -86,13 +88,18 @@ textarea:focus {
   right: 0;
 }
 .carousel-bg-black {
-  background-color: black;
+  /* background-color: black; */
+  /* background-color: white; */
 }
 .carousel-bg-white {
-  background-color: white;
+  /* background-color: white; */
 }
 
 /* 커맨트 */
+.comment-container {
+  overflow: auto;
+  height: 400px;
+}
 .comment__author {
   font-weight: 600;
   min-width: 100%;

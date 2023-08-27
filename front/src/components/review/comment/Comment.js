@@ -24,30 +24,7 @@ const Comment = ({ review, comment }) => {
   const isButtonsVisible = isMyComment && !isEditing;
   const isCommentEditBtnVisible =
     isMyComment && modalVisible.type === MODAL_TYPE.commentsList;
-
-  const editComment = async (e) => {
-    e.preventDefault();
-    if (!isMyComment) {
-      // return setToastMsg("다른 사람의 게시물을 수정할 수 없습니다");
-      alert("다른사람 게시물 수정못함");
-    }
-    try {
-      // const res = await Api.put(`/comments/${postId}`);
-    } catch (error) {
-      console.log(error);
-      // to do: 에러 메세지 핸들링
-    }
-  };
-
-  const deleteComment = async () => {
-    if (!isMyComment) {
-      alert("다른 사람의 게시물");
-    }
-    console.log("삭제");
-    //     // const res = await Api.delete(`/comments/${postId}`);
-    //     console.log(postId);
-  };
-
+  console.log(comment, "from comment compon");
   return (
     <Container className="flex">
       <Row>

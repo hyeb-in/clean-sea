@@ -1,15 +1,15 @@
 import Comment from "./Comment";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
-import { useState } from "react";
 
 const CurrentComments = ({
   review,
   setReviews,
-  commentList,
-  setCommentList,
   selectedReview,
   setSelectedReview,
+  commentList,
+  setCommentList,
   newCommentsList,
+  setNewCommentsList,
 }) => {
   const { openModal } = useModal();
 
@@ -22,7 +22,7 @@ const CurrentComments = ({
       {/* 순서 역순이어야 함 ㅋㅋ */}
       {commentList?.map(
         (comment, index) =>
-          index < 3 && (
+          index < 2 && (
             <div key={comment._id}>
               <Comment
                 comment={comment}
@@ -41,18 +41,22 @@ const CurrentComments = ({
           />
         </div>
       ))}
+      {/* 댓글 더보기 클릭시 댓글 상세 모달창으로 이동 */}
       <div
         onClick={() =>
           openModal(MODAL_TYPE.commentsList, {
             review,
             setReviews,
             comments: commentList,
-            setCommentList,
+            newCommentsList,
+            setNewCommentsList,
           })
         }
         className="link"
       >
         {/* 임시로 2개!! 원래 3개임 */}
+        {/* 불러올 수 있는 게 3개까지밖에 없어서 '더보기' 못열어 ㅋㅋ 그럼 그냥 2개로 줄이자 */}
+        {/* 갖고있는 걸로 가능할까?? 근데 그러려면 api 또 여러번 쫘라라락 쏴야함 */}
         {commentList?.length > 2 && `댓글 ${commentList.length}개 모두 보기`}
       </div>
     </>

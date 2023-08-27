@@ -15,7 +15,7 @@ const ReviewTitle = ({ children, review, onEditReview }) => {
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
 
   return (
-    <div className="d-flex align-items-center justify-content-between link px-0">
+    <div className="d-flex align-items-center justify-content-between link px-0 commentModal">
       <div
         sm="auto"
         className="px-0"

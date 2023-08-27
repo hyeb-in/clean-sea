@@ -3,11 +3,7 @@ import { Container } from "react-bootstrap";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
 import * as Api from "../../Api";
-import {
-  HandlerEnabledContext,
-  ModalVisibleContext,
-  UserStateContext,
-} from "../../App";
+import { ModalVisibleContext, UserStateContext } from "../../App";
 import ActionSelectorModal from "../common/popup/ActionSelectorModal";
 import EditReview from "./EditReview";
 import CommentsModal from "./comment/CommentsModal";
@@ -22,7 +18,6 @@ const ReviewsList = ({ reviews, setReviews }) => {
   const isActionPopupOpen = modalVisible?.type === MODAL_TYPE.actionSelector;
   const isCommentListPopupOpen = modalVisible?.type === MODAL_TYPE.commentsList;
   const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
-
   const fetchPrivateReviews = async () =>
     await Api.get("reviews/reviewListLogin");
   const fetchPublicReviews = async () => await Api.get("reviews/reviewList");
@@ -35,6 +30,7 @@ const ReviewsList = ({ reviews, setReviews }) => {
         if (loggedInUser) {
           const res = await fetchPrivateReviews();
           if (!res.data) alert("로그인 유저의 데이터를 불러올 수 없습니다");
+          console.log(res.data);
           setReviews(res.data);
           setIsLoaded(true);
         } else {

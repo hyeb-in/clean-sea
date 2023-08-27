@@ -47,6 +47,7 @@ const Review = ({ review, setReviews, selectedReview }) => {
                 commentList={commentList}
                 setCommentList={setCommentList}
                 newCommentsList={newCommentsList}
+                setNewCommentsList={setNewCommentsList}
               />
             </div>
             {/* 댓글 다는 창이 있다? reviewId가 필요함  */}

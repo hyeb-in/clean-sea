@@ -3,7 +3,13 @@ import { Button, Form } from "react-bootstrap";
 import { ModalVisibleContext, UserStateContext } from "../../../App";
 import * as Api from "../../../Api";
 
-const AddCommentForm = ({ review, setReviews, setNewCommentsList }) => {
+const AddCommentForm = ({
+  review,
+  setReviews,
+  setNewCommentsList,
+  modalCommentList,
+  setModalCommentList,
+}) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
   // 부모 컴포넌트로부터 데이터를 받을 수 있다(리뷰 페이지에서 작성되는 경우)
@@ -45,7 +51,13 @@ const AddCommentForm = ({ review, setReviews, setNewCommentsList }) => {
     <Form onSubmit={handleCommentSubmit} className="comment__form">
       <input
         value={newCommentValue}
-        onChange={(e) => setNewCommentValue(e.target.value)}
+        onChange={(e) => {
+          if (setModalCommentList) {
+            setModalCommentList(e.target.value);
+          } else {
+            setNewCommentValue(e.target.value);
+          }
+        }}
         placeholder="댓글 달기..."
         className="comment__input"
       />
