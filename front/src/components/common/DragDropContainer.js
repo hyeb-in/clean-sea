@@ -13,21 +13,20 @@ const DragDropContainer = ({
   formRef,
 }) => {
   const { modalVisible } = useContext(ModalVisibleContext);
-
+  const [inputFile, setInputFile] = useState(null);
   let fileCount = 0;
   let totalSize = 0;
 
   // url 형식: 'blob:http://localhost:3001/06d1eea8-6299-4a3f-8bc8-98b3d5971515'
   // 파일 => blob => image url로 변경 => preview에 저장해서 이미지 슬라이드로 띄운다
   const handleFileChange = (e) => {
-    const files = e.target.files;
-    if (!files) return alert("파일이 선택되지 않았습니다");
-    const targetFileList = Array.from(files);
+    console.log(inputFile);
+    // if (!inputFile) return alert("파일이 선택되지 않았습니다");
+    const targetFileList = Array.from(inputFile);
     setFormDataFiles(targetFileList);
-    fileCount += targetFileList.length;
+    fileCount += targetFileList?.length;
     // FileList는 유사배열이기때문에 targetFileList.forEach 이런식으로 배열의 메소드를 사용할 수 없다
     // 배열 메소드 사용하려면 변환 후 사용하거나 apply call 사용해야함
-    console.log(typeof targetFileList[0].size);
     if (targetFileList.length > 0) {
       targetFileList.forEach((file) => {
         totalSize += file.size;
@@ -60,6 +59,7 @@ const DragDropContainer = ({
       blobUrls.push(url);
     });
     setPreview(blobUrls);
+    console.log(blobUrls);
   };
 
   useEffect(() => {
@@ -76,7 +76,10 @@ const DragDropContainer = ({
       {preview && preview.length > 0 ? (
         <CarouselWrapper preview={preview} setPreview={setPreview} />
       ) : (
-        <DragnDrop handleFileChange={handleFileChange} formRef={formRef} />
+        <DragnDrop
+          handleFileChange={handleFileChange}
+          setInputFile={setInputFile}
+        />
       )}
     </>
   );

@@ -1,15 +1,21 @@
 .comment__timestamp {
   width: 100%;
   text-align: right;
+  margin-left: 10px;
+}
+.comments-container {
+  max-height: 300px;
+  overflow: auto;
 }
 .commentModal__title {
   /* background-color: white; */
 }
-
 .commentModal {
-  /* background-color: white; */
+  background-color: #f8f9fb;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
 }
-
 .commentModal__modalWrapper {
   max-width: 100%;
   margin: 0 60px;

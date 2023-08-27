@@ -6,6 +6,7 @@ import Avatar from "../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { UserStateContext } from "../../App";
 import useModal, { MODAL_TYPE } from "../../hooks/useModal";
+import Timestamp from "../common/microComponents/Timestamp";
 
 const ReviewTitle = ({ review, setReviews }) => {
   const navigate = useNavigate();
@@ -15,8 +16,7 @@ const ReviewTitle = ({ review, setReviews }) => {
   return (
     <div className="d-flex align-items-center justify-content-between link px-0 commentModal">
       <div
-        sm="auto"
-        className="px-0"
+        className="px-0 review__title"
         onClick={() => navigate(`/users/${review?.author}`)}
       >
         <Avatar width="40" />
@@ -26,6 +26,7 @@ const ReviewTitle = ({ review, setReviews }) => {
         >
           {review?.userName}
         </div>
+        <Timestamp createdAt={review.createdAt} />
       </div>
 
       {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}

@@ -10,7 +10,6 @@ import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 import useToast from "../../hooks/useToast";
 import { TOAST_POPUP_STATUS } from "../../constants";
 import ToastWrapper from "../common/popup/ToastWrapper";
-import ConfirmDeleteModal from "../common/popup/ConfirmDeleteModal";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -183,7 +182,6 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
         )}
         {/* submit 후 결과 -> 2. success or fail */}
         {/* to do: 버그수정. 공유되었습니다 모달창 뜬 후에 x 버튼이 아니라 바깥 창을 클릭하면 '게시글을 삭제하시겠어요?' 팝업이 뜸 */}
-
         {isFailed && showServerErrorModal(true)}
         {isSuccessful && showSuccessMsgModal(isSuccessful)}
         {showConfirmModal &&

@@ -23,6 +23,8 @@ import ResponseIndicator from "./components/common/indicators/ResponseIndicator"
 import axios from "axios";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
+import useToast from "./hooks/useToast";
+import ToastWrapper from "./components/common/popup/ToastWrapper";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -45,24 +47,24 @@ function App() {
 
   // 모든 요청에 isHandlerEnabled(상태 관리)를 함께 보낸다
   axios.interceptors.request.use((config) => {
-    if (config.isHandlerEnabled) {
-      console.log("from App.js REQ.use isHandlerEnabled", isHandlerEnabled);
-    }
+    // if (config.isHandlerEnabled) {
+    //   console.log("from App.js REQ.use isHandlerEnabled", isHandlerEnabled);
+    // }
     return config;
   });
 
   axios.interceptors.response.use(
     (response) => {
-      if (response.config.isHandlerEnabled) {
-        console.log(
-          `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`
-        );
-        setModalOptions({
-          state: true,
-          description: `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`,
-          title: "Request succeeded!",
-        });
-      }
+      // if (response.config.isHandlerEnabled) {
+      //   console.log(
+      //     `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`
+      //   );
+      //   setModalOptions({
+      //     state: true,
+      //     description: `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`,
+      //     title: "Request succeeded!",
+      //   });
+      // }
       return response;
     },
     (error) => {
@@ -156,6 +158,7 @@ function App() {
                       setUserInputValues={setUserInputValues}
                     />
                   )}
+
                 <Routes>
                   <Route path="/" exact element={<Main />} />
                   <Route path="/login" exact element={<Login />} />

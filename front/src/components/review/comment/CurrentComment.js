@@ -13,7 +13,7 @@ const CurrentComments = ({
   const { openModal } = useModal();
   const { setReviews } = useReview();
   return (
-    <>
+    <div className="comments-container">
       {/* 댓글 3개까지만 미리보기 */}
       {/* 추가된 커맨트까지 갯수가 3개 이상이 된다면 이전 커맨트는 사라지게 해준다 */}
       {/* 순서 역순이어야 함 ㅋㅋ */}
@@ -29,7 +29,7 @@ const CurrentComments = ({
             </div>
           )
       )}
-      {newCommentsList?.map((comment, index) => (
+      {newCommentsList?.map((comment) => (
         <div key={comment._id}>
           <Comment
             comment={comment}
@@ -56,7 +56,7 @@ const CurrentComments = ({
         {/* 갖고있는 걸로 가능할까?? 근데 그러려면 api 또 여러번 쫘라라락 쏴야함 */}
         {commentList?.length > 2 && `댓글 ${commentList.length}개 모두 보기`}
       </div>
-    </>
+    </div>
   );
 };
 

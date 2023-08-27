@@ -37,10 +37,9 @@ const Review = ({ review, setReviews, setReview }) => {
             <CarouselWrapper preview={IMAGE_URLS} />
             {/* 사진이 없는 형식일 경우에 레이아웃이 망가지는데 어떡해야할지 모르겠음! */}
           </Card.Header>
-          <Card.Body className="px-0 py-12 pt-0">
-            <div xs="auto" className="pb-3 ">
+          <Card.Body className="py-12 pt-0">
+            <div className="pb-3 ">
               <ReviewContents review={review} className="d-flex flex-column" />
-
               <div>
                 <CurrentComments
                   review={review}
