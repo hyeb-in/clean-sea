@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { 
+import {
+  getBeachByBeachName,
   getBeachById,
   getBeachByRegionAndYear,
   getBeaches,
@@ -17,6 +18,8 @@ beachRouter
 beachRouter
   .get('/beachesbyregion/:address/:year', getBeachByRegionAndYear);
   // .get('/beachesbyregion/:address/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+
+beachRouter.get("/beachbyname/:name", getBeachByBeachName);
 
 beachRouter
   .get('/beaches/:year', getBeachByRegionAndYearSpecific);

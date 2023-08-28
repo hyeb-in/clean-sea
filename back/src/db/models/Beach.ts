@@ -2,6 +2,11 @@ import { BeachModel, IBeach } from "../schemas/beachSchema";
 import { Types } from "mongoose";
 import { BeachData } from "beach";
 
+async function BeachByBeachName(name: IBeach): Promise<IBeach[]> {
+  const getBeaches = await BeachModel.findOne(name) as IBeach[];
+  return getBeaches;
+}
+
 async function BeachByBeachId(_id: Types.ObjectId): Promise<IBeach[]> {
   const getBeaches = await BeachModel.findOne({ _id : _id }) as IBeach[];
   return getBeaches;
@@ -45,4 +50,4 @@ async function Beaches(): Promise<IBeach[]> {
   return getBeaches;
 }
 
-export { BeachByBeachId, BeachByRegionAndYear, BeachByRegionAndYearSpecific, Beaches };
+export { BeachByBeachId, BeachByBeachName, BeachByRegionAndYear, BeachByRegionAndYearSpecific, Beaches };

@@ -1,17 +1,33 @@
 import { Request, Response, NextFunction } from 'express';
-import { 
-  getBeachByIdService, 
-  getBeachByRegionAndYearService, 
-  getBeachByRegionAndYearSpecificService, 
-  getBeachesService 
+import {
+  getBeachByBeachNameService,
+  getBeachByIdService,
+  getBeachByRegionAndYearService,
+  getBeachByRegionAndYearSpecificService,
+  getBeachesService
 } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
 import { IBeach } from '../types/beach';
 import { Types } from "mongoose";
 
+const getBeachByBeachName = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const name = req.params.name;
+
+    const result = await getBeachByBeachNameService({ name } as IBeach);
+    res.status(200).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
 const getBeachById = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -25,8 +41,8 @@ const getBeachById = async (
 };
 
 const getBeachByRegionAndYear = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -42,8 +58,8 @@ const getBeachByRegionAndYear = async (
 
 // 지역별 및 연도별 가져오기 및 추가조건
 const getBeachByRegionAndYearSpecific = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -59,8 +75,8 @@ const getBeachByRegionAndYearSpecific = async (
 
 
 const getBeaches = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
   ) => {
   try {
@@ -71,4 +87,4 @@ const getBeaches = async (
   }
 };
 
-export { getBeachById, getBeachByRegionAndYear, getBeachByRegionAndYearSpecific, getBeaches };
+export { getBeachByBeachName, getBeachById, getBeachByRegionAndYear, getBeachByRegionAndYearSpecific, getBeaches };
