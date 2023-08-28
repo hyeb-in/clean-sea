@@ -12,4 +12,4 @@ enum TargetType {
     isLike? : 'yes' | 'no';
   }
 
-  export { ILike };
+  export { ILike, TargetType };
