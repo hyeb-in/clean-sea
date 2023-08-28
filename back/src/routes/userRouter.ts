@@ -5,7 +5,7 @@ import {
   getUser,
   resetPassword,
   signUpUser,
-  updateUser, updateUserProfile,
+  updateUser,
 } from '../controllers/userController'
 import { jwtAuthentication } from '../middlewares/authenticateJwt'
 import {
@@ -25,8 +25,6 @@ userRouter.get("/current", jwtAuthentication, getUser);
 userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
-
-userRouter.put('/photo', express.static("profileImage"), updateUserProfile)
 
 userRouter
   .route("/:userId")
