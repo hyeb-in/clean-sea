@@ -10,6 +10,8 @@ import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 import useToast from "../../hooks/useToast";
 import { TOAST_POPUP_STATUS } from "../../constants";
 import ToastWrapper from "../common/popup/ToastWrapper";
+import { faBomb } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -22,8 +24,8 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const {
     modalVisible,
-    showServerErrorModal,
-    showSuccessMsgModal,
+    // showServerErrorModal,
+    // showSuccessMsgModal,
     showDeleteConfirmModal,
     closeModal,
   } = useModal();
@@ -31,11 +33,6 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
   const [formDataFiles, setFormDataFiles] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(RESULT_ENUM.NOT_YET);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  const isPosting = uploadStatus === RESULT_ENUM.UPLOADING;
-  const isFailed = uploadStatus === RESULT_ENUM.FAIL;
-  const isSuccessful = uploadStatus === RESULT_ENUM.SUCCESS;
-  const isFetched = isFailed || isSuccessful;
 
   const {
     showToast,
@@ -70,7 +67,6 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
       formData.append("uploadFile", formDataFiles);
       formData.append("title", userInputValues.title);
       formData.append("content", userInputValues.content);
-      setUploadStatus(RESULT_ENUM.UPLOADING);
       console.log(formData, "formData 형식");
       console.log(formDataFiles, "변경 전 형식");
 
@@ -80,7 +76,6 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
         formData
       );
 
-      setUploadStatus(RESULT_ENUM.UPLOADING);
       if (!res.ok) {
         return setUploadStatus(RESULT_ENUM.FAIL);
       }
@@ -90,14 +85,18 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
       setUserInputValues({ title: "", content: "" });
       closeModal();
     } catch (error) {
-      // console.error(error.response?.data.error); // 메세지 뜸 / 에러날 때도 있음
-      // console.log(error.response?.status);
       if (error.status === 404) {
         setUploadStatus(RESULT_ENUM.FAIL);
         setShowConfirmModal(true);
       }
     }
   };
+  console.log(uploadStatus);
+
+  const isPosting = uploadStatus === RESULT_ENUM.UPLOADING;
+  const isFailed = uploadStatus === RESULT_ENUM.FAIL;
+  const isSuccessful = uploadStatus === RESULT_ENUM.SUCCESS;
+  const isFetched = isFailed || isSuccessful;
 
   return (
     <>
@@ -133,10 +132,10 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
         // 이벤트 전파 방지용 >> 없을 시 모달창 클릭할 때도 모달창이 사라지는 현상 방지
         // to do: space bar입력시 모달창 사라짐 버그 (브라우저에 따라서 다른 듯? 확인하기)
       >
-        {/* 모달창 내부: 입력 받는 공간 */}
+        {/* 모달창 내부: 글 작성 */}
         {!isPosting && (
           <ModalBodyWrapper
-            title="글 작성하기"
+            title="게시글 작성하기"
             content={
               <div className="addReview__form flexible-col">
                 <DragDropContainer
@@ -153,6 +152,40 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
               </div>
             }
           >
+            {isPosting && (
+              <ModalBodyWrapper
+                show={isPosting}
+                title="게시물을 업로드하는 중입니다"
+                content={<SpinnerWrapper />}
+              />
+            )}
+            {isFailed && (
+              <ModalBodyWrapper
+                show={isFailed}
+                title="게시물을 업로드하지 못했습니다"
+                content={
+                  <FontAwesomeIcon
+                    icon={faBomb}
+                    className="indicator-success"
+                  />
+                }
+              />
+            )}
+            {isSuccessful && (
+              <ModalBodyWrapper
+                show={isSuccessful}
+                title="게시물을 업로드하지 못했습니다"
+                content={
+                  <FontAwesomeIcon icon={faBomb} className="indicator-fail" />
+                }
+              />
+            )}
+            {showConfirmModal &&
+              showDeleteConfirmModal(
+                showDeleteConfirmModal,
+                setShowConfirmModal,
+                closeModal
+              )}
             {/* 미디어 쿼리 적용(flexible-col class): 작은 화면에선 flex column, 큰 화면에선 row로 보여준다 */}
             {/* to do: 폼... 위치...여기가 아닐텐데...? */}
             <Form onSubmit={addReview} className="addReview__form">
@@ -167,31 +200,6 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
             </Form>
           </ModalBodyWrapper>
         )}
-        {isPosting && (
-          <ModalBodyWrapper
-            show={isPosting}
-            onHide={() => {
-              if (
-                userInputValues.title !== "" ||
-                userInputValues.content !== ""
-              ) {
-                setShowConfirmModal(false);
-              }
-            }}
-            title="게시물을 업로드하는 중입니다"
-            content={<SpinnerWrapper />}
-          />
-        )}
-        {/* submit 후 결과 -> 2. success or fail */}
-        {/* to do: 버그수정. 공유되었습니다 모달창 뜬 후에 x 버튼이 아니라 바깥 창을 클릭하면 '게시글을 삭제하시겠어요?' 팝업이 뜸 */}
-        {isFailed && showServerErrorModal(true)}
-        {isSuccessful && showSuccessMsgModal(isSuccessful)}
-        {showConfirmModal &&
-          showDeleteConfirmModal(
-            showDeleteConfirmModal,
-            setShowConfirmModal,
-            closeModal
-          )}
       </Modal>
     </>
   );
