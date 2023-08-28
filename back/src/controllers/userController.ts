@@ -9,7 +9,10 @@ import {
 import {IRequest} from "user";
 import {findUserByEmail} from "../db/models/User";
 import {errorGenerator} from "../utils/errorGenerator";
-import UserModel from "../db/schemas/userSchema";
+
+import { FileRequest } from 'upload'
+import { StatusCodes } from 'http-status-codes'
+import { handleProfileFileUpload } from '../middlewares/uploadMiddleware'
 
 /**
  * @param {*} req name,email,password
@@ -57,6 +60,7 @@ export const getUser = async (
     next: NextFunction
 ) => {
     try {
+        console.log(req.user)
         return res.status(200).json(req.user);
     } catch (error) {
         next(error);
@@ -79,6 +83,24 @@ export const updateUser = async (
         const updatedUser = await updateUserService(userId, inputData);
 
         res.status(200).json(updatedUser);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const updateUserProfile = (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
+    try {
+        handleProfileFileUpload(req as FileRequest, res, async (error: any) => {
+            if (error) {
+                return next(error)
+            }
+
+            return res.status(StatusCodes.CREATED).json();
+        })
     } catch (error) {
         next(error);
     }

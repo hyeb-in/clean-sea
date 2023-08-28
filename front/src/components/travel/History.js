@@ -1,49 +1,48 @@
-import React, { useState, useEffect, useContext  } from 'react'
+import React, { useState, useEffect, useContext } from "react";
 import {
   Col, Container, Row, Card, Button, Modal, FormControl
 } from "react-bootstrap";
 import * as Api from "../../Api";
 import { UserStateContext } from "../../App";
-import TravelItem from './TravelItem';
+import TravelItem from "./TravelItem";
 import SearchInput from "./SearchInput";
+import { useToggle } from "../../customhooks/modalCustomHooks";
 
 const History = ({ displayToast }) => {
   const [travels, setTravels] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useToggle();
+
   const { user } = useContext(UserStateContext);
   const [newTravel, setNewTravel] = useState({
     author: user._id,
-    beachId: '',
-    date: ''
+    beachId: "",
+    date: ""
   });
 
   const handleBeachIdChange = (selectedId) => {
     setNewTravel({ ...newTravel, beachId: selectedId });
   };
 
-  const handleModalClose = () => setShowModal(false);
-  const handleModalOpen = () => setShowModal(true);
-
   const fetchTravelList = async () => {
     try {
-      const response = await Api.get('travels/travelList');
+      const response = await Api.get("travels/travelList");
       setTravels(response.data);
     } catch (error) {
-      displayToast('방문 로그 조회 실패.');
+      displayToast("방문 로그 조회 실패.");
     }
   };
 
   const handleNewTravelSubmit = async () => {
     try {
       const travelData = { ...newTravel, date: new Date(newTravel.date) };
-      await Api.post('travels/register', travelData);
-      displayToast('방문 로그 등록 성공.');
+      await Api.post("travels/register", travelData);
+      displayToast("방문 로그 등록 성공.");
     } catch (error) {
-      displayToast('방문 로그 등록 실패.');
+      displayToast("방문 로그 등록 실패.");
     }
 
     await fetchTravelList();
-    handleModalClose();
+    setShowModal();
   };
 
   useEffect(() => {
@@ -51,7 +50,8 @@ const History = ({ displayToast }) => {
   }, []);
 
   const handleTravelUpdate = (travelId, updatedTravel) => {
-    const updatedTravels = travels.map(travel => travel._id === travelId ? updatedTravel : travel);
+    const updatedTravels = travels.map(
+      travel => travel._id === travelId ? updatedTravel : travel);
     setTravels(updatedTravels);
   };
 
@@ -66,8 +66,8 @@ const History = ({ displayToast }) => {
               </Col>
               <Col xs={6} className="d-flex justify-content-end">
                 <Button
-                  size="sm" style={{ marginTop: '5px', marginBottom: '5px' }}
-                  onClick={handleModalOpen}
+                  size="sm" style={{ marginTop: "5px", marginBottom: "5px" }}
+                  onClick={setShowModal}
                 >
                   로그 작성
                 </Button>
@@ -80,8 +80,10 @@ const History = ({ displayToast }) => {
               <Col>
                 {travels.length > 0 ? (
                   travels.map((travel, index) => (
-                    <TravelItem key={index} travelData={travel} onTravelUpdate={handleTravelUpdate}
-                                onTravelDelete={fetchTravelList} displayToast={displayToast} />
+                    <TravelItem key={index} travelData={travel}
+                                onTravelUpdate={handleTravelUpdate}
+                                onTravelDelete={fetchTravelList}
+                                displayToast={displayToast}/>
                   ))
                 ) : (
                   <p className="m-2">방문 로그가 없습니다</p>
@@ -91,21 +93,23 @@ const History = ({ displayToast }) => {
           </Card.Body>
         </Card>
 
-        <Modal show={showModal} onHide={handleModalClose}>
+        <Modal show={showModal} onHide={setShowModal}>
           <Modal.Header closeButton>
             <Modal.Title>새 방문 로그 작성</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <SearchInput onBeachIdSelected={handleBeachIdChange} displayToast={displayToast} />
+            <SearchInput onBeachIdSelected={handleBeachIdChange}
+                         displayToast={displayToast}/>
             <FormControl
               type="date"
               className="mt-2"
               value={newTravel.date}
-              onChange={(e) => setNewTravel({ ...newTravel, date: e.target.value })}
+              onChange={(e) => setNewTravel(
+                { ...newTravel, date: e.target.value })}
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleModalClose}>
+            <Button variant="secondary" onClick={setShowModal}>
               취소
             </Button>
             <Button variant="primary" onClick={handleNewTravelSubmit}>
@@ -115,7 +119,7 @@ const History = ({ displayToast }) => {
         </Modal>
       </Container>
     </>
-  )
-}
+  );
+};
 
 export default History;

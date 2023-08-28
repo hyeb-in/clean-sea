@@ -1,8 +1,8 @@
 import { MulterError } from "multer";
 import { insertFile, replacePlaceholder } from "../utils/uploads/upload";
 import { Request, Response, NextFunction } from "express";
-import { FileObjects, FileRequest } from "../types/upload";
-import { imageUpload } from "./fileUploadMiddleware";
+import { FileObjects, FileRequest } from 'upload';
+import { imageUpload, profileImages } from './fileUploadMiddleware'
 
 export function handleFileUpload(
   req: FileRequest,
@@ -79,6 +79,48 @@ export function handleFileUpload(
       }
 
       req.uploadFile = uploadFile;
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  });
+}
+
+
+export function handleProfileFileUpload(
+  req: FileRequest,
+  res: Response,
+  next: NextFunction
+) {
+  profileImages(req as Request, res, async function (err: any) {
+    try {
+      if (err instanceof MulterError) {
+        return next(err);
+      } else if (err) {
+        return next(err);
+      }
+      const files: FileObjects[] = req.files
+        ? ([] as FileObjects[]).concat(...Object.values(req.files))
+        : [];
+
+      if ((req as Request).method === "POST") {
+        const fileUrls: string[] = [];
+
+        for (const file of files) {
+          fileUrls.push(file.filename as string);
+        }
+
+        res.json(fileUrls);
+      } else if ((req as Request).method === "PUT") {
+        const fileUrls: string[] = [];
+
+        for (const file of files) {
+          fileUrls.push(file.filename as string);
+        }
+
+        res.json(fileUrls);
+      }
 
       next();
     } catch (error) {

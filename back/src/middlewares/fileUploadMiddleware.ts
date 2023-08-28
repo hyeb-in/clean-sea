@@ -22,4 +22,17 @@ const imageUpload = multer({
     fileFilter : imageFilter,
 });
 
-export { imageUpload };
+const profileImages = multer({
+    storage : multer.diskStorage({
+        destination: './profileImages/',
+        filename : function (req, file, cb) {
+            const ext = path.extname(file.originalname);
+            const fileName = `${Date.now()}${ext}`;
+            cb(null, fileName);
+        },
+
+    }),
+    fileFilter : imageFilter,
+}).array('files', 10);
+
+export { imageUpload, profileImages };
