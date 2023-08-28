@@ -48,10 +48,7 @@ export const updateUserService = async (
   let key: keyof IUser;
   for (key in inputData) {
     if (user[key] !== inputData[key]) {
-      if (typeof inputData[key] === 'string' || Array.isArray(inputData[key])) {
         changedValue[key] = inputData[key] as string | string[];
-      }
-
     }
   }
 

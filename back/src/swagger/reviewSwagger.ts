@@ -16,6 +16,39 @@
  *       author:
  *         type: string
  *         description: userId
+ *       userName:
+ *         type: string
+ *         description: user name
+ *       location:
+ *         type: string
+ *         description: location
+ *       uploadFile:
+ *         type: array
+ *         items:
+ *              type : string
+ *         description: upload imageFile
+ *       comments:
+ *         type: array
+ *         items:
+ *              type : string
+ *         description: user comment
+ *       commentCount:
+ *         type: number
+ *         description: comment Count
+ *       Likes:
+ *         type: array
+ *         items:
+ *              type : object
+ *              properties:
+ *                  userId:
+ *                      type: string
+ *                  isLike:
+ *                      type: string
+ *                      enum: ['yes', 'no']
+ *         description: Like Toggle
+ *       likeCount:
+ *         type: number
+ *         description: like count
  */
 
 /**
@@ -25,11 +58,6 @@
  *     summary: Create a new review
  *     tags: [Reviews]
  *     parameters:
- *       - name: userName
- *         in: formData
- *         required: false
- *         type: string
- *         description: username
  *       - name: location
  *         in: formData
  *         required: false
@@ -37,7 +65,7 @@
  *         description: location
  *       - name: uploadFile
  *         in: formData
- *         required: true
+ *         required: false
  *         type: file
  *         description: imageUpload
  *       - name: title
@@ -47,7 +75,7 @@
  *         description: title
  *       - name: content
  *         in: formData
- *         required: true
+ *         required: false
  *         type: string
  *         description: content
  *     requestBody:
@@ -142,6 +170,16 @@
  *         required: false
  *         type: string
  *         description: New content for the review
+ *       - name: location
+ *         in: formData
+ *         required: false
+ *         type: string
+ *         description: location
+ *       - name: uploadFile
+ *         in: formData
+ *         required: false
+ *         type: file
+ *         description: imageUpload
  *     requestBody:
  *       content:
  *         application/json:
@@ -154,22 +192,16 @@
  *               content:
  *                 type: string
  *                 description: New content for the review
- *     security:
- *       - bearerAuth: []
+ *     security: []
  *     responses:
  *       200:
- *         description: Updated review
+ *         description: Updated
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 title:
- *                   type: string
- *                   description: Updated review title
- *                 content:
- *                   type: string
- *                   description: Updated review content
+ *               $ref: '#/definitions/Review'
+ *       400:
+ *         description: Bad Request
  */
 
 /**
