@@ -4,6 +4,7 @@ import * as Api from "../../Api";
 import TravelImageWithText from "./TravelImageWithText";
 import SearchInput from "./SearchInput";
 import { useToggle } from "../../customhooks/modalCustomHooks";
+import { formatDate, formatDateWithoutTime } from './utils/travelUtils';
 
 const TravelItem = ({
   travelData,
@@ -63,34 +64,6 @@ const TravelItem = ({
   };
 
   const defaultImage = process.env.PUBLIC_URL + "/stamp.png";
-
-  const formatDate = (date) => {
-    let d = new Date(date);
-    let month = "" + (d.getMonth() + 1);
-    let day = "" + d.getDate();
-    let year = d.getFullYear();
-
-    if (month.length < 2)
-      month = "0" + month;
-    if (day.length < 2)
-      day = "0" + day;
-
-    return [year, month, day].join("-");
-  };
-
-  const formatDateWithoutTime = (date) => {
-    let d = new Date(date);
-    let month = "" + (d.getMonth() + 1);
-    let day = "" + d.getDate();
-    let year = d.getFullYear();
-
-    if (month.length < 2)
-      month = "0" + month;
-    if (day.length < 2)
-      day = "0" + day;
-
-    return [year, month, day].join("-");
-  };
 
   return (
     <>

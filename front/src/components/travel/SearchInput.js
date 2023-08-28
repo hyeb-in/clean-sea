@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, ListGroup } from "react-bootstrap";
 import * as Api from "../../Api";
-import beachList from "./beachList.json";
+import beachList from "./data/beachList.json";
 
 const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
 
