@@ -39,7 +39,11 @@ const Review = ({ review, setReviews, setReview }) => {
           </Card.Header>
           <Card.Body className="py-12 pt-0">
             <div className="pb-3 ">
-              <ReviewContents review={review} className="d-flex flex-column" />
+              <ReviewContents
+                review={review}
+                setReviews={setReviews}
+                className="d-flex flex-column"
+              />
               <div>
                 <CurrentComments
                   review={review}

@@ -21,9 +21,6 @@ const Comment = ({ review, comment, setModalCommentList }) => {
   const { postId, userId, content, userName, date } = comment;
 
   const isMyComment = loggedInUser && loggedInUser._id === userId;
-  const isButtonsVisible = isMyComment && !isEditing;
-  const isCommentEditBtnVisible =
-    isMyComment && modalVisible.type === MODAL_TYPE.commentsList;
 
   return (
     <>
@@ -35,12 +32,17 @@ const Comment = ({ review, comment, setModalCommentList }) => {
               width="30"
               onClick={() => navigate(`/users/${userId}`)}
             />
-            <strong className="text-author">{userName}</strong>
+            <span className="text-author">{userName}</span>
             {content}
           </span>
+
+          <Timestamp
+            createdAt={date}
+            className="text-timestamp comment__timestamp flex-justify-end"
+          />
           {/* 2. 댓글 목록에서 ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
           {/* 댓글 -> 수정으로 들어가면 댓글 창을 띄울 거라서 reviewId, review 정보가 필요함 */}
-          {isCommentEditBtnVisible && (
+          {isMyComment && (
             <div
               className="comment__col flex-justify-end "
               onClick={() => {
@@ -56,11 +58,7 @@ const Comment = ({ review, comment, setModalCommentList }) => {
                 });
               }}
             >
-              <Timestamp
-                createdAt={date}
-                className="text-timestamp comment__timestamp flex-justify-end"
-              />
-              <FontAwesomeIcon icon={faEllipsis} className="mx-3 link" />
+              {<FontAwesomeIcon icon={faEllipsis} className="mx-3 link" />}
             </div>
           )}
         </div>

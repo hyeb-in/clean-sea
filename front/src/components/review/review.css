@@ -119,6 +119,7 @@ textarea:focus {
 }
 .carousel-bg-white {
   /* background-color: white; */
+  max-width: 50%;
 }
 .review__contents {
   margin-top: 10px;
@@ -128,18 +129,23 @@ textarea:focus {
   overflow: auto;
   height: 400px;
   padding-left: 0;
+  margin-top: 20px;
 }
 .comment__flex {
   display: flex;
-  justify-items: space-between;
   margin-bottom: 10px;
+  justify-items: space-between !important;
 }
-
+.text-author {
+  margin-right: 10px;
+}
 .comment__col {
   display: flex;
+  align-items: center;
 }
 .comment__title {
   padding-top: 10px;
+  padding-bottom: 20px;
 }
 .w-100.bla {
   width: auto;
@@ -164,10 +170,10 @@ textarea:focus {
   word-break: break-all;
 }
 .comment__input {
-  margin-left: 0;
+  margin-left: 0 !important;
   background-color: none;
   border: none;
-  padding-right: 60px;
+
   /* Remove outline */
   outline: none;
   /* Reset padding and margin */
@@ -189,11 +195,12 @@ textarea:focus {
   font-weight: 500;
   font-size: 0.9rem;
   margin: 10px;
+  padding-right: 60px;
 }
 .comment__button {
   position: absolute;
   right: 0;
-  top: 5px;
+  top: 10px;
   border: none;
   padding-top: 10px;
 }

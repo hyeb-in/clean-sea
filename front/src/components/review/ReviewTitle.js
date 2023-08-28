@@ -38,7 +38,6 @@ const ReviewTitle = ({ review, setReviews }) => {
             className="black"
             onClick={() => {
               const data = {
-                target: MODAL_TYPE.editReview,
                 review,
                 setReviews,
               };

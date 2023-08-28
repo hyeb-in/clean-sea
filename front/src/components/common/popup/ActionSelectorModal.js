@@ -15,19 +15,27 @@ const ActionSelectorModal = () => {
   // reviewId가 있다면 reviewId를 삭제
   const { closeModal, openModal, modalVisible } = useModal();
   const isEditingReview = modalVisible.data.target === MODAL_TYPE.editReview;
-  const isDeleteingReview =
-    modalVisible.data.target === MODAL_TYPE.deleteReview;
 
-  const review = isEditingReview && modalVisible.data.review;
-  const setReviews = isEditingReview && modalVisible.data.setReviews;
+  const review = modalVisible?.data?.review;
+  const setReviews = modalVisible?.data?.setReviews;
   const commentId = modalVisible?.data?.commentId;
+  console.log(commentId, modalVisible.data);
+  //   FLOATING_REVIEW_DATA
+  // commentId
+  // setModalCommentList
 
+  //   review
+  // {_id: '64ec0ae1a48905af2d01e233', userName: 'WEWE', title: 'wefwfe222', content: 'wefwefew', author: '64e700bd9c79c25dbbafb6c6', …}
+  // setReviews
+  // "ACTION_SELECTOR"
+  console.log(review);
   const deleteById = async () => {
-    console.log(modalVisible.data);
     try {
-      if (isDeleteingReview) {
+      if (!review._id) throw new Error("정보를 찾을 수 없습니다");
+
+      if (review) {
         const res = await Api.delete(`reviews/${review._id}`);
-        if (!res.status === 204) {
+        if (!res.ok === 204) {
           throw new Error("failed");
         }
         setReviews((current) => {
@@ -41,7 +49,7 @@ const ActionSelectorModal = () => {
       // alert("성공");
       closeModal();
     } catch (error) {
-      alert(error);
+      console.log(error);
       // to do: 에러 메세지!_!
     }
   };
