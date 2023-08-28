@@ -9,6 +9,7 @@ interface IReview extends Document {
   author?: string;
   uploadFile?: string[];
   comments?: Types.ObjectId[];
+  commentCount? : number;
   likeCount?: number;
   isLike?: 'yes' | 'no';
   Likes?: ILike[];

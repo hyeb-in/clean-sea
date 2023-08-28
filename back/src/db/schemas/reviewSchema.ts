@@ -26,6 +26,12 @@ const ReviewSchema : Schema<IReview> = new Schema({
           ref: 'Comment',
         },
       ],
+      commentCount: {
+        type: Number,
+        default: function () {
+          return this.comments.length;
+        },
+      },
       Likes : [
       {
         userId : {
