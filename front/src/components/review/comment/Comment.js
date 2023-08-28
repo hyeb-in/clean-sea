@@ -93,11 +93,14 @@ const Comment = ({ review, comment }) => {
                       setModalVisible({
                         type: MODAL_TYPE.actionSelector,
                         isVisible: true,
-                        data: editingData,
+                        data: {
+                          commentId: comment._id,
+                        },
                       });
                     }}
-                  ></div>
-                  {<FontAwesomeIcon icon={faX} className="mx-3 link" />}
+                  >
+                    <FontAwesomeIcon icon={faX} className="mx-3 link" />
+                  </div>
                 </div>
               ) : (
                 <Form onSubmit={onEditComment}>

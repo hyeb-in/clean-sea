@@ -20,3 +20,101 @@
   max-width: 100%;
   margin: 0 60px;
 }
+/* 커맨트 */
+.comment-container {
+  overflow: auto;
+  height: 400px;
+  padding-left: 0;
+  margin-top: 20px;
+}
+.comment__flex {
+  /* display: flex;  여기 flex하면 텍스트 넘침 */
+  margin-bottom: 10px;
+  /* justify-items: space-between !important; */
+}
+.comment__edit-input {
+  width: 100%;
+}
+.comment__btn-col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1px solid black;
+}
+.text-author {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.comment__col {
+  display: flex;
+  align-items: center;
+}
+.comment__title {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+.w-100.bla {
+  width: auto;
+}
+.comment__author {
+  font-weight: 600;
+  min-width: 100%;
+  display: inline-block;
+  white-space: nowrap;
+}
+.comment__avatar {
+  position: absolute;
+  top: 20px;
+}
+.comment__form {
+  /* display: flex;
+  flex-direction: column; */
+  position: relative;
+}
+.comment__content {
+  color: grey;
+  word-break: break-all;
+}
+.comment__input {
+  margin-left: 0 !important;
+  background-color: none;
+  border: none;
+
+  /* Remove outline */
+  outline: none;
+  /* Reset padding and margin */
+  padding: 0;
+  margin: 0;
+  /* Reset background */
+  background: none;
+  /* Reset font styles */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  /* Reset other styles */
+  color: inherit;
+  line-height: inherit;
+  width: 100%;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+  padding: 10px 0;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin: 10px;
+  padding-right: 60px;
+}
+.comment__button {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  border: none;
+  padding-top: 10px;
+}
+.position-rel {
+  position: relative;
+}
+.comment__avatar {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
