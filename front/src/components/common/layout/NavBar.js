@@ -17,7 +17,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Avatar from "../Avatar";
-import { MODAL_TYPE } from "../../../constants";
+import { MODAL_TYPE } from "../../../hooks/useModal";
 
 const NavBar = () => {
   const navigate = useNavigate();

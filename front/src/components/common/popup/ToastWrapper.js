@@ -11,13 +11,30 @@ import { Col, Container, Row, Toast, ToastContainer } from "react-bootstrap";
  * @example
  * <ToastWrapper text={text} onClose={onClose} status={TOAST_POPUP_STATUS.alert} />
  */
-const ToastWrapper = ({ text, onClose, status, position }) => {
+// const {
+//   showToast,
+//   showToastPopup,
+//   toastMessage,
+//   toastStatus,
+//   toastPosition,
+// } = useToast();
+
+// {showToast && (
+//   <ToastWrapper
+//     text={toastMessage}
+//     status={toastStatus}
+//     position={toastPosition}
+
+//   />
+// )}
+
+const ToastWrapper = ({ setShowToast, text, status, position }) => {
   return (
     <ToastContainer>
       <Toast
         className="toast-popup"
         animation={true}
-        onClose={onClose}
+        onClose={() => setShowToast(false)}
         position={position}
         autohide
         delay={2000}

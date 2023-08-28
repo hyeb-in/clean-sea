@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { ModalVisibleContext, UserStateContext } from "../../../App";
-import { MODAL_TYPE } from "../../../constants";
+import { UserStateContext } from "../../../App";
+import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 
 const NoReviewIndicator = () => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { setModalVisible } = useContext(ModalVisibleContext);
+  const { setModalVisible } = useModal();
   return (
     <Card.Body className="flex-column-center-center card noReviewIndicator">
       <Card.Title>작성된 리뷰가 없습니다</Card.Title>
@@ -20,7 +20,7 @@ const NoReviewIndicator = () => {
           onClick={() =>
             setModalVisible({
               type: MODAL_TYPE.addReview,
-              isVisible: false,
+              isVisible: true,
               data: null,
             })
           }

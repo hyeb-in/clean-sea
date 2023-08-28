@@ -22,7 +22,7 @@ import PageNotFound from "./pages/PageNotFound";
 import ResponseIndicator from "./components/common/indicators/ResponseIndicator";
 import axios from "axios";
 import * as Api from "./Api";
-import { MODAL_TYPE } from "./constants";
+import { MODAL_TYPE } from "./hooks/useModal";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -45,24 +45,24 @@ function App() {
 
   // 모든 요청에 isHandlerEnabled(상태 관리)를 함께 보낸다
   axios.interceptors.request.use((config) => {
-    if (config.isHandlerEnabled) {
-      console.log("from App.js REQ.use isHandlerEnabled", isHandlerEnabled);
-    }
+    // if (config.isHandlerEnabled) {
+    //   console.log("from App.js REQ.use isHandlerEnabled", isHandlerEnabled);
+    // }
     return config;
   });
 
   axios.interceptors.response.use(
     (response) => {
-      if (response.config.isHandlerEnabled) {
-        console.log(
-          `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`
-        );
-        setModalOptions({
-          state: true,
-          description: `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`,
-          title: "Request succeeded!",
-        });
-      }
+      // if (response.config.isHandlerEnabled) {
+      //   console.log(
+      //     `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`
+      //   );
+      //   setModalOptions({
+      //     state: true,
+      //     description: `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`,
+      //     title: "Request succeeded!",
+      //   });
+      // }
       return response;
     },
     (error) => {
@@ -85,13 +85,19 @@ function App() {
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
-
+  const [review, setReview] = useState({ title: "", content: "" });
+  const [reviews, setReviews] = useState([]);
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
+  const [userInputValues, setUserInputValues] = useState({
+    title: "",
+    content: "",
+  });
+  console.log(reviews);
 
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
-  const [reviews, setReviews] = useState(null);
+
   const path = location.pathname.split("/")[1];
   const is404Page =
     path !== "" &&
@@ -141,14 +147,17 @@ function App() {
               <Interceptor>
                 {!is404Page && <NavBar />}
                 {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
-                {modalVisible.isVisible &&
-                  modalVisible.type === MODAL_TYPE.addReview && (
+                {modalVisible?.isVisible &&
+                  modalVisible?.type === MODAL_TYPE.addReview && (
                     <AddReview
                       headerTitle="새 게시물 작성하기"
                       reviews={reviews}
                       setReviews={setReviews}
+                      userInputValues={userInputValues}
+                      setUserInputValues={setUserInputValues}
                     />
                   )}
+
                 <Routes>
                   <Route path="/" exact element={<Main />} />
                   <Route path="/login" exact element={<Login />} />
@@ -159,11 +168,17 @@ function App() {
                     path="/reviews"
                     exact
                     element={
-                      <ReviewsList reviews={reviews} setReviews={setReviews} />
+                      <ReviewsList
+                        // review={review}
+                        // setReview={setReview}
+                        reviews={reviews}
+                        setReviews={setReviews}
+                      />
                     }
                   />
                   <Route path="/graph" exact element={<Graph />} />
                   {/* 404 페이지 */}
+
                   <Route path="*" element={<PageNotFound />} />
                 </Routes>
                 <ResponseIndicator

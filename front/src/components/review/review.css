@@ -17,7 +17,16 @@ textarea:focus {
 }
 .review-container {
   max-width: 70%;
+  padding: 10px;
 }
+
+.review__title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 0;
+}
+
 .review__ .addReview__form {
   display: flex;
   width: 100%;
@@ -29,7 +38,7 @@ textarea:focus {
   height: max-content;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .addReview__form.flexible-col,
   .review.flexible-col {
     display: flex;
@@ -37,7 +46,7 @@ textarea:focus {
   }
 }
 /* 큰 화면에서 flex-row 스타일 적용 */
-@media (min-width: 601px) {
+@media (min-width: 801px) {
   .addReview__form.flexible-col,
   .review.flexible-col {
     display: flex;
@@ -51,6 +60,19 @@ textarea:focus {
   min-width: 350px;
   width: 100%;
 }
+.review__flexible-child {
+  padding: 0;
+}
+@media (max-width: 800) {
+  .review__flexible-child {
+    width: 100%;
+  }
+}
+@media (min-width: 801px) {
+  .review__flexible-child {
+    max-width: 50%;
+  }
+}
 .carousel-arrow-icon {
   background-color: black;
   padding: 5px;
@@ -62,12 +84,29 @@ textarea:focus {
 .editForm__author {
   width: auto;
 }
-
+.show-more-btn {
+  word-break: break-all;
+}
+.comment__content {
+  white-space: unset;
+}
 /* image carousel */
 .carousel__container {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  background-color: #000000f5;
+}
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+  width: 100px;
+  height: 20px;
 }
 .carousel__close-btn {
   position: absolute;
@@ -75,67 +114,15 @@ textarea:focus {
   right: 0;
 }
 .carousel-bg-black {
-  background-color: black;
-}
-.carousel-bg-white {
+  /* background-color: black; */
   background-color: white;
 }
-
-/* 커맨트 */
-.comment__author {
-  font-weight: 600;
-  min-width: 100%;
-  display: inline-block;
-  white-space: nowrap;
+.carousel-bg-white {
+  /* background-color: white; */
+  max-width: 50%;
 }
-.comment__avatar {
-  position: absolute;
-  top: 20px;
-}
-.comment__form {
-  /* display: flex;
-  flex-direction: column; */
-  position: relative;
-}
-.comment__content {
-  color: grey;
-  word-break: break-all;
-}
-.comment__input {
-  background-color: none;
-  border: none;
-  /* Remove outline */
-  outline: none;
-  /* Reset padding and margin */
-  padding: 0;
-  margin: 0;
-  /* Reset background */
-  background: none;
-  /* Reset font styles */
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  /* Reset other styles */
-  color: inherit;
-  line-height: inherit;
-  width: 100%;
-  border-bottom: 1px solid gray;
-  padding: 5px;
-  margin: 10px;
-}
-.comment__button {
-  position: absolute;
-  right: 0;
-  top: 5px;
-  border: none;
-}
-.position-rel {
-  position: relative;
-}
-.comment__avatar {
-  position: absolute;
-  top: 0;
-  right: 0;
+.review__contents {
+  margin-top: 10px;
 }
 
 .isLiked {
@@ -148,16 +135,17 @@ textarea:focus {
 /* 드래그 앤 드랍 */
 .upload-area {
   position: relative;
+  z-index: 999;
   width: 100%;
   height: 100%;
   border: 2px dashed #ccc;
-  background-color: white;
+  background-color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-items: center;
-  padding: 40px 0;
-  margin: 15px;
+  /* padding: 40px 0;
+  margin: 15px; */
   color: #aaa;
   background-color: rgba(117, 120, 205, 0.263);
 }
@@ -168,6 +156,14 @@ textarea:focus {
 }
 .upload-label-bottom-text {
   background-color: none;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: cener;
+  flex-direction: column;
+  padding: 15px 10px;
 }
 .file-input {
   display: none;
@@ -180,6 +176,7 @@ textarea:focus {
   display: flex;
   justify-items: center;
   align-items: center;
+  z-index: -1;
 }
 .drag-drop-area-btn__container {
   position: absolute;

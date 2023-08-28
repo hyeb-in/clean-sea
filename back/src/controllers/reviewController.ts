@@ -48,7 +48,9 @@ const createReview = async (
       if (Array.isArray(req.files)) {
         uploadFile = req.files.map((file) => file.filename);
       } else if (req.files?.uploadFile) {
-        uploadFile = req.files.uploadFile.map((file) => file.filename);
+        uploadFile = Array.from(req.files.uploadFile).map(
+          (file) => file.filename
+        );
       }
 
       const addMyReview = await addReview({

@@ -1,4 +1,4 @@
-const Timestamp = ({ createdAt, className }) => {
+const Timestamp = ({ createdAt }) => {
   const currentTime = new Date(); // 현재 시간
   const createdAtgg = new Date(createdAt); // 주어진 시간
 

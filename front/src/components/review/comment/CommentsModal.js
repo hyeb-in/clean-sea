@@ -1,132 +1,97 @@
-import {
-  Button,
-  CloseButton,
-  Col,
-  Container,
-  Form,
-  Modal,
-  Row,
-} from "react-bootstrap";
-import ReviewTitle from "../ReviewTitle";
+import { CloseButton, Col, Container, Modal, Row } from "react-bootstrap";
+import ReviewHeader from "../ReviewTitle";
 import CarouselWrapper from "../../common/Carousel";
-import { ModalVisibleContext, UserStateContext } from "../../../App";
-import { useContext, useState } from "react";
-import { MODAL_TYPE } from "../../../constants";
-import * as Api from "../../../Api";
 import Comment from "./Comment";
+import AddCommentForm from "./CommentForm";
+import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
+import * as Api from "../../../Api";
+import { useEffect, useState } from "react";
+import ConfirmModal from "../../common/popup/ConfirmDeleteModal";
 
-// 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
-// 그냥 Review를 볼 수 있는 컴포넌트와 다르게 생김 주의... 이름 바꿔야할 듯
-// 모든 커멘트 목록이 필요함
-const FloatingReview = () => {
-  const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  const {
-    data: { reviewId, review, setNewComments, setReviews },
-  } = modalVisible;
+// 리뷰와 함께 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
+// 업데이트시 해야할 일
+// 1. background에 보이는 커맨트 리스트를 업데이트 해야함
+// 2. 모달창에 있는 커맨트 리스트 업데이트
+// -> 모든 커멘트 목록이 필요
+const CommentsModal = () => {
+  const { modalVisible } = useModal();
 
-  // data: {
-  //   reviewId,
-  //   review,
-  //   setNewComments,
-  //   setReviews,
-  const [comment, setComment] = useState("");
-  const isValid = comment.length > 0 && comment.length < 100;
-
-  console.log(modalVisible.data);
-
-  const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (!loggedInUser) {
-        alert("유저 없음");
-      }
-      // 글자수 제한: 1글자이상 100자이하
-      if (!isValid) {
-        alert("글자수 제한");
-      }
-      // review id로 해당 리뷰를 찾아서 review.Likes id가 있나? 값으로 갱신한다??
-      // isLikes에 userId가 저장되어있음
-      const res = await Api.post(`comments/${reviewId}`, { content: comment });
-      if (!res.data) {
-        return alert("요청 실패");
-      }
-
-      setReviews((current) => [...current, res.data]);
-      setNewComments((newComments) => [...newComments, res.data]);
-      setComment("");
-    } catch (error) {
-      // 서버 error 핸들링
-      alert(error);
-    }
-  };
-
+  const { review } = modalVisible.data;
+  const { closeModal } = useModal();
+  const [modalCommentList, setModalCommentList] = useState([]);
+  const [newCommentsList, setNewCommentsList] = useState([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  console.log(modalVisible);
+  try {
+    useEffect(() => {
+      const getAllComments = async () => {
+        const res = await Api.get(`comments/${review._id}`);
+        if (!res.data) throw new Error("데이터를 가져올 수 없습니다");
+        setModalCommentList(res.data);
+      };
+      getAllComments();
+    }, [review]);
+  } catch (error) {
+    console.log(error);
+  }
   return (
     <Modal
       sm={1}
       lg={6}
-      show={modalVisible.type === MODAL_TYPE.floatingReview}
-      onHide={() => {
-        setModalVisible({
-          type: null,
-          isVisible: false,
-          data: null,
-        });
-      }}
+      show={modalVisible.type === MODAL_TYPE.commentsList}
+      onHide={closeModal}
       centered
+      dialogClassName="commentModal__modalWrapper"
     >
       <Row className="flex-row-center-center carousel-bg-black">
+        <ReviewHeader
+          review={modalVisible.data.review}
+          className="commentModal__title"
+        >
+          <CloseButton
+            className="close-btn"
+            // to do: 댓글 입력중이었다면 경고창 먼저 띄우기
+            onClick={closeModal}
+          />
+        </ReviewHeader>
         <Col className="carousel-bg-white">
-          <ReviewTitle review={modalVisible.data}>
-            <CloseButton
-              className="close-btn"
-              // to do: 댓글 입력중이었다면 경고창 먼저 띄우기
-              onClick={() =>
-                setModalVisible({
-                  type: null,
-                  isVisible: false,
-                  data: null,
-                })
-              }
-            />
-          </ReviewTitle>
           <CarouselWrapper
             className="carousel__container"
-            imageUrls={[
+            preview={[
               "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
               "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
             ]}
           />
         </Col>
         <Col className="carousel-bg-white">
-          <Container>
+          <Container className="comment-container">
             <Row className="py-4 mx-2">
-              {review.comments?.map((comment) => (
-                <Comment comment={comment} />
-              ))}
-              <Form onSubmit={handleCommentSubmit} className="comment__form">
-                <input
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder="댓글 달기..."
-                  className="comment__input"
-                />
-                {comment?.length > 0 && (
-                  <Button
-                    onClick={handleCommentSubmit}
-                    variant="outline-primary"
-                    className="comment__button"
-                  >
-                    게시
-                  </Button>
-                )}
-              </Form>
+              {modalCommentList?.length > 0 &&
+                modalCommentList?.map((comment) => (
+                  <Comment
+                    comment={comment}
+                    key={comment._id}
+                    setModalCommentList={setModalCommentList}
+                  />
+                ))}
+              {newCommentsList?.length > 0 &&
+                newCommentsList.map((comment) => (
+                  <div key={comment._id}>
+                    <Comment comment={comment} />
+                  </div>
+                ))}
+              <AddCommentForm setNewCommentsList={setNewCommentsList} />
             </Row>
           </Container>
+          <ConfirmModal
+            show={showConfirmModal}
+            setShowConfirmModal={setShowConfirmModal}
+            closeReviewFormModal={() => setShowConfirmModal(false)}
+          />
         </Col>
       </Row>
     </Modal>
   );
 };
 
-export default FloatingReview;
+export default CommentsModal;

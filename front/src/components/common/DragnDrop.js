@@ -1,9 +1,9 @@
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "react-bootstrap";
+import { faHandPointer } from "@fortawesome/free-regular-svg-icons";
 
-const CustomDragnDrop = ({ setSelectedFiles, handleFileChange }) => {
+const CustomDragnDrop = ({ handleFileChange, setInputFile }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragOver = (e) => {
@@ -17,39 +17,37 @@ const CustomDragnDrop = ({ setSelectedFiles, handleFileChange }) => {
 
   const handleDrop = (e) => {
     e.preventDefault();
+    console.log(e.dataTransfer.files, "from drop");
+    setInputFile(e.dataTransfer.files);
     setIsDragging(false);
-    const files = e.dataTransfer.files;
-    setSelectedFiles(Array.from(files));
   };
 
   return (
-    <div>
-      <div
-        className={`upload-area ${isDragging ? "active" : ""}`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <label htmlFor="file-input" className="upload-label">
-          최대 10MB / jpeg, png 첨부 가능
+    <div
+      className={`upload-area ${isDragging ? "active" : ""}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      <div className="upload-label-bottom-text">
+        <label htmlFor="file-input" className="upload-label link">
+          클릭해서 파일찾기
         </label>
-        <div className="upload-label-bottom-text">
-          파일을 여기로 드래그하세요
-        </div>
+        <div>파일을 여기로 드래그하세요</div>
+        <FontAwesomeIcon icon={faHandPointer} />
         <FontAwesomeIcon icon={faImage} className="upload-icon" />
         <input
           type="file"
-          id="file-input"
+          id="file-input" // 라벨의 htmlFor로 연결시켜준다
           className="file-input"
           multiple
-          onChange={handleFileChange}
+          onChange={(e) => {
+            console.log(e.target.files, "from file");
+            setInputFile(e.target.files);
+            handleFileChange(e);
+          }}
           accept="image/png, image/jpeg"
         />
-        <div className="drag-drop-area">
-          <div className="drag-drop-area__btn-container">
-            <Button variant="outline-primary">이미지 가져오기</Button>
-          </div>
-        </div>
       </div>
     </div>
   );
