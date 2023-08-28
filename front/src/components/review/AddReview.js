@@ -65,14 +65,14 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
       let formData = new FormData();
       // FormData 생성자의 첫 번째 매개변수로는 HTMLFormElement 객체가 필요함
       // FileList는 HTMLFormElement가 아니기때문에 일단 매개변수 없이 생성 후 append로 추가한다
-      formData.append("uploadFile", files);
-      if (files && files.length > 0) {
-          for (let i = 0; i < files.length; i++) {
-            formData.append("uploadFile[]", files[i]);
-          }
+      formData.append("uploadFile", formDataFiles);
+      if (formDataFiles && formDataFiles.length > 0) {
+        for (let i = 0; i < formDataFiles.length; i++) {
+          formData.append("uploadFile[]", formDataFiles[i]);
+        }
       }
-      formData.append("title", review.title);
-      formData.append("content", review.content);
+      formData.append("title", userInputValues.title);
+      formData.append("content", userInputValues.content);
       setUploadStatus(RESULT_ENUM.UPLOADING);
       const res = await axios.post(`${serverUrl}reviews/register`, formData);
 
