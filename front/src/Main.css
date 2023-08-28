@@ -1,6 +1,7 @@
 @import "./reset.css";
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "./components/review/review.css";
+@import "./components/review/comment/comment.css";
 
 body {
   margin: 0;
@@ -21,6 +22,11 @@ body {
   justify-content: center;
   align-items: center;
 }
+.flex-justify-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .flex-space-between {
   display: flex;
   justify-content: space-between;
@@ -39,6 +45,8 @@ body {
 }
 .text-author {
   font-weight: 600;
+  color: rgba(0, 0, 0, 0.786);
+  /* text-wrap: nowrap; */
 }
 .bold {
   font-weight: 600;
@@ -46,10 +54,17 @@ body {
 .text-content {
   color: grey;
 }
-.text-timestamp {
+.text-timestamp,
+.text-like {
   font-size: 0.8rem;
   font-weight: 600;
   color: gray;
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+}
+.text-like {
+  margin-right: 10px;
 }
 .h-100 {
   height: 100%;
@@ -82,8 +97,4 @@ body {
 }
 .toast-popup__title {
   font-weight: 600;
-}
-
-/* controls */
-.submit-btn {
 }

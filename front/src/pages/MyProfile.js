@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Container,
   Row,
@@ -8,133 +8,191 @@ import {
   ListGroupItem,
   Button,
   FormControl,
-} from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import History from "../components/History";
-import CardHeader from "react-bootstrap/CardHeader";
-import * as Api from "../Api";
+  Modal, Form,
+} from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import History from '../components/travel/History';
+import CardHeader from 'react-bootstrap/CardHeader';
+import * as Api from '../Api';
+import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from '../constants';
+import { useToggle } from '../customhooks/modalCustomHooks';
+import RandomUserList from '../components/travel/RandomUserList';
+import ProfileToastWrapper
+  from '../components/common/popup/ProfileToastWrapper';
 
 const MyProfile = () => {
   const { id } = useParams();
 
-  const [userName, setUserName] = useState("훈제오리");
-  const [userEmail, setUserEmail] = useState("elice@elice.com");
-  const [userDescription, setUserDescription] = useState(
-    "설명이 아직 없습니다. 추가해주세요"
-  );
+  const [userName, setUserName] = useState('훈제오리');
+  const [userEmail, setUserEmail] = useState('elice@elice.com');
+  const [userDescription, setUserDescription] = useState('설명이 아직 없습니다. 추가해주세요');
   const [userProfileImage, setUserProfileImage] = useState(
-    "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
-  );
-  const [isEditMode, setIsEditMode] = useState(false);
+    'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png');
+  const [randomUsers, setRandomUsers] = useState([]);
+
+  const [toastMessage, setToastMessage] = useState('');
+
+  const [isEditMode, setIsEditMode] = useToggle();
+  const [isShowProfileModal, toggleProfileModal] = useToggle();
+  const [showToast, setShowToast] = useToggle();
+
+  const fileRef = useRef(null);
+
+  const displayToastMessage = (message) => {
+    setToastMessage(message);
+    setShowToast();
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await Api.get(`users/${id}`);
         const userData = response.data;
-        console.log(userData);
+
         setUserName(userData.name);
         setUserEmail(userData.email);
         setUserDescription(userData.description);
         setUserProfileImage(
-          userData.profileImage ||
-            "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
-        );
+          `http://${window.location.hostname}:5001/profile-images/${userData.profileImage}` ||
+          'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png');
       } catch (error) {
-        alert("유저 정보를 가져오는 데 실패했습니다.");
+        displayToastMessage('유저 정보를 가져오는 데 실패했습니다.');
       }
     };
 
     fetchUserData();
   }, [id]);
 
-  const handleEditClick = () => {
-    setIsEditMode(!isEditMode);
-  };
+  useEffect(() => {
+    const fetchRandomUsers = async () => {
+      try {
+        const response = await Api.get('users/randomlist');
+        setRandomUsers(response.data);
+      } catch (error) {
+        displayToastMessage('랜덤 유저 정보를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchRandomUsers();
+  }, []);
 
   const handleCompleteClick = async () => {
-    setIsEditMode(false);
+    setIsEditMode();
 
     const apiEndpoint = `users/${id}`;
     const postData = {
       name: userName,
-      email: userEmail,
       description: userDescription,
     };
     try {
       await Api.put(apiEndpoint, postData);
-      alert("정보가 성공적으로 업데이트되었습니다.");
+      displayToastMessage('프로필이 성공적으로 업데이트되었습니다.');
     } catch (error) {
-      alert("오류가 발생했습니다. 다시 시도해주세요.");
+      displayToastMessage('오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
 
-  return (
-    <Container>
-      <Row>
-        <Col>
-          <Card small className="mb-4 pt-3">
-            <CardHeader className="border-bottom">
-              <div className="mb-3 mx-auto">
-                {/* <img
-                  className="rounded-circle"
-                  src={userProfileImage}
-                  width="110"
-                  alt="User Profile"
-                /> */}
-              </div>
-              {isEditMode ? (
-                <FormControl
-                  type="text"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                />
-              ) : (
-                <h4 className="mb-2">{userName}</h4>
-              )}
-              {isEditMode ? (
-                <FormControl
-                  type="text"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                />
-              ) : (
-                <span className="text-muted d-block mb-1">{userEmail}</span>
-              )}
-            </CardHeader>
-            <ListGroup flush>
-              <ListGroupItem className="p-4">
-                {isEditMode ? (
-                  <FormControl
-                    type="text"
-                    value={userDescription}
-                    onChange={(e) => setUserDescription(e.target.value)}
-                  />
-                ) : (
-                  <strong className="text-muted d-block mb-2">
-                    {userDescription}
-                  </strong>
-                )}
-              </ListGroupItem>
-            </ListGroup>
+  const handleSubmitProfileImage = useCallback(() => {
+    const inputFile = fileRef.current;
+    console.log('inputFile  :', inputFile.files);
+    const formData = new FormData();
+    for (const file of inputFile.files) {
+      formData.append('files', file);
+    }
+    Api.putImage(`users/photo`, formData).then(async r => {
+      setUserProfileImage(
+        `http://${window.location.hostname}:5001/profile-images/${r.data[0]}`);
+      const apiEndpoint = `users/${id}`;
+      const postData = {
+        profileImage: r.data[0],
+      };
+      try {
+        await Api.put(apiEndpoint, postData);
+        displayToastMessage('프로필 이미지가 성공적으로 업데이트되었습니다.');
+      } catch (error) {
+        displayToastMessage('오류가 발생했습니다. 다시 시도해주세요.');
+      }
+    });
+    toggleProfileModal();
 
-            <span>
-              <Button variant="link" onClick={handleEditClick}>
-                {isEditMode ? "취소" : "편집"}
-              </Button>
-              {isEditMode && (
-                <Button variant="link" onClick={handleCompleteClick}>
-                  완료
-                </Button>
-              )}
-            </span>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
-        <History></History>
-      </Row>
-    </Container>
+  }, [toggleProfileModal, fileRef]);
+
+  return (
+    <>
+      <Container>
+        <Row>
+          <Col sm={8}>
+            <Card small className="mb-4 mt-4 pt-3">
+              <CardHeader className="border-bottom">
+                <div className="mb-3 mx-auto">
+                  <img
+                    className="rounded-circle"
+                    src={userProfileImage}
+                    width="110"
+                    alt="User Profile"
+                  />
+                </div>
+                {isEditMode ? <FormControl type="text" value={userName}
+                                           onChange={e => setUserName(
+                                             e.target.value)}/> : <h4
+                  className="mb-2">{userName}</h4>}
+                <span className="text-muted d-block mb-1">{userEmail}</span>
+              </CardHeader>
+              <ListGroup flush>
+                <ListGroupItem className="p-4">
+                  {isEditMode ? <FormControl type="text" value={userDescription}
+                                             onChange={e => setUserDescription(
+                                               e.target.value)}/> : <strong
+                    className="text-muted d-block mb-2">{userDescription}</strong>}
+                </ListGroupItem>
+              </ListGroup>
+
+              <span>
+                <Button variant="link" onClick={setIsEditMode}>{isEditMode
+                  ? '취소'
+                  : '편집'}</Button>
+                {isEditMode && <Button variant="link"
+                                       onClick={handleCompleteClick}>완료</Button>}
+                {isEditMode &&
+                  <Button variant="link" onClick={toggleProfileModal}>프로필 이미지
+                    편집</Button>}
+              </span>
+            </Card>
+
+            <History displayToast={displayToastMessage}/>
+          </Col>
+          <Col sm={4}>
+            <RandomUserList data={randomUsers}></RandomUserList>
+          </Col>
+        </Row>
+      </Container>
+      <Modal show={isShowProfileModal} onHide={toggleProfileModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>프로필 이미지 편집</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Control type={'file'} ref={fileRef} multiple/>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={toggleProfileModal}>
+            취소
+          </Button>
+          <Button variant="primary" onClick={handleSubmitProfileImage}>
+            저장
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {showToast && (
+        <ProfileToastWrapper
+          text={toastMessage}
+          position={TOAST_POPUP_POSITION.topCenter}
+          status={TOAST_POPUP_STATUS.info}
+          onClose={setShowToast}
+        />
+      )}
+    </>
   );
 };
 

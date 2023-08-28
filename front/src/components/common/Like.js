@@ -10,7 +10,7 @@ import { UserStateContext } from "../../App";
 // isLiked가 reviews list에서 받아오는 값
 const Like = ({ isLiked, reviewId, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const [isLikedState, setIsLikedState] = useState(isLiked === IS_LIKE.yes);
+  const [isLikedState, setIsLikedState] = useState(isLiked);
 
   const handleLikes = async (e) => {
     if (!loggedInUser) {
@@ -21,7 +21,6 @@ const Like = ({ isLiked, reviewId, setReviews }) => {
         targetType: "review",
         targetId: reviewId,
       });
-      console.log(res.data.message);
 
       if (res.data.message === IS_LIKE.added) {
         setReviews((current) => {
@@ -52,7 +51,8 @@ const Like = ({ isLiked, reviewId, setReviews }) => {
       }
       setIsLikedState(!isLikedState);
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.statusCode);
+      alert(error.statusCode);
     }
   };
 

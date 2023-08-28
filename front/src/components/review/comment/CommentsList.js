@@ -1,5 +1,7 @@
-import { Row } from "react-bootstrap";
+import { useContext } from "react";
 import Comment from "./Comment";
+import { ModalVisibleContext } from "../../../App";
+import { MODAL_TYPE } from "../../../constants";
 
 const CommentsList = ({
   comments,
@@ -7,7 +9,13 @@ const CommentsList = ({
   selectedReview,
   setSelectedReview,
   review,
+  reviewId,
+  setNewComments,
+  setReviews,
+  showDetails,
 }) => {
+  const { setModalVisible } = useContext(ModalVisibleContext);
+
   return (
     <>
       {/* 댓글 3개까지만 미리보기 */}
@@ -37,6 +45,25 @@ const CommentsList = ({
           ))}
         </div>
       )}
+      {/* ::::댓글 모두 보기:::: 클릭시 floatingReview 모달에 데이터 보내주기 */}
+      <div
+        onClick={() =>
+          setModalVisible({
+            type: MODAL_TYPE.floatingReview,
+            isVisible: true,
+            data: {
+              reviewId,
+              review,
+              setNewComments,
+              setReviews,
+            },
+          })
+        }
+        className="link"
+      >
+        {/* 임시로 2개!! 원래 3개임 */}
+        {showDetails && `댓글 ${comments.length}개 모두 보기`}
+      </div>
     </>
   );
 };

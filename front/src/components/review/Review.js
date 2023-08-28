@@ -1,14 +1,13 @@
 import React, { useContext, useState } from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
-import CarouselWrapper from "../common/Carousel";
+import { Card } from "react-bootstrap";
 import ReviewTitle from "./ReviewTitle";
-import * as Api from "../../Api";
-import { ModalVisibleContext, UserStateContext } from "../../App";
-import Timestamp from "../common/Timestamp";
-import { IS_LIKE, MODAL_TYPE } from "../../constants";
-import CommentsList from "./comment/CommentsList";
-import Like from "../common/Like";
-import Contents from "./comment/Contents";
+import CurrentComments from "./comment/CurrentComment";
+import ReviewContents from "./ReviewContents";
+import CarouselWrapper from "../common/Carousel";
+import AddCommentForm from "./comment/CommentForm";
+import { UserStateContext } from "../../App";
+import EditReview from "./EditReview";
+import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 
 export const IMAGE_URLS = [
   "https://img.freepik.com/free-photo/beautiful-beach-and-sea_74190-6620.jpg?t=st=1691935043~exp=1691935643~hmac=7d32dd31eda2acee9b8c0a03ff9d29d591c8e105715746b9643e2600cd4b2b70",
@@ -16,97 +15,66 @@ export const IMAGE_URLS = [
 ];
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const Review = ({ review, setReviews, selectedReview, setSelectedReview }) => {
-  const {
-    _id: reviewId,
-    author: authorId,
-    title,
-    content,
-    createdAt,
-    userName,
-    uploadFile,
-    comments,
-    likeCount,
-  } = review;
-
+const Review = ({ review, setReviews, setReview }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { setModalVisible } = useContext(ModalVisibleContext);
-  const [newComments, setNewComments] = useState([]);
-  const [showDetails, setShowDetails] = useState(true);
-  const isLiked = loggedInUser && review?.isLike === IS_LIKE.yes;
+  const { modalVisible } = useModal();
+  const [commentList, setCommentList] = useState(
+    review ? review.comments : null
+  );
+  const [newCommentsList, setNewCommentsList] = useState([]);
+  const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
 
   return (
     <>
-      <Card bg="light" key={reviewId} className="my-5 review-container">
-        <Card.Header>
-          <ReviewTitle review={review} setReviews={setReviews} />
-        </Card.Header>
-        <Card.Body className="px-0 py-12 pt-0">
-          {IMAGE_URLS?.length > 0 && <CarouselWrapper imageUrls={IMAGE_URLS} />}
-          <Container className="px-10 py-2">
-            <Row>
-              <Col className="comment__author">{userName}</Col>
-            </Row>
-            <Row xs="auto" className="pb-3">
-              <Contents
-                title={title}
-                showDetails={showDetails}
-                content={content}
+      {review && (
+        <Card
+          bg="light"
+          key={review._id}
+          className="my-5 review-container review flexible-col "
+        >
+          <Card.Header className="review__flexible-child">
+            <ReviewTitle review={review} setReviews={setReviews} />
+            <CarouselWrapper preview={IMAGE_URLS} />
+            {/* 사진이 없는 형식일 경우에 레이아웃이 망가지는데 어떡해야할지 모르겠음! */}
+          </Card.Header>
+          <Card.Body className="py-12 pt-0">
+            <div className="pb-3 ">
+              <ReviewContents
+                review={review}
+                setReviews={setReviews}
+                className="d-flex flex-column"
               />
-              <Row className="d-flex w-100">
-                <Col
-                  className="link bold"
-                  onClick={() => setShowDetails(!showDetails)}
-                ></Col>
-                {loggedInUser && (
-                  <Like
-                    isLiked={isLiked}
-                    reviewId={reviewId}
-                    setReviews={setReviews}
-                  />
-                )}
-              </Row>
-              <Card.Text className="d-flex justify-content-end">
-                <Timestamp createdAt={createdAt} />
-                {showDetails && (
-                  <div className="text-timestamp mx-3 link">더보기</div>
-                )}
-                <Col className="text-timestamp flex-justify-end">
-                  {likeCount > 0 && `좋아요 ${likeCount}개`}
-                </Col>
-              </Card.Text>
-              <Col>
-                <CommentsList
-                  comments={comments}
-                  newComments={newComments}
-                  selectedReview={selectedReview}
-                  setSelectedReview={selectedReview}
+              <div>
+                <CurrentComments
                   review={review}
+                  commentList={commentList}
+                  setCommentList={setCommentList}
+                  newCommentsList={newCommentsList}
+                  setNewCommentsList={setNewCommentsList}
                 />
-              </Col>
-              {/* ::::댓글 모두 보기:::: 클릭시 floatingReview 모달에 데이터 보내주기 */}
-              <Col
-                onClick={() =>
-                  setModalVisible({
-                    type: MODAL_TYPE.floatingReview,
-                    isVisible: true,
-                    data: {
-                      reviewId,
-                      review,
-                      setNewComments,
-                      setReviews,
-                    },
-                  })
-                }
-                className="link"
-              >
-                {/* 임시로 2개!! 원래 3개임 */}
-                {comments?.length > 2 && `댓글 ${comments.length}개 모두 보기`}
-              </Col>
-            </Row>
-          </Container>
-        </Card.Body>
-      </Card>
+              </div>
+              {/* 댓글 다는 창이 있다? reviewId가 필요함  */}
+              {loggedInUser && (
+                <AddCommentForm
+                  review={review}
+                  setReviews={setReviews}
+                  setNewCommentsList={setNewCommentsList}
+                />
+              )}
+            </div>
+          </Card.Body>
+        </Card>
+      )}
+
+      {/* 모달3. review 수정하기 폼 모달 */}
+      {isEditReviewPopupOpen && (
+        <EditReview
+          review={review}
+          setReview={setReview}
+          setReviews={setReviews}
+          setNewCommentsList={setNewCommentsList}
+        />
+      )}
     </>
   );
 };

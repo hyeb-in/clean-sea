@@ -3,7 +3,7 @@ import {
   UserStateContext,
   DispatchContext,
   ModalVisibleContext,
-} from "../../App";
+} from "../../../App";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,8 +16,8 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Avatar from "./Avatar";
-import { MODAL_TYPE } from "../../constants";
+import Avatar from "../Avatar";
+import { MODAL_TYPE } from "../../../hooks/useModal";
 
 const NavBar = () => {
   const navigate = useNavigate();
