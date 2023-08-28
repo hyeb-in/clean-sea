@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changePassword,
   deleteUser,
   getRandomUser,
   getUser,
@@ -26,7 +27,7 @@ userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
 
-userRouter.post("/change-password");
+userRouter.post("/:userId/change-password", changePassword);
 
 userRouter
   .route("/:userId")
