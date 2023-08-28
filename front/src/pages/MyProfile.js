@@ -157,6 +157,7 @@ const MyProfile = () => {
                     편집</Button>}
               </span>
             </Card>
+
             <History displayToast={displayToastMessage}/>
           </Col>
           <Col sm={4}>
@@ -169,11 +170,9 @@ const MyProfile = () => {
           <Modal.Title>프로필 이미지 편집</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-
           <Form>
             <Form.Control type={'file'} ref={fileRef} multiple/>
           </Form>
-
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={toggleProfileModal}>
