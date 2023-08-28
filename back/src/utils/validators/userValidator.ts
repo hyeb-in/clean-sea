@@ -31,7 +31,7 @@ const passwordErrorMessage = {
 const validateSchema = {
   name: joi
     .string()
-    .min(5)
+    .min(2)
     .max(20)
     .required()
     .pattern(nameReg)
@@ -54,6 +54,7 @@ const validateSchema = {
   uploadFile: joi.any(),
 };
 
+//TODO창근님 코드 훔쳐오기
 export const validateSignUp = async (
   req: IRequest,
   res: Response,
