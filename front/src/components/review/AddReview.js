@@ -12,6 +12,7 @@ import { TOAST_POPUP_STATUS } from "../../constants";
 import ToastWrapper from "../common/popup/ToastWrapper";
 import { faBomb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { serverUrl } from "../../Api";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -71,10 +72,7 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
       console.log(formDataFiles, "변경 전 형식");
 
       setUploadStatus(RESULT_ENUM.UPLOADING);
-      const res = await axios.post(
-        "http://localhost:5001/reviews/register",
-        formData
-      );
+      const res = await axios.post(`${serverUrl}reviews/register`, formData);
 
       if (!res.ok) {
         return setUploadStatus(RESULT_ENUM.FAIL);

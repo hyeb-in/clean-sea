@@ -45,7 +45,7 @@ const ReviewTitle = ({ review, setReviews }) => {
               openModal(MODAL_TYPE.actionSelector, data);
             }}
           >
-            {/* 게시글 수정 화면이 아니라면 ... 대신 '완료'버튼을 보여준다 */}
+            {/* 게시글 수정 화면이 아니라면 ... 버튼을 보여준다 */}
             {modalVisible.type !== MODAL_TYPE.editReview && (
               <FontAwesomeIcon icon={faEllipsis} />
             )}
