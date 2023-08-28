@@ -9,27 +9,31 @@ const errorMessage = {
   stringMax: "300글자이하이여야합니다.",
 };
 
-const validateSchema = (schema : joi.ObjectSchema, optional = false) => {
-    return (req : IRequest, res : Response , next : NextFunction) => {
-        const { error } = schema.validate(req.body);
-        if (error){
-            const errorMessage = error.details[0].message;
-            const customError = errorGenerator(errorMessage, 400);
-            return res.status(customError.statusCode).json({error:customError.message});
-        }
-        next();
+const validateSchema = (schema: joi.ObjectSchema, optional = false) => {
+  return (req: IRequest, res: Response, next: NextFunction) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      const errorMessage = error.details[0].message;
+      const customError = errorGenerator(errorMessage, 400);
+      //TODO res.status를 안 써도 될 듯
+      // throw로 그냥 보내주면 될 것 같다.
+      return res
+        .status(customError.statusCode)
+        .json({ error: customError.message });
     }
-}
+    next();
+  };
+};
 
 const reviewSchema = joi.object({
   title: joi.string().min(4).messages({
-      "string.base": errorMessage.stringBase,
-      "string.min": errorMessage.stringMin,
+    "string.base": errorMessage.stringBase,
+    "string.min": errorMessage.stringMin,
   }),
   content: joi.string().min(4).max(300).messages({
-      "string.base": errorMessage.stringBase,
-      "string.min": errorMessage.stringMin,
-      "string.max": errorMessage.stringMax,
+    "string.base": errorMessage.stringBase,
+    "string.min": errorMessage.stringMin,
+    "string.max": errorMessage.stringMax,
   }),
   location: joi.any(),
   uploadFile: joi.any(),
@@ -38,20 +42,6 @@ const reviewSchema = joi.object({
 export const postReviewValidator = validateSchema(reviewSchema);
 
 export const putReviewValidator = validateSchema(reviewSchema, true);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import joi from "joi";
 // import { NextFunction, Response } from "express";
@@ -85,7 +75,6 @@ export const putReviewValidator = validateSchema(reviewSchema, true);
 //       uploadFile : joi.any(),
 //     })
 // );
-  
 
 // export const putReviewValidator = validateSchema (
 //     joi.object({

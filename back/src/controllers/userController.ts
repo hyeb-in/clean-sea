@@ -1,5 +1,6 @@
 import { NextFunction, Response } from "express";
 import {
+  changePasswordService,
   createUserService,
   deleteUserService,
   getRandomUserService,
@@ -7,10 +8,10 @@ import {
   updateUserService,
 } from "../services/userService";
 import { IRequest } from "user";
-import { findUserByEmail, findUserById } from "../db/models/User";
+import { findUserByEmail, findUserById, update } from "../db/models/User";
 import { errorGenerator } from "../utils/errorGenerator";
-import UserModel from "../db/schemas/userSchema";
 import { pwdMatchCheck } from "../utils/pwdMatchCheck";
+import bcrypt from "bcrypt";
 
 /**
  * @param {*} req name,email,password
@@ -28,6 +29,8 @@ export const signUpUser = async (
 
     res.status(200).json(newUser);
   } catch (error) {
+    //const err = errorGenerator(error.message,statusCode);
+    //next(err)
     next(error);
   }
 };
@@ -75,6 +78,7 @@ export const updateUser = async (
 ) => {
   try {
     const { userId } = req.params;
+
     const inputData = req.body;
 
     const updatedUser = await updateUserService(userId, inputData);
@@ -116,7 +120,6 @@ export const resetPassword = async (
     if (!user) throw errorGenerator("해당 이메일은 존재하지 않습니다.", 403);
     const userId = user._id;
     const resetedUser = await resetPasswordService(userId, email);
-
     res.status(200).json(resetedUser);
   } catch (error) {
     next(error);
@@ -129,11 +132,18 @@ export const changePassword = async (
   next: NextFunction
 ) => {
   try {
-    // const { userId } = req.body;
-    // const inputData = req.body;
-    // const user = await findUserById(userId);
-    // if (pwdMatchCheck(inputData.confirmPassword, user))
-    //   const updatedUser = await updateUserService(userId, inputData);
+    const { userId } = req.params;
+    const { confirmPassword, newPassword } = req.body;
+
+    const user = await findUserById(userId);
+    const isMatched = await bcrypt.compare(confirmPassword, user.password);
+    if (!isMatched) {
+      const error = errorGenerator("비밀번호가 일치하지 않습니다.", 403);
+      throw error;
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const updatedPwdUser = await update(userId, { password: hashedPassword });
+    res.status(200).json(updatedPwdUser);
   } catch (error) {
     next(error);
   }

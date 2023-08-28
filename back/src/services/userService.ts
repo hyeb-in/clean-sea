@@ -26,7 +26,7 @@ export const createUserService = async (
 ): Promise<IUser> => {
   const user = await findUserByEmail(email);
 
-  if (user) throw errorGenerator("이미 존재하는 이메일 입니다.", 403);
+  if (user) throw errorGenerator("이미 존재하는 이메일 입니다.", 400);
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const createdUser = await create(name, email, hashedPassword);
@@ -40,7 +40,7 @@ export const updateUserService = async (
 ) => {
   //1. 먼저 db에 있는 user정보를 가져온다.
   const user = await UserModel.findById(userId);
-  if (!user) throw errorGenerator("유저가 존재하지 않습니다.", 403);
+  if (!user) throw errorGenerator("유저가 존재하지 않습니다.", 400);
 
   //2. 하나씩 비교한다.
   const changedValue: Record<string, string | string[]> = {};
@@ -60,7 +60,7 @@ export const updateUserService = async (
 export const deleteUserService = async (userId: string) => {
   const deletedUser = await deleteById(userId);
 
-  if (!deletedUser) throw errorGenerator("유저가 존재하지 않습니다.", 403);
+  if (!deletedUser) throw errorGenerator("유저가 존재하지 않습니다.", 400);
 
   return deletedUser;
 };
@@ -77,4 +77,13 @@ export const resetPasswordService = async (userId: string, email: string) => {
 export const getRandomUserService = async () => {
   const randomUser = await getRandomUser();
   return randomUser;
+};
+
+export const changePasswordService = async (
+  userId: string,
+  newPassword: string
+) => {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const updatedPwdUser = await update(userId, { password: hashedPassword });
+  return updatedPwdUser;
 };

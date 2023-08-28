@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 import {
   getBeachByBeachNameService,
   getBeachByIdService,
   getBeachByRegionAndYearService,
   getBeachByRegionAndYearSpecificServiceAvg,
   getBeachByRegionAndYearSpecificService,
-  getBeachesService
+  getBeachesService,
 } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
 import { IBeach } from '../types/beach';
@@ -47,6 +47,7 @@ const getBeachByRegionAndYear = async (
   next: NextFunction
 ) => {
   try {
+    //TODO const {address, year} =req.params로 받기 추천
     const address = req.params.address; // 주소 파라미터를 받아옴
     const year = req.params.year; // 연도 파라미터를 받아옴
     const result = await getBeachByRegionAndYearService(address, year); // 주소와 연도 값을 직접 전달
@@ -74,7 +75,6 @@ const getBeachByRegionAndYearSpecificAvg = async (
   }
 };
 
-
 // 지역별 및 연도별 가져오기 및 추가조건
 const getBeachByRegionAndYearSpecific = async (
   req: Request,
@@ -92,12 +92,7 @@ const getBeachByRegionAndYearSpecific = async (
   }
 };
 
-
-const getBeaches = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-  ) => {
+const getBeaches = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await getBeachesService();
     res.status(StatusCodes.OK).json(result);
@@ -106,4 +101,9 @@ const getBeaches = async (
   }
 };
 
-export { getBeachByBeachName, getBeachById, getBeachByRegionAndYear, getBeachByRegionAndYearSpecificAvg, getBeachByRegionAndYearSpecific, getBeaches };
+export { getBeachByBeachName, getBeachById,
+  getBeachByRegionAndYear,
+  getBeachByRegionAndYearSpecificAvg,
+  getBeachByRegionAndYearSpecific,
+  getBeaches,
+};

@@ -1,6 +1,11 @@
-import { BeachByBeachName, BeachByBeachId, BeachByRegionAndYear, BeachByRegionAndYearSpecificAvg, BeachByRegionAndYearSpecific, Beaches } from "../db/models/Beach";
+import { BeachByBeachName, BeachByBeachId,
+  BeachByRegionAndYear,
+  BeachByRegionAndYearSpecificAvg,
+  BeachByRegionAndYearSpecific,
+  Beaches,
+} from "../db/models/Beach";
 import { Types } from "mongoose";
-import { IBeach, BeachData, BeachDataAvg } from '../types/beach';
+import { IBeach, BeachData, BeachDataAvg } from "../types/beach";
 
 // 해수욕장 명칭 하나로 가져오기
 async function getBeachByIdService(_id: Types.ObjectId): Promise<IBeach[]> {
@@ -14,20 +19,26 @@ async function getBeachByBeachNameService(name: IBeach): Promise<IBeach[]> {
 }
 
 // 지역별 및 연도별 가져오기
-async function getBeachByRegionAndYearService(address: string, year: string): Promise<IBeach[]> {
+async function getBeachByRegionAndYearService(
+  address: string,
+  year: string
+): Promise<IBeach[]> {
   const beachData = await BeachByRegionAndYear(address, year); // 주소와 연도를 함께 전달
   return beachData;
 }
 
 // 지역별 및 연도별 가져오기 및 추가조건, 상대값
-async function getBeachByRegionAndYearSpecificServiceAvg(year: string): Promise<BeachDataAvg> {
+async function getBeachByRegionAndYearSpecificServiceAvg(
+  year: string
+): Promise<BeachDataAvg> {
   const beachData = await BeachByRegionAndYearSpecificAvg(year); // 주소와 연도를 함께 전달
   return beachData;
 }
 
-
 // 지역별 및 연도별 가져오기 및 추가조건
-async function getBeachByRegionAndYearSpecificService(year: string): Promise<BeachData> {
+async function getBeachByRegionAndYearSpecificService(
+  year: string
+): Promise<BeachData> {
   const beachData = await BeachByRegionAndYearSpecific(year); // 주소와 연도를 함께 전달
   return beachData;
 }
@@ -40,7 +51,8 @@ async function getBeachesService(): Promise<IBeach[]> {
   }
 
   // 모든 이력을 배열로 변환
-  const beachDataResult: IBeach[] = beachData.map(beach => ({
+  //TODO beach => beach로 하면 안되나요?
+  const beachDataResult: IBeach[] = beachData.map((beach) => ({
     _id: beach._id,
     name: beach.name,
     address: beach.address,
@@ -56,5 +68,11 @@ async function getBeachesService(): Promise<IBeach[]> {
   return beachDataResult;
 }
 
-
-export { getBeachByBeachNameService, getBeachByIdService, getBeachByRegionAndYearService, getBeachByRegionAndYearSpecificServiceAvg, getBeachByRegionAndYearSpecificService, getBeachesService };
+export {
+  getBeachByBeachNameService,
+  getBeachByIdService,
+  getBeachByRegionAndYearService,
+  getBeachByRegionAndYearSpecificServiceAvg,
+  getBeachByRegionAndYearSpecificService,
+  getBeachesService,
+};
