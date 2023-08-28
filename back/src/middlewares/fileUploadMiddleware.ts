@@ -10,7 +10,7 @@ const imageFilter = (req : any, file : Express.Multer.File, cb : any) =>{
 };
 // 이미지 업로드 저장 경로
 const storage = multer.diskStorage({
-    destination: path.join(__dirname, '../imageUpload/'),
+    destination: './imageUpload/',
     filename : function (req, file, cb) {
         const ext = path.extname(file.originalname);
         const fileName = `${Date.now()}${ext}`;

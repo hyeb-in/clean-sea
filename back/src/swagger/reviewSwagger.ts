@@ -25,12 +25,12 @@
  *       uploadFile:
  *         type: array
  *         items:
- *              type : string
+ *           type: string
  *         description: upload imageFile
  *       comments:
  *         type: array
  *         items:
- *              type : string
+ *           type: string
  *         description: user comment
  *       commentCount:
  *         type: number
@@ -38,13 +38,13 @@
  *       Likes:
  *         type: array
  *         items:
- *              type : object
- *              properties:
- *                  userId:
- *                      type: string
- *                  isLike:
- *                      type: string
- *                      enum: ['yes', 'no']
+ *           type: object
+ *           properties:
+ *             userId:
+ *               type: string
+ *             isLike:
+ *               type: string
+ *               enum: ['yes', 'no']
  *         description: Like Toggle
  *       likeCount:
  *         type: number
