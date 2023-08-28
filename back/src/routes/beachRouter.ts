@@ -22,8 +22,6 @@ beachRouter
   // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
 
 beachRouter
-  .get('/beaches', getBeaches);
-
-beachRouter.get("/beaches", jwtAuthentication, getBeaches);
+  .get("/beaches", jwtAuthentication, getBeaches);
 
 export default beachRouter;
