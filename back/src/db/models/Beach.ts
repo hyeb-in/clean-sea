@@ -12,7 +12,6 @@ async function BeachByRegionAndYear(address: string, year: string): Promise<IBea
   return getBeaches;
 }
 
-
 async function BeachByRegionAndYearSpecificAvg(year: string): Promise<BeachDataAvg> {
   const query: any = { year: year };
   const getBeaches = await BeachModel.find(query) as IBeach[];
