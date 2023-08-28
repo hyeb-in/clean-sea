@@ -15,9 +15,10 @@ import History from '../components/travel/History';
 import CardHeader from 'react-bootstrap/CardHeader';
 import * as Api from '../Api';
 import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from '../constants';
-import ToastWrapper from '../components/common/popup/ToastWrapper';
 import { useToggle } from '../customhooks/modalCustomHooks';
 import RandomUserList from '../components/travel/RandomUserList';
+import ProfileToastWrapper
+  from '../components/common/popup/ProfileToastWrapper';
 
 const MyProfile = () => {
   const { id } = useParams();
@@ -184,7 +185,7 @@ const MyProfile = () => {
         </Modal.Footer>
       </Modal>
       {showToast && (
-        <ToastWrapper
+        <ProfileToastWrapper
           text={toastMessage}
           position={TOAST_POPUP_POSITION.topCenter}
           status={TOAST_POPUP_STATUS.info}
