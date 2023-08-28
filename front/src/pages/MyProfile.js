@@ -53,7 +53,7 @@ const MyProfile = () => {
         setUserEmail(userData.email);
         setUserDescription(userData.description);
         setUserProfileImage(
-          `http://${window.location.hostname}:5001/profile-images/${userData.profileImage}` ||
+          `http://${window.location.hostname}:5001/${userData.uploadFile[0]}` ||
           'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png');
       } catch (error) {
         displayToastMessage('유저 정보를 가져오는 데 실패했습니다.');
@@ -97,21 +97,16 @@ const MyProfile = () => {
     console.log('inputFile  :', inputFile.files);
     const formData = new FormData();
     for (const file of inputFile.files) {
-      formData.append('files', file);
+      formData.append('uploadFile[]', file);
     }
-    Api.putImage(`users/photo`, formData).then(async r => {
+    Api.putImage(`users/${id}`, formData).then(async r => {
       setUserProfileImage(
-        `http://${window.location.hostname}:5001/profile-images/${r.data[0]}`);
-      const apiEndpoint = `users/${id}`;
-      const postData = {
-        profileImage: r.data[0],
-      };
-      try {
-        await Api.put(apiEndpoint, postData);
-        displayToastMessage('프로필 이미지가 성공적으로 업데이트되었습니다.');
-      } catch (error) {
-        displayToastMessage('오류가 발생했습니다. 다시 시도해주세요.');
-      }
+        `http://${window.location.hostname}:5001/${r.data.uploadFile[0]}`);
+      displayToastMessage('프로필 이미지가 성공적으로 업데이트되었습니다.');
+    })
+      .catch(e => {
+      console.log(e);
+      displayToastMessage('오류가 발생했습니다. 다시 시도해주세요.');
     });
     toggleProfileModal();
 

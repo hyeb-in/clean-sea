@@ -39,7 +39,7 @@ export const handleFileUpload: RequestHandler<FileRequest> = (req, res, next) =>
             } else if (req.method === 'PUT') {
                 await handleFileOperation(files, replacePlaceholder);
             }
-            req.body.uploadFile = uploadFile.map(filename => `/team/imageUpload/${filename}`);
+            req.body.uploadFile = uploadFile.map(filename => `uploads/${filename}`);
             next();
         } catch (error) {
             next(error);
@@ -68,7 +68,7 @@ export const handleFileUpload: RequestHandler<FileRequest> = (req, res, next) =>
 //             const files: FileObjects[] = req.files ? ([] as FileObjects[]).concat(...Object.values(req.files)) : [];
 //             const uploadFile = files.map(file => file.filename);
 
-            
+
 //             if (req.method === 'POST') {
 //                 const fileUrls: string[] = [];
 //                 const fileObjects: FileObjects[] = [];
