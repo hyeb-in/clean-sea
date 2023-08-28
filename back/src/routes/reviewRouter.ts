@@ -1,20 +1,19 @@
 import { Router } from "express";
 import {
   createReview,
-  getMyReview,
-  getUserReview,
+  getAllReview,
+  getAllLogin,
   updateReview,
-  deleteReview,
+  deleteReview
 } from "../controllers/reviewController";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
-
+// import { postReviewValidator, putReviewValidator } from "../utils/validators/reviewValidator";
 const reviewAuthRouter = Router();
 
 reviewAuthRouter
     .post("/register", jwtAuthentication, createReview)
-    .get("/reviewList", jwtAuthentication, getMyReview);
-
-reviewAuthRouter.get("/:userId", jwtAuthentication, getUserReview);
+    .get("/reviewList", getAllReview)
+    .get("/reviewListLogin", jwtAuthentication, getAllLogin);
 
 reviewAuthRouter
     .route("/:reviewId")

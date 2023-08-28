@@ -7,12 +7,12 @@ import {
   getBeachesService 
 } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
-import { IBeach } from '../types/beach';
+import { IBeach } from 'beach';
 import { Types } from "mongoose";
 
 const getBeachById = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -26,8 +26,8 @@ const getBeachById = async (
 };
 
 const getBeachByRegionAndYear = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -78,8 +78,8 @@ const getBeachByRegionAndYearSpecific = async (
 
 
 const getBeaches = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
   ) => {
   try {

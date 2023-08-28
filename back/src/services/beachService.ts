@@ -8,7 +8,6 @@ async function getBeachByIdService(_id: Types.ObjectId): Promise<IBeach[]> {
   return beachDataOne;
 }
 
-
 // 지역별 및 연도별 가져오기
 async function getBeachByRegionAndYearService(address: string, year: string): Promise<IBeach[]> {
   const beachData = await BeachByRegionAndYear(address, year); // 주소와 연도를 함께 전달

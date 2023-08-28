@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { 
+import { Router } from "express";
+import {
   getBeachById,
   getBeachByRegionAndYear,
   getBeaches,
@@ -10,13 +10,8 @@ import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const beachRouter = Router();
 
-beachRouter
-  .get('/beachbyId/:_id', getBeachById);
-  // .get('/beachbyId/:_id', beachValidator.getBeach, jwtAuthentication, getBeachById);
-
-beachRouter
-  .get('/beachesbyregion/:address/:year', getBeachByRegionAndYear);
-  // .get('/beachesbyregion/:address/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+beachRouter.get("/beachbyId/:_id", getBeachById);
+// .get('/beachbyId/:_id', beachValidator.getBeach, jwtAuthentication, getBeachById);
 
 beachRouter
   .get('/beachesavg/:year', getBeachByRegionAndYearSpecific);
@@ -28,5 +23,7 @@ beachRouter
 
 beachRouter
   .get('/beaches', getBeaches);
+
+beachRouter.get("/beaches", jwtAuthentication, getBeaches);
 
 export default beachRouter;

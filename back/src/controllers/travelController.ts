@@ -6,8 +6,8 @@ import {
   setTravel,
   deletedTravel,
 } from "../services/travelService";
-import { TravelValidator } from "../utils/validators/travelValidator";
 import { IRequest } from "user";
+import { errorGenerator } from "../utils/errorGenerator";
 
 const sendResponse = function (res: Response, statusCode: number, data: any) {
   if (statusCode >= 400) {
@@ -24,21 +24,14 @@ const createTravel = async (
   try {
     const author = req.user._id;
 
-    const schema = TravelValidator.postTravel();
-    const validationResult = schema.validate(req.body);
-    if (validationResult.error) {
-      return sendResponse(res, StatusCodes.BAD_REQUEST, {
-        error: validationResult.error.details[0].message,
-      });
-    }
-
     const addMyTravel = await addTravel({
       toCreate: { ...req.body, author },
     });
 
     return sendResponse(res, StatusCodes.CREATED, addMyTravel);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    const customError = errorGenerator(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
@@ -49,9 +42,10 @@ const getMyTravel = async (
 ) => {
   try {
     const myTravel = await getTravel(req.user._id);
-    return sendResponse(res, StatusCodes.OK, myTravel);
+    return sendResponse(res, StatusCodes.CREATED, myTravel);
   } catch (err) {
-    next(err);
+    const customError = errorGenerator("Failed to retrieve travels", StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
@@ -63,9 +57,10 @@ const getUserTravel = async (
   try {
     const userTravel = await getTravel(req.params.userId);
 
-    return sendResponse(res, StatusCodes.OK, userTravel);
+    return sendResponse(res, StatusCodes.CREATED, userTravel);
   } catch (err) {
-    next(err);
+    const customError = errorGenerator("Failed to retrieve user travels", StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
@@ -76,21 +71,15 @@ const updateTravel = async (
 ) => {
   try {
     const id = req.params.travelId;
-    const schema = TravelValidator.putTravel();
-    const validationResult = schema.validate(req.body);
-
-    if (validationResult.error) {
-      return sendResponse(res, StatusCodes.BAD_REQUEST, {
-        error: validationResult.error.details[0].message,
-      });
-    }
+    
     const updatedTravel = await setTravel(id, {
       toUpdate: { ...req.body },
     });
 
-    return sendResponse(res, StatusCodes.OK, updatedTravel);
+    return sendResponse(res, StatusCodes.CREATED, updatedTravel);
   } catch (err) {
-    next(err);
+    const customError = errorGenerator("Failed to update travels", StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
@@ -102,9 +91,10 @@ const deleteTravel = async (
   try {
     const deleteTravel = await deletedTravel(req.params.travelId);
 
-    return sendResponse(res, StatusCodes.OK, deleteTravel);
+    return sendResponse(res, StatusCodes.CREATED, deleteTravel);
   } catch (err) {
-    next(err);
+    const customError = errorGenerator("Failed to delete travels", StatusCodes.INTERNAL_SERVER_ERROR);
+    return res.status(customError.statusCode).json({ error: customError.message });
   }
 };
 
