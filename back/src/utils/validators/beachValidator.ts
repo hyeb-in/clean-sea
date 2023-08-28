@@ -1,32 +1,27 @@
 import joi, { Schema } from 'joi';
-import { Request, Response, NextFunction } from 'express';
-import { StatusCodes } from 'http-status-codes';
 
-export const beachNameValidator = (): Schema => {
-  return joi.object({
-    name: joi.string().required(),
-  });
-};
+class beachValidator {
+  static getBeach() : Schema {
+      return joi.object({
+          _id : joi.string().min(2).required().messages({
+              'string.base' : "글자를 확인해주세요.",
+              'string.min' : '2글자 이상 작성해주세요.',
+          }),
+      });
+  }
 
-export const addressNameValidator = (): Schema => {
-  return joi.object({
-    address: joi.string().required(),
-  });
-};
-
-function validate(schema: Schema) {
-  return (
-    req: Request, 
-    res: Response, 
-    next: NextFunction
-    ) => {
-    const { error } = schema.validate(req.params);
-    if (error) {
-      res.status(StatusCodes.BAD_REQUEST).send(error.details[0].message);
-    } else {
-      next();
-    }
-  };
+  static getBeachAndYear() : Schema {
+      return joi.object({
+          year : joi.number().min(4).optional().messages({
+              'string.base' : "숫자로 입력해주세요.",
+              'string.min' : '1999 형태로 작성해주세요',
+          }),
+          address : joi.string().min(2).optional().messages({
+            'string.base' : "글자를 확인해주세요.",
+            'string.min' : '2글자 이상 작성해주세요.',
+        }),
+      });
+  }
 }
 
-export { validate };
+export { beachValidator };

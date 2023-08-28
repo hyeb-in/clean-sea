@@ -1,10 +1,5 @@
-import { Schema, model, Document } from 'mongoose';
-
-interface ITravel extends Document {
-    author? : string;
-    beachId : string;
-    date : Date;
-}
+import { Schema, model } from 'mongoose';
+import { ITravel } from 'travel';
 
 const TravelSchema : Schema<ITravel> = new Schema({
     author : {
