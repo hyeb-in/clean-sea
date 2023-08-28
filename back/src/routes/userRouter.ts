@@ -12,6 +12,7 @@ import {
   validateSignUp,
   validateUpdateUser,
 } from "../utils/validators/userValidator";
+import { handleFileUpload } from "../middlewares/uploadMiddleware";
 
 const userRouter = Router();
 
@@ -28,7 +29,7 @@ userRouter.post("/reset-password", resetPassword);
 userRouter
   .route("/:userId")
   .get(jwtAuthentication, getUser)
-  .put(jwtAuthentication, validateUpdateUser, updateUser)
+  .put(jwtAuthentication, handleFileUpload, validateUpdateUser, updateUser)
   .delete(jwtAuthentication, deleteUser);
 
 export default userRouter;

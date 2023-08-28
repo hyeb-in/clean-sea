@@ -7,11 +7,10 @@ export interface IUser {
   email: string;
   password: string;
   description: string;
-  profileImage: string;
+  uploadFile?: string[];
 }
 
 export interface IRequest extends Request {
   user: IUser;
   token: string;
-  uploadFile?: string[];
 }

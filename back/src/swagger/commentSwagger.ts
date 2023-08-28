@@ -68,6 +68,12 @@
  *   get:
  *     summary: Get comments
  *     tags: [Comments]
+ *     parameters:
+ *       - name: postId
+ *         in: path
+ *         required: true
+ *         type: Schema.Types.ObjectId
+ *         description: Review ID
  *     security:
  *       - bearerAuth: []
  *     responses:

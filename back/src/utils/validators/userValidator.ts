@@ -59,11 +59,11 @@ export const validateUpdateUser = (
   next: NextFunction
 ) => {
   const updateValue = req.body;
-
+  console.log(req.body);
   const schema = joi.object({
     name: joi.string().min(2).max(20).required().pattern(nameReg),
     description: joi.string().optional(),
-    profileImage: joi.string().optional(),
+    uploadFile: joi.any(),
   });
 
   const { value, error } = schema.validate(updateValue);
