@@ -1,4 +1,4 @@
-const Timestamp = ({ createdAt }) => {
+const Timestamp = ({ createdAt, className }) => {
   const currentTime = new Date(); // 현재 시간
   const createdAtgg = new Date(createdAt); // 주어진 시간
 
@@ -9,7 +9,7 @@ const Timestamp = ({ createdAt }) => {
   const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일자로 변환
 
   return (
-    <div className="text-timestamp">
+    <div className="text-timestamp comment__timestamp">
       {minutesPassed < 1 && "방금 전"}
       {minutesPassed < 60 && minutesPassed > 0 && `${minutesPassed}분 전`}
       {minutesPassed >= 60 && hoursPassed < 24 && `${hoursPassed}시간 전`}

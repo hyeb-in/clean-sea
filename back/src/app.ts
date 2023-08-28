@@ -17,6 +17,9 @@ import { mailSender } from "./utils/sendMail";
 
 const app: Express = express();
 app.use(cors());
+
+app.use("/profile-images", express.static("profileImages"));
+
 app.use(passport.initialize());
 localStrategy();
 jwtStrategy();
@@ -39,6 +42,7 @@ app.use("/travels", travelAuthRouter);
 app.use("/beaches", beachRouter);
 app.use("/auth", authRouter);
 app.use("/comments", commentAuthRouter);
+
 app.use("/api", likeAuthRouter);
 
 app.use("/uploads", express.static("imageUpload"));

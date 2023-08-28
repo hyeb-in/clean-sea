@@ -1,4 +1,4 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import {
   deleteUser,
   getRandomUser,
@@ -6,8 +6,8 @@ import {
   resetPassword,
   signUpUser,
   updateUser,
-} from "../controllers/userController";
-import { jwtAuthentication } from "../middlewares/authenticateJwt";
+} from '../controllers/userController'
+import { jwtAuthentication } from '../middlewares/authenticateJwt'
 import {
   validateSignUp,
   validateUpdateUser,

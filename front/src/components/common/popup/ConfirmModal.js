@@ -1,5 +1,5 @@
 import Button from "react-bootstrap/Button";
-import ModalBodyWrapper from "../ModalBodyWrapper";
+import ModalBodyWrapper from "../layout/ModalBodyWrapper";
 import { Container, Modal } from "react-bootstrap";
 
 /**

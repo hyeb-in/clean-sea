@@ -106,9 +106,9 @@ export const validateUpdateUser = (
   const updateValue = req.body;
 
   const schema = joi.object({
-    name: validateSchema.name,
-    description: validateSchema.description,
-    uploadFile: validateSchema.uploadFile,
+    name: joi.string().min(2).max(20).optional().pattern(nameReg),
+    description: joi.string().optional(),
+    uploadFile: joi.any(),
   });
 
   const { error } = schema.validate(updateValue);

@@ -1,3 +1,7 @@
+input:focus,
+textarea:focus {
+  outline: none;
+} /* outline 테두리 없애기 */
 /* 상태 표시해주는 모달창 --> to do: 외부로 뺄 것 */
 .noReviewIndicator {
   min-height: 400px;
@@ -13,18 +17,62 @@
 }
 .review-container {
   max-width: 70%;
+  padding: 10px;
 }
-.addReview__form {
+
+.review__title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.review__ .addReview__form {
   display: flex;
   width: 100%;
 }
-.addReview-container__lg {
+.addreview__modalWrapper {
+  max-width: 100% !important;
+}
+.addreview__btn {
+  height: max-content;
+}
+
+@media (max-width: 800px) {
+  .addReview__form.flexible-col,
+  .review.flexible-col {
+    display: flex;
+    flex-direction: column;
+  }
+}
+/* 큰 화면에서 flex-row 스타일 적용 */
+@media (min-width: 801px) {
+  .addReview__form.flexible-col,
+  .review.flexible-col {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+  }
+}
+.review.flexible-col {
+  min-width: 350px;
   width: 100%;
-  flex-direction: column;
 }
-.addReview-container__sm {
+.review__flexible-child {
+  padding: 0;
 }
-/* review form */
+@media (max-width: 800) {
+  .review__flexible-child {
+    width: 100%;
+  }
+}
+@media (min-width: 801px) {
+  .review__flexible-child {
+    max-width: 50%;
+  }
+}
 .carousel-arrow-icon {
   background-color: black;
   padding: 5px;
@@ -36,12 +84,29 @@
 .editForm__author {
   width: auto;
 }
-
+.show-more-btn {
+  word-break: break-all;
+}
+.comment__content {
+  white-space: unset;
+}
 /* image carousel */
 .carousel__container {
-  width: auto;
+  width: 100%;
   height: 100%;
   object-fit: contain;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  background-color: #000000f5;
+}
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+  width: 100px;
+  height: 20px;
 }
 .carousel__close-btn {
   position: absolute;
@@ -49,64 +114,15 @@
   right: 0;
 }
 .carousel-bg-black {
-  background-color: black;
-}
-.carousel-bg-white {
+  /* background-color: black; */
   background-color: white;
 }
-
-/* 커맨트 */
-.comment__author {
-  font-weight: 600;
+.carousel-bg-white {
+  /* background-color: white; */
+  max-width: 50%;
 }
-.comment__avatar {
-  position: absolute;
-  top: 20px;
-}
-.comment__form {
-  /* display: flex;
-  flex-direction: column; */
-  position: relative;
-}
-.comment__content {
-  color: grey;
-  word-break: break-all;
-}
-.comment__input {
-  background-color: none;
-  border: none;
-  /* Remove outline */
-  outline: none;
-  /* Reset padding and margin */
-  padding: 0;
-  margin: 0;
-  /* Reset background */
-  background: none;
-  /* Reset font styles */
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  /* Reset other styles */
-  color: inherit;
-  line-height: inherit;
-  width: 100%;
-  border-bottom: 1px solid gray;
-  padding: 5px;
-  margin: 10px;
-}
-.comment__button {
-  position: absolute;
-  right: 0;
-  top: 5px;
-  border: none;
-}
-.position-rel {
-  position: relative;
-}
-.comment__avatar {
-  position: absolute;
-  top: 0;
-  right: 0;
+.review__contents {
+  margin-top: 10px;
 }
 
 .isLiked {
@@ -117,28 +133,63 @@
 }
 
 /* 드래그 앤 드랍 */
-.upload-container {
-  display: flex;
-  width: 100%;
-}
 .upload-area {
+  position: relative;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
   border: 2px dashed #ccc;
-  padding: 10px;
-  background-color: white;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  /* padding: 40px 0;
+  margin: 15px; */
+  color: #aaa;
+  background-color: rgba(117, 120, 205, 0.263);
 }
 .upload-label {
-  display: block;
-  margin-bottom: 10px;
+  display: flex;
+  color: #000000c1;
+  font-weight: 600;
+}
+.upload-label-bottom-text {
+  background-color: none;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: cener;
+  flex-direction: column;
+  padding: 15px 10px;
 }
 .file-input {
   display: none;
 }
 .drag-drop-area {
+  position: absolute;
+  top: 0;
+  height: 100%;
   width: 100%;
-  border: 2px dashed #aaa;
-  padding: 20px;
-  color: #aaa;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  z-index: -1;
+}
+.drag-drop-area-btn__container {
+  position: absolute;
+
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.upload-icon,
+.upload-text {
+  font-size: 4rem;
+  padding: 15px;
 }
 .active {
-  background-color: black;
+  background-color: #e6e6e6;
 }

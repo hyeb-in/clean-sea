@@ -10,7 +10,11 @@ import {
 import { IRequest } from "user";
 import { errorGenerator } from "../utils/errorGenerator";
 
-const sendResponseWithData = function (res: Response, statusCode: number, data: any) {
+const sendResponseWithData = function (
+  res: Response,
+  statusCode: number,
+  data: any
+) {
   res.status(statusCode).json(data);
 };
 
@@ -28,8 +32,13 @@ const createReview = async (
 
       return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
   } catch (error) {
-    const customError = errorGenerator(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
-    return res.status(customError.statusCode).json({ error: customError.message });
+    const customError = errorGenerator(
+      error.message,
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+    return res
+      .status(customError.statusCode)
+      .json({ error: customError.message });
   }
 };
 
@@ -38,12 +47,16 @@ const getAllReview = async (
   res: Response,
 ) => {
   try {
-    
     const allReview = await getReview();
     return sendResponseWithData(res, StatusCodes.CREATED, allReview);
   } catch (err) {
-    const customError = errorGenerator("Failed to retrieve reviews", StatusCodes.INTERNAL_SERVER_ERROR);
-    return res.status(customError.statusCode).json({ error: customError.message });
+    const customError = errorGenerator(
+      "Failed to retrieve reviews",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+    return res
+      .status(customError.statusCode)
+      .json({ error: customError.message });
   }
 };
 
@@ -56,9 +69,14 @@ const getAllLogin = async (
 
     const loginReview = await getLoginReview(author);
     return sendResponseWithData(res, StatusCodes.CREATED, loginReview);
-  }catch(err){
-    const customError = errorGenerator("Failed to retrieve login reviews", StatusCodes.INTERNAL_SERVER_ERROR);
-    return res.status(customError.statusCode).json({ error: customError.message });
+  } catch (err) {
+    const customError = errorGenerator(
+      "Failed to retrieve login reviews",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+    return res
+      .status(customError.statusCode)
+      .json({ error: customError.message });
   }
 };
 
@@ -75,8 +93,13 @@ const updateReview = async (
   
       return sendResponseWithData(res, StatusCodes.CREATED, updatedReview);
   } catch (err) {
-    const customError = errorGenerator("Failed to update login reviews", StatusCodes.INTERNAL_SERVER_ERROR);
-    return res.status(customError.statusCode).json({ error: customError.message });
+    const customError = errorGenerator(
+      "Failed to update login reviews",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+    return res
+      .status(customError.statusCode)
+      .json({ error: customError.message });
   }
 };
 
@@ -88,8 +111,13 @@ const deleteReview = async (
     const deletReview = await deletedReview(req.params.reviewId);
     return sendResponseWithData(res, StatusCodes.CREATED, deletReview);
   } catch (err) {
-    const customError = errorGenerator("Failed to delete login reviews", StatusCodes.INTERNAL_SERVER_ERROR);
-    return res.status(customError.statusCode).json({ error: customError.message });
+    const customError = errorGenerator(
+      "Failed to delete login reviews",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+    return res
+      .status(customError.statusCode)
+      .json({ error: customError.message });
   }
 };
 

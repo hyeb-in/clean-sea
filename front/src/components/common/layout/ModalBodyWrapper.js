@@ -7,7 +7,7 @@ const ModalBodyWrapper = ({ children, title, onHide, content }) => {
         <Modal.Title size="ms">{title}</Modal.Title>
       </Modal.Header>
       {content && (
-        <Modal.Body className="d-flex justify-content-center align-items-center">
+        <Modal.Body className="d-flex justify-content-center align-items-center ">
           {content}
         </Modal.Body>
       )}
