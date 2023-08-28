@@ -4,7 +4,7 @@ import ReviewTitle from "./ReviewTitle";
 import CurrentComments from "./comment/CurrentComment";
 import ReviewContents from "./ReviewContents";
 import CarouselWrapper from "../common/Carousel";
-import AddCommentForm from "./comment/AddCommentForm";
+import AddCommentForm from "./comment/CommentForm";
 import { UserStateContext } from "../../App";
 import EditReview from "./EditReview";
 import useModal, { MODAL_TYPE } from "../../hooks/useModal";

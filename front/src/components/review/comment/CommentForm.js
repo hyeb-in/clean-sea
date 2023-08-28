@@ -3,7 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { ModalVisibleContext, UserStateContext } from "../../../App";
 import * as Api from "../../../Api";
 
-const AddCommentForm = ({ review, setNewCommentsList }) => {
+const CommentForm = ({ review, setNewCommentsList }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
   // 부모 컴포넌트로부터 데이터를 받을 수 있다(리뷰 페이지에서 작성되는 경우)
@@ -61,4 +61,4 @@ const AddCommentForm = ({ review, setNewCommentsList }) => {
   );
 };
 
-export default AddCommentForm;
+export default CommentForm;

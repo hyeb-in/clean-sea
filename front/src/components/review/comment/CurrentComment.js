@@ -15,13 +15,14 @@ const CurrentComments = ({
   return (
     <div className="comments-container">
       {/* 댓글 3개까지만 미리보기 */}
-      {/* 삭제 로직 구현 */}
+      {/* 삭제 로직 구현  */}
       {/* setComments 갱신 */}
       {commentList?.map(
         (comment, index) =>
           index < 2 && (
             <div key={comment._id}>
               <Comment
+                review={review}
                 comment={comment}
                 selectedReview={selectedReview}
                 setSelectedReview={setSelectedReview}
@@ -32,6 +33,7 @@ const CurrentComments = ({
       {newCommentsList?.map((comment) => (
         <div key={comment._id}>
           <Comment
+            review={review}
             comment={comment}
             selectedReview={selectedReview}
             setSelectedReview={setSelectedReview}

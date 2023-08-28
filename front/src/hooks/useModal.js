@@ -44,7 +44,7 @@ const useModal = () => {
   const showServerErrorModal = (show) => {
     return (
       <ModalBodyWrapper
-        show={true}
+        show={show}
         title="게시물을 업로드하지 못했습니다"
         content={
           <FontAwesomeIcon icon={faBomb} className="indicator-success" />

@@ -15,8 +15,6 @@ import { TOAST_POPUP_STATUS } from "../../constants";
 const ReviewsList = ({ setReview, reviews, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
-  // const { showToast, showToastPopup, toastText, toastStatus, toastPosition } =
-  //   useToast();
 
   const isActionPopupOpen = modalVisible?.type === MODAL_TYPE.actionSelector;
   const isCommentListPopupOpen = modalVisible?.type === MODAL_TYPE.commentsList;

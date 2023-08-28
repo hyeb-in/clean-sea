@@ -132,12 +132,21 @@ textarea:focus {
   margin-top: 20px;
 }
 .comment__flex {
-  display: flex;
+  /* display: flex;  여기 flex하면 텍스트 넘침 */
   margin-bottom: 10px;
-  justify-items: space-between !important;
+  /* justify-items: space-between !important; */
+}
+.comment__edit-input {
+  width: 100%;
+}
+.comment__btn-col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .text-author {
   margin-right: 10px;
+  margin-left: 5px;
 }
 .comment__col {
   display: flex;

@@ -2,7 +2,7 @@ import { CloseButton, Col, Container, Modal, Row } from "react-bootstrap";
 import ReviewHeader from "../ReviewTitle";
 import CarouselWrapper from "../../common/Carousel";
 import Comment from "./Comment";
-import AddCommentForm from "./AddCommentForm";
+import AddCommentForm from "./CommentForm";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import * as Api from "../../../Api";
 import { useEffect, useState } from "react";
@@ -15,22 +15,18 @@ import ConfirmModal from "../../common/popup/ConfirmDeleteModal";
 // -> 모든 커멘트 목록이 필요
 const CommentsModal = () => {
   const { modalVisible } = useModal();
+
   const { review } = modalVisible.data;
   const { closeModal } = useModal();
   const [modalCommentList, setModalCommentList] = useState([]);
-  // new comments list는 어디서 오는거고, 데이터 검사좀 하고 쓰자...
   const [newCommentsList, setNewCommentsList] = useState([]);
-  // console.log(modalVisible.data);
-  // reviews는 보내줄 필요 없음 modalVisible.data <<<< 필요없는 거 지우기  reviewId만 보내도 될듯
-  // 값 어떻게 갱신할 건지?
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
+  console.log(modalVisible);
   try {
     useEffect(() => {
       const getAllComments = async () => {
         const res = await Api.get(`comments/${review._id}`);
         if (!res.data) throw new Error("데이터를 가져올 수 없습니다");
-        // console.log(res.data);
         setModalCommentList(res.data);
       };
       getAllComments();

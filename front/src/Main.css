@@ -59,8 +59,9 @@ body {
   font-size: 0.8rem;
   font-weight: 600;
   color: gray;
-  display: inline-block;
+  display: flex;
   white-space: nowrap;
+  align-items: center;
 }
 .text-like {
   margin-right: 10px;

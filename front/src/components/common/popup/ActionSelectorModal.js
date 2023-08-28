@@ -11,24 +11,31 @@ import * as Api from "../../../Api";
  *
  */
 const ActionSelectorModal = () => {
-  // commentId가 있다면 comment를 삭제
+  // commentId가 있다면 comment를 삭제 -----> comment 삭제는 Comment 컴포넌트에서 해결하는 걸로 바뀜. 수정사항 반영할 것
   // reviewId가 있다면 reviewId를 삭제
   const { closeModal, openModal, modalVisible } = useModal();
-  const isEditingReview = modalVisible.data.target === MODAL_TYPE.editReview;
 
   const review = modalVisible?.data?.review;
   const setReviews = modalVisible?.data?.setReviews;
   const commentId = modalVisible?.data?.commentId;
-  console.log(commentId, modalVisible.data);
-  //   FLOATING_REVIEW_DATA
-  // commentId
-  // setModalCommentList
+  const editCommentData = modalVisible?.data?.currentComment;
 
-  //   review
-  // {_id: '64ec0ae1a48905af2d01e233', userName: 'WEWE', title: 'wefwfe222', content: 'wefwefew', author: '64e700bd9c79c25dbbafb6c6', …}
-  // setReviews
-  // "ACTION_SELECTOR"
-  console.log(review);
+  const onEdit = () => {
+    console.log(modalVisible, "from actionselector");
+
+    if (review && !editCommentData) {
+      openModal(MODAL_TYPE.editReview, {
+        ...modalVisible.data,
+        review,
+      });
+    } else if (editCommentData) {
+      openModal(MODAL_TYPE.commentsList, {
+        ...modalVisible.data,
+      });
+    }
+    // 수정은 모달창 아니고 그냥 review 컨테이너 안에서 해결.
+  };
+
   const deleteById = async () => {
     try {
       if (!review._id) throw new Error("정보를 찾을 수 없습니다");
@@ -44,17 +51,15 @@ const ActionSelectorModal = () => {
         });
       } else if (commentId) {
         // delete comment
-        console.log("hi");
         const res = await Api.delete(`comments/${commentId}`);
         if (!res.ok) {
           throw new Error("failed");
         }
+        // 성공메세지 출력
       }
-      // alert("성공");
       closeModal();
     } catch (error) {
       console.log(error);
-      // to do: 에러 메세지!_!
     }
   };
 
@@ -70,21 +75,10 @@ const ActionSelectorModal = () => {
       centered
     >
       <ListGroup className="text-center">
-        {review && (
-          <ListGroup.Item
-            action
-            onClick={() => {
-              if (review) {
-                openModal(MODAL_TYPE.editReview, {
-                  ...modalVisible.data,
-                  review,
-                });
-              }
-            }}
-          >
-            수정
-          </ListGroup.Item>
-        )}
+        <ListGroup.Item action onClick={onEdit}>
+          수정
+        </ListGroup.Item>
+
         <ListGroup.Item action className="delete" onClick={deleteById}>
           삭제
         </ListGroup.Item>

@@ -13,6 +13,7 @@ const ReviewTitle = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { openModal, modalVisible } = useModal();
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
+
   return (
     <div className="d-flex align-items-center justify-content-between link px-0 commentModal">
       <div
@@ -26,7 +27,7 @@ const ReviewTitle = ({ review, setReviews }) => {
         >
           {review?.userName}
         </div>
-        <Timestamp createdAt={review.createdAt} />
+        <Timestamp createdAt={review?.createdAt} />
       </div>
 
       {/* 로그인 유저가 작성한 글이라면 ellipsis 버튼을 보여준다 */}
