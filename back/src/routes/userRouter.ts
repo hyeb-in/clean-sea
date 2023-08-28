@@ -26,6 +26,8 @@ userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
 
+userRouter.post("/change-password");
+
 userRouter
   .route("/:userId")
   .get(jwtAuthentication, getUser)

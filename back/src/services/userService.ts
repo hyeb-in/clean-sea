@@ -11,7 +11,6 @@ import { generateRandomPassword } from "../utils/randomPassword";
 import { mailSender } from "../utils/sendMail";
 import { errorGenerator } from "../utils/errorGenerator";
 import UserModel from "../db/schemas/userSchema";
-import { error } from "winston";
 
 /**
  * @param {*} email
@@ -48,7 +47,7 @@ export const updateUserService = async (
   let key: keyof IUser;
   for (key in inputData) {
     if (user[key] !== inputData[key]) {
-        changedValue[key] = inputData[key] as string | string[];
+      changedValue[key] = inputData[key] as string | string[];
     }
   }
 
