@@ -1,4 +1,3 @@
-import { Container, Row } from "react-bootstrap";
 import Avatar from "../../common/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
@@ -17,8 +16,8 @@ const Comment = ({ review, comment, setModalCommentList }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const [isEditing, setIsEditing] = useState(false);
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  const { postId, userId, content, userName, date } = comment;
+  const { setModalVisible } = useContext(ModalVisibleContext);
+  const { userId, content, userName, date } = comment;
 
   const isMyComment = loggedInUser && loggedInUser._id === userId;
 

@@ -8,15 +8,15 @@ const CurrentComments = ({
   setSelectedReview,
   commentList,
   newCommentsList,
-  setNewCommentsList,
 }) => {
   const { openModal } = useModal();
   const { setReviews } = useReview();
+
   return (
     <div className="comments-container">
       {/* 댓글 3개까지만 미리보기 */}
-      {/* 추가된 커맨트까지 갯수가 3개 이상이 된다면 이전 커맨트는 사라지게 해준다 */}
-      {/* 순서 역순이어야 함 ㅋㅋ */}
+      {/* 삭제 로직 구현 */}
+      {/* setComments 갱신 */}
       {commentList?.map(
         (comment, index) =>
           index < 2 && (
@@ -46,7 +46,6 @@ const CurrentComments = ({
             setReviews,
             comments: commentList,
             newCommentsList,
-            setNewCommentsList,
           })
         }
         className="link"

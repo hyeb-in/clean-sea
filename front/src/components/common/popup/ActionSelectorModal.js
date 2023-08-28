@@ -35,7 +35,7 @@ const ActionSelectorModal = () => {
 
       if (review) {
         const res = await Api.delete(`reviews/${review._id}`);
-        if (!res.ok === 204) {
+        if (!res.ok) {
           throw new Error("failed");
         }
         setReviews((current) => {
@@ -45,6 +45,10 @@ const ActionSelectorModal = () => {
       } else if (commentId) {
         // delete comment
         console.log("hi");
+        const res = await Api.delete(`comments/${commentId}`);
+        if (!res.ok) {
+          throw new Error("failed");
+        }
       }
       // alert("성공");
       closeModal();
@@ -66,7 +70,7 @@ const ActionSelectorModal = () => {
       centered
     >
       <ListGroup className="text-center">
-        {isEditingReview && (
+        {review && (
           <ListGroup.Item
             action
             onClick={() => {
