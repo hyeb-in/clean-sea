@@ -12,7 +12,7 @@ import { postReviewValidator, putReviewValidator } from "../utils/validators/rev
 const reviewAuthRouter = Router();
 
 reviewAuthRouter
-    .post("/register", jwtAuthentication, handleFileUpload, createReview)
+    .post("/register", jwtAuthentication, handleFileUpload, postReviewValidator, createReview)
     .get("/reviewList", getAllReview)
     .get("/reviewListLogin", jwtAuthentication, getAllLogin);
 
