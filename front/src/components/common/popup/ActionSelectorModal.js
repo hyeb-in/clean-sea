@@ -11,7 +11,7 @@ import * as Api from "../../../Api";
  *
  */
 const ActionSelectorModal = () => {
-  // commentId가 있다면 comment를 삭제 -----> comment 삭제는 Comment 컴포넌트에서 해결하는 걸로 바뀜. 수정사항 반영할 것
+  // commentId가 있다면 comment를 삭제 -----> comment 수정은 Comment 컴포넌트에서 해결하는 걸로 바뀜. 수정사항 반영할 것
   // reviewId가 있다면 reviewId를 삭제
   const { closeModal, openModal, modalVisible } = useModal();
 
@@ -19,27 +19,38 @@ const ActionSelectorModal = () => {
   const setReviews = modalVisible?.data?.setReviews;
   const commentId = modalVisible?.data?.commentId;
   const editCommentData = modalVisible?.data?.currentComment;
-
+  console.log(modalVisible.data);
   const onEdit = () => {
-    console.log(modalVisible, "from actionselector");
-
     if (review && !editCommentData) {
       openModal(MODAL_TYPE.editReview, {
         ...modalVisible.data,
         review,
       });
-    } else if (editCommentData) {
-      openModal(MODAL_TYPE.commentsList, {
-        ...modalVisible.data,
-      });
     }
-    // 수정은 모달창 아니고 그냥 review 컨테이너 안에서 해결.
+    // else if (editCommentData) {
+    //   openModal(MODAL_TYPE.commentsList, {
+    //     ...modalVisible.data,
+    //   });
+    // }
+    // 수정은 모달창 아니고 그냥 review 컨테이너 안에서 해결. ==> to do: 코드 정리
   };
 
   const deleteById = async () => {
     try {
-      if (!review._id) throw new Error("정보를 찾을 수 없습니다");
+      if (!review?._id && !commentId)
+        throw new Error("정보를 찾을 수 없습니다");
+      if (commentId) {
+        // delete comment
+        const res = await Api.delete(`comments/${commentId}`);
+        if (!res.ok) {
+          throw new Error("failed");
+        }
+        // 성공메세지 출력
+        alert("성공");
+        return closeModal(); // edit comment했으면 return!
+      }
 
+      // 리뷰 삭제 로직 -->> review가 있는지 체크 해야함 (뭔가 꼬여있음 주의)
       if (review) {
         const res = await Api.delete(`reviews/${review._id}`);
         if (!res.ok) {
@@ -49,13 +60,6 @@ const ActionSelectorModal = () => {
           const currentReviews = [...current];
           return currentReviews.filter((item) => item._id !== review._id);
         });
-      } else if (commentId) {
-        // delete comment
-        const res = await Api.delete(`comments/${commentId}`);
-        if (!res.ok) {
-          throw new Error("failed");
-        }
-        // 성공메세지 출력
       }
       closeModal();
     } catch (error) {
