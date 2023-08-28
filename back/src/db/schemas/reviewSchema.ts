@@ -1,28 +1,46 @@
-import { Schema, model, Document } from 'mongoose';
-
-interface IReview extends Document {
-    title: string;
-    content: string;
-    author?: string;
-    uploadFile?: string;
-}
+import mongoose, { Schema, model } from 'mongoose';
+import { IReview } from 'review';
 
 const ReviewSchema : Schema<IReview> = new Schema({
+    userName : {
+        type : String,
+    },
+    location : {
+        type : String,
+    },
     title : {
         type : String,
-        required : true,
     },
     content : {
         type : String,
-        required : true,
     },
     author : {
         type : String,
-        required : true,
     },
     uploadFile : {
-        type : String,
+        type : [String],
     },
+    comments: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Comment',
+        },
+      ],
+      Likes : [
+      {
+        userId : {
+            type : String,
+        },
+        isLike : {
+            type : String,
+            enum : ['yes', 'no'],
+        },
+      },
+    ],
+      likeCount : {
+        type :Number,
+        default : 0,
+      },
     },
 
     {

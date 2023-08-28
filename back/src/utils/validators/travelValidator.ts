@@ -1,17 +1,33 @@
-import joi, { Schema } from 'joi';
+import joi from "joi";
+import { NextFunction, Response } from "express";
+import { IRequest } from "user";
+import { errorGenerator } from "../errorGenerator";
 
-class TravelValidator {
-    static postTravel() : Schema {
-        return joi.object({
-            date : joi.date().iso().required(),
-        });
-    }
-
-    static putTravel() : Schema {
-        return joi.object({
-            date : joi.date().iso().optional(),
-        });
+const validateSchema = (schema : joi.ObjectSchema) => {
+    return (req : IRequest, res : Response , next : NextFunction) => {
+        const { error } = schema.validate(req.body);
+        if (error){
+            const errorMessage = error.details[0].message;
+        const customError = errorGenerator(errorMessage, 400);
+        return res.status(customError.statusCode).json({error:customError.message});
+        }
+        next();
     }
 }
 
-export { TravelValidator };
+export const postTravelValidator = validateSchema (
+    joi.object({
+        author : joi.required(),
+        beachId: joi.required(),
+        date : joi.date().iso().required(),
+    }),
+);
+
+
+export const putTravelValidator = validateSchema (
+    joi.object({
+        beachId: joi.required(),
+        date : joi.date().iso().optional(),
+    }),
+);
+

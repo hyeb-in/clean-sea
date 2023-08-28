@@ -25,12 +25,21 @@
  *     summary: Create a new review
  *     tags: [Reviews]
  *     parameters:
- *       - name: author
- *         in: path
+ *       - name: userName
+ *         in: formData
  *         required: false
- *         schema:
- *           type: string
- *         description: userId
+ *         type: string
+ *         description: username
+ *       - name: location
+ *         in: formData
+ *         required: false
+ *         type: string
+ *         description: location
+ *       - name: uploadFile
+ *         in: formData
+ *         required: true
+ *         type: file
+ *         description: imageUpload
  *       - name: title
  *         in: formData
  *         required: true
@@ -53,6 +62,7 @@
  *               content:
  *                 type: string
  *                 description: Review content
+ *     security: []
  *     responses:
  *       200:
  *         description: Created
@@ -70,6 +80,8 @@
  *   get:
  *     summary: Get reviews created by the authenticated user
  *     tags: [Reviews]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of reviews
@@ -94,6 +106,8 @@
  *         schema:
  *           type: string
  *         description: User ID whose reviews are being retrieved
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of reviews
@@ -140,6 +154,8 @@
  *               content:
  *                 type: string
  *                 description: New content for the review
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Updated review
@@ -169,6 +185,8 @@
  *         schema:
  *           type: string
  *         description: Review ID to delete
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       204:
  *         description: No Content

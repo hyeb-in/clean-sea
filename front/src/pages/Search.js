@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import SearchBar from "../components/SearchBar";
-import Map from "../components/Map";
+import Map from "../components/common/Map";
+import SearchBar from "../components/common/layout/SearchBar";
 
 const Search = () => {
   return (

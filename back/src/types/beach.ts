@@ -1,12 +1,17 @@
+import { Types } from "mongoose";
+
 interface IBeach {
-  id: number;
-  name: string;
+  year?: number;
+  _id?: Types.ObjectId;
   address: string;
-  goodnessFit?: boolean;
-  eschScore?: number,
-  enteScore?: number,
+  name: string;
   ente?: number;
   esch?: number;
+  goodnessFit?: boolean;
+  eschAvg?: number;
+  enteAvg?: number;
+  eschScore?: number;
+  enteScore?: number;
   latitude?: number;
   longitude?: number;
 }

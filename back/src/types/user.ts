@@ -1,5 +1,6 @@
 import { Request } from "express";
 
+//TODO : created at, update at 이런 것도 넣어주기!
 export interface IUser {
   _id: string;
   name: string;

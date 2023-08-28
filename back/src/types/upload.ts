@@ -1,17 +1,18 @@
-interface FileObject {
-    fieldname : String;
-    originalname : String;
-    encoding : String;
-    mimetype : String;
-    size : Number;
-    destination : string;
-    filename : String;
-    path : String;
+interface FileObjects {
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    size: number;
+    destination: string;
+    filename: string;
+    path: string;
 }
 
 interface FileRequest {
-    file? : FileObject;
-    files? : {[fieldname : string] : File[]};
+    file?: FileObjects;
+    files?: { [fieldname: string]: FileObjects[] };
+    uploadFile?: string[];
 }
 
-export { FileObject, FileRequest };
+export { FileObjects, FileRequest };

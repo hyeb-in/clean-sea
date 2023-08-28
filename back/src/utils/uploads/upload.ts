@@ -1,35 +1,12 @@
-// import { FileObject, FileRequest } from "upload";
+import { FileObjects } from "../../types/upload";
 
-// class FileAppender{
-//     strategy : string;
-//     req : FileRequest;
-//     constructor(strategy : string, req : FileRequest){
-//         this.strategy = strategy;
-//         this.req = req;
+function insertFile(placeholder : FileObjects, file : FileObjects){
+    Object.assign(placeholder, file);
+}
 
-//         switch (strategy){
-//             case "NONE":
-//                 break;
-//             case "VALUE":
-//                 break;
-//             case "ARRAY":
-//                 req.files = [];
-//                 break;
+function replacePlaceholder(placeholder : FileObjects, file : FileObjects){
+    delete placeholder.fieldname;
+    Object.assign(placeholder, file);
+}
 
-//             default :
-//             throw new Error('Unknown file strategy :' + strategy);
-//         }
-//     }
-
-//     replacePlaceholder(placeholder : FileObject, file : FileObject){
-//         if (this.strategy === "VALUE"){
-//             this.req.file = file;
-//             return;
-//         }
-
-//         delete placeholder.fieldname;
-//         Object.assign(placeholder, file);
-//     }
-// }
-
-// export { FileAppender };
+export { insertFile, replacePlaceholder };

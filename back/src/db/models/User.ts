@@ -6,6 +6,11 @@ export const findUserById = async (userId: string): Promise<IUser> => {
   return user;
 };
 
+/**
+ *
+ * @param email ({email} 아님)
+ * @returns
+ */
 export const findUserByEmail = async (email: string): Promise<IUser> => {
   const user = await UserModel.findOne({ email });
 
@@ -22,19 +27,25 @@ export const create = async (
     email,
     password: hashedPassword,
   });
-  console.log(newUser);
 
   return newUser;
 };
 
-export const update = async (userId: string, inputData: Partial<IUser>) => {
-  const updatedUser = await UserModel.findByIdAndUpdate(userId, inputData, {
+//TODO  하나하나 체크하고 업데이트하기.
+export const update = async (userId: string, changedValue: Partial<IUser>) => {
+  const updatedUser = await UserModel.findByIdAndUpdate(userId, changedValue, {
     new: true,
   });
 
   return updatedUser;
 };
+
 export const deleteById = async (userId: string) => {
   const user = await UserModel.findByIdAndDelete(userId);
   return user;
+};
+
+export const getRandomUser = async () => {
+  const randomUser = await UserModel.aggregate([{ $sample: { size: 5 } }]);
+  return randomUser;
 };

@@ -1,42 +1,57 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 interface IBeach {
-  id: number;
-  name: string;
+  year?: number;
+  _id?: Types.ObjectId;
   address: string;
-  goodnessFit?: boolean;
-  eschScore?: number,
-  enteScore?: number,
+  name: string;
   ente?: number;
   esch?: number;
+  goodnessFit?: boolean;
+  eschAvg?: number;
+  enteAvg?: number;
+  eschScore?: number;
+  enteScore?: number;
   latitude?: number;
   longitude?: number;
+  eschGlobalAvg?: number;
+  enteGlobalAvg?: number;
+  eschAvgGlobalScore?: number;
+  enteAvgGlobalScore?: number;
 }
 
 const BeachSchema = new Schema<IBeach>(
   {
-    id: {
+    year: {
       type: Number,
+      required: false,
+    },
+    address: {
+      type: String,
       required: true,
     },
     name: {
       type: String,
       required: true,
     },
-    address: {
-      type: String,
-      required: true,
-    },
-    latitude: {
+    ente: {
       type: Number,
       required: false,
     },
-    longitude: {
+    esch: {
       type: Number,
       required: false,
     },
     goodnessFit: {
       type: Boolean,
+      required: false,
+    },
+    eschAvg: {
+      type: Number,
+      required: false,
+    },
+    enteAvg: {
+      type: Number,
       required: false,
     },
     eschScore: {
@@ -47,14 +62,33 @@ const BeachSchema = new Schema<IBeach>(
       type: Number,
       required: false,
     },
-    ente: {
+    latitude: {
       type: Number,
       required: false,
     },
-    esch: {
+    longitude: {
       type: Number,
       required: false,
     },
+    eschGlobalAvg: {
+      type: Number,
+      required: false,
+    },
+    enteGlobalAvg: {
+      type: Number,
+      required: false,
+    },
+    eschAvgGlobalScore: {
+      type: Number,
+      required: false,
+    },
+    enteAvgGlobalScore: {
+      type: Number,
+      required: false,
+    }
+  },
+  {
+    timestamps: true,
   }
 );
 
