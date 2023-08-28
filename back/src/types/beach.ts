@@ -16,4 +16,13 @@ interface IBeach {
   longitude?: number;
 }
 
-export { IBeach }
+interface BeachData {
+[year: string]: 
+{ 
+  eschAvg: number, 
+  enteAvg: number 
+}[];
+}
+
+
+export { IBeach, BeachData }

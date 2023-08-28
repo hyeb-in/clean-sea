@@ -24,8 +24,4 @@ class beachValidator {
   }
 }
 
-
-
-
-
 export { beachValidator };
