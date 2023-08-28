@@ -7,17 +7,18 @@ import {
   deleteReview
 } from "../controllers/reviewController";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
-// import { postReviewValidator, putReviewValidator } from "../utils/validators/reviewValidator";
+import { handleFileUpload } from "../middlewares/uploadMiddleware";
+import { postReviewValidator, putReviewValidator } from "../utils/validators/reviewValidator";
 const reviewAuthRouter = Router();
 
 reviewAuthRouter
-    .post("/register", jwtAuthentication, createReview)
+    .post("/register", jwtAuthentication, handleFileUpload, postReviewValidator, createReview)
     .get("/reviewList", getAllReview)
     .get("/reviewListLogin", jwtAuthentication, getAllLogin);
 
 reviewAuthRouter
     .route("/:reviewId")
-    .put(jwtAuthentication, updateReview)
+    .put(jwtAuthentication, handleFileUpload, putReviewValidator, updateReview)
     .delete(jwtAuthentication, deleteReview);
 
 export default reviewAuthRouter;

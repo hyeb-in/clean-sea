@@ -3,6 +3,7 @@ import {
   getBeachByBeachNameService,
   getBeachByIdService,
   getBeachByRegionAndYearService,
+  getBeachByRegionAndYearSpecificServiceAvg,
   getBeachByRegionAndYearSpecificService,
   getBeachesService
 } from "../services/beachService";
@@ -57,6 +58,24 @@ const getBeachByRegionAndYear = async (
 };
 
 // 지역별 및 연도별 가져오기 및 추가조건
+const getBeachByRegionAndYearSpecificAvg = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const year = req.params.year; // 연도 파라미터를 받아옴
+
+    const result = await getBeachByRegionAndYearSpecificServiceAvg(year); // 주소와 연도 값을 직접 전달
+    console.log(result);
+    res.status(StatusCodes.OK).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
+
+// 지역별 및 연도별 가져오기 및 추가조건
 const getBeachByRegionAndYearSpecific = async (
   req: Request,
   res: Response,
@@ -87,4 +106,4 @@ const getBeaches = async (
   }
 };
 
-export { getBeachByBeachName, getBeachById, getBeachByRegionAndYear, getBeachByRegionAndYearSpecific, getBeaches };
+export { getBeachByBeachName, getBeachById, getBeachByRegionAndYear, getBeachByRegionAndYearSpecificAvg, getBeachByRegionAndYearSpecific, getBeaches };

@@ -5,13 +5,14 @@ import {
   getUser,
   resetPassword,
   signUpUser,
-  updateUser, updateUserProfile,
+  updateUser,
 } from '../controllers/userController'
 import { jwtAuthentication } from '../middlewares/authenticateJwt'
 import {
   validateSignUp,
   validateUpdateUser,
 } from "../utils/validators/userValidator";
+import { handleFileUpload } from "../middlewares/uploadMiddleware";
 
 const userRouter = Router();
 
@@ -25,12 +26,12 @@ userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
 
-userRouter.put('/photo', express.static("profileImage"), updateUserProfile)
+userRouter.post("/change-password");
 
 userRouter
   .route("/:userId")
   .get(jwtAuthentication, getUser)
-  .put(jwtAuthentication, validateUpdateUser, updateUser)
+  .put(jwtAuthentication, handleFileUpload, validateUpdateUser, updateUser)
   .delete(jwtAuthentication, deleteUser);
 
 export default userRouter;

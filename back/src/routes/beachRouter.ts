@@ -22,6 +22,10 @@ beachRouter
 beachRouter.get("/beachbyname/:name", getBeachByBeachName);
 
 beachRouter
+  .get('/beachesavg/:year', getBeachByRegionAndYearSpecific);
+  // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+
+beachRouter
   .get('/beaches/:year', getBeachByRegionAndYearSpecific);
   // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
 

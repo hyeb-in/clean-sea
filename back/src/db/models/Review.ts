@@ -30,7 +30,7 @@ async function findUserReviews(author:string): Promise<IReview[]>{
       .exec();
 
     const authorString = author.toString();
-    console.log(authorString);
+
     const userReviewsObjects = userReviews.map(review =>{
       const isLike = review.Likes.some(like=>like.userId === authorString && like.isLike === 'yes');
       const reviewObject = review.toObject() as IReview;

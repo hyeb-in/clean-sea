@@ -11,7 +11,6 @@ import { generateRandomPassword } from "../utils/randomPassword";
 import { mailSender } from "../utils/sendMail";
 import { errorGenerator } from "../utils/errorGenerator";
 import UserModel from "../db/schemas/userSchema";
-import { error } from "winston";
 
 /**
  * @param {*} email
@@ -44,11 +43,11 @@ export const updateUserService = async (
   if (!user) throw errorGenerator("유저가 존재하지 않습니다.", 403);
 
   //2. 하나씩 비교한다.
-  const changedValue: Partial<IUser> = {};
+  const changedValue: Record<string, string | string[]> = {};
   let key: keyof IUser;
   for (key in inputData) {
     if (user[key] !== inputData[key]) {
-      changedValue[key] = inputData[key];
+      changedValue[key] = inputData[key] as string | string[];
     }
   }
 

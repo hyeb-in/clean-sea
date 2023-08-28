@@ -1,5 +1,5 @@
 import { Document, Types } from 'mongoose';
-import { ILike } from 'liketype';
+import { ILike } from 'likes';
 
 interface IReview extends Document {
   title?: string;
@@ -9,6 +9,7 @@ interface IReview extends Document {
   author?: string;
   uploadFile?: string[];
   comments?: Types.ObjectId[];
+  commentCount? : number;
   likeCount?: number;
   isLike?: 'yes' | 'no';
   Likes?: ILike[];
