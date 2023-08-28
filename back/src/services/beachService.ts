@@ -1,8 +1,14 @@
-import { BeachByBeachId, BeachByRegionAndYear, BeachByRegionAndYearSpecificAvg, BeachByRegionAndYearSpecific, Beaches } from "../db/models/Beach";
+import { BeachByBeachName, BeachByBeachId, BeachByRegionAndYear, BeachByRegionAndYearSpecificAvg, BeachByRegionAndYearSpecific, Beaches } from "../db/models/Beach";
 import { Types } from "mongoose";
 import { IBeach, BeachData, BeachDataAvg } from '../types/beach';
 
 // 해수욕장 명칭 하나로 가져오기
+async function getBeachByNameService(name: string): Promise<IBeach | null> {
+  const beachDataOne = await BeachByBeachName(name);
+  return beachDataOne;
+}
+
+// 해수욕장 id로 가져오기
 async function getBeachByIdService(_id: Types.ObjectId): Promise<IBeach[]> {
   const beachDataOne = await BeachByBeachId(_id);
   return beachDataOne;
@@ -51,4 +57,4 @@ async function getBeachesService(): Promise<IBeach[]> {
   return beachDataResult;
 }
 
-export { getBeachByIdService, getBeachByRegionAndYearService, getBeachByRegionAndYearSpecificServiceAvg, getBeachByRegionAndYearSpecificService, getBeachesService };
+export { getBeachByNameService, getBeachByIdService, getBeachByRegionAndYearService, getBeachByRegionAndYearSpecificServiceAvg, getBeachByRegionAndYearSpecificService, getBeachesService };

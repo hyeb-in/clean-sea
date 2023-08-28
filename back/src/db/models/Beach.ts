@@ -2,8 +2,8 @@ import { BeachModel, IBeach } from "../schemas/beachSchema";
 import { Types } from "mongoose";
 import { BeachData, BeachDataAvg } from "beach";
 
-async function BeachByBeachName(name: IBeach): Promise<IBeach[]> {
-  const getBeaches = await BeachModel.findOne(name) as IBeach[];
+async function BeachByBeachName(name: string): Promise<IBeach | null> {
+  const getBeaches = await BeachModel.findOne({ name: name });
   return getBeaches;
 }
 
@@ -80,6 +80,7 @@ async function Beaches(): Promise<IBeach[]> {
 }
 
 export { 
+  BeachByBeachName,
   BeachByBeachId, 
   BeachByRegionAndYear, 
   BeachByRegionAndYearSpecificAvg, 

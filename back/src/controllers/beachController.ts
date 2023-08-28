@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { 
+  getBeachByNameService,
   getBeachByIdService, 
   getBeachByRegionAndYearService, 
   getBeachByRegionAndYearSpecificServiceAvg,
@@ -9,6 +10,25 @@ import {
 import { StatusCodes } from "http-status-codes";
 import { IBeach } from 'beach';
 import { Types } from "mongoose";
+
+const getBeachByName = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const name = req.params.name;
+
+    const result = await getBeachByNameService(name);
+    if (result) {
+      res.status(StatusCodes.OK).json(result);
+    } else {
+      res.status(StatusCodes.NOT_FOUND).json({ message: 'not found error' });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
 
 const getBeachById = async (
   req: Request,
@@ -90,4 +110,4 @@ const getBeaches = async (
   }
 };
 
-export { getBeachById, getBeachByRegionAndYear, getBeachByRegionAndYearSpecificAvg, getBeachByRegionAndYearSpecific, getBeaches };
+export { getBeachByName, getBeachById, getBeachByRegionAndYear, getBeachByRegionAndYearSpecificAvg, getBeachByRegionAndYearSpecific, getBeaches };
