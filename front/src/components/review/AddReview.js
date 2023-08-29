@@ -17,6 +17,7 @@ import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
 import CarouselWrapper from "../common/Carousel";
 import { FileUploader } from "react-drag-drop-files";
 import ReviewFormBody from "./ReviewFormBody";
+import { cleanUpBlobUrls, createFormData } from "../../util/imagUrl";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -92,25 +93,10 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
       if (userInputValues.content.length > 300) {
         return showToastPopup("내용이 너무 깁니다", TOAST_POPUP_STATUS.alert);
       }
-      console.log(formDataFileRef.current);
-      const formDataFiles = Array.from(formDataFileRef.current);
 
-      const formData = new FormData();
+      const formData = createFormData(formDataFileRef, userInputValues);
 
-      formData.append("uploadFile", formDataFiles);
-      if (formDataFiles && formDataFiles.length > 0) {
-        for (let i = 0; i < formDataFiles.length; i++) {
-          formData.append("uploadFile[]", formDataFiles[i]);
-        }
-        formData.append("title", userInputValues.title);
-        formData.append("content", userInputValues.content);
-      }
-
-      console.log(formData.getAll("uploadFile[]"));
-      console.log(formData.getAll("title"));
-      console.log(formData.getAll("content"));
-
-      setUploadStatus(RESULT_ENUM.UPLOADING);
+      // setUploadStatus(RESULT_ENUM.UPLOADING);
 
       const res = await axios.post(`${serverUrl}reviews/register`, formData);
       if (!res.data) {
@@ -140,7 +126,7 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
     if (!modalVisible?.isVisible && preview?.length > 0) {
       return () => {
-        preview?.forEach((url) => URL.revokeObjectURL(url));
+        cleanUpBlobUrls(preview);
       };
     }
   }, [preview, modalVisible]);
@@ -165,7 +151,7 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
         backdrop="static"
         centered
         keyboard={false}
-        // dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
+        dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
         className="px-5"
         show={modalVisible.type === MODAL_TYPE.addReview}
         onHide={() => {
