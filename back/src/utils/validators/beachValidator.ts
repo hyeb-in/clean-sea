@@ -40,6 +40,14 @@ class beachValidator {
     return this.validateSchema(schema);
   }
 
+  static getBeachByRegionAndYear() {
+    const schema = joi.object({
+      year: commonNumberValidation.optional(),
+      address: commonStringValidation.optional(),
+    });
+    return this.validateSchema(schema);
+  }
+
   static getBeachByRegionAndYearSpecificAvg() {
     const schema = joi.object({
       year: commonNumberValidation.optional(),

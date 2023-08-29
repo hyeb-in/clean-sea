@@ -46,4 +46,10 @@ async function getBeachesService(): Promise<IBeach[]> {
   return beachDataResult;
 }
 
-export { getBeachByNameService, getBeachByIdService, getBeachByRegionAndYearService, getBeachByRegionAndYearSpecificServiceAvg, getBeachByRegionAndYearSpecificService, getBeachesService };
+export { 
+  getBeachByNameService, 
+  getBeachByIdService, 
+  getBeachByRegionAndYearService, 
+  getBeachByRegionAndYearSpecificServiceAvg, 
+  getBeachByRegionAndYearSpecificService, 
+  getBeachesService };
