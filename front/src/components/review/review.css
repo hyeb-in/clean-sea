@@ -126,6 +126,7 @@ textarea:focus {
 }
 .carousel-item img {
   object-fit: cover;
+  height: 350px;
 }
 .review__contents {
   margin-top: 10px;

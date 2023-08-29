@@ -81,6 +81,7 @@ const Comment = ({ review, comment }) => {
                       isVisible: true,
                       data: {
                         commentId: comment._id,
+                        setResult,
                       },
                     });
                   }}

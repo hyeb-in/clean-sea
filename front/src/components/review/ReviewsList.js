@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
@@ -33,39 +33,49 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
     await Api.get("reviews/reviewListLogin");
   const fetchPublicReviews = async () => await Api.get("reviews/reviewList");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
-        if (loggedInUser) {
-          const res = await fetchPrivateReviews();
-          console.log(res);
-          if (!res.data) {
-            showToastPopup(
-              "유저의 데이터를 불러올 수 없습니다",
-              TOAST_POPUP_STATUS.error
-            );
-          }
-          setReviews(res.data);
-          setIsLoaded(true);
-        } else {
-          const res = await fetchPublicReviews();
-          if (!res.data) {
-            showToastPopup(
-              "공개된 데이터를 불러올 수 없습니다",
-              TOAST_POPUP_STATUS.error
-            );
-          }
-
-          setReviews(res.data);
-          setIsLoaded(true);
+  const fetchData = useCallback(async () => {
+    try {
+      // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
+      if (loggedInUser) {
+        const res = await fetchPrivateReviews();
+        console.log(res);
+        if (!res.data) {
+          showToastPopup(
+            "유저의 데이터를 불러올 수 없습니다",
+            TOAST_POPUP_STATUS.error
+          );
         }
-      } catch (error) {
-        // showToastPopup(error, TOAST_POPUP_STATUS.error);
+        setReviews(res.data);
+        setIsLoaded(true);
+      } else {
+        const res = await fetchPublicReviews();
+        if (!res.data) {
+          showToastPopup(
+            "공개된 데이터를 불러올 수 없습니다",
+            TOAST_POPUP_STATUS.error
+          );
+        }
+
+        setReviews(res.data);
+        setIsLoaded(true);
       }
-    };
-    fetchData();
+    } catch (error) {
+      // showToastPopup(error, TOAST_POPUP_STATUS.error);
+    }
   }, [loggedInUser, setReviews]);
+
+  useEffect(() => {
+    fetchData();
+  }, [loggedInUser, setReviews, fetchData]);
+
+  useEffect(() => {
+    console.log(modalVisible);
+    if (modalVisible.status === "deleted") {
+      console.log("hi");
+      fetchData();
+      // reviews 정보를 새로 받아오는 방법
+    }
+  }, [modalVisible, setReviews]);
 
   return (
     <>
