@@ -22,7 +22,7 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
 
   const handleListItemClick = async (name) => {
     try {
-      const beach = await Api.get(`beaches/beachbyname/${name}`);
+      const beach = await Api.get(`beaches/name/${name}`);
       onBeachIdSelected(beach.data._id);
       setSearchTerm(beach.data.name);
       setFilteredItems([]);
