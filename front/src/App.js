@@ -92,12 +92,9 @@ function App() {
     title: "",
     content: "",
   });
-  console.log(reviews);
-
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
-
   const path = location.pathname.split("/")[1];
   const is404Page =
     path !== "" &&
@@ -157,7 +154,6 @@ function App() {
                       setUserInputValues={setUserInputValues}
                     />
                   )}
-
                 <Routes>
                   <Route path="/" exact element={<Main />} />
                   <Route path="/login" exact element={<Login />} />
@@ -168,12 +164,7 @@ function App() {
                     path="/reviews"
                     exact
                     element={
-                      <ReviewsList
-                        // review={review}
-                        // setReview={setReview}
-                        reviews={reviews}
-                        setReviews={setReviews}
-                      />
+                      <ReviewsList reviews={reviews} setReviews={setReviews} />
                     }
                   />
                   <Route path="/graph" exact element={<Graph />} />

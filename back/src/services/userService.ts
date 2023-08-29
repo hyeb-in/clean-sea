@@ -6,6 +6,7 @@ import {
   updateUserName,
   getRandomUser,
   update,
+  findUserById,
 } from "../db/models/User";
 import { IUser } from "user";
 import { generateRandomPassword } from "../utils/randomPassword";
@@ -93,3 +94,8 @@ export const changePasswordService = async (
   const updatedPwdUser = await update(userId, { password: hashedPassword });
   return updatedPwdUser;
 };
+
+export const getUserService = async (userId: string) => {
+  const user = await findUserById(userId);
+  return user;
+}

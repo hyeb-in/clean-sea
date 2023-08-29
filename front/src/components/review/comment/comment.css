@@ -4,8 +4,15 @@
   margin-left: 10px;
 }
 .comments-container {
+  margin: 25px 0;
   max-height: 300px;
+}
+.scroll-container {
   overflow: auto;
+  max-height: 300px;
+}
+.comment__border {
+  border: 1px solid rgb(0, 0, 0);
 }
 .commentModal__title {
   /* background-color: white; */
@@ -21,19 +28,30 @@
   margin: 0 60px;
 }
 /* 커맨트 */
-.comment-container {
-  overflow: auto;
+.comment-list__container {
+  overflow: scroll;
   height: 400px;
   padding-left: 0;
   margin-top: 20px;
 }
-.comment__flex {
-  /* display: flex;  여기 flex하면 텍스트 넘침 */
+.comment__container {
+  display: flex;
+  /* 여기 flex하면 텍스트 넘침 */
   margin-bottom: 10px;
-  /* justify-items: space-between !important; */
+  flex-direction: column;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
-.comment__edit-input {
+
+.text-content {
   width: 100%;
+  font-size: 0.9rem;
+  margin: 10px 0;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.928);
+}
+
+.comment__btn-container {
+  display: flex;
 }
 .comment__btn-col {
   display: flex;
@@ -46,13 +64,23 @@
   margin-left: 5px;
 }
 .comment__col {
-  display: flex;
-  align-items: center;
+  float: left;
+  margin: 0;
 }
 .comment__title {
+  display: flex;
+  color: rgb(65, 65, 65);
   padding-top: 10px;
-  padding-bottom: 20px;
+  /* float: left; */
+  font-weight: 500;
 }
+.comment__title img {
+  float: left;
+}
+.comment__col:nth-child(2) {
+  display: flex;
+}
+
 .w-100.bla {
   width: auto;
 }
@@ -95,26 +123,53 @@
   color: inherit;
   line-height: inherit;
   width: 100%;
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
   padding: 10px 0;
   font-weight: 500;
   font-size: 0.9rem;
   margin: 10px;
   padding-right: 60px;
+  border-top: 1px solid rgb(203, 203, 203);
+  border-bottom: 1px solid rgb(203, 203, 203);
 }
-.comment__button {
+.comment__submit-btn {
   position: absolute;
   right: 0;
   top: 10px;
   border: none;
   padding-top: 10px;
 }
-.position-rel {
+.comment__edit-input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.comment__edit-input {
+  width: 100%;
+  border-top: none;
+  padding-right: 0;
+}
+.comment__edit-btn {
+  min-width: fit-content;
+  font-size: 0.9rem;
+}
+.comment__edit-btn:first-child {
+  margin-right: 10px;
+}
+.comment__b .position-rel {
   position: relative;
 }
 .comment__avatar {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.showMoreDetails {
+  display: flex;
+  text-align: end;
+  padding: 10px;
+  font-size: 0.9rem;
+}
+.more-comments {
+  font-size: 0.8rem;
 }

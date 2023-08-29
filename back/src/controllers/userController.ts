@@ -2,7 +2,7 @@ import { NextFunction, Response } from "express";
 import {
   createUserService,
   deleteUserService,
-  getRandomUserService,
+  getRandomUserService, getUserService,
   resetPasswordService,
   updateUserService,
 } from "../services/userService";
@@ -51,7 +51,7 @@ export const getRandomUser = async (
 };
 
 /**
- * @description id값으로 유저 호출 api
+ * @description 현재 세션의 유저 호출 api
  */
 export const getUser = async (
   req: IRequest,
@@ -60,6 +60,23 @@ export const getUser = async (
 ) => {
   try {
     return res.status(200).json(req.user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @description id값으로 유저 호출 api
+ */
+export const getUserById = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = req.params['userId'];
+    const user = await getUserService(id);
+    return res.status(200).json(user);
   } catch (error) {
     next(error);
   }
