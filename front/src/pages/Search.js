@@ -11,7 +11,7 @@ const Search = () => {
           <SearchBar />
         </Col>
         <Col xs={8} className="px-0">
-          {/* <Map /> */}
+          <Map />
         </Col>
       </Row>
     </Container>
