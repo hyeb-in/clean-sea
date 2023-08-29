@@ -25,7 +25,7 @@ const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
   };
 
   const urls = imageUrls ? imageUrls : preview;
-  console.log(urls);
+
   return (
     <Carousel
       className={`carousel__container px-0`}
@@ -43,11 +43,13 @@ const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
               fluid
             />
             {/* preview 삭제버튼 */}
-            <Carousel.Caption className="d-flex justify-content-end">
-              <Button variant="danger" onClick={() => removeUrl(index)}>
-                삭제 <FontAwesomeIcon icon={faTrashCan} />
-              </Button>
-            </Carousel.Caption>
+            {preview && (
+              <Carousel.Caption className="d-flex justify-content-end">
+                <Button variant="danger" onClick={() => removeUrl(index)}>
+                  삭제 <FontAwesomeIcon icon={faTrashCan} />
+                </Button>
+              </Carousel.Caption>
+            )}
           </Carousel.Item>
         );
       })}

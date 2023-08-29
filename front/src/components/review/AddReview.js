@@ -25,6 +25,11 @@ export const RESULT_ENUM = {
   FAIL: "실패",
 };
 
+// to do
+// 1. 프리뷰 이미지 삭제 -> uploadFile에서도 삭제
+// 2. 안쓰는 코드 정리
+// 3. 토스트 팝업 알림
+
 const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const {
