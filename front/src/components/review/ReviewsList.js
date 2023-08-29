@@ -129,14 +129,6 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
 
       {/* 모달3. review 수정하기 폼 모달 */}
       {isEditReviewPopupOpen && <EditReview />}
-      {showToast && (
-        <ToastWrapper
-          setShowToast={setShowToast}
-          text={toastMessage}
-          status={toastStatus}
-          position={toastPosition}
-        />
-      )}
     </>
   );
 };
