@@ -6,7 +6,6 @@ import AddCommentForm from "./CommentForm";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import * as Api from "../../../Api";
 import { useEffect, useRef, useState } from "react";
-import ConfirmModal from "../../common/popup/ConfirmDeleteModal";
 
 // 리뷰와 함께 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
 // 업데이트시 해야할 일
@@ -21,7 +20,6 @@ const CommentsModal = () => {
   const { closeModal } = useModal();
   const [modalCommentList, setModalCommentList] = useState([]);
   const [newCommentsList, setNewCommentsList] = useState([]);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // 댓글 입력시 자동 스크롤
   useEffect(() => {
@@ -91,11 +89,6 @@ const CommentsModal = () => {
             </Row>
             <div ref={scrollRef}></div>
           </Container>
-          <ConfirmModal
-            show={showConfirmModal}
-            setShowConfirmModal={setShowConfirmModal}
-            closeReviewFormModal={() => setShowConfirmModal(false)}
-          />
         </Col>
       </Row>
     </Modal>
