@@ -27,6 +27,8 @@ async function handleFileOperation(files: FileObjects[], operation: (placeholder
 
 export const handleFileUpload: RequestHandler<FileRequest> = (req, res, next) => {
     uploadMiddleware(req as Request, res, async function (err: any) {
+        console.log(req.body);
+        console.log(11111111);
         try {
             if (err instanceof MulterError || err) {
                 return next(err);
