@@ -6,7 +6,10 @@
 .comments-container {
   margin: 25px 0;
   max-height: 300px;
+}
+.scroll-container {
   overflow: auto;
+  max-height: 300px;
 }
 .comment__border {
   border: 1px solid rgb(0, 0, 0);
@@ -25,8 +28,8 @@
   margin: 0 60px;
 }
 /* 커맨트 */
-.comment-container {
-  overflow: auto;
+.comment-list__container {
+  overflow: scroll;
   height: 400px;
   padding-left: 0;
   margin-top: 20px;
@@ -36,8 +39,11 @@
   /* 여기 flex하면 텍스트 넘침 */
   margin-bottom: 10px;
   flex-direction: column;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
+
 .text-content {
+  width: 100%;
   font-size: 0.9rem;
   margin: 10px 0;
   font-weight: 400;

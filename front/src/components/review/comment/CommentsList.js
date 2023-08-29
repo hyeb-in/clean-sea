@@ -18,33 +18,35 @@ const CommentsList = ({
 
   return (
     <>
-      {/* 댓글 3개까지만 미리보기 */}
-      {comments?.map(
-        (comment, index) =>
-          index < 2 && (
-            <div key={comment._id}>
+      <div className="comment-list__container">
+        {/* 댓글 3개까지만 미리보기 */}
+        {comments?.map(
+          (comment, index) =>
+            index < 2 && (
+              <div key={comment._id}>
+                <Comment
+                  comment={comment}
+                  selectedReview={selectedReview}
+                  setSelectedReview={setSelectedReview}
+                />
+              </div>
+            )
+        )}
+        {/* 새로 작성될 커맨트 리스트 */}
+        {newComments && (
+          <div>
+            {newComments.map((item) => (
               <Comment
-                comment={comment}
+                comment={item}
+                key={item._id}
                 selectedReview={selectedReview}
                 setSelectedReview={setSelectedReview}
+                review={review}
               />
-            </div>
-          )
-      )}
-      {/* 새로 작성될 커맨트 리스트 */}
-      {newComments && (
-        <div>
-          {newComments.map((item) => (
-            <Comment
-              comment={item}
-              key={item._id}
-              selectedReview={selectedReview}
-              setSelectedReview={setSelectedReview}
-              review={review}
-            />
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
       {/* ::::댓글 모두 보기:::: 클릭시 floatingReview 모달에 데이터 보내주기 */}
       <div
         onClick={() =>

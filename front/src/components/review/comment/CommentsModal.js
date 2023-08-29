@@ -5,7 +5,7 @@ import Comment from "./Comment";
 import AddCommentForm from "./CommentForm";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import * as Api from "../../../Api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ConfirmModal from "../../common/popup/ConfirmDeleteModal";
 
 // 리뷰와 함께 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
@@ -15,13 +15,19 @@ import ConfirmModal from "../../common/popup/ConfirmDeleteModal";
 // -> 모든 커멘트 목록이 필요
 const CommentsModal = () => {
   const { modalVisible } = useModal();
+  const scrollRef = useRef(null);
 
   const { review } = modalVisible.data;
   const { closeModal } = useModal();
   const [modalCommentList, setModalCommentList] = useState([]);
   const [newCommentsList, setNewCommentsList] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  console.log(modalVisible);
+
+  // 댓글 입력시 자동 스크롤
+  useEffect(() => {
+    scrollRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [modalCommentList, newCommentsList]);
+
   try {
     useEffect(() => {
       const getAllComments = async () => {
@@ -34,6 +40,7 @@ const CommentsModal = () => {
   } catch (error) {
     console.log(error);
   }
+
   return (
     <Modal
       sm={1}
@@ -82,6 +89,7 @@ const CommentsModal = () => {
                 ))}
               <AddCommentForm setNewCommentsList={setNewCommentsList} />
             </Row>
+            <div ref={scrollRef}></div>
           </Container>
           <ConfirmModal
             show={showConfirmModal}

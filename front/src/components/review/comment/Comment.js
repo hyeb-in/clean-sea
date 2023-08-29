@@ -24,16 +24,15 @@ const Comment = ({ review, comment }) => {
   );
   const [result, setResult] = useState(comment);
 
-  console.log(targetId === comment._id);
-
   const onEditComment = async (e) => {
     e.preventDefault();
-    console.log(editCommentValue);
+
     try {
       const res = await Api.put(`comments/${comment._id}`, {
         content: editCommentValue,
       });
       if (!res.ok) throw new Error("업데이트에 실패했습니다");
+
       setResult(res.data);
       setIsEditing(false);
     } catch (error) {
@@ -65,10 +64,6 @@ const Comment = ({ review, comment }) => {
                 className="text-timestamp comment__timestamp flex-justify-end"
               />
             )}
-
-            {/* 2. 댓글 목록에서 ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
-            {/* 댓글 -> 수정으로 들어가면 댓글 창을 띄울 거라서 reviewId, review 정보가 필요함 */}
-            {/* {isMyComment && (          )} */}
 
             {isMyComment && !isEditing && (
               <div className="comment__btn-col">
