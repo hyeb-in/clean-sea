@@ -10,7 +10,6 @@ import { UserStateContext } from "../../App";
 import axios from "axios";
 import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 import { TOAST_POPUP_STATUS } from "../../constants";
-import { serverUrl } from "../../Api";
 import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
 import CarouselWrapper from "../common/Carousel";
 import { FileUploader } from "react-drag-drop-files";
@@ -20,6 +19,9 @@ import {
   createBlobUrls,
   createFormData,
 } from "../../util/imagUrl";
+import useToast from "../../hooks/useToast";
+import ToastWrapper from "../common/popup/ToastWrapper";
+import { serverUrl } from "../../Api";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -30,12 +32,12 @@ export const RESULT_ENUM = {
 
 // to do
 // 1. 프리뷰 이미지 삭제 -> uploadFile에서도 삭제
-// 2. 안쓰는 코드 정리
-// 3. 토스트 팝업 알림
 
 const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, closeModal } = useModal();
+  const { showToast, showToastPopup, toastPosition, toastText, toastStatus } =
+    useToast();
 
   const [preview, setPreview] = useState(null);
   const formDataFileRef = useRef(null);
@@ -48,18 +50,33 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
   };
 
   const handleSubmit = useCallback(async () => {
-    // console.log(formDataRef.current.getAll("uploadFile[]")); // formData가 비어있는 이유
     try {
-      if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
-      // edit review랑 중복임
-      if (
-        userInputValues.title.length < 4 ||
-        userInputValues.content.length < 4
-      ) {
-        // "제목과 내용은 4글자 이상 작성해주세요",
-      }
+      const isTitleInvalid = userInputValues.title.length < 4;
+      const isContentInvalid = userInputValues.content.length < 4;
+      const isTooLong = userInputValues.content.length > 300;
       if (userInputValues.content.length > 300) {
-        return alert("내용이 너무 깁니다", TOAST_POPUP_STATUS.alert);
+        return showToastPopup("내용이 너무 깁니다", TOAST_POPUP_STATUS.alert);
+      }
+      if (!loggedInUser) {
+        showToastPopup(
+          "로그인 한 유저만 사용할 수 있습니다",
+          TOAST_POPUP_STATUS.alert
+        );
+      }
+      if (isTitleInvalid) {
+        showToastPopup(
+          "제목은 4글자 이상 작성해주세요",
+          TOAST_POPUP_STATUS.alert
+        );
+      }
+      if (isContentInvalid) {
+        showToastPopup(
+          "내용은 4글자 이상 작성해주세요",
+          TOAST_POPUP_STATUS.alert
+        );
+      }
+      if (isTooLong) {
+        showToastPopup("내용이 너무 깁니다", TOAST_POPUP_STATUS.alert);
       }
 
       const formData = createFormData(formDataFileRef, userInputValues);
@@ -70,17 +87,15 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
 
       setReviews((current) => [res.data, ...current]);
       setUserInputValues({ title: "", content: "" });
-      closeModal();
+      // closeModal();
+      // 알림창
+      // 경고창
     } catch (error) {
       console.log(error);
+      // showToastPopup(error, TOAST_POPUP_STATUS.alert);
     }
-  }, [
-    loggedInUser,
-    closeModal,
-    setReviews,
-    setUserInputValues,
-    userInputValues,
-  ]);
+  }, [showToastPopup, userInputValues]);
+  console.log(toastStatus, toastText);
 
   useEffect(() => {
     // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
@@ -93,6 +108,15 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
 
   return (
     <>
+      {/* 클라이언트 단에서 오류 처리 */}
+      {showToast && (
+        <ToastWrapper
+          text={toastText}
+          toastStatus={toastStatus}
+          position={toastPosition}
+        />
+      )}
+
       {/* 리뷰 입력 모달창: 유저가 리뷰 업로드하기 버튼이나 리뷰 수정 버튼을 누르면 팝업 */}
       <Modal
         onClick={(e) => {

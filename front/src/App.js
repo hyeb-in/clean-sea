@@ -23,8 +23,6 @@ import ResponseIndicator from "./components/common/indicators/ResponseIndicator"
 import axios from "axios";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
-import useToast from "./hooks/useToast";
-import ToastWrapper from "./components/common/popup/ToastWrapper";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -94,19 +92,9 @@ function App() {
     title: "",
     content: "",
   });
-  const {
-    showToast,
-    showToastPopup,
-    toastMessage,
-    setShowToast,
-    toastStatus,
-    toastPosition,
-  } = useToast();
-
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
-
   const path = location.pathname.split("/")[1];
   const is404Page =
     path !== "" &&
@@ -166,15 +154,6 @@ function App() {
                       setUserInputValues={setUserInputValues}
                     />
                   )}
-                {showToast && (
-                  <ToastWrapper
-                    setShowToast={setShowToast}
-                    text={toastMessage}
-                    status={toastStatus}
-                    position={toastPosition}
-                  />
-                )}
-
                 <Routes>
                   <Route path="/" exact element={<Main />} />
                   <Route path="/login" exact element={<Login />} />
@@ -185,12 +164,7 @@ function App() {
                     path="/reviews"
                     exact
                     element={
-                      <ReviewsList
-                        // review={review}
-                        // setReview={setReview}
-                        reviews={reviews}
-                        setReviews={setReviews}
-                      />
+                      <ReviewsList reviews={reviews} setReviews={setReviews} />
                     }
                   />
                   <Route path="/graph" exact element={<Graph />} />
