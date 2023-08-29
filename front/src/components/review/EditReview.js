@@ -102,6 +102,7 @@ const EditReview = () => {
       closeModal();
     }
   };
+  console.log(modalVisible.type === MODAL_TYPE.editReview);
 
   return (
     <>
@@ -151,14 +152,14 @@ const EditReview = () => {
             </div>
           }
         >
-          {isFailed && showServerErrorModal(true)}
-          {isSuccessful && showSuccessMsgModal(isSuccessful)}
-          {showConfirmModal &&
+          {/* {isFailed && showServerErrorModal(true)}
+          {isSuccessful && showSuccessMsgModal(isSuccessful)} */}
+          {/* {showConfirmModal &&
             showDeleteConfirmModal(
               showDeleteConfirmModal,
               setShowConfirmModal,
               closeModal
-            )}
+            )} */}
           {
             <Form onSubmit={onSubmit} className="addReview__form">
               <Button

@@ -25,6 +25,11 @@ export const RESULT_ENUM = {
   FAIL: "실패",
 };
 
+// to do
+// 1. 프리뷰 이미지 삭제 -> uploadFile에서도 삭제
+// 2. 안쓰는 코드 정리
+// 3. 토스트 팝업 알림
+
 const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const {
@@ -160,7 +165,7 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
         backdrop="static"
         centered
         keyboard={false}
-        dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
+        // dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
         className="px-5"
         show={modalVisible.type === MODAL_TYPE.addReview}
         onHide={() => {
@@ -173,7 +178,19 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
           }
         }}
       >
-        <ModalBodyWrapper>
+        <ModalBodyWrapper
+          title="작성하기"
+          onHide={closeModal}
+          content={
+            <Button
+              onClick={handleSubmit}
+              className="addreview__btn"
+              variant="outline-primary"
+            >
+              확인
+            </Button>
+          }
+        >
           <Form className="addReview__form">
             {preview && preview.length > 0 ? (
               <CarouselWrapper preview={preview} setPreview={setPreview} />
@@ -187,18 +204,10 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
                 onSizeError={() => alert("용랑이 너무 큽니다")}
               />
             )}
-
             <ReviewFormBody
               userInputValues={userInputValues}
               setUserInputValues={setUserInputValues}
             />
-            <Button
-              onClick={handleSubmit}
-              className="addreview__btn"
-              variant="outline-primary"
-            >
-              확인
-            </Button>
           </Form>
         </ModalBodyWrapper>
       </Modal>

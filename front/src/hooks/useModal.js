@@ -43,25 +43,17 @@ const useModal = () => {
 
   const showServerErrorModal = (show) => {
     return (
-      <ModalBodyWrapper
-        show={show}
-        title="게시물을 업로드하지 못했습니다"
-        content={
-          <FontAwesomeIcon icon={faBomb} className="indicator-success" />
-        }
-      />
+      <ModalBodyWrapper show={show} title="게시물을 업로드하지 못했습니다">
+        <FontAwesomeIcon icon={faBomb} className="indicator-success" />
+      </ModalBodyWrapper>
     );
   };
 
   const showSuccessMsgModal = (show) => {
     return (
-      <ModalBodyWrapper
-        show={show}
-        title="게시물이 공유되었습니다"
-        content={
-          <FontAwesomeIcon icon={faCircleCheck} className="indicator-success" />
-        }
-      />
+      <ModalBodyWrapper show={show} title="게시물이 공유되었습니다">
+        <FontAwesomeIcon icon={faCircleCheck} className="indicator-success" />
+      </ModalBodyWrapper>
     );
   };
 

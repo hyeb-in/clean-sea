@@ -15,7 +15,7 @@ const CommentsList = ({
   showDetails,
 }) => {
   const { setModalVisible } = useContext(ModalVisibleContext);
-
+  console.log(review.commentCount, "weifhwoefhowe");
   return (
     <>
       <div className="comment-list__container">

@@ -69,7 +69,7 @@ const ActionSelectorModal = () => {
   return (
     <Modal
       show={isActionPopupOpen}
-      onHide={closeModal}
+      // onHide={closeModal}
       backdrop="static"
       keyboard={false}
       // aria-labelledby="contained-modal-title-vcenter" // to do: 정체가 뭐임
