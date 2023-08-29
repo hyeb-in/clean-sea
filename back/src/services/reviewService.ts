@@ -1,4 +1,3 @@
-import { IUser } from 'user';
 import { createReview, findAllReviews, findUserReviews, findReview, updateReview, deleteReview } from '../db/models/Review';
 import { IReview } from '../types/review';
 
@@ -12,14 +11,13 @@ async function getReview() : Promise<IReview[]>{
     return review;
 }
 
-async function getLoginReview(author : string, updatedUser : IUser) : Promise<IReview[]>{
-    const loginReview = await findUserReviews(author, updatedUser);
+async function getLoginReview(author : string) : Promise<IReview[]>{
+    const loginReview = await findUserReviews(author);
     return loginReview;
 }
 
 async function setReview(reviewId : string,{toUpdate}:{toUpdate : Partial<IReview>}): Promise<IReview | null>{
     await findReview(reviewId);
-
     const updatedReview = updateReview(reviewId, toUpdate);
 
     return updatedReview;

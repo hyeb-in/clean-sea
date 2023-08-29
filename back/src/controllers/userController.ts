@@ -1,6 +1,5 @@
 import { NextFunction, Response } from "express";
 import {
-  changePasswordService,
   createUserService,
   deleteUserService,
   getRandomUserService,
@@ -10,7 +9,6 @@ import {
 import { IRequest } from "user";
 import { findUserByEmail, findUserById, update } from "../db/models/User";
 import { errorGenerator } from "../utils/errorGenerator";
-import { pwdMatchCheck } from "../utils/pwdMatchCheck";
 import bcrypt from "bcrypt";
 
 /**

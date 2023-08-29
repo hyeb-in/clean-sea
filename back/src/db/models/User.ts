@@ -1,6 +1,7 @@
 import { IUser } from "user";
 import UserModel from "../schemas/userSchema";
-import { findUserReviews } from "./Review";
+import { ReviewModel } from "../schemas/reviewSchema";
+import { CommentModel } from "../schemas/commetSchema";
 
 export const findUserById = async (userId: string): Promise<IUser> => {
   const user = await UserModel.findById(userId);
@@ -37,9 +38,28 @@ export const update = async (userId: string, changedValue: Partial<IUser>) => {
     new: true,
   });
 
-  await findUserReviews(userId, updatedUser);
   return updatedUser;
 };
+
+export const updateUserName = async(userId : string, newUserName : string) => {
+  const userReviews = await ReviewModel.find({author : userId }).exec();
+  const userComments = await CommentModel.find({userId}).exec();
+
+  const updatePromises = userReviews.map(async review => {
+    review.userName = newUserName;
+    await review.save();
+  });
+  const secondPromises = userComments.map(async comment => {
+    comment.userName = newUserName;
+    await comment.save();
+  })
+
+  await Promise.all(updatePromises);
+  await Promise.all(secondPromises);
+
+  return true;
+}
+
 
 export const deleteById = async (userId: string) => {
   const user = await UserModel.findByIdAndDelete(userId);

@@ -7,7 +7,7 @@ const errorMessage = {
     invalidDate : "날짜형식에 맞춰 입력해야합니다.",
 };
 
-const validateSchema = (schema : joi.ObjectSchema, optional = false) => {
+const validateSchema = (schema : joi.ObjectSchema) => {
     return (req : IRequest, res : Response , next : NextFunction) => {
         const { error } = schema.validate(req.body);
         if (error){
@@ -19,11 +19,15 @@ const validateSchema = (schema : joi.ObjectSchema, optional = false) => {
     }
 }
 
-const travelSchema = joi.object({
-    date : joi.date().iso().messages(errorMessage),
+const posttravelSchema = joi.object({
+    date : joi.date().iso().required().messages(errorMessage),
 });
 
-export const postTravelValidator = validateSchema (travelSchema);
+const puttravelSchema = joi.object({
+    date : joi.date().iso().optional().messages(errorMessage),
+});
 
-export const putTravelValidator = validateSchema (travelSchema, true);
+export const postTravelValidator = validateSchema (posttravelSchema);
+
+export const putTravelValidator = validateSchema (puttravelSchema);
 

@@ -6,7 +6,7 @@ import {
   setReview,
   deletedReview,
 } from "../services/reviewService";
-import { IRequest, IUser } from "user";
+import { IRequest } from "user";
 
 const createReview = async (req: IRequest, res: Response, next : NextFunction) => {
   try {
@@ -35,9 +35,8 @@ const getAllReview = async (req: IRequest, res: Response, next : NextFunction) =
 const getAllLogin = async (req: IRequest, res: Response, next : NextFunction) => {
   try {
     const author = req.user._id;
-    const updatedUser : IUser = req.user;
 
-    const loginReview = await getLoginReview(author,updatedUser);
+    const loginReview = await getLoginReview(author);
     res.status(200).json(loginReview);
   } catch (error) {
     next(error);
@@ -51,7 +50,7 @@ const updateReview = async (req: IRequest, res: Response, next : NextFunction) =
     const updatedReview = await setReview(id, {
       toUpdate: { ...req.body },
     });
-
+    console.log(updateReview);
     res.status(200).json(updatedReview);
   } catch (error) {
     next(error);

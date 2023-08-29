@@ -1,7 +1,6 @@
 import { ReviewModel } from '../schemas/reviewSchema';
 import { IReview } from '../../types/review';
 import { errorGenerator } from "../../utils/errorGenerator";
-import { IUser } from 'user';
 
 async function createReview(toCreate: IReview): Promise<IReview> {
   const newReview = await ReviewModel.create(toCreate);
@@ -21,7 +20,7 @@ async function findAllReviews(): Promise<IReview[]> {
   return userReviewsObjects as IReview[];
 }
 
-async function findUserReviews(author:string, updatedUser: IUser): Promise<IReview[]>{
+async function findUserReviews(author:string): Promise<IReview[]>{
   const userReviews = await ReviewModel.find()
       .populate({
         path : 'comments',
@@ -35,7 +34,6 @@ async function findUserReviews(author:string, updatedUser: IUser): Promise<IRevi
     const userReviewsObjects = userReviews.map(review =>{
       const isLike = review.Likes.some(like=>like.userId === authorString && like.isLike === 'yes');
       const reviewObject = review.toObject() as IReview;
-      reviewObject.updatedUser = updatedUser;
       if (isLike) {
         reviewObject.isLike = 'yes';
       }else{

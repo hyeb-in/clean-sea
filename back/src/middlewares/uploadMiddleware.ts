@@ -27,8 +27,6 @@ async function handleFileOperation(files: FileObjects[], operation: (placeholder
 
 export const handleFileUpload: RequestHandler<FileRequest> = (req, res, next) => {
     uploadMiddleware(req as Request, res, async function (err: any) {
-        console.log(req.body);
-        console.log(11111111);
         try {
             if (err instanceof MulterError || err) {
                 return next(err);
@@ -42,7 +40,6 @@ export const handleFileUpload: RequestHandler<FileRequest> = (req, res, next) =>
                 await handleFileOperation(files, replacePlaceholder);
             }
             req.body.uploadFile = uploadFile.map(filename => `uploads/${filename}`);
-            console.log(req.body);
             next();
         } catch (error) {
             next(error);
