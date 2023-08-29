@@ -96,7 +96,6 @@ const getBeachByRegionAndYearSpecific = async (
   }
 };
 
-
 const getBeaches = async (
   req: Request,
   res: Response,

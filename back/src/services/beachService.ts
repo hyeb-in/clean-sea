@@ -26,7 +26,6 @@ async function getBeachByRegionAndYearSpecificServiceAvg(year: string): Promise<
   return beachData;
 }
 
-
 // 지역별 및 연도별 가져오기 및 추가조건
 async function getBeachByRegionAndYearSpecificService(year: string): Promise<BeachData> {
   const beachData = await BeachByRegionAndYearSpecific(year); // 주소와 연도를 함께 전달
