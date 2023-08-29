@@ -37,7 +37,7 @@ const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
     >
       {urls.map((url, index) => {
         return (
-          <Carousel.Item key={url}>
+          <Carousel.Item key={`${url}-${index}`}>
             <Image
               src={url && url?.includes("blob") ? url : `${serverUrl}${url}`}
               fluid
