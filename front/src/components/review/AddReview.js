@@ -1,18 +1,22 @@
-import React, { useContext, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { UserStateContext } from "../../App";
-import SpinnerWrapper from "../common/indicators/Spinner";
-import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
-import ReviewFormBody from "./ReviewFormBody";
-import DragDropContainer from "../common/DragDropContainer";
 import axios from "axios";
 import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 import useToast from "../../hooks/useToast";
 import { TOAST_POPUP_STATUS } from "../../constants";
 import ToastWrapper from "../common/popup/ToastWrapper";
-import { faBomb } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { serverUrl } from "../../Api";
+import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
+import CarouselWrapper from "../common/Carousel";
+import { FileUploader } from "react-drag-drop-files";
+import ReviewFormBody from "./ReviewFormBody";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -21,7 +25,7 @@ export const RESULT_ENUM = {
   FAIL: "실패",
 };
 
-const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
+const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const {
     modalVisible,
@@ -32,9 +36,9 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
   } = useModal();
 
   const [preview, setPreview] = useState(null);
-  const [formDataFiles, setFormDataFiles] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(RESULT_ENUM.NOT_YET);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const formDataFileRef = useRef(null);
 
   const {
     showToast,
@@ -45,8 +49,29 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
     toastPosition,
   } = useToast();
 
-  // 게시글 업로드
-  const addReview = async (files) => {
+  const isPosting = uploadStatus === RESULT_ENUM.UPLOADING;
+  const isFailed = uploadStatus === RESULT_ENUM.FAIL;
+  const isSuccessful = uploadStatus === RESULT_ENUM.SUCCESS;
+  const isFetched = isFailed || isSuccessful;
+
+  const handleFileChange = (files) => {
+    const blobUrls = [];
+
+    const formDataFiles = Array.from(files);
+    formDataFileRef.current = formDataFiles;
+    // setUploadStatus(RESULT_ENUM.UPLOADING);
+
+    // url blob
+    formDataFiles.forEach((file) => {
+      const blob = new Blob([file], { type: file.type });
+      const url = URL.createObjectURL(blob);
+      blobUrls.push(url);
+    });
+    setPreview(blobUrls);
+  };
+
+  const handleSubmit = useCallback(async () => {
+    // console.log(formDataRef.current.getAll("uploadFile[]")); // formData가 비어있는 이유
     try {
       if (!loggedInUser) throw new Error("로그인 한 유저만 사용할 수 있습니다");
       // edit review랑 중복임
@@ -62,51 +87,58 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
       if (userInputValues.content.length > 300) {
         return showToastPopup("내용이 너무 깁니다", TOAST_POPUP_STATUS.alert);
       }
-      let formData = new FormData();
-      if (files && files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-          formData.append("uploadFile[]", files[i]);
+      console.log(formDataFileRef.current);
+      const formDataFiles = Array.from(formDataFileRef.current);
+
+      const formData = new FormData();
+
+      formData.append("uploadFile", formDataFiles);
+      if (formDataFiles && formDataFiles.length > 0) {
+        for (let i = 0; i < formDataFiles.length; i++) {
+          formData.append("uploadFile[]", formDataFiles[i]);
         }
+        formData.append("title", userInputValues.title);
+        formData.append("content", userInputValues.content);
       }
 
-      formData.append("uploadFile");
-      formData.append("title", userInputValues.title);
-      formData.append("content", userInputValues.content);
-
-      console.log(formData, "formData 형식");
-      console.log(formDataFiles, "변경 전 형식");
-
-      console.log(formDataFiles);
-      //       formData.append("uploadFile", formDataFiles);
-      //       if (formDataFiles && formDataFiles.length > 0) {
-      //         for (let i = 0; i < formDataFiles.length; i++) {
-      //           formData.append("uploadFile[]", formDataFiles[i]);
-      //         }
-      //       }
+      console.log(formData.getAll("uploadFile[]"));
+      console.log(formData.getAll("title"));
+      console.log(formData.getAll("content"));
 
       setUploadStatus(RESULT_ENUM.UPLOADING);
-      if (!formData) throw new Error("파일 없음");
-      const res = await axios.post(`${serverUrl}reviews/register`, formData);
 
-      if (!res.ok) {
-        return setUploadStatus(RESULT_ENUM.FAIL);
+      const res = await axios.post(`${serverUrl}reviews/register`, formData);
+      if (!res.data) {
+        setUploadStatus(RESULT_ENUM.FAIL);
+        throw new Error("데이터를 불러오지 못했습니다");
       }
+
       setReviews((current) => [res.data, ...current]);
       setUploadStatus(RESULT_ENUM.SUCCESS);
       setUserInputValues({ title: "", content: "" });
       closeModal();
     } catch (error) {
-      if (error.status === 404) {
-        setUploadStatus(RESULT_ENUM.FAIL);
-        setShowConfirmModal(true);
-      }
+      console.log(error);
+      setUploadStatus(RESULT_ENUM.FAIL);
+      //       setShowConfirmModal(true);
     }
-  };
+  }, [
+    loggedInUser,
+    userInputValues,
+    showToastPopup,
+    setReviews,
+    setUserInputValues,
+    closeModal,
+  ]);
 
-  const isPosting = uploadStatus === RESULT_ENUM.UPLOADING;
-  const isFailed = uploadStatus === RESULT_ENUM.FAIL;
-  const isSuccessful = uploadStatus === RESULT_ENUM.SUCCESS;
-  const isFetched = isFailed || isSuccessful;
+  useEffect(() => {
+    // 모달이 닫힐 때 메모리에 저장된 Blob URL 삭제
+    if (!modalVisible?.isVisible && preview?.length > 0) {
+      return () => {
+        preview?.forEach((url) => URL.revokeObjectURL(url));
+      };
+    }
+  }, [preview, modalVisible]);
 
   return (
     <>
@@ -131,66 +163,47 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
         dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
         className="px-5"
         show={modalVisible.type === MODAL_TYPE.addReview}
-        // onHide={() => {
-        //   // 모달창 제거
-        //   // title과 content가 비어있다면(날아갈 데이터가 없다면) 유저에게 묻지 않고 모달창 제거
-        //   if (userInputValues.title !== "" || userInputValues.content !== "") {
-        //     // 내용이 있다면 다시 한 번 확인하는 모달창에 표시한다
-        //     setShowConfirmModal(true);
-        //   } else {
-        //     closeModal();
-        //     setUserInputValues({ title: "", content: "" }); // 입력창 비워주기
-        //   }
-        // }}
+        onHide={() => {
+          // title과 content가 비어있다면(날아갈 데이터가 없다면) 유저에게 묻지 않고 모달창 제거
+          if (userInputValues.title !== "" || userInputValues.content !== "") {
+            setShowConfirmModal(true);
+          } else {
+            closeModal();
+            setUserInputValues({ title: "", content: "" }); // 입력창 비워주기
+          }
+        }}
       >
-        <DragDropContainer
-          addReview={addReview}
-          preview={preview}
-          setPreview={setPreview}
-          userInputValues={userInputValues}
-          setUserInputValues={setUserInputValues}
-          setFormDataFiles={setFormDataFiles}
-        />
+        <ModalBodyWrapper>
+          <Form className="addReview__form">
+            {preview && preview.length > 0 ? (
+              <CarouselWrapper preview={preview} setPreview={setPreview} />
+            ) : (
+              <FileUploader
+                handleChange={(files) => handleFileChange(files)}
+                name="file"
+                types={["png", "jpeg"]}
+                maxSize={10}
+                multiple={true}
+                onSizeError={() => alert("용랑이 너무 큽니다")}
+              />
+            )}
+
+            <ReviewFormBody
+              userInputValues={userInputValues}
+              setUserInputValues={setUserInputValues}
+            />
+            <Button
+              onClick={handleSubmit}
+              className="addreview__btn"
+              variant="outline-primary"
+            >
+              확인
+            </Button>
+          </Form>
+        </ModalBodyWrapper>
       </Modal>
     </>
   );
 };
 
-// {/* 모달창 내부: 글 작성 */}
-//
-//     {isPosting && (
-//       <ModalBodyWrapper
-//         show={isPosting}
-//         title="게시물을 업로드하는 중입니다"
-//         content={<SpinnerWrapper />}
-//       />
-//     )}
-//     {isFailed && (
-//       <ModalBodyWrapper
-//         show={isFailed}
-//         title="게시물을 업로드하지 못했습니다"
-//         content={
-//           <FontAwesomeIcon
-//             icon={faBomb}
-//             className="indicator-success"
-//           />
-//         }
-//       />
-//     )}
-//     {isSuccessful && (
-//       <ModalBodyWrapper
-//         show={isSuccessful}
-//         title="게시물을 업로드하지 못했습니다"
-//         content={
-//           <FontAwesomeIcon icon={faBomb} className="indicator-fail" />
-//         }
-//       />
-//     )}
-//     {showConfirmModal &&
-//       showDeleteConfirmModal(
-//         showDeleteConfirmModal,
-//         setShowConfirmModal,
-//         closeModal
-//       )}
-
-export default AddReview;
+export default AddReviewForm;
