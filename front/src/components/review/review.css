@@ -86,6 +86,7 @@ textarea:focus {
 }
 .show-more-btn {
   word-break: break-all;
+  margin-top: 5px;
 }
 .comment__content {
   white-space: unset;

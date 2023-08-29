@@ -1,7 +1,7 @@
 import Comment from "./Comment";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import useReview from "../../../hooks/useReview";
-import { useEffect, useRef, useState } from "react";
+// import { useEffect, useRef } from "react";
 
 const CurrentComments = ({
   review,
@@ -12,13 +12,13 @@ const CurrentComments = ({
 }) => {
   const { openModal } = useModal();
   const { setReviews } = useReview();
-  const scrollRef = useRef(null);
+  // const scrollRef = useRef(null);
 
-  useEffect(() => {
-    if (newCommentsList) {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [newCommentsList]);
+  // useEffect(() => {
+  //   if (newCommentsList) {
+  //     scrollRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [newCommentsList]);
 
   return (
     <div className="comments-container scroll-container">
@@ -46,7 +46,7 @@ const CurrentComments = ({
           />
         </div>
       ))}
-      <div ref={scrollRef}></div>
+      {/* <div ref={scrollRef}></div> */}
       {/* 댓글 더보기 클릭시 댓글 상세 모달창으로 이동 */}
       <div
         onClick={() =>

@@ -71,7 +71,7 @@ const CommentsModal = () => {
           />
         </Col>
         <Col className="carousel-bg-white">
-          <Container className="comment-container">
+          <Container className="comment-list__container">
             <Row className="py-4 mx-2">
               {modalCommentList?.length > 0 &&
                 modalCommentList?.map((comment) => (

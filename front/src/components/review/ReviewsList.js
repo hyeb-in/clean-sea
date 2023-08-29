@@ -39,6 +39,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
         // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
         if (loggedInUser) {
           const res = await fetchPrivateReviews();
+          console.log(res);
           if (!res.data) {
             showToastPopup(
               "유저의 데이터를 불러올 수 없습니다",
@@ -55,6 +56,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
               TOAST_POPUP_STATUS.error
             );
           }
+
           setReviews(res.data);
           setIsLoaded(true);
         }
@@ -63,7 +65,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
       }
     };
     fetchData();
-  }, [loggedInUser]);
+  }, [loggedInUser, setReviews]);
 
   return (
     <>
