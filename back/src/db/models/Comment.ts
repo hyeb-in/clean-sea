@@ -12,6 +12,7 @@ async function createComment(toCreate : IComment) : Promise<IComment>{
     const saveComment = await newComment.save();
     if(review){
         review.comments.push(saveComment._id);
+        review.commentCount++;
         await review.save();
     }
     const newCommentObject = newComment.toObject();
@@ -39,6 +40,15 @@ async function updateComment(commentId : string, toUpdate: Partial<IComment>): P
 async function deleteComment(commentId : string) : Promise<IComment | null>{
     const deletedComment = await CommentModel.findOneAndDelete({ _id : commentId});
     if (deletedComment) {
+        const review = await ReviewModel.findById(deletedComment.postId);
+        if (review) {
+            const commentIndex = review.comments.findIndex(id => id.toString() === commentId);
+            if (commentIndex !== -1) {
+                review.comments.splice(commentIndex, 1);
+                review.commentCount--;
+                await review.save();
+            }
+        }
         const deletedCommentObject = deletedComment.toObject();
         return deletedCommentObject as IComment;
       }
