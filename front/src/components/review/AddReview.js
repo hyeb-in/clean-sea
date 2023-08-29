@@ -17,7 +17,11 @@ import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
 import CarouselWrapper from "../common/Carousel";
 import { FileUploader } from "react-drag-drop-files";
 import ReviewFormBody from "./ReviewFormBody";
-import { cleanUpBlobUrls, createFormData } from "../../util/imagUrl";
+import {
+  cleanUpBlobUrls,
+  createBlobUrls,
+  createFormData,
+} from "../../util/imagUrl";
 
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
@@ -61,19 +65,10 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
   const isFetched = isFailed || isSuccessful;
 
   const handleFileChange = (files) => {
-    const blobUrls = [];
-
     const formDataFiles = Array.from(files);
     formDataFileRef.current = formDataFiles;
     // setUploadStatus(RESULT_ENUM.UPLOADING);
-
-    // url blob
-    formDataFiles.forEach((file) => {
-      const blob = new Blob([file], { type: file.type });
-      const url = URL.createObjectURL(blob);
-      blobUrls.push(url);
-    });
-    setPreview(blobUrls);
+    createBlobUrls(files, setPreview);
   };
 
   const handleSubmit = useCallback(async () => {
@@ -95,9 +90,7 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
       }
 
       const formData = createFormData(formDataFileRef, userInputValues);
-
       // setUploadStatus(RESULT_ENUM.UPLOADING);
-
       const res = await axios.post(`${serverUrl}reviews/register`, formData);
       if (!res.data) {
         setUploadStatus(RESULT_ENUM.FAIL);

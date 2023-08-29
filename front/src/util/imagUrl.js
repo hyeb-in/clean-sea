@@ -1,7 +1,3 @@
-export const cleanUpBlobUrls = (blobUrls) => {
-  blobUrls.forEach((url) => URL.revokeObjectURL(url));
-};
-
 // FormUtils.js
 
 export const createFormData = (formDataFileRef, userInputValues) => {
@@ -21,4 +17,20 @@ export const createFormData = (formDataFileRef, userInputValues) => {
   // console.log(formData.getAll("content"));
 
   return formData;
+};
+
+export const createBlobUrls = (files, setPreview) => {
+  const blobUrls = [];
+  const formDataFiles = Array.from(files);
+  formDataFiles.forEach((file) => {
+    const blob = new Blob([file], { type: file.type });
+    const url = URL.createObjectURL(blob);
+    blobUrls.push(url);
+  });
+  setPreview(blobUrls);
+  return blobUrls;
+};
+
+export const cleanUpBlobUrls = (blobUrls) => {
+  blobUrls.forEach((url) => URL.revokeObjectURL(url));
 };
