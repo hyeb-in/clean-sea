@@ -10,7 +10,7 @@ const CarouselWrapper = ({ preview, setReview, imageUrls }) => {
   //   const newImageUrls = preview.filter((_, idx) => index !== idx);
   //   setReview((current) => ({ ...current, imageUrls: newImageUrls }));
   // };
-
+  console.log(imageUrls);
   return (
     <Carousel
       className={`carousel__container px-0`}
@@ -37,8 +37,11 @@ const CarouselWrapper = ({ preview, setReview, imageUrls }) => {
         // db 데이터 (1692779441756.png) 라면 그대로 보여준다
         return (
           // to do: 인덱스 바꾸기::::: img 주소로 넣어두면 중복때문에 에러 안없어져서 임시로 사용
-          <Carousel.Item key={url + "" + index}>
-            <Image src={`${serverUrl}${url}`} fluid />
+          <Carousel.Item key={url}>
+            <Image
+              src={url.includes("blob") ? url : `${serverUrl}${url}`}
+              fluid
+            />
             {/* 업로드 한 이미지 삭제하기 - 일단 패스 */}
             {/* {setReview && (
               <Carousel.Caption className="d-flex justify-content-end">
