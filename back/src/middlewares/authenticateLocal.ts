@@ -24,7 +24,7 @@ export const localAuthentication = (
           const err = errorGenerator(info.message, 400);
           next(err);
         }
-        //토큰 테스트하려고 짧게해둔 변경할 것
+        //TODO 토큰 시간 변경
         const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
           expiresIn: "1000m",
         });

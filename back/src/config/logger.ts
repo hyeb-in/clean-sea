@@ -58,16 +58,11 @@ function httpLogger(req: Request, res: Response, next: NextFunction): void {
   )(req, res, next);
 }
 
-morgan.token("body", (req: Request, res: Response) => {
+morgan.token("body", (req: Request) => {
   return JSON.stringify(req.body);
 });
 
-function errorMiddleware(
-  error: IError,
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
+function errorMiddleware(error: IError, req: Request, res: Response): void {
   logger.error(
     `statusCode: ${error.statusCode} | Error Message: ${error.message} `
   );
