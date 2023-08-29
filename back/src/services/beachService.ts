@@ -42,7 +42,6 @@ async function getBeachesService(): Promise<IBeach[]> {
   }
 
   // 모든 이력을 배열로 변환
-  //TODO beach => beach로 하면 안되나요?
   const beachDataResult: IBeach[] = beachData.map((beach) => ({
     _id: beach._id,
     name: beach.name,

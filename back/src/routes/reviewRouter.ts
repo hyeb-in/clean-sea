@@ -15,7 +15,6 @@ import {
 const reviewAuthRouter = Router();
 
 reviewAuthRouter
-  //TODO handleFileUpload랑 validator 순서 변경 해야하지 않은지?
   .post(
     "/register",
     jwtAuthentication,
