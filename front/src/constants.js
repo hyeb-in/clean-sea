@@ -61,3 +61,10 @@ export const IS_LIKE = {
   removed: "Like removed",
   added: "Like added",
 };
+
+export const RESULT_ENUM = {
+  NOT_YET: "작성중",
+  UPLOADING: "업로드 중",
+  SUCCESS: "성공",
+  FAIL: "실패",
+};

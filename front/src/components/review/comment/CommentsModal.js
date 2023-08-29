@@ -1,5 +1,5 @@
 import { CloseButton, Col, Container, Modal, Row } from "react-bootstrap";
-import ReviewHeader from "../ReviewTitle";
+import ReviewHeader from "../layout/ReviewTitle";
 import CarouselWrapper from "../../common/Carousel";
 import Comment from "./Comment";
 import AddCommentForm from "./CommentForm";

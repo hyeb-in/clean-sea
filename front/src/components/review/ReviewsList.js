@@ -5,7 +5,7 @@ import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
 import { ModalVisibleContext, UserStateContext } from "../../App";
 import ActionSelectorModal from "../common/popup/ActionSelectorModal";
 import CommentsModal from "./comment/CommentsModal";
-import Review from "./Review";
+import Review from "./layout/Review";
 import { MODAL_TYPE } from "../../hooks/useModal";
 import * as Api from "../../Api";
 import useToast from "../../hooks/useToast";

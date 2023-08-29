@@ -23,6 +23,7 @@ import ResponseIndicator from "./components/common/indicators/ResponseIndicator"
 import axios from "axios";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
+import ReviewFormContainer from "./components/review/layout/ReviewFormContainer";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -144,16 +145,14 @@ function App() {
               <Interceptor>
                 {!is404Page && <NavBar />}
                 {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
-                {modalVisible?.isVisible &&
-                  modalVisible?.type === MODAL_TYPE.addReview && (
-                    <AddReview
-                      headerTitle="새 게시물 작성하기"
-                      reviews={reviews}
-                      setReviews={setReviews}
-                      userInputValues={userInputValues}
-                      setUserInputValues={setUserInputValues}
-                    />
-                  )}
+                {modalVisible?.type === MODAL_TYPE.addReview && (
+                  <AddReview
+                    reviews={reviews}
+                    setReviews={setReviews}
+                    userInputValues={userInputValues}
+                    setUserInputValues={setUserInputValues}
+                  />
+                )}
                 <Routes>
                   <Route path="/" exact element={<Main />} />
                   <Route path="/login" exact element={<Login />} />

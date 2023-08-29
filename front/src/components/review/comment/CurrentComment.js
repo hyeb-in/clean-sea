@@ -13,7 +13,7 @@ const CurrentComments = ({
   const { openModal } = useModal();
   const { setReviews } = useReview();
   // const scrollRef = useRef(null);
-  console.log(review, "wiejfwlifj");
+
   // useEffect(() => {
   //   if (newCommentsList) {
   //     scrollRef.current.scrollIntoView({ behavior: "smooth" });

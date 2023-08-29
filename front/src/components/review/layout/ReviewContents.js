@@ -1,15 +1,13 @@
 import { useContext, useState } from "react";
-import Like from "../common/microComponents/Like";
-import { UserStateContext } from "../../App";
-import { IS_LIKE } from "../../constants";
-import LikeText from "../common/microComponents/LikeText";
+import Like from "../../common/microComponents/Like";
+import { UserStateContext } from "../../../App";
+import { IS_LIKE } from "../../../constants";
+import LikeText from "../../common/microComponents/LikeText";
 
 const ReviewContents = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const iLiked = loggedInUser && review.isLike === IS_LIKE.yes;
   const [showDetails, setShowDetails] = useState(false);
-
-  const hasCommentsMoreThanThree = review.comments?.length > 3;
 
   const { _id: reviewId, title, content, likeCount } = review;
 

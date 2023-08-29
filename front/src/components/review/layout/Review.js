@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Card } from "react-bootstrap";
 import ReviewTitle from "./ReviewTitle";
-import CurrentComments from "./comment/CurrentComment";
+import CurrentComments from "../comment/CurrentComment";
 import ReviewContents from "./ReviewContents";
-import CarouselWrapper from "../common/Carousel";
-import AddCommentForm from "./comment/CommentForm";
-import { UserStateContext } from "../../App";
+import CarouselWrapper from "../../common/Carousel";
+import AddCommentForm from "../comment/CommentForm";
+import { UserStateContext } from "../../../App";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const Review = ({ review, setReviews, setReview }) => {
