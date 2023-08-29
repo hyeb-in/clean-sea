@@ -176,7 +176,7 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
         <ModalBodyWrapper>
           <Form className="addReview__form">
             {preview && preview.length > 0 ? (
-              <CarouselWrapper imageUrls={preview} setPreview={setPreview} />
+              <CarouselWrapper preview={preview} setPreview={setPreview} />
             ) : (
               <FileUploader
                 handleChange={(files) => handleFileChange(files)}
