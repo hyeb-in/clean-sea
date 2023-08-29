@@ -13,12 +13,7 @@ import ToastWrapper from "../common/popup/ToastWrapper";
 import { TOAST_POPUP_STATUS } from "../../constants";
 import EditReview from "./EditReview";
 
-const ReviewsList = ({
-  setReview,
-  reviews,
-  setReviews,
-  setNewCommentsList,
-}) => {
+const ReviewsList = ({ setReview, reviews, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
 
@@ -102,10 +97,10 @@ const ReviewsList = ({
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&
-            reviews.map((review, index) => (
+            reviews.map((review) => (
               <div
                 // to do: key 중복 없애라는 경고가 계속 발생함
-                key={`${review._id}-${modalVisible?.type}-${index}`}
+                key={review._id}
                 className="d-flex justify-content-center align-items-center"
               >
                 <Review

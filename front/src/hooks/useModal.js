@@ -1,10 +1,5 @@
 import { useContext, useState } from "react";
 import { ModalVisibleContext } from "../App";
-import ModalBodyWrapper from "../components/common/layout/ModalBodyWrapper";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBomb } from "@fortawesome/free-solid-svg-icons";
-import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
-import ConfirmDeleteModal from "../components/common/popup/ConfirmDeleteModal";
 
 export const MODAL_TYPE = {
   commentsList: "COMMENTS_LIST",
@@ -41,36 +36,6 @@ const useModal = () => {
     });
   };
 
-  const showServerErrorModal = (show) => {
-    return (
-      <ModalBodyWrapper show={show} title="게시물을 업로드하지 못했습니다">
-        <FontAwesomeIcon icon={faBomb} className="indicator-success" />
-      </ModalBodyWrapper>
-    );
-  };
-
-  const showSuccessMsgModal = (show) => {
-    return (
-      <ModalBodyWrapper show={show} title="게시물이 공유되었습니다">
-        <FontAwesomeIcon icon={faCircleCheck} className="indicator-success" />
-      </ModalBodyWrapper>
-    );
-  };
-
-  const showDeleteConfirmModal = (
-    showConfirmModal,
-    setShowConfirmModal,
-    closeModal
-  ) => {
-    return (
-      <ConfirmDeleteModal
-        show={showConfirmModal}
-        setShowConfirmModal={setShowConfirmModal}
-        closeReviewFormModal={closeModal}
-      />
-    );
-  };
-
   return {
     editedReview,
     setEditedReview,
@@ -78,9 +43,6 @@ const useModal = () => {
     setModalVisible,
     closeModal,
     openModal,
-    showServerErrorModal,
-    showSuccessMsgModal,
-    showDeleteConfirmModal,
   };
 };
 
