@@ -61,9 +61,6 @@ const AddReviewForm = ({ setReviews, userInputValues, setUserInputValues }) => {
     formDataFileRef.current = formDataFiles;
     // setUploadStatus(RESULT_ENUM.UPLOADING);
 
-    // 폼데이터 사용방법
-    // console.log(formData.getAll("uploadFile[]")); // formData가 비어있는 이유
-    // formDataRef.current = formData;
     // url blob
     formDataFiles.forEach((file) => {
       const blob = new Blob([file], { type: file.type });
