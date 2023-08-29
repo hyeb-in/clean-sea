@@ -6,7 +6,7 @@ import * as Api from "../../Api";
 import { UserStateContext } from "../../App";
 import TravelItem from "./TravelItem";
 import SearchInput from "./SearchInput";
-import { useToggle } from "../../customhooks/modalCustomHooks";
+import { useToggle } from "../../hooks/profileHooks";
 
 const History = ({ displayToast, isEditable }) => {
   const [travels, setTravels] = useState([]);

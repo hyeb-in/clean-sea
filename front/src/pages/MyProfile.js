@@ -21,7 +21,7 @@ import History from '../components/travel/History';
 import CardHeader from 'react-bootstrap/CardHeader';
 import * as Api from '../Api';
 import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from '../constants';
-import { useToggle } from '../customhooks/modalCustomHooks';
+import { useToggle } from '../hooks/profileHooks';
 import RandomUserList from '../components/travel/RandomUserList';
 import ProfileToastWrapper
   from '../components/common/popup/ProfileToastWrapper';

@@ -3,7 +3,7 @@ import { FormControl, Button, Modal, Card, Col } from "react-bootstrap";
 import * as Api from "../../Api";
 import TravelImageWithText from "./TravelImageWithText";
 import SearchInput from "./SearchInput";
-import { useToggle } from "../../customhooks/modalCustomHooks";
+import { useToggle } from "../../hooks/profileHooks";
 import { formatDate, formatDateWithoutTime } from './utils/travelUtils';
 
 const TravelItem = ({
