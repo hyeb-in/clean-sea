@@ -11,22 +11,19 @@ import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const beachRouter = Router();
 
-beachRouter.get("/beaches/name/:name", getBeachByName);
-  // .get('/beachbyId/:_id', beachValidator.getBeach, jwtAuthentication, getBeachById);
-
-beachRouter.get("/beachbyId/:_id", getBeachById);
-  // .get('/beachbyId/:_id', beachValidator.getBeach, jwtAuthentication, getBeachById);
+beachRouter
+  .get("/beaches/name/:name", jwtAuthentication, beachValidator.getBeachByName, getBeachByName);
 
 beachRouter
-  .get('/beachesavg/:year', getBeachByRegionAndYearSpecificAvg);
-  // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+  .get("/beachbyId/:_id", jwtAuthentication, beachValidator.getBeachById, getBeachById);
 
 beachRouter
-  .get('/beaches/:year', getBeachByRegionAndYearSpecific);
-  // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+  .get('/beachesavg/:year', jwtAuthentication, beachValidator.getBeachByRegionAndYearSpecificAvg, getBeachByRegionAndYearSpecificAvg);
 
 beachRouter
-  .get("/beaches", getBeaches);
-  // .get("/beaches", jwtAuthentication, getBeaches);
+  .get('/beaches/:year', jwtAuthentication, beachValidator.getBeachByRegionAndYearSpecific, getBeachByRegionAndYearSpecific);
+
+beachRouter
+  .get("/beaches", jwtAuthentication, getBeaches);
 
 export default beachRouter;
