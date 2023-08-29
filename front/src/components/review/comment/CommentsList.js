@@ -59,10 +59,12 @@ const CommentsList = ({
             },
           })
         }
-        className="link"
+        className="link showMoreDetails"
       >
         {/* 임시로 2개!! 원래 3개임 */}
-        {showDetails && `댓글 ${comments.length}개 모두 보기`}
+        <div className="more-comments">
+          {showDetails && `댓글 ${comments.length}개 모두 보기`}
+        </div>
       </div>
     </>
   );
