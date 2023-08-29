@@ -29,10 +29,12 @@ userRouter.post("/reset-password", resetPassword);
 
 userRouter.post("/:userId/change-password", changePassword);
 
+userRouter.put('/photo/:userId', jwtAuthentication, handleFileUpload, updateUser)
+
 userRouter
   .route("/:userId")
   .get(jwtAuthentication, getUserById)
-  .put(jwtAuthentication, handleFileUpload, validateUpdateUser, updateUser)
+  .put(jwtAuthentication, validateUpdateUser, updateUser)
   .delete(jwtAuthentication, deleteUser);
 
 export default userRouter;
