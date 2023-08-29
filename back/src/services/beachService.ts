@@ -41,18 +41,7 @@ async function getBeachesService(): Promise<IBeach[]> {
   }
 
   // 모든 이력을 배열로 변환
-  const beachDataResult: IBeach[] = beachData.map(beach => ({
-    _id: beach._id,
-    name: beach.name,
-    address: beach.address,
-    goodnessFit: beach.goodnessFit,
-    eschScore: beach.eschScore,
-    enteScore: beach.enteScore,
-    ente: beach.ente,
-    esch: beach.esch,
-    latitude: beach.latitude,
-    longitude: beach.longitude,
-  }));
+  const beachDataResult: IBeach[] = beachData.map(beach => beach);
 
   return beachDataResult;
 }

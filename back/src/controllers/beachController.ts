@@ -34,7 +34,7 @@ const getBeachById = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+  ) => {
   try {
     const _id = new Types.ObjectId(req.params._id); // _id 파라미터를 ObjectId로 변환
 
@@ -49,7 +49,7 @@ const getBeachByRegionAndYear = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+  ) => {
   try {
     const address = req.params.address; // 주소 파라미터를 받아옴
     const year = req.params.year; // 연도 파라미터를 받아옴
@@ -66,7 +66,7 @@ const getBeachByRegionAndYearSpecificAvg = async (
   req: Request, 
   res: Response, 
   next: NextFunction
-) => {
+  ) => {
   try {
     const year = req.params.year; // 연도 파라미터를 받아옴
 
@@ -84,7 +84,7 @@ const getBeachByRegionAndYearSpecific = async (
   req: Request, 
   res: Response, 
   next: NextFunction
-) => {
+  ) => {
   try {
     const year = req.params.year; // 연도 파라미터를 받아옴
 
