@@ -11,7 +11,7 @@ async function getTravel(userId : string) :Promise<ITravel[]>{
     return travel;
 }
 
-async function setTravel(travelId : string, {toUpdate} : {toUpdate : Partial<ITravel>}){
+async function setTravel(travelId : string, {toUpdate} : {toUpdate : Partial<ITravel>}): Promise<ITravel | null>{
     await findUserTravel(travelId);
 
     const updatedTravel = updateTravel(travelId, toUpdate);
