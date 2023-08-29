@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useContext,
+} from 'react';
 import {
   Container,
   Row,
@@ -19,9 +25,11 @@ import { useToggle } from '../customhooks/modalCustomHooks';
 import RandomUserList from '../components/travel/RandomUserList';
 import ProfileToastWrapper
   from '../components/common/popup/ProfileToastWrapper';
+import { UserStateContext } from '../App';
 
 const MyProfile = () => {
   const { id } = useParams();
+  const { user: loggedInUser } = useContext(UserStateContext);
 
   const [userName, setUserName] = useState('훈제오리');
   const [userEmail, setUserEmail] = useState('elice@elice.com');
@@ -142,19 +150,21 @@ const MyProfile = () => {
                 </ListGroupItem>
               </ListGroup>
 
-              <span>
-                <Button variant="link" onClick={setIsEditMode}>{isEditMode
-                  ? '취소'
-                  : '편집'}</Button>
-                {isEditMode && <Button variant="link"
-                                       onClick={handleCompleteClick}>완료</Button>}
-                {isEditMode &&
-                  <Button variant="link" onClick={toggleProfileModal}>프로필 이미지
-                    편집</Button>}
-              </span>
+              {loggedInUser._id === id && (
+                <span>
+                  <Button variant="link" onClick={setIsEditMode}>{isEditMode
+                    ? '취소'
+                    : '편집'}</Button>
+                  {isEditMode && <Button variant="link"
+                                         onClick={handleCompleteClick}>완료</Button>}
+                  {isEditMode &&
+                    <Button variant="link" onClick={toggleProfileModal}>프로필 이미지
+                      편집</Button>}
+                </span>
+              )}
             </Card>
 
-            <History displayToast={displayToastMessage}/>
+            <History displayToast={displayToastMessage} isEditable={id === loggedInUser._id}/>
           </Col>
           <Col sm={4}>
             <RandomUserList data={randomUsers}></RandomUserList>

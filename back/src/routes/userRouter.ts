@@ -3,11 +3,11 @@ import {
   changePassword,
   deleteUser,
   getRandomUser,
-  getUser,
+  getUser, getUserById,
   resetPassword,
   signUpUser,
   updateUser,
-} from '../controllers/userController'
+} from "../controllers/userController";
 import { jwtAuthentication } from '../middlewares/authenticateJwt'
 import {
   validateSignUp,
@@ -31,7 +31,7 @@ userRouter.post("/:userId/change-password", changePassword);
 
 userRouter
   .route("/:userId")
-  .get(jwtAuthentication, getUser)
+  .get(jwtAuthentication, getUserById)
   .put(jwtAuthentication, handleFileUpload, validateUpdateUser, updateUser)
   .delete(jwtAuthentication, deleteUser);
 

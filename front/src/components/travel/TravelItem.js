@@ -10,7 +10,8 @@ const TravelItem = ({
   travelData,
   onTravelUpdate,
   onTravelDelete,
-  displayToast
+  displayToast,
+  isEditable
 }) => {
   const [isEditing, setIsEditing] = useToggle();
   const [showDeleteModal, setShowDeleteModal] = useToggle();
@@ -82,11 +83,18 @@ const TravelItem = ({
                   alignItems: "center",
                   justifyContent: "flex-start"
                 }}>
-                  <Button variant="outline-primary"
-                          onClick={setIsEditing}
-                          className={"mx-1"}>편집</Button>
-                  <Button variant="outline-danger"
-                          onClick={setShowDeleteModal}>삭제</Button>
+                  {
+                    isEditable ? (
+                      <>
+                        <Button variant="outline-primary"
+                                onClick={setIsEditing}
+                                className={"mx-1"}>편집</Button>
+                        <Button variant="outline-danger"
+                                onClick={setShowDeleteModal}>삭제</Button>
+                      </>
+                    ) : <></>
+                  }
+
                 </div>
               </Card.Body>
             </Col>
