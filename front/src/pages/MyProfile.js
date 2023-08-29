@@ -117,7 +117,7 @@ const MyProfile = () => {
       <Container>
         <Row>
           <Col sm={8}>
-            <Card small className="mb-4 mt-4 pt-3">
+            <Card className="mb-4 mt-4 pt-3">
               <CardHeader className="border-bottom">
                 <div className="mb-3 mx-auto">
                   <img
@@ -133,7 +133,7 @@ const MyProfile = () => {
                   className="mb-2">{userName}</h4>}
                 <span className="text-muted d-block mb-1">{userEmail}</span>
               </CardHeader>
-              <ListGroup flush>
+              <ListGroup>
                 <ListGroupItem className="p-4">
                   {isEditMode ? <FormControl type="text" value={userDescription}
                                              onChange={e => setUserDescription(

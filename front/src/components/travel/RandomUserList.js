@@ -21,7 +21,7 @@ const RandomUserList = ({ data }) => {
             <h4 className="mb-2">{user.name}</h4>
             <span className="text-muted d-block mb-1">{user.email}</span>
           </CardHeader>
-          <ListGroup flush>
+          <ListGroup>
             <ListGroupItem className="p-4">
               <strong
                 className="text-muted d-block mb-2">{user.description}</strong>
