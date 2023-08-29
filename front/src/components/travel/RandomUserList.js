@@ -13,7 +13,9 @@ const RandomUserList = ({ data }) => {
 
               <img
                 className="rounded-circle"
-                src={user.uploadFile.length > 0 && user.uploadFile[0] !== ""  ? `http://${window.location.hostname}:5001/${user.uploadFile[0]}` : 'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png'}
+                src={user.uploadFile && user.uploadFile.length > 0 && user.uploadFile[0] !== ""
+                  ? `http://${window.location.hostname}:5001/${user.uploadFile[0]}`
+                  : 'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png'}
                 width="110"
                 alt="User Profile"
               />
