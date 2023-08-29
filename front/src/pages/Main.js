@@ -28,7 +28,7 @@ const Main = () => {
           ["kr-ul", 3.52], //울산
           ["kr-in", 7.96], //인천
           ["kr-kw", 0.75], //강원
-          ["kr-gn", 0.60], //충남
+          ["kr-gn", 0.6], //충남
           ["kr-cj", 1.12], //제주
         ];
 
@@ -56,7 +56,8 @@ const Main = () => {
           colorAxis: {
             stops: [
               [0, "#00B9FF"], // Start color for higher values
-              [1, "#FFFFFF"], // End color for lower values
+              [0.5, "#FFFFFF"],
+              [1, "#f89b00"], // End color for lower values
             ],
           },
 

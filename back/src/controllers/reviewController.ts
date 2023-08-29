@@ -7,14 +7,8 @@ import {
   setReview,
   deletedReview,
 } from "../services/reviewService";
-import { handleFileUpload } from "../middlewares/uploadMiddleware";
 import { IRequest } from "user";
 import { errorGenerator } from "../utils/errorGenerator";
-import { FileRequest } from "upload";
-import {
-  postReviewValidator,
-  putReviewValidator,
-} from "../utils/validators/reviewValidator";
 
 const sendResponseWithData = function (
   res: Response,
@@ -24,43 +18,18 @@ const sendResponseWithData = function (
   res.status(statusCode).json(data);
 };
 
-const createReview = async (
-  req: IRequest,
-  res: Response,
-  next: NextFunction
-) => {
+const createReview = async (req: IRequest, res: Response) => {
   try {
     const author = req.user._id;
     const userName = req.user.name;
 
-    //  handleImageUpload(req as FileRequest, next);
-
-    handleFileUpload(req as FileRequest, res, async function (error: any) {
-      if (error) {
-        return next(error);
-      }
-      // postReviewValidator(req, res,async function (validationError: any) {
-      //   if (validationError) {
-      //     return next(validationError);
-      // };
-      let uploadFile: string[] = [];
-
-      if (Array.isArray(req.files)) {
-        uploadFile = req.files.map((file) => file.filename);
-      } else if (req.files?.uploadFile) {
-        uploadFile = Array.from(req.files.uploadFile).map(
-          (file) => file.filename
-        );
-      }
-
-      const addMyReview = await addReview({
-        toCreate: { ...req.body, author, userName, uploadFile },
-      });
-
-      return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
-      // });
+    const addMyReview = await addReview({
+      toCreate: { ...req.body, author, userName },
     });
+
+    return sendResponseWithData(res, StatusCodes.CREATED, addMyReview);
   } catch (error) {
+    //TODO 여기도 return res.status로 보내주는게 아니라 여기는 next로 보내주면 될 것 같음
     const customError = errorGenerator(
       error.message,
       StatusCodes.INTERNAL_SERVER_ERROR
@@ -103,38 +72,15 @@ const getAllLogin = async (req: IRequest, res: Response) => {
   }
 };
 
-const updateReview = async (
-  req: IRequest,
-  res: Response,
-  next: NextFunction
-) => {
+const updateReview = async (req: IRequest, res: Response) => {
   try {
     const id = req.params.reviewId;
 
-    // handleFileUpload(req as FileRequest,res,async function (err : any){
-    //   if (err){
-    //     return next(err);
-    //   }
-    let uploadFile: string[] = [];
-
-    if (Array.isArray(req.files)) {
-      uploadFile = req.files.map((file) => file.filename);
-    } else if (req.files?.uploadFile) {
-      uploadFile = req.files.uploadFile.map((file) => file.filename);
-    }
-
-    putReviewValidator(req, res, function (validationError: any) {
-      if (validationError) {
-        return;
-      }
-    });
-
     const updatedReview = await setReview(id, {
-      toUpdate: { ...req.body, uploadFile },
+      toUpdate: { ...req.body },
     });
 
     return sendResponseWithData(res, StatusCodes.CREATED, updatedReview);
-    // });
   } catch (err) {
     const customError = errorGenerator(
       "Failed to update login reviews",

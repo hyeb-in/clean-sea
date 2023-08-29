@@ -77,6 +77,13 @@ const AddReview = ({ setReviews, userInputValues, setUserInputValues }) => {
       console.log(formDataFiles, "변경 전 형식");
 
       console.log(formDataFiles);
+      //       formData.append("uploadFile", formDataFiles);
+      //       if (formDataFiles && formDataFiles.length > 0) {
+      //         for (let i = 0; i < formDataFiles.length; i++) {
+      //           formData.append("uploadFile[]", formDataFiles[i]);
+      //         }
+      //       }
+
       setUploadStatus(RESULT_ENUM.UPLOADING);
       if (!formData) throw new Error("파일 없음");
       const res = await axios.post(`${serverUrl}reviews/register`, formData);

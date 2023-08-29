@@ -4,20 +4,31 @@ import {
   getAllReview,
   getAllLogin,
   updateReview,
-  deleteReview
+  deleteReview,
 } from "../controllers/reviewController";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
-// import { postReviewValidator, putReviewValidator } from "../utils/validators/reviewValidator";
+import { handleFileUpload } from "../middlewares/uploadMiddleware";
+import {
+  postReviewValidator,
+  putReviewValidator,
+} from "../utils/validators/reviewValidator";
 const reviewAuthRouter = Router();
 
 reviewAuthRouter
-    .post("/register", jwtAuthentication, createReview)
-    .get("/reviewList", getAllReview)
-    .get("/reviewListLogin", jwtAuthentication, getAllLogin);
+  //TODO handleFileUpload랑 validator 순서 변경 해야하지 않은지?
+  .post(
+    "/register",
+    jwtAuthentication,
+    handleFileUpload,
+    postReviewValidator,
+    createReview
+  )
+  .get("/reviewList", getAllReview)
+  .get("/reviewListLogin", jwtAuthentication, getAllLogin);
 
 reviewAuthRouter
-    .route("/:reviewId")
-    .put(jwtAuthentication, updateReview)
-    .delete(jwtAuthentication, deleteReview);
+  .route("/:reviewId")
+  .put(jwtAuthentication, handleFileUpload, putReviewValidator, updateReview)
+  .delete(jwtAuthentication, deleteReview);
 
 export default reviewAuthRouter;

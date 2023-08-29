@@ -61,7 +61,7 @@ const CurrentComments = ({
       >
         {/* 임시로 2개!! 원래 3개임 */}
         <div className="more-comments">
-          {commentList?.length > 2 && `댓글 ${commentList.length}개 모두 보기`}
+          {commentList?.length > 2 && `댓글 ${review.commentCount}개 모두 보기`}
         </div>
       </div>
     </div>

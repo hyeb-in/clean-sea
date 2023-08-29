@@ -16,6 +16,10 @@
  *       userId:
  *         type: string
  *         description: user ID
+ *       isLike:
+ *         type: string
+ *         enum: ['yes', 'no']
+ *         description: Indicates whether the action is a like ('yes') or dislike ('no')
  */
 
 /**
@@ -40,27 +44,15 @@
  *         required: true
  *         type: string
  *         description: user
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               targetId:
- *                 type: string
- *                 description: targetId
- *               targetType:
- *                 type: string
- *                 description: targetType
- *               userId:
- *                 type: string
- *                 description: userId
- *     security: []
  *     responses:
  *       '200':
- *         description: Added
+ *         description: Like status toggled successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/definitions/Like'
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Result message
  */

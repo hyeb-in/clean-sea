@@ -96,10 +96,12 @@ textarea:focus {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  height: 400px;
   display: flex;
   align-items: center;
   background-color: #000000f5;
+}
+.carousel {
+  overflow: hidden;
 }
 .text-overflow {
   overflow: hidden;
@@ -123,7 +125,6 @@ textarea:focus {
   max-width: 50%;
 }
 .carousel-item img {
-  height: 400px;
   object-fit: cover;
 }
 .review__contents {
