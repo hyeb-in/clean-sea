@@ -13,7 +13,7 @@ const CurrentComments = ({
   const { openModal } = useModal();
   const { setReviews } = useReview();
   // const scrollRef = useRef(null);
-
+  console.log(review, "wiejfwlifj");
   // useEffect(() => {
   //   if (newCommentsList) {
   //     scrollRef.current.scrollIntoView({ behavior: "smooth" });
@@ -61,7 +61,7 @@ const CurrentComments = ({
       >
         {/* 임시로 2개!! 원래 3개임 */}
         <div className="more-comments">
-          {commentList?.length > 2 && `댓글 ${review.commentCount}개 모두 보기`}
+          {review.commentCount > 2 && `댓글 ${review.commentCount}개 모두 보기`}
         </div>
       </div>
     </div>

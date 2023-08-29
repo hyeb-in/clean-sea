@@ -11,8 +11,14 @@ import * as Api from "../../Api";
 import useToast from "../../hooks/useToast";
 import ToastWrapper from "../common/popup/ToastWrapper";
 import { TOAST_POPUP_STATUS } from "../../constants";
+import EditReview from "./EditReview";
 
-const ReviewsList = ({ setReview, reviews, setReviews }) => {
+const ReviewsList = ({
+  setReview,
+  reviews,
+  setReviews,
+  setNewCommentsList,
+}) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
 
@@ -70,12 +76,14 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
 
   useEffect(() => {
     console.log(modalVisible);
+
     if (modalVisible.status === "deleted") {
       console.log("hi");
       fetchData();
       // reviews 정보를 새로 받아오는 방법
     }
-  }, [modalVisible, setReviews]);
+  }, [modalVisible, setReviews, fetchData]);
+  const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
 
   return (
     <>
@@ -123,6 +131,9 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
 
       {/* 모달3. review 수정하기 폼 모달 */}
       {/* >>>> Review 하위 컴포넌트로 이동 */}
+
+      {/* 모달3. review 수정하기 폼 모달 */}
+      {isEditReviewPopupOpen && <EditReview />}
       {showToast && (
         <ToastWrapper
           setShowToast={setShowToast}

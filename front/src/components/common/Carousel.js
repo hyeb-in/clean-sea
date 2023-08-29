@@ -8,54 +8,38 @@ import { Button, Image } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import { serverUrl } from "../../Api";
 
+const prevIcon = (
+  <FontAwesomeIcon icon={faArrowLeft} className="carousel-arrow-icon" />
+);
+
+const nextIcon = (
+  <FontAwesomeIcon icon={faArrowRight} className="carousel-arrow-icon" />
+);
+
 const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
   // 업로드, 수정 할 때 삭제버튼 누르면 하나씩 제거
-
   const removeUrl = (index) => {
     setPreview((current) => {
-      const newImageUrls = current.filter((item, idx) => idx !== index);
-      return newImageUrls;
+      return [...current].filter((_, idx) => idx !== index);
     });
   };
 
-  console.log(imageUrls);
-
+  const urls = imageUrls ? imageUrls : preview;
+  console.log(urls);
   return (
     <Carousel
       className={`carousel__container px-0`}
       interval={null}
       variant="dark"
-      indicators={imageUrls?.length > 1}
-      prevIcon={
-        imageUrls?.length > 1 && (
-          <FontAwesomeIcon icon={faArrowLeft} className="carousel-arrow-icon" />
-        )
-      }
-      nextIcon={
-        imageUrls?.length > 1 && (
-          <FontAwesomeIcon
-            icon={faArrowRight}
-            className="carousel-arrow-icon"
-          />
-        )
-      }
+      indicators={urls.length > 1}
+      prevIcon={urls.length > 1 && prevIcon}
+      nextIcon={urls.length > 1 && nextIcon}
     >
-      {/* to do: 중복 코드 제거하기 */}
-      {imageUrls?.map((url, index) => {
+      {urls.map((url, index) => {
         return (
           <Carousel.Item key={url}>
             <Image
-              src={url.includes("blob") ? url : `${serverUrl}${url}`}
-              fluid
-            />
-          </Carousel.Item>
-        );
-      })}
-      {preview?.map((url, index) => {
-        return (
-          <Carousel.Item key={url}>
-            <Image
-              src={url.includes("blob") ? url : `${serverUrl}${url}`}
+              src={url && url?.includes("blob") ? url : `${serverUrl}${url}`}
               fluid
             />
             {/* preview 삭제버튼 */}

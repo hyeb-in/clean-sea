@@ -6,18 +6,15 @@ import ReviewContents from "./ReviewContents";
 import CarouselWrapper from "../common/Carousel";
 import AddCommentForm from "./comment/CommentForm";
 import { UserStateContext } from "../../App";
-import EditReview from "./EditReview";
-import useModal, { MODAL_TYPE } from "../../hooks/useModal";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
 const Review = ({ review, setReviews, setReview }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible } = useModal();
+
   const [commentList, setCommentList] = useState(
     review ? review.comments : null
   );
   const [newCommentsList, setNewCommentsList] = useState([]);
-  const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
 
   return (
     <>
@@ -59,16 +56,6 @@ const Review = ({ review, setReviews, setReview }) => {
             </div>
           </Card.Body>
         </Card>
-      )}
-
-      {/* 모달3. review 수정하기 폼 모달 */}
-      {isEditReviewPopupOpen && (
-        <EditReview
-          review={review}
-          setReview={setReview}
-          setReviews={setReviews}
-          setNewCommentsList={setNewCommentsList}
-        />
       )}
     </>
   );
