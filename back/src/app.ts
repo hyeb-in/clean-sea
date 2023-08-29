@@ -13,7 +13,6 @@ import authRouter from "./routes/authRouter";
 import { swaggerUi, specs } from "./swagger/swagger";
 
 import "./db";
-import { mailSender } from "./utils/sendMail";
 
 const app: Express = express();
 app.use(cors());
