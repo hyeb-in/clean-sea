@@ -1,5 +1,3 @@
-// FormUtils.js
-
 export const createFormData = (formDataFileRef, userInputValues) => {
   const formDataFiles = Array.from(formDataFileRef.current);
   const formData = new FormData();
@@ -15,7 +13,6 @@ export const createFormData = (formDataFileRef, userInputValues) => {
   // console.log(formData.getAll("uploadFile[]"));
   // console.log(formData.getAll("title"));
   // console.log(formData.getAll("content"));
-
   return formData;
 };
 
