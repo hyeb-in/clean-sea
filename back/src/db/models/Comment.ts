@@ -4,7 +4,7 @@ import { IComment } from "../../types/comment";
 import { errorGenerator } from "../../utils/errorGenerator";
 
 async function createComment(toCreate : IComment) : Promise<IComment>{
-    const { content, userName, userId, postId } = toCreate;
+    const { postId } = toCreate;
 
     const review = await ReviewModel.findById(postId);
 

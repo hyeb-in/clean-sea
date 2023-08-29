@@ -1,5 +1,6 @@
 import { Document, Types } from 'mongoose';
 import { ILike } from 'likes';
+import { IUser } from 'user';
 
 interface IReview extends Document {
   title?: string;
@@ -13,6 +14,7 @@ interface IReview extends Document {
   likeCount?: number;
   isLike?: 'yes' | 'no';
   Likes?: ILike[];
+  updatedUser? : IUser;
 }
 
 export { IReview };

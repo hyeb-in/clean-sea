@@ -6,7 +6,7 @@ import {
   setReview,
   deletedReview,
 } from "../services/reviewService";
-import { IRequest } from "user";
+import { IRequest, IUser } from "user";
 
 const createReview = async (req: IRequest, res: Response, next : NextFunction) => {
   try {
@@ -35,8 +35,9 @@ const getAllReview = async (req: IRequest, res: Response, next : NextFunction) =
 const getAllLogin = async (req: IRequest, res: Response, next : NextFunction) => {
   try {
     const author = req.user._id;
+    const updatedUser : IUser = req.user;
 
-    const loginReview = await getLoginReview(author);
+    const loginReview = await getLoginReview(author,updatedUser);
     res.status(200).json(loginReview);
   } catch (error) {
     next(error);

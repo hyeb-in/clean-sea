@@ -1,5 +1,6 @@
 import { IUser } from "user";
 import UserModel from "../schemas/userSchema";
+import { findUserReviews } from "./Review";
 
 export const findUserById = async (userId: string): Promise<IUser> => {
   const user = await UserModel.findById(userId);
@@ -36,6 +37,7 @@ export const update = async (userId: string, changedValue: Partial<IUser>) => {
     new: true,
   });
 
+  await findUserReviews(userId, updatedUser);
   return updatedUser;
 };
 
