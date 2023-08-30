@@ -1,4 +1,4 @@
-import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Card, Image, ListGroup, ListGroupItem } from 'react-bootstrap';
 import CardHeader from 'react-bootstrap/CardHeader';
 import React from 'react';
 
@@ -9,15 +9,13 @@ const RandomUserList = ({ data }) => {
         <Card key={user._id} className="mb-4 mt-4 pt-3">
           <CardHeader className="border-bottom">
             <div className="mb-3 mx-auto">
-
-
-              <img
-                className="rounded-circle"
+              <Image
                 src={user.uploadFile && user.uploadFile.length > 0 && user.uploadFile[0] !== ""
                   ? `http://${window.location.hostname}:5001/${user.uploadFile[0]}`
                   : 'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png'}
                 width="110"
                 alt="User Profile"
+                roundedCircle
               />
             </div>
             <h4 className="mb-2">{user.name}</h4>
