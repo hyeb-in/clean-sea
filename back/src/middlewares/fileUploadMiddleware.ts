@@ -2,10 +2,10 @@ import multer from 'multer';
 import path from 'path';
 
 const imageFilter = (req : any, file : Express.Multer.File, cb : any) =>{
-    if( file.mimetype.startsWith('image/') && (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')){
+    if( file.mimetype.startsWith('video/') || (file.mimetype.startsWith('image/') && (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'))){
         cb(null,true);
     }else{
-        cb(new Error('Only jpeg, and png 이미지 파일이여야만 합니다.'), false);
+        cb(new Error('Only jpeg, and png 파일이여야만 합니다.'), false);
     }
 };
 // 이미지 업로드 저장 경로
@@ -46,6 +46,6 @@ const videoFilter = (req : any, file : Express.Multer.File, cb : any) => {
 const videoUploadMiddleware = multer({
     storage : videoStorage,
     fileFilter : videoFilter,
-}).single('uploadVideo');
+}).array('uploadVideo[]',5);
 
 export { uploadMiddleware, videoUploadMiddleware };

@@ -34,7 +34,8 @@ const postreviewSchema = joi.object({
     "string.min": errorMessage.stringMin,
     "string.max": errorMessage.stringMax,
   }),
-  uploadFile: joi.array().items(joi.string()).required(),
+  uploadFile: joi.array().items(joi.string()).optional(),
+  uploadVideo: joi.array().items(joi.string()).optional(),
 });
 
 const putreviewSchema = joi.object({
@@ -48,6 +49,7 @@ const putreviewSchema = joi.object({
     "string.max": errorMessage.stringMax,
   }),
   uploadFile: joi.array().items(joi.string()).optional(),
+  uploadVideo: joi.array().items(joi.string()).optional(),
 });
 
 export const postReviewValidator = validateSchema(postreviewSchema);

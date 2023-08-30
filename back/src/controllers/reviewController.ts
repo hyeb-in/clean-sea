@@ -50,7 +50,6 @@ const updateReview = async (req: IRequest, res: Response, next : NextFunction) =
     const updatedReview = await setReview(id, {
       toUpdate: { ...req.body },
     });
-    console.log(updateReview);
     res.status(200).json(updatedReview);
   } catch (error) {
     next(error);

@@ -13,7 +13,7 @@ import {
   validateSignUp,
   validateUpdateUser,
 } from "../utils/validators/userValidator";
-import { handleFileUpload } from "../middlewares/uploadMiddleware";
+import { fileUpload } from "../middlewares/uploadMiddleware";
 
 const userRouter = Router();
 
@@ -29,7 +29,7 @@ userRouter.post("/reset-password", resetPassword);
 
 userRouter.post("/:userId/change-password", changePassword);
 
-userRouter.put('/photo/:userId', jwtAuthentication, handleFileUpload, updateUser)
+userRouter.put('/photo/:userId', jwtAuthentication, fileUpload, updateUser)
 
 userRouter
   .route("/:userId")
