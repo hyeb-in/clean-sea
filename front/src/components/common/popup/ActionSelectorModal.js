@@ -21,6 +21,7 @@ const ActionSelectorModal = () => {
 
   const editReview = () => {
     if (review) {
+      // 임시로 addReview로 보냄-> EDIT REVIEW data
       openModal(MODAL_TYPE.editReview, {
         ...modalVisible.data,
         review,

@@ -19,9 +19,9 @@ import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
 import AddReview from "./components/review/AddReview";
 import PageNotFound from "./pages/PageNotFound";
-import ResponseIndicator from "./components/common/indicators/ResponseIndicator";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
+import EditReview from "./components/review/EditReview";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -30,17 +30,11 @@ export const ModalOptionContext = createContext(null);
 export const ModalVisibleContext = createContext(null);
 
 function App() {
-  const [modalOptions, setModalOptions] = useState({
-    state: false,
-    description: null,
-    title: null,
-  });
   const [modalVisible, setModalVisible] = useState({
     type: null,
     isVisible: false,
     data: null,
   });
-
   // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
@@ -88,56 +82,58 @@ function App() {
   if (!isFetchCompleted) {
     return "loading...";
   }
-
+  console.log(modalVisible);
   return (
     // to do: 구조.................?
     <UserStateContext.Provider value={userState}>
       <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
-        <ModalOptionContext.Provider value={{ modalOptions, setModalOptions }}>
-          <DispatchContext.Provider value={dispatch}>
-            <Interceptor>
-              {!is404Page && <NavBar />}
-              {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
-              {modalVisible?.type === MODAL_TYPE.addReview && (
-                <AddReview
-                  reviews={reviews}
-                  setReviews={setReviews}
-                  userInputValues={userInputValues}
-                  setUserInputValues={setUserInputValues}
-                />
-              )}
-
-              <Routes>
-                <Route path="/" exact element={<Main />} />
-                <Route path="/login" exact element={<Login />} />
-                <Route path="/signup" exact element={<SignUp />} />
-                <Route path="/users/:id" exact element={<MyProfile />} />
-                <Route path="/search" exact element={<Search />} />
-                <Route
-                  path="/reviews"
-                  exact
-                  element={
-                    <ReviewsList
-                      reviews={reviews}
-                      setReviews={setReviews}
-                      userInputValues={userInputValues}
-                      setUserInputValues={setUserInputValues}
-                    />
-                  }
-                />
-                <Route path="/graph" exact element={<Graph />} />
-                {/* 404 페이지 */}
-
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-              <ResponseIndicator
-                modalOptions={modalOptions}
-                setModalOptions={setModalOptions}
+        <DispatchContext.Provider value={dispatch}>
+          <Interceptor>
+            {!is404Page && <NavBar />}
+            {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
+            {/* >>>> edit review 오류때문에 임시로 edit도 여기서 사용한다 */}
+            {modalVisible && modalVisible.type === MODAL_TYPE.addReview && (
+              <AddReview
+                reviews={reviews}
+                setReviews={setReviews}
+                userInputValues={userInputValues}
+                setUserInputValues={setUserInputValues}
               />
-              {!is404Page && <Footer />}
-            </Interceptor>
-          </DispatchContext.Provider>
-        </ModalOptionContext.Provider>
+            )}
+            {modalVisible && modalVisible.type === MODAL_TYPE.editReview && (
+              <EditReview
+                reviews={reviews}
+                setReviews={setReviews}
+                userInputValues={userInputValues}
+                setUserInputValues={setUserInputValues}
+              />
+            )}
+
+            <Routes>
+              <Route path="/" exact element={<Main />} />
+              <Route path="/login" exact element={<Login />} />
+              <Route path="/signup" exact element={<SignUp />} />
+              <Route path="/users/:id" exact element={<MyProfile />} />
+              <Route path="/search" exact element={<Search />} />
+              <Route
+                path="/reviews"
+                exact
+                element={
+                  <ReviewsList
+                    reviews={reviews}
+                    setReviews={setReviews}
+                    userInputValues={userInputValues}
+                    setUserInputValues={setUserInputValues}
+                  />
+                }
+              />
+              <Route path="/graph" exact element={<Graph />} />
+              {/* 404 페이지 */}
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+            {!is404Page && <Footer />}
+          </Interceptor>
+        </DispatchContext.Provider>
       </ModalVisibleContext.Provider>
     </UserStateContext.Provider>
   );

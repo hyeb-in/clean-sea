@@ -14,9 +14,15 @@ import useModal from "../../hooks/useModal";
 
 // 다른 부분
 
-const EditReview = ({ userInputValues, setUserInputValues }) => {
+const EditReview = ({
+  userInputValues,
+  setUserInputValues,
+  reviews,
+  setReviews,
+}) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useModal();
+  console.log(modalVisible);
   // deps(modalVisible)이 변경될 때에만 review, setReviews를 다시 가져온다
   // 무슨 차이인지 잘 모르겠음
   // const { review, setReviews } = useMemo(
@@ -61,14 +67,7 @@ const EditReview = ({ userInputValues, setUserInputValues }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [
-    loggedInUser,
-    // showToastPopup,
-    userInputValues,
-    setUserInputValues,
-    // setReviews,
-    // review._id,
-  ]);
+  }, []);
 
   return (
     <ReviewFormContainer

@@ -1,6 +1,17 @@
 import { Col, Container, Row } from "react-bootstrap";
+import useModal from "../../../hooks/useModal";
 
 const ReviewFormBody = ({ userInputValues, setUserInputValues }) => {
+  const { modalVisible } = useModal();
+  const currentReviewData = modalVisible?.data?.review;
+
+  if (currentReviewData) {
+    setUserInputValues({
+      title: currentReviewData.title,
+      content: currentReviewData.content,
+    });
+  }
+  // title, content, uploadFile
   return (
     <Container className="w-100">
       <Row className="d-flex flex-column">

@@ -46,7 +46,7 @@ const Review = ({ review, setReviews, setReview }) => {
                   setNewCommentsList={setNewCommentsList}
                 />
               </div>
-              {/* 댓글 다는 창이 있다? reviewId가 필요함  */}
+              {/* 댓글 다는 창이 있다? reviewId가 필요함 */}
               {loggedInUser && (
                 <AddCommentForm
                   review={review}

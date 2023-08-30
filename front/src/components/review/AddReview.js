@@ -6,6 +6,7 @@ import { createBlobUrls, createFormData } from "../../util/imagUrl";
 import useToast from "../../hooks/useToast";
 import axios from "axios";
 import { serverUrl } from "../../Api";
+import useModal from "../../hooks/useModal";
 
 const AddReview = ({
   userInputValues,
@@ -18,6 +19,7 @@ const AddReview = ({
   const { user: loggedInUser } = useContext(UserStateContext);
   const formDataFileRef = useRef(null);
   const { showToastPopup } = useToast();
+  const { closeModal } = useModal();
 
   const handleFileChange = (files) => {
     const formDataFiles = Array.from(files);
@@ -40,6 +42,7 @@ const AddReview = ({
       }
       setReviews((current) => [res.data, ...current]);
       setUserInputValues({ title: "", content: "" });
+      closeModal();
       // closeModal();
       // [x] 토스트
       // 알림창: loading ->  onError, onSuccess
@@ -47,7 +50,7 @@ const AddReview = ({
     } catch (error) {
       console.log(error);
     }
-  }, [showToastPopup, userInputValues, loggedInUser, setReviews]);
+  }, [closeModal, userInputValues]);
 
   return (
     <ReviewFormContainer

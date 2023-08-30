@@ -22,9 +22,11 @@ const ReviewFormContainer = ({
   const { modalVisible, closeModal } = useModal();
   const { showToast, toastPosition, toastText, toastStatus } = useToast();
 
+  const editingReviewData = modalVisible?.data?.review?.uploadFile;
+
   // 저장됐던 이미지가 있다면 불러와서 보여준다
   // 삭제 가능
-  // 추가 가능
+  // 추가 가능?
   // 들어온 파일 => 다시 formData로 변환 => post
 
   // 중복
@@ -62,6 +64,7 @@ const ReviewFormContainer = ({
           // title과 content가 비어있다면(날아갈 데이터가 없다면) 유저에게 묻지 않고 모달창 제거
           if (userInputValues.title !== "" || userInputValues.content !== "") {
             // 물어보기 !!confirm modal
+            console.log("confirm");
           } else {
             closeModal();
             setUserInputValues({ title: "", content: "" }); // 입력창 비워주기
@@ -82,7 +85,7 @@ const ReviewFormContainer = ({
           }
         >
           <Form className="addReview__form">
-            {preview && preview.length > 0 ? (
+            {editingReviewData || (preview && preview?.length > 0) ? (
               <CarouselWrapper preview={preview} setPreview={setPreview} />
             ) : (
               <FileUploader
