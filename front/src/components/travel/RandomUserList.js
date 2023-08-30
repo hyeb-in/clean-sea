@@ -1,8 +1,11 @@
 import { Card, Image, ListGroup, ListGroupItem } from 'react-bootstrap';
 import CardHeader from 'react-bootstrap/CardHeader';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RandomUserList = ({ data }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       {data.map(user => (
@@ -16,6 +19,7 @@ const RandomUserList = ({ data }) => {
                 width="110"
                 alt="User Profile"
                 roundedCircle
+                onClick={() => navigate(`/users/${user._id}`)}
               />
             </div>
             <h4 className="mb-2">{user.name}</h4>
