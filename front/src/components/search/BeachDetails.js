@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Badge, Table } from 'react-bootstrap';
+import { Container, Row, Col, Badge, Table, Alert } from 'react-bootstrap';
 
 const BeachDetails = ({ beachData }) => {
   if (!beachData) return null;
@@ -79,8 +79,10 @@ const BeachDetails = ({ beachData }) => {
         </Col>
       </Row>
 
-      <Row className="mt-3">
-        <h4>전국 대비 종합 점수: {beachData.sumGerms}</h4>
+      <Row className="mt-3 p-4">
+        <Alert key="info" variant="info">
+          <h4>전국 대비 종합 점수: {beachData.sumGerms}</h4>
+        </Alert>
       </Row>
     </Container>
   );

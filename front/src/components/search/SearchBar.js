@@ -6,6 +6,7 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import RegionDropdown from './RegionDropdown';
+import './SearchBar.css';
 
 const testData = [
   {
@@ -100,7 +101,7 @@ const SearchBar = ({ setSelectedBeach }) => {
         <Col>
           {
             beachData.map((beach, index) => (
-              <ListGroup key={beach._id} className="my-2" onClick={() => handleBeachSelect(beach)}>
+              <ListGroup key={beach._id} className="my-2 hoverable" onClick={() => handleBeachSelect(beach)}>
                 <ListGroup.Item>{`${index + 1}위 - ${beach.name} 해수욕장`}</ListGroup.Item>
               </ListGroup>
             ))
