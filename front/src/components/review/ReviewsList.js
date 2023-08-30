@@ -13,7 +13,13 @@ import ToastWrapper from "../common/popup/ToastWrapper";
 import { TOAST_POPUP_STATUS } from "../../constants";
 import EditReview from "./EditReview";
 
-const ReviewsList = ({ setReview, reviews, setReviews }) => {
+const ReviewsList = ({
+  setReview,
+  reviews,
+  setReviews,
+  userInputValues,
+  setUserInputValues,
+}) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
 
@@ -39,13 +45,13 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
       // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
       if (loggedInUser) {
         const res = await fetchPrivateReviews();
-        console.log(res);
         if (!res.data) {
           showToastPopup(
             "유저의 데이터를 불러올 수 없습니다",
             TOAST_POPUP_STATUS.error
           );
         }
+        if (reviews === res.data) return;
         setReviews(res.data);
         setIsLoaded(true);
       } else {
@@ -56,28 +62,27 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
             TOAST_POPUP_STATUS.error
           );
         }
-
+        if (reviews === res.data) return;
         setReviews(res.data);
         setIsLoaded(true);
       }
     } catch (error) {
       // showToastPopup(error, TOAST_POPUP_STATUS.error);
     }
-  }, [loggedInUser, setReviews]);
+  }, [loggedInUser, showToastPopup]); // deps 값이 변경될 때에만 실행한다
 
   useEffect(() => {
     fetchData();
-  }, [loggedInUser, setReviews, fetchData]);
+  }, [loggedInUser]);
+  // fetchData 제거
 
   useEffect(() => {
-    console.log(modalVisible);
-
     if (modalVisible.status === "deleted") {
-      console.log("hi");
       fetchData();
-      // reviews 정보를 새로 받아오는 방법
+      // setState 대신 reviews 정보를 새로 받아오는 방법
     }
-  }, [modalVisible, setReviews, fetchData]);
+  }, [modalVisible.status, fetchData]);
+
   const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
 
   return (
@@ -115,7 +120,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
       </Container>
       {/* 1. isActionSelectorVisible, setActionSelectorVisible 상태관리 useContext */}
       {/* 2. 삭제, 취소, 수정 띄우는 ActionSelectorModal */}
-      {/* 3. 커멘트 수정 -> 이미 떠있는 모달 없애고(ActionSelectorModal) -> EditCommentsModal */}
+      {/* 3. 모든 댓글 볼 수 있는 CommentsModal */}
 
       {/* 모달1. edit review 수정, 삭제, 취소 선택할 수 있는 모달창 띄우기 */}
       {isActionPopupOpen && <ActionSelectorModal />}
@@ -123,12 +128,13 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
       {/* 모달2. comments get, post, 댓글 전체 볼 수 있는 창 띄우기 */}
       {/* delete comment는 actionselector에서 처리한다 */}
       {isCommentListPopupOpen && <CommentsModal />}
-
       {/* 모달3. review 수정하기 폼 모달 */}
-      {/* >>>> Review 하위 컴포넌트로 이동 */}
-
-      {/* 모달3. review 수정하기 폼 모달 */}
-      {isEditReviewPopupOpen && <EditReview />}
+      {isEditReviewPopupOpen && (
+        <EditReview
+          userInputValues={userInputValues}
+          setUserInputValues={setUserInputValues}
+        />
+      )}
     </>
   );
 };

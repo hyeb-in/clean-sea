@@ -1,19 +1,21 @@
-import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
-import CardHeader from 'react-bootstrap/CardHeader';
-import React from 'react';
+import { Card, ListGroup, ListGroupItem } from "react-bootstrap";
+import CardHeader from "react-bootstrap/CardHeader";
+import React from "react";
 
 const RandomUserList = ({ data }) => {
   return (
     <>
-      {data.map(user => (
+      {data.map((user) => (
         <Card key={user._id} className="mb-4 mt-4 pt-3">
           <CardHeader className="border-bottom">
             <div className="mb-3 mx-auto">
-
-
               <img
                 className="rounded-circle"
-                src={user.uploadFile.length > 0 && user.uploadFile[0] !== ""  ? `http://${window.location.hostname}:5001/${user.uploadFile[0]}` : 'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png'}
+                src={
+                  user.uploadFile.length > 0 && user.uploadFile[0] !== ""
+                    ? `http://${window.location.hostname}:5001/${user.uploadFile[0]}`
+                    : "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
+                }
                 width="110"
                 alt="User Profile"
               />
@@ -23,14 +25,15 @@ const RandomUserList = ({ data }) => {
           </CardHeader>
           <ListGroup flush>
             <ListGroupItem className="p-4">
-              <strong
-                className="text-muted d-block mb-2">{user.description}</strong>
+              <strong className="text-muted d-block mb-2">
+                {user.description}
+              </strong>
             </ListGroupItem>
           </ListGroup>
         </Card>
       ))}
     </>
-  )
-}
+  );
+};
 
 export default RandomUserList;

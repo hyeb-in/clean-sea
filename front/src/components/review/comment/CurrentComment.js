@@ -1,6 +1,5 @@
 import Comment from "./Comment";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
-import useReview from "../../../hooks/useReview";
 // import { useEffect, useRef } from "react";
 
 const CurrentComments = ({
@@ -9,9 +8,11 @@ const CurrentComments = ({
   setSelectedReview,
   commentList,
   newCommentsList,
+  setReviews,
 }) => {
   const { openModal } = useModal();
-  const { setReviews } = useReview();
+
+  // const { setReviews } = useReview();
   // const scrollRef = useRef(null);
 
   // useEffect(() => {

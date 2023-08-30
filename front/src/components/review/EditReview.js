@@ -1,119 +1,85 @@
-import { useContext, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
+import { createBlobUrls, createFormData } from "../../util/imagUrl";
+import validationReview from "../../util/validation.js/review";
+import ReviewFormContainer from "./layout/ReviewFormContainer";
+import useToast from "../../hooks/useToast";
 import { UserStateContext } from "../../App";
-import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
-import ReviewFormBody from "./layout/ReviewFormBody";
-import useModal, { MODAL_TYPE } from "../../hooks/useModal";
-import * as Api from "../../Api";
-// add review랑 형태가 같음 -> 하나로 합쳐도 될 듯?
+import { serverUrl } from "../../Api";
+import axios from "axios";
+import useModal from "../../hooks/useModal";
 
 // <ReviewTitle/>에서  '...' 버튼을 클릭 => id, review 값 modalVisible 컨텍스트에 전달
 // => <ActionSelectorModal />에서 그 값을 받아서
 // => 모달에 관한 컨텍스트만 변경 후 데이터를 현재 컴포넌트로 전달
 
-// to do: 불필요한 매개변수 지울 것
-const EditReview = () => {
+// 다른 부분
+
+const EditReview = ({ userInputValues, setUserInputValues }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, closeModal } = useModal();
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  const { review, setReviews } = modalVisible.data;
-  // 리뷰 title, content 초기값 설정을 위해 review 정보를 가져온다
-  // <Review />에서 수정 버튼 클릭 할 때 review값을 modalVisible에 저장한다
-  const [userInputValues, setUserInputValues] = useState({
-    title: review?.title,
-    content: review?.content,
-  });
-
-  // const [files, setFiles] = useState(null);
-  // const { editStatus } = useState(false);
+  const { modalVisible } = useModal();
+  // deps(modalVisible)이 변경될 때에만 review, setReviews를 다시 가져온다
+  // 무슨 차이인지 잘 모르겠음
+  // const { review, setReviews } = useMemo(
+  //   () => modalVisible?.data || {},
+  //   [modalVisible]
+  // );
+  // const { showToastPopup } = useToast();
   // const [preview, setPreview] = useState(null);
-  // const {
-  //   showToast,
-  //   showToastPopup,
-  //   toastMessage,
-  //   setShowToast,
-  //   toastStatus,
-  //   toastPosition,
-  // } = useToast();
+  // const formDataFileRef = useRef(null);
 
-  // const reviewId = modalVisible.data.review._id;
+  // console.log(modalVisible);
 
-  // const isSuccessful = editStatus === RESULT_ENUM.SUCCESS;
-  // const isFailed = editStatus === RESULT_ENUM.FAIL;
-  // const isPosting = !editStatus === RESULT_ENUM.NOT_YET;
-  // const isFetched = !isPosting && (isSuccessful || isFailed);
+  // const handleFileChange = (files) => {
+  //   const formDataFiles = Array.from(files);
+  //   formDataFileRef.current = formDataFiles;
+  //   createBlobUrls(files, setPreview);
+  // };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  // inputs 중 하나가 변경되어야만 콜백을 새로 실행시킨다
+  const handleSubmit = useCallback(async () => {
     try {
-      //유효성검사 중복
-      // const response = await Api.put(`reviews/${reviewId}`, userInputValues);
-      // if (!response.ok) {
-      //   showToastPopup("데이터를 불러올 수 없습니다", TOAST_POPUP_STATUS.error);
+      const validationError = validationReview(loggedInUser, userInputValues);
+
+      if (validationError) {
+        // showToastPopup(validationError.message, validationError.status);
+        // return;
+      }
+      // const formData = createFormData(formDataFileRef, userInputValues);
+      // const res = await axios.put(
+      //   `${serverUrl}reviews/${review._id}`,
+      //   formData
+      // );
+      // if (!res.data) {
+      //   throw new Error("데이터를 불러오지 못했습니다");
       // }
-      // showToastPopup("요청 성공!", TOAST_POPUP_STATUS.success);
-      // setReviews((current) => {
-      //   const currentReviews = [...current];
-      //   return currentReviews.map((item) =>
-      //     item._id === review._id ? { ...review, ...userInputValues } : item
-      //   );
-      // });
-      // closeModal();
+      // setReviews((current) => [res.data, ...current]);
       // setUserInputValues({ title: "", content: "" });
-    } catch (error) {
-      // showToastPopup("정보를 불러올 수 없습니다", TOAST_POPUP_STATUS.error);
       // closeModal();
+      // [x] 토스트
+      // 알림창: loading ->  onError, onSuccess
+      // 작성중 close -> 경고창
+    } catch (error) {
+      console.log(error);
     }
-  };
+  }, [
+    loggedInUser,
+    // showToastPopup,
+    userInputValues,
+    setUserInputValues,
+    // setReviews,
+    // review._id,
+  ]);
 
   return (
-    <>
-      <Modal
-        keyboard={false}
-        dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
-        className="px-5"
-        show={modalVisible.type === MODAL_TYPE.editReview}
-        onHide={() => {
-          if (userInputValues.title !== "" || userInputValues.content !== "") {
-            // 내용이 있다면 다시 한 번 확인하는 모달창에 표시한다
-            setShowConfirmModal(true);
-          } else {
-            closeModal();
-            setUserInputValues({ title: "", content: "" }); // 입력창 비워주기
-          }
-        }}
-        onClick={(e) => e.stopPropagation()}
-        centered
-        backdrop="static"
-      >
-        <ModalBodyWrapper
-          title="게시글 수정하기"
-          content={
-            <div className="addReview__form flexible-col">
-              <ReviewFormBody
-                review={review}
-                userInputValues={userInputValues}
-                setUserInputValues={setUserInputValues}
-              />
-            </div>
-          }
-        >
-          {
-            <Form onSubmit={onSubmit} className="addReview__form">
-              <Button
-                className="addreview__btn"
-                variant="outline-primary"
-                type="submit"
-                onClick={onSubmit}
-              >
-                확인
-              </Button>
-            </Form>
-          }
-        </ModalBodyWrapper>
-      </Modal>
-    </>
+    <ReviewFormContainer
+      headerTitle="수정하기"
+      userInputValues={userInputValues}
+      setUserInputValues={setUserInputValues}
+      // handleFileChange={handleFileChange}
+      handleSubmit={handleSubmit}
+      // preview={preview}
+      // setPreview={setPreview}
+    />
   );
 };
 

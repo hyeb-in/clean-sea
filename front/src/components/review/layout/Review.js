@@ -39,6 +39,7 @@ const Review = ({ review, setReviews, setReview }) => {
               <div>
                 <CurrentComments
                   review={review}
+                  setReviews={setReviews}
                   commentList={commentList}
                   setCommentList={setCommentList}
                   newCommentsList={newCommentsList}

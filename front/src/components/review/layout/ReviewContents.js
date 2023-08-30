@@ -7,10 +7,10 @@ import LikeText from "../../common/microComponents/LikeText";
 const ReviewContents = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const iLiked = loggedInUser && review.isLike === IS_LIKE.yes;
-  const [showDetails, setShowDetails] = useState(false);
-
   const { _id: reviewId, title, content, likeCount } = review;
-
+  const [showDetails, setShowDetails] = useState(content?.length > 10);
+  // 글자수 10자 이상이면 showDetails true
+  // false 때 줄임말 제거
   return (
     <>
       <div className="flex-justify-between review__contents">
@@ -29,7 +29,7 @@ const ReviewContents = ({ review, setReviews }) => {
       {/* 이름과 제목, 내용 */}
       <div className="">
         <div className="comment__title">{title}</div>
-        <div className={!showDetails ? "text-overflow" : ""}>{content}</div>
+        <div className={showDetails ? "text-overflow" : ""}>{content}</div>
         {!showDetails && (
           <div
             onClick={() => setShowDetails(true)}
