@@ -7,6 +7,8 @@ export interface IUser {
   password?: string;
   description: string;
   uploadFile?: string[];
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface IRequest extends Request {

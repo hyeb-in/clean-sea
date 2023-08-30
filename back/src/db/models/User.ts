@@ -27,18 +27,16 @@ export const create = async (
     email,
     password: hashedPassword,
   });
-  const { password, ...userWithoutPassword } = newUser.toObject();
 
-  return userWithoutPassword;
+  return newUser;
 };
 
 export const update = async (userId: string, changedValue: Partial<IUser>) => {
   const updatedUser = await UserModel.findByIdAndUpdate(userId, changedValue, {
     new: true,
   });
-  const { password, ...userWithoutPassword } = updatedUser.toObject();
 
-  return userWithoutPassword;
+  return updatedUser;
 };
 
 export const deleteById = async (userId: string) => {
@@ -47,12 +45,6 @@ export const deleteById = async (userId: string) => {
 };
 
 export const getRandomUser = async () => {
-  const randomUsers = await UserModel.aggregate([{ $sample: { size: 5 } }]);
-  const randomUser = randomUsers.reduce((acc, user) => {
-    const { password, ...userWithoutPassword } = user;
-    acc.push(userWithoutPassword);
-    return acc;
-  }, []);
-
+  const randomUser = await UserModel.aggregate([{ $sample: { size: 5 } }]);
   return randomUser;
 };

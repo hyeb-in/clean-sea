@@ -7,11 +7,24 @@ import {
   resetPasswordService,
   updateUserService,
 } from "../services/userService";
-import { IRequest } from "user";
+import { IRequest, IUser } from "user";
 import { findUserByEmail, findUserById } from "../db/models/User";
 import { errorGenerator } from "../utils/errorGenerator";
 import { pwdMatchCheck } from "../utils/pwdMatchCheck";
 
+const deletePassword = (user: IUser) => {
+  const userWithoutPassword = {
+    name: user.name,
+    email: user.email,
+    description: user.description,
+    _id: user._id,
+    uploadFile: user.uploadFile,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
+
+  return userWithoutPassword;
+};
 /**
  * @param {*} req name,email,password
  * @return res.status(200).json(newUser);
@@ -27,10 +40,8 @@ export const signUpUser = async (
     const { name, email, password } = req.body;
 
     const newUser = await createUserService(name, email, password);
-
-    delete newUser.password;
-
-    res.status(200).json(newUser);
+    const userWithoutPassword = deletePassword(newUser);
+    res.status(200).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -46,7 +57,12 @@ export const getRandomUser = async (
   next: NextFunction
 ) => {
   try {
-    const randomUser = await getRandomUserService();
+    const randomUsers = await getRandomUserService();
+    const randomUser = randomUsers.reduce((acc, user) => {
+      acc.push(deletePassword(user));
+      return acc;
+    }, []);
+
     res.status(200).json(randomUser);
   } catch (error) {
     next(error);
@@ -63,8 +79,8 @@ export const getUser = async (
   next: NextFunction
 ) => {
   try {
-    console.log("getUser console", req.user);
-    return res.status(200).json(req.user);
+    const userWithoutPassword = deletePassword(req.user);
+    res.status(200).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -130,7 +146,9 @@ export const resetPassword = async (
     if (!user) throw errorGenerator("해당 이메일은 존재하지 않습니다.", 400);
     const userId = user._id;
     const resetedUser = await resetPasswordService(userId, email);
-    res.status(200).json(resetedUser);
+
+    const userWithoutPassword = deletePassword(resetedUser);
+    res.status(200).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -157,8 +175,8 @@ export const changePassword = async (
     await pwdMatchCheck(confirmPassword, user);
 
     const updatedPwdUser = await changePasswordService(userId, newPassword);
-
-    res.status(200).json(updatedPwdUser);
+    const userWithoutPassword = deletePassword(updatedPwdUser);
+    res.status(200).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
