@@ -59,6 +59,7 @@ export const updateUserService = async (
 
   //3.일부분만 업데이트 해준다.
   const updatedUser = await update(userId, changedValue);
+  // if (!updatedUser || updatedUser === {})
   if (!updatedUser) throw errorGenerator("업데이트에 실패했습니다.", 500);
   return updatedUser;
 };

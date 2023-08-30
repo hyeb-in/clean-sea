@@ -4,7 +4,7 @@ export interface IUser {
   _id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   description: string;
   uploadFile?: string[];
 }

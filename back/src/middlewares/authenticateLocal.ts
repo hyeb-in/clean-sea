@@ -16,7 +16,7 @@ export const localAuthentication = (
       { session: false },
       (error: Error, user: IUser, info: any) => {
         if (error) {
-          const err = errorGenerator(error.message, 403);
+          const err = errorGenerator(error.message, 500);
           next(err);
         }
 
@@ -24,13 +24,15 @@ export const localAuthentication = (
           const err = errorGenerator(info.message, 400);
           next(err);
         }
-        //TODO 토큰 시간 변경
-        const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
-          expiresIn: "1000m",
-        });
-        req.token = token;
-        req.user = user;
-        next();
+        //토큰 테스트하려고 짧게해둔 변경할 것
+        if (user) {
+          const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
+            expiresIn: "10000m",
+          });
+          req.token = token;
+          req.user = user;
+          next();
+        }
       }
     )(req, res, next);
   } catch (error) {

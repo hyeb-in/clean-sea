@@ -21,7 +21,7 @@ userRouter.post("/register", validateSignUp, signUpUser);
 
 userRouter.get("/current", jwtAuthentication, getUser);
 
-userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
+userRouter.get("/randomlist", getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
 

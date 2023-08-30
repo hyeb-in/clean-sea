@@ -17,6 +17,7 @@ import { pwdMatchCheck } from "../utils/pwdMatchCheck";
  * @return res.status(200).json(newUser);
  * @description 회원가입 api
  */
+//TODO newUser 통째로 X password 뺴고
 export const signUpUser = async (
   req: IRequest,
   res: Response,
@@ -27,10 +28,10 @@ export const signUpUser = async (
 
     const newUser = await createUserService(name, email, password);
 
+    delete newUser.password;
+
     res.status(200).json(newUser);
   } catch (error) {
-    //const err = errorGenerator(error.message,statusCode);
-    //next(err)
     next(error);
   }
 };
@@ -46,7 +47,6 @@ export const getRandomUser = async (
 ) => {
   try {
     const randomUser = await getRandomUserService();
-
     res.status(200).json(randomUser);
   } catch (error) {
     next(error);
@@ -63,6 +63,7 @@ export const getUser = async (
   next: NextFunction
 ) => {
   try {
+    console.log("getUser console", req.user);
     return res.status(200).json(req.user);
   } catch (error) {
     next(error);

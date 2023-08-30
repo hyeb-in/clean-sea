@@ -14,7 +14,8 @@ export const jwtAuthentication = async (
       { session: false },
       (error: Error, user: IUser, info: any) => {
         if (error) {
-          throw errorGenerator(error.message, 403);
+          const err = errorGenerator(error.message, 500);
+          next(err);
         }
         if (info) {
           if (info.message === "jwt expired") {
