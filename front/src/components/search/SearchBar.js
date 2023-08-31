@@ -3,106 +3,83 @@ import {
   Container,
   Col,
   Row,
-  ListGroup,
-} from "react-bootstrap";
+  ListGroup, Button, ButtonGroup,
+} from 'react-bootstrap';
 import RegionDropdown from './RegionDropdown';
 import './SearchBar.css';
-
-const testData = [
-  {
-    "_id": "64e779ed76941c58840efefc1",
-    "year": 2023,
-    "address": "강원",
-    "name": "첫번째",
-    "esch": 35.0625,
-    "ente": 13.1041666667,
-    "goodnessFit": true,
-    "eschAvg": 30.3641646466,
-    "enteAvg": 7.0546748972,
-    "eschScore": 1.1547329033,
-    "enteScore": 1.8575153154000001,
-    "Latitude": -1,
-    "Longitude": -1,
-    "eschGlobalAvg": 55.0346520784,
-    "enteGlobalAvg": 35.2402508284,
-    "eschAvgGlobalScore": 0.5517281113,
-    "enteAvgGlobalScore": 0.2001879876,
-    "sumGerms": 0.7519160989
-  },
-  {
-    "_id": "64e779ed76941c58840efefc2",
-    "year": 2023,
-    "address": "강원",
-    "name": "두번째",
-    "esch": 35.0625,
-    "ente": 13.1041666667,
-    "goodnessFit": true,
-    "eschAvg": 30.3641646466,
-    "enteAvg": 7.0546748972,
-    "eschScore": 1.1547329033,
-    "enteScore": 1.8575153154000001,
-    "Latitude": -1,
-    "Longitude": -1,
-    "eschGlobalAvg": 55.0346520784,
-    "enteGlobalAvg": 35.2402508284,
-    "eschAvgGlobalScore": 0.5517281113,
-    "enteAvgGlobalScore": 0.2001879876,
-    "sumGerms": 0.7519160989
-  },
-  {
-    "_id": "64e779ed76941c58840efefc3",
-    "year": 2023,
-    "address": "강원",
-    "name": "세번째",
-    "esch": 35.0625,
-    "ente": 13.1041666667,
-    "goodnessFit": true,
-    "eschAvg": 30.3641646466,
-    "enteAvg": 7.0546748972,
-    "eschScore": 1.1547329033,
-    "enteScore": 1.8575153154000001,
-    "Latitude": -1,
-    "Longitude": -1,
-    "eschGlobalAvg": 55.0346520784,
-    "enteGlobalAvg": 35.2402508284,
-    "eschAvgGlobalScore": 0.5517281113,
-    "enteAvgGlobalScore": 0.2001879876,
-    "sumGerms": 0.7519160989
-  }
-];
+import * as Api from '../../Api';
 
 const SearchBar = ({ setSelectedBeach }) => {
   const [selectedItem, setSelectedItem] = useState("");
   const [beachData, setBeachData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 7;
 
   const handleItemSelect = (item) => {
     console.log(item);
     setSelectedItem(item);
-    // DB에서 데이터 가져오는 로직을 구현하고, 가져온 데이터를 상태로 업데이트
+    setCurrentPage(1);
   };
 
   const handleBeachSelect = (beach) => {
     setSelectedBeach(beach);
   };
 
-  // 지역별 해수욕장 데이터 가져오기
   useEffect(() => {
-    setBeachData(testData)
+    if (selectedItem === null || selectedItem === "") {
+      return;
+    }
+
+    Api.get(`beaches/beaches/2023/${selectedItem}`)
+    .then(r => {
+      setBeachData(r.data);
+    });
   }, [selectedItem]);
+
+  const totalPage = Math.ceil(beachData.length / itemsPerPage);
+
+  const displayedData = beachData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const getBackgroundColor = (rank) => {
+    switch(rank) {
+      case 1:
+        return ["#007BFF", "#FFFFFF"]; // 파란색
+      case 2:
+        return ["#66AFFF", "#e8f0f8"]; // 약간 옅은 파란색
+      case 3:
+        return ["#B3D8FF", "#000000"]; // 더 옅은 파란색
+      default:
+        return ["", ""]; // 기본 배경색
+    }
+  };
 
   return (
     <Container fluid className="mt-2">
-      <Row>
+      <Row className="justify-content-center">
         <Col>
           <RegionDropdown selectedItem={selectedItem} handleItemSelect={handleItemSelect} />
+        </Col>
+      </Row>
+      <hr />
+      <Row className="justify-content-center my-3">
+        <Col md="auto">
+          {beachData.length > 0 && (currentPage !== 1 || currentPage !== totalPage) && (
+            <ButtonGroup>
+              <Button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>&larr;</Button>
+              <Button disabled={currentPage === totalPage} onClick={() => setCurrentPage(currentPage + 1)}>&rarr;</Button>
+            </ButtonGroup>
+          )}
         </Col>
       </Row>
       <Row>
         <Col>
           {
-            beachData.map((beach, index) => (
+            displayedData.map((beach, index) => (
               <ListGroup key={beach._id} className="my-2 hoverable" onClick={() => handleBeachSelect(beach)}>
-                <ListGroup.Item>{`${index + 1}위 - ${beach.name} 해수욕장`}</ListGroup.Item>
+                <ListGroup.Item style={{ backgroundColor: getBackgroundColor(beach.rank)[0],
+                  color: getBackgroundColor(beach.rank)[1]}}>
+                  {`${beach.rank}위 - ${beach.name} 해수욕장`}
+                </ListGroup.Item>
               </ListGroup>
             ))
           }
