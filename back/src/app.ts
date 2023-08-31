@@ -17,7 +17,7 @@ import "./db";
 const app: Express = express();
 app.use(cors());
 
-app.use("/uploads", express.static("imageUpload"));
+
 
 app.use(passport.initialize());
 localStrategy();
@@ -42,6 +42,7 @@ app.use("/beaches", beachRouter);
 app.use("/auth", authRouter);
 app.use("/comments", commentAuthRouter);
 
+app.use("/uploads", express.static("imageUpload"));
 app.use("/api", likeAuthRouter);
 
 app.use(errorMiddleware);

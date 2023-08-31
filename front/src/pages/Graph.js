@@ -38,7 +38,7 @@ const Graph = () => {
     },
     chart: {
       type: "bar",
-      height: 350,
+      height: 700,
       toolbar: {
         show: false,
       },
@@ -74,16 +74,16 @@ const Graph = () => {
       },
     },
     title: {
-      text: '연도별 지역 해수욕장 대장균/장구균 검출수',
-      align: 'center',
+      text: "연도별 지역 해수욕장 대장균/장구균 검출수",
+      align: "center",
       margin: 10,
       offsetX: 0,
       offsetY: 0,
       floating: false,
       style: {
-        fontSize: '16px',
-        fontWeight: 'bold',
-        color: '#333',
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#333",
       },
     },
   };
@@ -145,30 +145,23 @@ const Graph = () => {
   return (
     <Container>
       <Row>
-        <Col xs={4} className="px-0">
+        <Col xs={6} className="px-0">
           <Dropdown>
             <DropdownButton
               id="year-dropdown"
               title={selectedYear}
               onSelect={handleYearSelect}
             >
-              {[2015, 2017, 2019, 2021, 2022, 2023].map(
-                (year) => (
-                  <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
-                )
-              )}
+              {[2015, 2017, 2019, 2021, 2022, 2023].map((year) => (
+                <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
+              ))}
             </DropdownButton>
           </Dropdown>
         </Col>
       </Row>
       <Row>
         <div id="chart">
-          <ApexCharts
-            options={options}
-            series={chartData.series}
-            type="bar"
-            height={350}
-          />
+          <ApexCharts options={options} series={chartData.series} type="bar" />
         </div>
       </Row>
     </Container>

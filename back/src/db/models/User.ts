@@ -41,25 +41,34 @@ export const update = async (userId: string, changedValue: Partial<IUser>) => {
   return updatedUser;
 };
 
-export const updateUserName = async(userId : string, newUserName : string) => {
-  const userReviews = await ReviewModel.find({author : userId }).exec();
-  const userComments = await CommentModel.find({userId}).exec();
+export const updateUserName = async (userId: string, newUserName: string) => {
+  // const userReviews = await ReviewModel.updateMany(
+  //   { author: userId },
+  //   { userName: newUserName }
+  // ).exec();
 
-  const updatePromises = userReviews.map(async review => {
+  // const userComments = await CommentModel.updateMany(
+  //   { userId },
+  //   { userName: newUserName }
+  // ).exec();
+  const userReviews = await ReviewModel.find({ author: userId }).exec();
+  const userComments = await CommentModel.find({ userId }).exec();
+
+  const updatePromises = userReviews.map(async (review) => {
     review.userName = newUserName;
     await review.save();
   });
-  const secondPromises = userComments.map(async comment => {
+
+  const secondPromises = userComments.map(async (comment) => {
     comment.userName = newUserName;
     await comment.save();
-  })
+  });
 
   await Promise.all(updatePromises);
   await Promise.all(secondPromises);
 
   return true;
-}
-
+};
 
 export const deleteById = async (userId: string) => {
   const user = await UserModel.findByIdAndDelete(userId);

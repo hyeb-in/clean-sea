@@ -3,12 +3,13 @@ import {
   changePassword,
   deleteUser,
   getRandomUser,
-  getUser, getUserById,
+  getCurrentUser,
+  getUserById,
   resetPassword,
   signUpUser,
   updateUser,
 } from "../controllers/userController";
-import { jwtAuthentication } from '../middlewares/authenticateJwt'
+import { jwtAuthentication } from "../middlewares/authenticateJwt";
 import {
   validateSignUp,
   validateUpdateUser,
@@ -19,17 +20,15 @@ const userRouter = Router();
 
 userRouter.post("/register", validateSignUp, signUpUser);
 
-userRouter.get("/tokentest", jwtAuthentication);
+userRouter.get("/current", jwtAuthentication, getCurrentUser);
 
-userRouter.get("/current", jwtAuthentication, getUser);
-
-userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
+userRouter.get("/randomlist", getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
 
-userRouter.post("/:userId/change-password", changePassword);
+userRouter.post("/:userId/change-password", jwtAuthentication, changePassword);
 
-userRouter.put('/photo/:userId', jwtAuthentication, fileUpload, updateUser)
+userRouter.put("/photo/:userId", jwtAuthentication, fileUpload, updateUser);
 
 userRouter
   .route("/:userId")

@@ -13,7 +13,7 @@ import Footer from "./components/common/layout/Footer";
 import NavBar from "./components/common/layout/NavBar";
 import ReviewsList from "./components/review/ReviewsList";
 import { loginReducer } from "./Reducer";
-import "./Main.css";
+import "./index.css";
 import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
@@ -63,6 +63,7 @@ function App() {
       const res = await Api.get("users/current");
       const currentUser = res.data;
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
+      console.log(currentUser);
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: currentUser,

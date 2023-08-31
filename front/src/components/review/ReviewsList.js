@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
@@ -69,7 +69,10 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
     fetchData();
   }, [
     loggedInUser,
-    // modalVisible, reviews, showToastPopup, setReviews
+    modalVisible,
+    reviews,
+    showToastPopup,
+    setReviews,
     // 다 넣으면 다시 무한 요청..
   ]);
 

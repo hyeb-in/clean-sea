@@ -16,7 +16,7 @@ textarea:focus {
   padding: 50px;
 }
 .review-container {
-  max-width: 70%;
+  width: 320px;
   padding: 10px;
 }
 
@@ -46,7 +46,7 @@ textarea:focus {
   }
 }
 /* 큰 화면에서 flex-row 스타일 적용 */
-@media (min-width: 801px) {
+/* @media (min-width: 801px) {
   .addReview__form.flexible-col,
   .review.flexible-col {
     display: flex;
@@ -55,15 +55,15 @@ textarea:focus {
     height: 100%;
     align-items: center;
   }
-}
-.review.flexible-col {
+} */
+/* .review.flexible-col {
   min-width: 350px;
   width: 100%;
-}
+} */
 .review__flexible-child {
   padding: 0;
 }
-@media (max-width: 800) {
+/* @media (max-width: 800) {
   .review__flexible-child {
     width: 100%;
   }
@@ -72,7 +72,7 @@ textarea:focus {
   .review__flexible-child {
     max-width: 50%;
   }
-}
+} */
 .carousel-arrow-icon {
   background-color: black;
   padding: 5px;
@@ -96,8 +96,8 @@ textarea:focus {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: flex;
-  align-items: center;
+  /* display: flex;
+  align-items: center; */
   background-color: #000000f5;
 }
 .carousel {
@@ -124,6 +124,10 @@ textarea:focus {
   /* background-color: white; */
   max-width: 50%;
 }
+.carousel-inner {
+  background-color: rgb(17, 16, 16);
+}
+
 .carousel-item img {
   object-fit: cover;
   height: 350px;

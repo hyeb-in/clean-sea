@@ -4,9 +4,11 @@ export interface IUser {
   _id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   description: string;
   uploadFile?: string[];
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface IRequest extends Request {

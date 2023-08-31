@@ -21,8 +21,10 @@ const Interceptor = ({ children }) => {
         };
       }
       // 여기에 명시 없을 시, 업로드 할 때 formData형식으로 보낸 후 계속 formData 형식으로 남아있는 듯(??)
-      if (config.url.includes("/reviews/register") ||
-        (config.url.includes("/users/photo") && config.method === "put")) {
+      if (
+        config.url.includes("/reviews/register") ||
+        (config.url.includes("/users/photo") && config.method === "put")
+      ) {
         // Form Data 형식으로 데이터 보내기
         config.headers["Content-Type"] = "multipart/form-data";
       } else {
@@ -54,10 +56,10 @@ const Interceptor = ({ children }) => {
         return response;
       },
       (error) => {
-        const errorMessage = error.response.data;
-        const status = error.response.status;
-        console.log(error.response.status, "from interceptor");
-        console.log(error.response.data, "from interceptor");
+        const errorMessage = error?.response?.data;
+        const status = error?.response?.status;
+        console.log(error?.response?.status, "from interceptor");
+        console.log(error?.response?.data, "from interceptor");
 
         const isTokenExpired = errorMessage === "토큰 만료" || status === 401;
 
@@ -81,7 +83,7 @@ const Interceptor = ({ children }) => {
       axios.interceptors.request.eject(axiosInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, [navigate, dispatch, isGetRequest]);
+  }, [navigate, dispatch, isGetRequest, user]);
   return children;
 };
 

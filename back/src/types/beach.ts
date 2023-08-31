@@ -36,23 +36,18 @@ interface IRankedBeach extends IBeach {
 }
 
 interface BeachData {
-  [year: string]:
-  {
-    eschAvg: number,
-    enteAvg: number
+  [year: string]:{
+    eschAvg: number;
+    enteAvg: number;
   }[];
 }
 
 type BeachDataAvg = {
-  [year: string]:
-  {
-    eschAvgRelative: number,
-    enteAvgRelative: number,
-    avgRelativeScore: number
+  [year: string]:{
+    eschAvgRelative: number;
+    enteAvgRelative: number;
+    avgRelativeScore: number;
   }[];
 };
 
-
-
-
-export { IBeach, BeachData, IRankedBeach, BeachDataAvg }
+export { IBeach, BeachData, IRankedBeach, BeachDataAvg };
