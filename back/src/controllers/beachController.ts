@@ -8,7 +8,6 @@ import {
   getBeachesService 
 } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
-import { IBeach } from 'beach';
 import { Types } from "mongoose";
 
 const getBeachByName = async (
