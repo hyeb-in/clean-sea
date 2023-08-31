@@ -6,7 +6,6 @@ import ExportingModule from "highcharts/modules/exporting";
 import ExportDataModule from "highcharts/modules/export-data";
 import AccessibilityModule from "highcharts/modules/accessibility";
 import Chats from "../components/common/Chats";
-// import "./font/font.css";
 
 // Initialize Highcharts modules
 HighchartsMap(Highcharts);
@@ -118,7 +117,6 @@ const Main = () => {
               maxWidth: "90%", // 이미지 너비 최대 100%
               height: "100%", // 이미지 높이 자동 조절
             }}
-            alt="Kakao"
           />
         </Col>
         <Col className="text-center">
