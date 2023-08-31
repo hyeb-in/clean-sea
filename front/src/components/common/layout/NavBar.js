@@ -70,8 +70,8 @@ const NavBar = () => {
             {/* 로그인 한 유저에게만 보이기 */}
             {/* to do: 임시!! 로그아웃되면 null이어야하는데 {} 빈 객체가 찍히고있음 */}
             {user &&
-            user.constructor === Object &&
-            Object.keys(user).length !== 0 ? (
+            user?.constructor === Object &&
+            Object.keys(user)?.length !== 0 ? (
               <>
                 <Nav.Link
                   onClick={() =>

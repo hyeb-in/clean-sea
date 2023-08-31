@@ -5,6 +5,9 @@ import { serverUrl } from "../../Api";
 
 const Avatar = React.forwardRef(({ width, user }, ref) => {
   const navigate = useNavigate();
+  const avatarUrl = user?.uploadFile
+    ? `${serverUrl}${user.uploadFile[0]}`
+    : "/image/icon.png";
 
   return (
     <Nav.Link onClick={() => navigate(`/users/${user._id}`)} ref={ref}>
@@ -14,7 +17,7 @@ const Avatar = React.forwardRef(({ width, user }, ref) => {
       >
         <img
           className="rounded-circle"
-          src={serverUrl + user?.uploadFile || "/icon.png"}
+          src={avatarUrl}
           width={width}
           alt="avatar"
         />

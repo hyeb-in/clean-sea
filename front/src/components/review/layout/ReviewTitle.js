@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
@@ -7,12 +7,26 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { UserStateContext } from "../../../App";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import Timestamp from "../../common/microComponents/Timestamp";
+import * as Api from "../../../Api";
 
 const ReviewTitle = ({ review, setReviews }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const { openModal, modalVisible } = useModal();
   const isMyReview = loggedInUser && loggedInUser._id === review?.author;
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const res = await Api.get(`users/${review.author}`);
+      if (!res.data) {
+        console.log("유저 데이터를 가져올 수 없습니다"); // >> 기본 이미지 띄우기
+      }
+      console.log(res.data);
+      setUser(res.data);
+    };
+    fetchUserData();
+  }, [review.author]);
 
   return (
     <div className="d-flex align-items-center justify-content-between link px-0 commentModal">
@@ -20,7 +34,7 @@ const ReviewTitle = ({ review, setReviews }) => {
         className="px-0 review__title"
         onClick={() => navigate(`/users/${review?.author}`)}
       >
-        <Avatar width="40" />
+        <Avatar width="40" user={user} />
         <div
           xs="10"
           className="px-2 pm-2 d-flex align-items-center text-author editForm__author"

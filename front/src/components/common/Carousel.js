@@ -43,7 +43,11 @@ const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
         return (
           <Carousel.Item key={`${url}-${index}`}>
             <Image
-              src={url && url?.includes("blob") ? url : `${serverUrl}${url}`}
+              src={
+                url && url?.includes("blob")
+                  ? url
+                  : `${serverUrl}${url}` || "/image/imageLoading.png"
+              }
               fluid
             />
             {/* preview 삭제버튼 */}
