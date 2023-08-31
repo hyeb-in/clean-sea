@@ -83,7 +83,7 @@ const Interceptor = ({ children }) => {
       axios.interceptors.request.eject(axiosInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, [navigate, dispatch, isGetRequest]);
+  }, [navigate, dispatch, isGetRequest, user]);
   return children;
 };
 

@@ -21,11 +21,13 @@ import { MODAL_TYPE } from "../../../hooks/useModal";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const { user: loggedInUser } = useContext(UserStateContext);
+  const { user } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
   const { setModalVisible } = useContext(ModalVisibleContext);
-  const isLogin = !!loggedInUser;
-  console.log(isLogin);
+  console.log("user : ", user);
+  console.log("user : ", typeof user);
+
+  // 왜 {}로 나오는지 ?? user가 없으면 null 안닌가?
 
   const logout = () => {
     sessionStorage.removeItem("userToken");
@@ -70,7 +72,7 @@ const NavBar = () => {
               </OverlayTrigger>
             </Nav.Link>
             {/* 로그인 한 유저에게만 보이기 */}
-            {isLogin ? (
+            {user ? (
               <>
                 <Nav.Link
                   onClick={() =>
@@ -91,9 +93,7 @@ const NavBar = () => {
                 <Nav.Item>
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>
                 </Nav.Item>
-                <Nav.Link
-                  onClick={() => navigate(`/users/${loggedInUser._id}`)}
-                >
+                <Nav.Link onClick={() => navigate(`/users/${user._id}`)}>
                   {/* to do: 툴팁 안뜸 */}
                   <OverlayTrigger
                     placement="bottom"
