@@ -13,7 +13,6 @@ import Footer from "./components/common/layout/Footer";
 import NavBar from "./components/common/layout/NavBar";
 import ReviewsList from "./components/review/ReviewsList";
 import { loginReducer } from "./Reducer";
-import "./index.css";
 import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
@@ -22,6 +21,7 @@ import PageNotFound from "./pages/PageNotFound";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
 import EditReview from "./components/review/EditReview";
+import "./index.css";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);

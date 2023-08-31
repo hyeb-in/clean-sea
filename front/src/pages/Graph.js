@@ -94,12 +94,6 @@ const Graph = () => {
   // beaches/beachesbyregion/강원/2015
 
   useEffect(() => {
-    Api.get("beaches/beaches")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {
     const fetchData = () => {
       Api.get("beaches/beaches", `${selectedYear}`)
         .then((response) => {
