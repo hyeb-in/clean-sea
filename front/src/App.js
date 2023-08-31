@@ -61,6 +61,7 @@ function App() {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
       const res = await Api.get("users/current");
+      if (!res) throw new Error("유저 정보를 받아올 수 없습니다");
       const currentUser = res.data;
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
       dispatch({

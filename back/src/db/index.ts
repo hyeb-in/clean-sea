@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const url = process.env.MONGODB_URL;
 
-mongoose.connect("mongodb://localhost:27017/test");
+mongoose.connect(url);
 const db = mongoose.connection;
 
 db.on("connected", () =>

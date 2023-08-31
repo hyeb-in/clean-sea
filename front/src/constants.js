@@ -68,3 +68,5 @@ export const RESULT_ENUM = {
   SUCCESS: "성공",
   FAIL: "실패",
 };
+
+export const DEFAULT_AVATAR = "/image/icon.png";

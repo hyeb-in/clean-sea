@@ -63,7 +63,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
               TOAST_POPUP_STATUS.error
             );
           }
-          if (reviews === res.data) return;
+
           setReviews(res.data);
           setIsLoaded(true);
         }

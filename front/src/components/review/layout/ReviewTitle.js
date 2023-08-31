@@ -18,15 +18,15 @@ const ReviewTitle = ({ review, setReviews }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const res = await Api.get(`users/${review.author}`);
-      if (!res.data) {
+      const res = await Api.get(`users/${review?.author}`);
+      if (!res?.data) {
         console.log("유저 데이터를 가져올 수 없습니다"); // >> 기본 이미지 띄우기
       }
       console.log(res.data);
       setUser(res.data);
     };
     fetchUserData();
-  }, [review.author]);
+  }, [review?.author]);
 
   return (
     <div className="d-flex align-items-center justify-content-between link px-0 commentModal">
