@@ -34,24 +34,20 @@ const AddReview = ({
       const validationError = validationReview(loggedInUser, userInputValues);
       if (validationError) {
         setShowToast(validationError.message, validationError.status);
-        console.log(validationError.message);
         return;
       }
       setUploadingStatus(RESULT_ENUM.UPLOADING);
       const formData = createFormData(formDataFileRef, userInputValues);
-      const res = await axios.post(`${serverUrl}reviews/registerrr`, formData);
+      const res = await axios.post(`${serverUrl}reviews/register`, formData);
       if (!res.data) {
-        setUploadingStatus(RESULT_ENUM.FAIL);
-        throw new Error("데이터를 저장하지 못했습니다");
+        return setUploadingStatus(RESULT_ENUM.FAIL);
       }
       setReviews((current) => [res.data, ...current]);
       setUserInputValues({ title: "", content: "" });
       setUploadingStatus(RESULT_ENUM.SUCCESS);
       closeModal();
       // 알림창: loading ->  onError, onSuccess
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, [
     closeModal,
     userInputValues,
@@ -61,11 +57,12 @@ const AddReview = ({
     toastMessage,
     showToast,
     setUploadingStatus,
+    setShowToast,
   ]);
 
   return (
     <>
-      {/* {showToast && <ToastWrapper toastData={toastData} />} */}
+      {showToast && <ToastWrapper toastData={toastData} />}
       <ReviewFormContainer
         headerTitle="글 작성하기"
         userInputValues={userInputValues}

@@ -6,8 +6,14 @@ import * as Api from "../../Api";
 import useModal from "../../hooks/useModal";
 import ToastWrapper from "../common/popup/ToastWrapper";
 import validationReview from "../../util/validation.js/review";
+import { RESULT_ENUM } from "../../constants";
 
-const EditReview = ({ userInputValues, setUserInputValues, setReviews }) => {
+const EditReview = ({
+  userInputValues,
+  setUserInputValues,
+  setReviews,
+  setUploadingStatus,
+}) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, closeModal } = useModal();
   const currentReviewData = modalVisible?.data?.review;
@@ -18,29 +24,26 @@ const EditReview = ({ userInputValues, setUserInputValues, setReviews }) => {
 
   const handleSubmit = useCallback(async () => {
     try {
-      const validationError = validationReview(loggedInUser, userInputValues);
+      console.log(editedReview);
+      const validationError = validationReview(loggedInUser, editedReview);
       if (validationError) {
         setShowToast(validationError.message, validationError.status);
         console.log(validationError.message);
         return;
       }
+      setUploadingStatus(RESULT_ENUM.UPLOADING);
       const res = await Api.put(`reviews/${currentReviewData._id}`, {
         title: editedReview.title,
         content: editedReview.content,
       });
       if (!res.data) {
-        throw new Error("데이터를 불러오지 못했습니다");
+        setUploadingStatus(RESULT_ENUM.FAIL);
       }
-      console.log(res.data);
+      setUploadingStatus(RESULT_ENUM.SUCCESS);
       setReviews((current) => [res.data, ...current]);
       setEditedReview(null);
       closeModal();
-      // [x] 토스트
-      // 알림창: loading ->  onError, onSuccess
-      // 작성중 close -> 경고창
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, [
     closeModal,
     loggedInUser,
@@ -53,7 +56,7 @@ const EditReview = ({ userInputValues, setUserInputValues, setReviews }) => {
 
   return (
     <>
-      {/* {showToast && <ToastWrapper toastData={toastData} />} */}
+      {showToast && <ToastWrapper toastData={toastData} />}
       <ReviewFormContainer
         headerTitle="수정하기"
         userInputValues={userInputValues}

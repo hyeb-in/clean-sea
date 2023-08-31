@@ -78,7 +78,7 @@ const Interceptor = ({ children }) => {
           // );
         }
         setShowToast(errorMessage, TOAST_POPUP_STATUS.error);
-        // showToastWithStatus(status, errorMessage);
+        showToastWithStatus(status, errorMessage);
         return Promise.reject(error); // 여기서 reject하면 => 어딘가에서 catch 해줘야 함!
       }
     );
