@@ -15,16 +15,6 @@ const jwtOptions = {
 };
 
 const localCallback = async (email: string, password: string, done: any) => {
-  // findOne함수 더 이상 callback 지원X
-
-  // await UserModel.findOne({ email }, (err: Error, user: IUser) => {
-  //   if (err) return done(err);
-  //   if (!user)
-  //     return done(null, false, { message: "회원이 존재하지 않습니다." });
-  //   if (!pwdMatchCheck(password, user))
-  //     return done(null, false, { message: "비밀번호가 일치하지 않습니다." });
-  //   done(null, user);
-  // });
   try {
     const user = await findUserByEmail(email);
     if (!user) {
