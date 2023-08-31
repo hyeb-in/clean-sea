@@ -28,8 +28,14 @@ const ReviewContents = ({ review, setReviews }) => {
       </div>
       {/* 이름과 제목, 내용 */}
       <div className="">
-        <div className="comment__title">{title}</div>
-        <div className={showDetails ? "text-overflow" : ""}>{content}</div>
+        <div className="review__title">{title}</div>
+        <div
+          className={
+            showDetails ? "text-overflow review__content" : "review__content"
+          }
+        >
+          {content}
+        </div>
         {!showDetails && (
           <div
             onClick={() => setShowDetails(true)}

@@ -131,7 +131,11 @@ textarea:focus {
 .review__contents {
   margin-top: 10px;
 }
-
+.review__title {
+  font-weight: 600;
+}
+.review__content {
+}
 .isLiked {
   color: red;
 }
