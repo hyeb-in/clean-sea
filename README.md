@@ -48,10 +48,6 @@ Atlas 서버
 2. 전역으로 Yarn을 설치합니다: `npm install --global yarn`
 3. 백엔드를 실행합니다: `yarn start`
 
-- cd back
-- npm install --global yarn
-- yarn start
-
 ## 기술 스택
 ### 프론트 엔드
 - HTML
