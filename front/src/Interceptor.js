@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { DispatchContext, ModalOptionContext, UserStateContext } from "./App";
+import { DispatchContext, UserStateContext } from "./App";
 
 const Interceptor = ({ children }) => {
   const dispatch = useContext(DispatchContext);
   const { user } = useContext(UserStateContext);
-  const { modalOptions, setModalOptions } = useContext(ModalOptionContext);
   const [isGetRequest, setIsGetRequest] = useState(false);
   const navigate = useNavigate();
 
@@ -74,7 +73,7 @@ const Interceptor = ({ children }) => {
           // 모달창 띄워서 알려주기:: ex) 토큰이 만료되어 로그아웃되었습니다 팝업
           alert("토큰이 만료되었습니다. post, put, del 하려면 다시 로그인.");
         }
-        return Promise.reject(error);
+        return Promise.reject(error); // 여기서 reject하면 => 어딘가에서 catch 해줘야 함!
       }
     );
     // Clean up interceptors when the component unmounts
@@ -82,7 +81,7 @@ const Interceptor = ({ children }) => {
       axios.interceptors.request.eject(axiosInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, [user, modalOptions, setModalOptions, dispatch, navigate, isGetRequest]);
+  }, [navigate, dispatch, isGetRequest]);
   return children;
 };
 

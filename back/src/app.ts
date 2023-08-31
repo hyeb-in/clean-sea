@@ -1,7 +1,7 @@
 import userRouter from "./routes/userRouter";
 import reviewAuthRouter from "./routes/reviewRouter";
 import travelAuthRouter from "./routes/travelRouter";
-//import beachRouter from "./routes/beachRouter";
+import beachRouter from "./routes/beachRouter";
 import commentAuthRouter from "./routes/commentRouter";
 import likeAuthRouter from "./routes/likeRouter";
 import { errorMiddleware, httpLogger } from "./config/logger";
@@ -38,7 +38,7 @@ app.use(httpLogger);
 app.use("/users", userRouter);
 app.use("/reviews", reviewAuthRouter);
 app.use("/travels", travelAuthRouter);
-//app.use("/beaches", beachRouter);
+app.use("/beaches", beachRouter);
 app.use("/auth", authRouter);
 app.use("/comments", commentAuthRouter);
 

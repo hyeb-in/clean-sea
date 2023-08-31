@@ -1,0 +1,12 @@
+/* font.css */
+
+@font-face {
+    font-family: 'Black Han Sans';
+    src: url('./path-to-black-han-sans.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  body {
+    font-family: 'Black Han Sans', sans-serif;
+  }

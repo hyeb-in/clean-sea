@@ -39,6 +39,9 @@ const Graph = () => {
     chart: {
       type: "bar",
       height: 350,
+      toolbar: {
+        show: false,
+      },
     },
     plotOptions: {
       bar: {
@@ -68,6 +71,19 @@ const Graph = () => {
         formatter: function (val) {
           return val + "개 검출";
         },
+      },
+    },
+    title: {
+      text: "연도별 지역 해수욕장 대장균/장구균 검출수",
+      align: "center",
+      margin: 10,
+      offsetX: 0,
+      offsetY: 0,
+      floating: false,
+      style: {
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#333",
       },
     },
   };
@@ -113,95 +129,6 @@ const Graph = () => {
     };
     if (selectedYear) {
       fetchData();
-      //   // mocking
-      //   const yearsData = {
-      //     "2023": [
-      //         {
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     }
-      //     ],
-      //     "2014": [{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     }]
-      //     }
-      //   const data = yearsData[selectedYear]
-      //   console.log(data);
-      //   console.log(yearsData);
-      //   console.log(selectedYear);
-      //   console.log(typeof selectedYear);
-      // const eschAvgData = data.map((item) => item.eschAvg); // 대장균 데이터
-      //       const enteAvgData = data.map((item) => item.enteAvg); // 장구균 데이터
-
-      //       const updatedChartData = {
-      //         series: [
-      //           {
-      //             name: '대장균',
-      //             data: eschAvgData
-      //           },
-      //           {
-      //             name: '장구균',
-      //             data: enteAvgData
-      //           }
-      //         ]
-      //       };
-
-      //       setChartData(updatedChartData); // 상태를 업데이트합니다.;
     }
   }, [selectedYear]);
 
@@ -225,11 +152,9 @@ const Graph = () => {
               title={selectedYear}
               onSelect={handleYearSelect}
             >
-              {[2015, 2017, 2019, 2021, 2022, 2023].map(
-                (year) => (
-                  <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
-                )
-              )}
+              {[2015, 2017, 2019, 2021, 2022, 2023].map((year) => (
+                <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
+              ))}
             </DropdownButton>
           </Dropdown>
         </Col>
