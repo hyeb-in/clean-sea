@@ -22,6 +22,12 @@ import PageNotFound from "./pages/PageNotFound";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
 import EditReview from "./components/review/EditReview";
+import { Modal, Spinner } from "react-bootstrap";
+import { RESULT_ENUM } from "./constants";
+import ModalBodyWrapper from "./components/common/layout/ModalBodyWrapper";
+import { faBomb, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UploadStatusIndicators from "./components/common/indicators/UploadStatusIndicators";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -45,6 +51,7 @@ function App() {
     title: "",
     content: "",
   });
+  const [uploadingStatus, setUploadingStatus] = useState(RESULT_ENUM.NOT_YET);
 
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
@@ -100,6 +107,7 @@ function App() {
                 setReviews={setReviews}
                 userInputValues={userInputValues}
                 setUserInputValues={setUserInputValues}
+                setUploadingStatus={setUploadingStatus}
               />
             )}
             {modalVisible && modalVisible.type === MODAL_TYPE.editReview && (
@@ -110,7 +118,12 @@ function App() {
                 setUserInputValues={setUserInputValues}
               />
             )}
-
+            {uploadingStatus && (
+              <UploadStatusIndicators
+                uploadingStatus={uploadingStatus}
+                setUploadingStatus={setUploadingStatus}
+              />
+            )}
             <Routes>
               <Route path="/" exact element={<Main />} />
               <Route path="/login" exact element={<Login />} />

@@ -8,12 +8,15 @@ import axios from "axios";
 import { serverUrl } from "../../Api";
 import useModal from "../../hooks/useModal";
 import ToastWrapper from "../common/popup/ToastWrapper";
+import ModalBodyWrapper from "../common/layout/ModalBodyWrapper";
+import { Modal, Spinner } from "react-bootstrap";
+import { RESULT_ENUM } from "../../constants";
 
 const AddReview = ({
   userInputValues,
   setUserInputValues,
   setReviews,
-  reviews,
+  setUploadingStatus,
 }) => {
   const [preview, setPreview] = useState(null);
 
@@ -21,7 +24,6 @@ const AddReview = ({
   const formDataFileRef = useRef(null);
   const { showToast, setShowToast, toastMessage, toastData } = useToast();
   const { closeModal } = useModal();
-
   const handleFileChange = (files) => {
     const formDataFiles = Array.from(files);
     formDataFileRef.current = formDataFiles;
@@ -35,18 +37,18 @@ const AddReview = ({
         console.log(validationError.message);
         return;
       }
+      setUploadingStatus(RESULT_ENUM.UPLOADING);
       const formData = createFormData(formDataFileRef, userInputValues);
       const res = await axios.post(`${serverUrl}reviews/register`, formData);
       if (!res.data) {
-        throw new Error("데이터를 불러오지 못했습니다");
+        setUploadingStatus(RESULT_ENUM.FAIL);
+        throw new Error("데이터를 저장하지 못했습니다");
       }
       setReviews((current) => [res.data, ...current]);
       setUserInputValues({ title: "", content: "" });
-      closeModal();
+      setUploadingStatus(RESULT_ENUM.SUCCESS);
       // closeModal();
-      // [x] 토스트
       // 알림창: loading ->  onError, onSuccess
-      // 작성중 close -> 경고창
     } catch (error) {
       console.log(error);
     }
@@ -58,11 +60,13 @@ const AddReview = ({
     setUserInputValues,
     toastMessage,
     showToast,
+    setUploadingStatus,
   ]);
 
   return (
     <>
       {showToast && <ToastWrapper toastData={toastData} />}
+
       <ReviewFormContainer
         headerTitle="글 작성하기"
         userInputValues={userInputValues}

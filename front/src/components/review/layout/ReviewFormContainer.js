@@ -52,7 +52,6 @@ const ReviewFormContainer = ({
         onHide={() => {
           // title과 content가 비어있다면(날아갈 데이터가 없다면) 유저에게 묻지 않고 모달창 제거
           if (userInputValues.title !== "" || userInputValues.content !== "") {
-            // 물어보기 !!confirm modal
             setShowConfirmModal(true);
           } else {
             closeModal();
@@ -63,7 +62,10 @@ const ReviewFormContainer = ({
         {showConfirmModal && (
           <ConfirmDeleteModal
             show={showConfirmModal}
-            closeModal={() => setShowConfirmModal(false)}
+            closeModal={() => {
+              setShowConfirmModal(false);
+              setUserInputValues({ title: "", content: "" });
+            }}
             closeReviewModal={closeModal}
           />
         )}

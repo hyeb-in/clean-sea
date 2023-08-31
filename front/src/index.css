@@ -123,3 +123,8 @@ body {
   padding-top: 20px; /* 텍스트 위 여백 추가 */
   padding-bottom: 20px; /* 텍스트 아래 여백 추가 */
 }
+.uploading-indicator-icons {
+  font-size: 5rem;
+  margin: 40px;
+  color: blue;
+}

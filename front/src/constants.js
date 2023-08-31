@@ -65,8 +65,9 @@ export const IS_LIKE = {
 export const RESULT_ENUM = {
   NOT_YET: "작성중",
   UPLOADING: "업로드 중",
-  SUCCESS: "성공",
+  SEND: "완료",
   FAIL: "실패",
+  SUCCESS: "성공",
 };
 
 export const DEFAULT_AVATAR = "/image/icon.png";
