@@ -57,16 +57,16 @@ export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
 
         try {
             if (err instanceof MulterError || err) {
-                return next(err);
+                return next(err);   
             }
-            console.log(req.files);
+
             const files: FileObjects[] = req.files ? ([] as FileObjects[]).concat(...Object.values(req.files)) : [];
-            console.log(req.files);
+
             const uploadFile = files.map(file => file.filename);
 
             if (req.method === 'POST') {
                 await handleFileOperation(files, insertFile);
-                req.body.uploadFile = uploadFile.map(filename => `${filename}`);
+                req.body.uploadFile = uploadFile.map(filename => `uploads/${filename}`);
             } else if (req.method === 'PUT'  && files.length > 0) {
                 await handleFileOperation(files, replacePlaceholder);
                 // if (req.originalUrl.includes('/photo/')) {
@@ -89,7 +89,7 @@ export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
                 //         return res.status(500).json({ message: 'Internal server error' });
                 //     }
                 // }
-                req.body.uploadFile = uploadFile.map(filename => `${filename}`);
+                req.body.uploadFile = uploadFile.map(filename => `uploads/${filename}`);
             }
             next();
         } catch (error) {
