@@ -20,10 +20,12 @@ const validateSchema = (schema : joi.ObjectSchema) => {
 }
 
 const posttravelSchema = joi.object({
+    beachId: joi.required(),
     date : joi.date().iso().required().messages(errorMessage),
 });
 
 const puttravelSchema = joi.object({
+    beachId: joi.required(),
     date : joi.date().iso().optional().messages(errorMessage),
 });
 

@@ -58,7 +58,7 @@ function httpLogger(req: Request, res: Response, next: NextFunction): void {
   )(req, res, next);
 }
 
-morgan.token("body", (req: Request, res: Response) => {
+morgan.token("body", (req: Request) => {
   return JSON.stringify(req.body);
 });
 
@@ -68,9 +68,13 @@ function errorMiddleware(
   res: Response,
   next: NextFunction
 ): void {
+  if (error.statusCode === null || error.statusCode === undefined)
+    error.statusCode = 500;
+
   logger.error(
     `statusCode: ${error.statusCode} | Error Message: ${error.message} `
   );
+
   res.status(error.statusCode).send(error.message);
 }
 

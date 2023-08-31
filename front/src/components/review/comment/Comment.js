@@ -101,7 +101,9 @@ const Comment = ({ comment, setComments, setNewComments, setCommentCount }) => {
                   value={editCommentValue}
                   onChange={(e) => setEditCommentValue(e.target.value)}
                 />
-                <div>Enter</div>
+                <div className="comment__complete-btn" onClick={onEditComment}>
+                  게시
+                </div>
                 <div
                   className="comment__edit-btn "
                   onClick={() => setIsEditing(false)}

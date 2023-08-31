@@ -9,9 +9,9 @@ import { UserStateContext } from "../../../App";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const Review = ({ review, setReview, setReviews }) => {
+const Review = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { openModal, setModalVisible } = useModal();
+  const { openModal } = useModal();
   const [comments, setComments] = useState(review?.comments || []);
   const [newComments, setNewComments] = useState([]);
   const [commentCount, setCommentCount] = useState(review.commentCount);
@@ -61,9 +61,6 @@ const Review = ({ review, setReview, setReviews }) => {
               >
                 {/* 임시로 2개!! 원래 3개임 */}
                 <div className="more-comments">
-                  {commentCount > 0 &&
-                    commentCount <= 2 &&
-                    `댓글 ${commentCount}개`}
                   {commentCount > 2 && `댓글 ${commentCount}개 모두 보기`}
                 </div>
               </div>

@@ -3,7 +3,6 @@ import {
   Col, Container, Row, Card, Button, Modal, FormControl
 } from "react-bootstrap";
 import * as Api from "../../Api";
-import { UserStateContext } from "../../App";
 import TravelItem from "./TravelItem";
 import SearchInput from "./SearchInput";
 import { useToggle } from "../../hooks/profileHooks";
@@ -12,9 +11,7 @@ const History = ({ displayToast, isEditable }) => {
   const [travels, setTravels] = useState([]);
   const [showModal, setShowModal] = useToggle();
 
-  const { user } = useContext(UserStateContext);
   const [newTravel, setNewTravel] = useState({
-    author: user._id,
     beachId: "",
     date: ""
   });

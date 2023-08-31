@@ -8,7 +8,7 @@ const Avatar = React.forwardRef(({ width }, ref) => {
     <Col sm="auto" ref={ref}>
       <img
         className="rounded-circle"
-        src="https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
+        src="/icon.png"
         width={width}
         alt="avatar"
       />

@@ -74,16 +74,16 @@ const Graph = () => {
       },
     },
     title: {
-      text: '연도별 지역 해수욕장 대장균/장구균 검출수',
-      align: 'center',
+      text: "연도별 지역 해수욕장 대장균/장구균 검출수",
+      align: "center",
       margin: 10,
       offsetX: 0,
       offsetY: 0,
       floating: false,
       style: {
-        fontSize: '16px',
-        fontWeight: 'bold',
-        color: '#333',
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#333",
       },
     },
   };
@@ -152,22 +152,16 @@ const Graph = () => {
               title={selectedYear}
               onSelect={handleYearSelect}
             >
-              {[2015, 2017, 2019, 2021, 2022, 2023].map(
-                (year) => (
-                  <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
-                )
-              )}
+              {[2015, 2017, 2019, 2021, 2022, 2023].map((year) => (
+                <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
+              ))}
             </DropdownButton>
           </Dropdown>
         </Col>
       </Row>
       <Row>
         <div id="chart">
-          <ApexCharts
-            options={options}
-            series={chartData.series}
-            type="bar"
-          />
+          <ApexCharts options={options} series={chartData.series} type="bar" />
         </div>
       </Row>
     </Container>

@@ -36,9 +36,9 @@ const ReviewContents = ({ review, setReviews }) => {
         >
           {content}
         </div>
-        {!showDetails && (
+        {showDetails && (
           <div
-            onClick={() => setShowDetails(true)}
+            onClick={() => setShowDetails(false)}
             className={"text-timestamp link show-more-btn"}
           >
             더보기
