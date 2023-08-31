@@ -72,6 +72,6 @@ Atlas 서버
 - [해양환경정보시스템](https://www.meis.go.kr/mei/observe/beach.do): 해당 링크는 해양수질 관련 정보를 제공하는 공식 웹사이트로, 프로젝트에서 사용한 데이터의 원본 출처입니다. 프로젝트 개발에 도움을 받은 정보와 데이터를 얻을 수 있습니다.
 
 ## API
-![프로젝트 이미지](../back/4.png)
+![4](/uploads/807b35e16fbe03efed344dfb9216a420/4.png)
 
-![프로젝트 이미지](../back/5.png)
+![5](/uploads/137f54eedabc168cc7679efc91bf2e8b/5.png)
