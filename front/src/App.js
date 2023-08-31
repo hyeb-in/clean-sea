@@ -13,6 +13,7 @@ import Footer from "./components/common/layout/Footer";
 import NavBar from "./components/common/layout/NavBar";
 import ReviewsList from "./components/review/ReviewsList";
 import { loginReducer } from "./Reducer";
+import "./index.css";
 import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
@@ -22,6 +23,10 @@ import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
 import EditReview from "./components/review/EditReview";
 import "./index.css";
+import { RESULT_ENUM } from "./constants";
+import UploadStatusIndicators from "./components/common/indicators/UploadStatusIndicators";
+import ToastWrapper from "./components/common/popup/ToastWrapper";
+import useToast from "./hooks/useToast";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -45,6 +50,8 @@ function App() {
     title: "",
     content: "",
   });
+  const [uploadingStatus, setUploadingStatus] = useState(RESULT_ENUM.NOT_YET);
+  const { showToast, toastData } = useToast();
 
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
@@ -61,9 +68,9 @@ function App() {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
       const res = await Api.get("users/current");
+      if (!res) throw new Error("유저 정보를 받아올 수 없습니다");
       const currentUser = res.data;
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
-      console.log(currentUser);
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: currentUser,
@@ -91,6 +98,7 @@ function App() {
       <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
         <DispatchContext.Provider value={dispatch}>
           <Interceptor>
+            {showToast && <ToastWrapper toastData={toastData} />}
             {!is404Page && <NavBar />}
             {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
             {/* >>>> edit review 오류때문에 임시로 edit도 여기서 사용한다 */}
@@ -100,6 +108,7 @@ function App() {
                 setReviews={setReviews}
                 userInputValues={userInputValues}
                 setUserInputValues={setUserInputValues}
+                setUploadingStatus={setUploadingStatus}
               />
             )}
             {modalVisible && modalVisible.type === MODAL_TYPE.editReview && (
@@ -108,6 +117,12 @@ function App() {
                 setReviews={setReviews}
                 userInputValues={userInputValues}
                 setUserInputValues={setUserInputValues}
+              />
+            )}
+            {uploadingStatus && (
+              <UploadStatusIndicators
+                uploadingStatus={uploadingStatus}
+                setUploadingStatus={setUploadingStatus}
               />
             )}
 

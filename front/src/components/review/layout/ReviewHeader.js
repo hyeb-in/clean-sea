@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
@@ -6,8 +6,9 @@ import Avatar from "../../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { ModalVisibleContext, UserStateContext } from "../../../App";
 import { MODAL_TYPE } from "../../../constants";
+import * as Api from "../../../Api";
 
-const ReviewTitle = ({ children, review, onEditReview }) => {
+const ReviewTitle = ({ children, review }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
@@ -21,7 +22,7 @@ const ReviewTitle = ({ children, review, onEditReview }) => {
           className="px-0"
           onClick={() => navigate(`/users/${review?.author}`)}
         >
-          <Avatar width="40" />
+          {/* <Avatar width="40" user={review?.author} /> */}
           <div
             xs="10"
             className="px-2 pm-2 d-flex align-items-center text-author editForm__author"

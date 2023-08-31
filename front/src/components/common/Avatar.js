@@ -2,9 +2,15 @@ import React from "react";
 import { Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../../Api";
+import { DEFAULT_AVATAR } from "../../constants";
 
 const Avatar = React.forwardRef(({ width, user }, ref) => {
   const navigate = useNavigate();
+  const hasAvatarUrl = user?.uploadFile && !!user?.uploadFile[0];
+
+  const avatarUrl = hasAvatarUrl
+    ? `${serverUrl}${user.uploadFile[0]}`
+    : DEFAULT_AVATAR;
 
   return (
     <Nav.Link onClick={() => navigate(`/users/${user._id}`)} ref={ref}>
@@ -14,7 +20,7 @@ const Avatar = React.forwardRef(({ width, user }, ref) => {
       >
         <img
           className="rounded-circle"
-          src={serverUrl + user?.uploadFile || "/icon.png"}
+          src={avatarUrl}
           width={width}
           alt="avatar"
         />

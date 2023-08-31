@@ -37,9 +37,15 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // 임시!!
+        const loggedIn =
+          loggedInUser?.constructor === Object &&
+          Object.keys(loggedInUser).length !== 0;
+
         // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
-        if (loggedInUser) {
+        if (loggedIn) {
           const res = await fetchPrivateReviews();
+          console.log(res.data);
           if (!res.data) {
             showToastPopup(
               "데이터를 불러올 수 없습니다",
@@ -57,7 +63,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
               TOAST_POPUP_STATUS.error
             );
           }
-          if (reviews === res.data) return;
+
           setReviews(res.data);
           setIsLoaded(true);
         }
@@ -69,10 +75,10 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
     fetchData();
   }, [
     loggedInUser,
-    modalVisible,
-    reviews,
-    showToastPopup,
-    setReviews,
+    // modalVisible,
+    // reviews,
+    // showToastPopup,
+    // setReviews,
     // 다 넣으면 다시 무한 요청..
   ]);
 
