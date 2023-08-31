@@ -7,40 +7,35 @@ import {
   getBeaches,
   getBeachByRegionAndYearSpecific,
 } from "../controllers/beachController";
-//import { beachValidator } from "../utils/validators/beachValidator";
+import {
+  beachParamsValidator,
+  commonParamValidator,
+} from "../utils/validators/beachValidator";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const beachRouter = Router();
 
-beachRouter.get(
-  "/beaches/name/:name",
-  jwtAuthentication,
-  //beachValidator.getBeachByName,
-  getBeachByName
-);
+beachRouter.get("/beaches/name/:name", jwtAuthentication, getBeachByName);
 
-beachRouter.get("/name/:name", getBeachByName);
-// .get('/beachbyId/:_id', beachValidator.getBeach, jwtAuthentication, getBeachById);
-
-beachRouter.get(
-  "/beachbyId/:_id",
-  jwtAuthentication,
-  //beachValidator.getBeachById,
-  getBeachById
-);
+beachRouter.get("/beachbyId/:_id", jwtAuthentication, getBeachById);
 
 beachRouter.get(
   "/beaches/:year/:address",
   jwtAuthentication,
-  // beachValidator.getBeachByRegionAndYear,
   getBeachByRegionAndYear
 );
 
 beachRouter.get(
   "/beachesavg/:year",
   jwtAuthentication,
-  //beachValidator.getBeachByRegionAndYearSpecificAvg,
+  beachParamsValidator,
   getBeachByRegionAndYearSpecificAvg
+);
+
+beachRouter.get(
+  "/beaches/:year",
+  jwtAuthentication,
+  getBeachByRegionAndYearSpecific
 );
 
 beachRouter.get(
