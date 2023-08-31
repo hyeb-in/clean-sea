@@ -14,7 +14,7 @@ import {
   ListGroupItem,
   Button,
   FormControl,
-  Modal, Form,
+  Modal, Form, Image,
 } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import History from '../components/travel/History';
@@ -128,11 +128,11 @@ const MyProfile = () => {
             <Card className="mb-4 mt-4 pt-3">
               <CardHeader className="border-bottom">
                 <div className="mb-3 mx-auto">
-                  <img
-                    className="rounded-circle"
+                  <Image
                     src={userProfileImage}
                     width="110"
                     alt="User Profile"
+                    roundedCircle
                   />
                 </div>
                 {isEditMode ? <FormControl type="text" value={userName}

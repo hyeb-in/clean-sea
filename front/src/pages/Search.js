@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useState } from 'react';
 import { Container, Row, Col } from "react-bootstrap";
-import Map from "../components/common/Map";
-import SearchBar from "../components/common/layout/SearchBar";
+import SearchBar from "../components/search/SearchBar";
+import BeachDetails from '../components/search/BeachDetails';
 
 const Search = () => {
+  const [selectedBeach, setSelectedBeach] = useState(null);
+
   return (
     <Container fluid style={{ height: "100%" }}>
       <Row>
-        <Col xs={4} className="px-0">
-          <SearchBar />
+        <Col xs={3} className="px-0">
+          <SearchBar setSelectedBeach={setSelectedBeach} />
         </Col>
-        <Col xs={8} className="px-0">
-          {/* <Map /> */}
+        <Col xs={9} className="px-0">
+          {selectedBeach ? (
+            <BeachDetails beachData={selectedBeach} />
+          ) : (
+            <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+              <h1>선택된 지역이 없습니다</h1>
+            </Container>
+          )}
         </Col>
       </Row>
     </Container>

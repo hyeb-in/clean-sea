@@ -11,7 +11,7 @@ import {
 
 const beachRouter = Router();
 
-beachRouter.get("/beaches/name/:name", getBeachByName);
+beachRouter.get("/name/:name", getBeachByName);
   // .get('/beachbyId/:_id', beachValidator.getBeach, jwtAuthentication, getBeachById);
 
 beachRouter.get("/beachbyId/:_id", getBeachById);
