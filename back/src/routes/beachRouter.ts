@@ -19,7 +19,7 @@ beachRouter
   .get("/beachbyId/:_id", jwtAuthentication, idParamValidator, getBeachById);
 
 beachRouter
-  .get('/beaches/:year/:address', jwtAuthentication, yearAddressParamsValidator, getBeachByRegionAndYear);
+  .get('/beaches/:year/:address', yearAddressParamsValidator, getBeachByRegionAndYear);
 
 beachRouter
   .get('/beachesavg/:year', jwtAuthentication, beachParamsValidator, getBeachByRegionAndYearSpecificAvg);

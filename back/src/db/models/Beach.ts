@@ -14,16 +14,7 @@ async function BeachByBeachId(_id: Types.ObjectId): Promise<IBeach[]> {
 
 async function BeachByRegionAndYear(address: string, year: string): Promise<IRankedBeach []> {
   const getBeaches = await BeachModel.find({ address: address, year: year }) as IRankedBeach []; // 주소와 연도로 찾기
-
-  // globalScore 기준으로 오름차순 정렬
-  const sortedBeaches = getBeaches.sort((a, b) => ((a.globalScore) ?? 0) - ((b.globalScore) ?? 0));
-
-  // rank 부여
-  sortedBeaches.forEach((beach, index) => {
-    (beach as any)['rank'] = index + 1; // 또는 IBeach 인터페이스에 rank 추가
-  });
-
-  return sortedBeaches;
+  return getBeaches;
 }
 
 
