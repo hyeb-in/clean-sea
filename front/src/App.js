@@ -63,6 +63,7 @@ function App() {
       const res = await Api.get("users/current");
       const currentUser = res.data;
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
+      console.log(currentUser);
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: currentUser,

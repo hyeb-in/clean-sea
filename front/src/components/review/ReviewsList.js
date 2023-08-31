@@ -69,7 +69,10 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
     fetchData();
   }, [
     loggedInUser,
-    // modalVisible, reviews, showToastPopup, setReviews
+    modalVisible,
+    reviews,
+    showToastPopup,
+    setReviews,
     // 다 넣으면 다시 무한 요청..
   ]);
 
