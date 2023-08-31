@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import {
   getBeachByNameService,
   getBeachByIdService,
-  getBeachByRegionAndYearService,
   getBeachByRegionAndYearSpecificServiceAvg,
   getBeachByRegionAndYearSpecificService,
   getBeachesService,
+  getBeachByRegionAndYearService,
 } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
 //import { IBeach } from 'beach';

@@ -3,6 +3,7 @@ import {
   create,
   deleteById,
   findUserByEmail,
+  updateUserName,
   getRandomUser,
   update,
   findUserById,
@@ -70,7 +71,12 @@ export const updateUserService = async (
 
   //3.일부분만 업데이트 해준다.
   const updatedUser = await update(userId, changedValue);
-  if (!updatedUser) throw errorGenerator("업데이트에 실패했습니다.", 500);
+  if (!updatedUser) throw errorGenerator("업데이트에 실패했습니다.", 403);
+
+  if ("name" in changedValue) {
+    const newUserName = changedValue["name"] as string;
+    await updateUserName(userId, newUserName);
+  }
   return updatedUser;
 };
 

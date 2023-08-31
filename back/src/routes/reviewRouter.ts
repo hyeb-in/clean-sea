@@ -7,7 +7,7 @@ import {
   deleteReview,
 } from "../controllers/reviewController";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
-import { handleFileUpload } from "../middlewares/uploadMiddleware";
+import { fileUpload } from "../middlewares/uploadMiddleware";
 import {
   postReviewValidator,
   putReviewValidator,
@@ -18,7 +18,7 @@ reviewAuthRouter
   .post(
     "/register",
     jwtAuthentication,
-    handleFileUpload,
+    fileUpload,
     postReviewValidator,
     createReview
   )
@@ -27,7 +27,7 @@ reviewAuthRouter
 
 reviewAuthRouter
   .route("/:reviewId")
-  .put(jwtAuthentication, handleFileUpload, putReviewValidator, updateReview)
+  .put(jwtAuthentication, fileUpload, putReviewValidator, updateReview)
   .delete(jwtAuthentication, deleteReview);
 
 export default reviewAuthRouter;

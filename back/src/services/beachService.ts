@@ -7,7 +7,7 @@ import {
   Beaches,
 } from "../db/models/Beach";
 import { Types } from "mongoose";
-import { IBeach, BeachData, BeachDataAvg } from "beach";
+import { IBeach, BeachData, BeachDataAvg } from "../types/beach";
 
 // 해수욕장 명칭 하나로 가져오기
 async function getBeachByNameService(name: string): Promise<IBeach | null> {
@@ -62,8 +62,8 @@ async function getBeachesService(): Promise<IBeach[]> {
 export {
   getBeachByNameService,
   getBeachByIdService,
-  getBeachByRegionAndYearService,
   getBeachByRegionAndYearSpecificServiceAvg,
   getBeachByRegionAndYearSpecificService,
   getBeachesService,
+  getBeachByRegionAndYearService,
 };

@@ -9,7 +9,7 @@ const errorMessage = {
   stringMax: "300글자이하이여야합니다.",
 };
 
-const validateSchema = (schema: joi.ObjectSchema, optional = false) => {
+const validateSchema = (schema: joi.ObjectSchema) => {
   return (req: IRequest, res: Response, next: NextFunction) => {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -21,20 +21,34 @@ const validateSchema = (schema: joi.ObjectSchema, optional = false) => {
   };
 };
 
-const reviewSchema = joi.object({
-  title: joi.string().min(4).messages({
+const postreviewSchema = joi.object({
+  title: joi.string().min(4).required().messages({
     "string.base": errorMessage.stringBase,
     "string.min": errorMessage.stringMin,
   }),
-  content: joi.string().min(4).max(300).messages({
+  content: joi.string().min(4).max(300).required().messages({
     "string.base": errorMessage.stringBase,
     "string.min": errorMessage.stringMin,
     "string.max": errorMessage.stringMax,
   }),
-  location: joi.any(),
-  uploadFile: joi.any(),
+  uploadFile: joi.array().items(joi.string()).optional(),
+  uploadVideo: joi.array().items(joi.string()).optional(),
 });
 
-export const postReviewValidator = validateSchema(reviewSchema);
+const putreviewSchema = joi.object({
+  title: joi.string().min(4).optional().messages({
+    "string.base": errorMessage.stringBase,
+    "string.min": errorMessage.stringMin,
+  }),
+  content: joi.string().min(4).max(300).optional().messages({
+    "string.base": errorMessage.stringBase,
+    "string.min": errorMessage.stringMin,
+    "string.max": errorMessage.stringMax,
+  }),
+  uploadFile: joi.array().items(joi.string()).optional(),
+  uploadVideo: joi.array().items(joi.string()).optional(),
+});
 
-export const putReviewValidator = validateSchema(reviewSchema, true);
+export const postReviewValidator = validateSchema(postreviewSchema);
+
+export const putReviewValidator = validateSchema(putreviewSchema);
