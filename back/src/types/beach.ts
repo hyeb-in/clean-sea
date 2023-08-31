@@ -14,6 +14,12 @@ interface IBeach {
   enteScore?: number;
   latitude?: number;
   longitude?: number;
+  globalScore?: number;
+}
+
+interface IRankedBeach extends IBeach {
+  rank: number;
+  globalScore: number; // 이제 optional이 아니라 필수로
 }
 
 interface BeachData {
@@ -36,4 +42,4 @@ type BeachDataAvg = {
   
 
 
-export { IBeach, BeachData, BeachDataAvg }
+export { IBeach, BeachData, IRankedBeach, BeachDataAvg }
