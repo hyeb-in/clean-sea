@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { 
+import {
   getBeachByNameService,
-  getBeachByIdService, 
-  getBeachByRegionAndYearService, 
+  getBeachByIdService,
+  getBeachByRegionAndYearService,
   getBeachByRegionAndYearSpecificServiceAvg,
-  getBeachByRegionAndYearSpecificService, 
-  getBeachesService 
+  getBeachByRegionAndYearSpecificService,
+  getBeachesService
 } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
-// import { IBeach } from 'beach';
 import { Types } from "mongoose";
 
 const getBeachByName = async (
@@ -51,8 +50,7 @@ const getBeachByRegionAndYear = async (
   next: NextFunction
   ) => {
   try {
-    const address = req.params.address; // 주소 파라미터를 받아옴
-    const year = req.params.year; // 연도 파라미터를 받아옴
+    const { address, year } = req.params;
     const result = await getBeachByRegionAndYearService(address, year); // 주소와 연도 값을 직접 전달
     console.log(result);
     res.status(StatusCodes.OK).json(result);
@@ -63,8 +61,8 @@ const getBeachByRegionAndYear = async (
 
 // 지역별 및 연도별 가져오기 및 추가조건
 const getBeachByRegionAndYearSpecificAvg = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
   ) => {
   try {
@@ -81,8 +79,8 @@ const getBeachByRegionAndYearSpecificAvg = async (
 
 // 지역별 및 연도별 가져오기 및 추가조건
 const getBeachByRegionAndYearSpecific = async (
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction
   ) => {
   try {

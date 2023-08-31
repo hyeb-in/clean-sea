@@ -1,6 +1,6 @@
 import { BeachModel, IBeach } from "../schemas/beachSchema";
 import { Types } from "mongoose";
-import { BeachData, BeachDataAvg } from "beach";
+import { BeachData, BeachDataAvg, IRankedBeach } from "beach";
 
 async function BeachByBeachName(name: string): Promise<IBeach | null> {
   const getBeaches = await BeachModel.findOne({ name: name });
@@ -12,10 +12,20 @@ async function BeachByBeachId(_id: Types.ObjectId): Promise<IBeach[]> {
   return getBeaches;
 }
 
-async function BeachByRegionAndYear(address: string, year: string): Promise<IBeach[]> {
-  const getBeaches = await BeachModel.find({ address: address, year: year }) as IBeach[]; // 주소와 연도로 찾기
-  return getBeaches;
+async function BeachByRegionAndYear(address: string, year: string): Promise<IRankedBeach []> {
+  const getBeaches = await BeachModel.find({ address: address, year: year }) as IRankedBeach []; // 주소와 연도로 찾기
+
+  // globalScore 기준으로 오름차순 정렬
+  const sortedBeaches = getBeaches.sort((a, b) => ((a.globalScore) ?? 0) - ((b.globalScore) ?? 0));
+
+  // rank 부여
+  sortedBeaches.forEach((beach, index) => {
+    (beach as any)['rank'] = index + 1; // 또는 IBeach 인터페이스에 rank 추가
+  });
+
+  return sortedBeaches;
 }
+
 
 async function BeachByRegionAndYearSpecificAvg(year: string): Promise<BeachDataAvg> {
   const query: any = { year: year };
