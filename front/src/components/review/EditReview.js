@@ -42,7 +42,6 @@ const EditReview = ({
       setUploadingStatus(RESULT_ENUM.SUCCESS);
       setReviews((current) => [res.data, ...current]);
       setEditedReview(null);
-      closeModal();
     } catch (error) {}
   }, [
     closeModal,
