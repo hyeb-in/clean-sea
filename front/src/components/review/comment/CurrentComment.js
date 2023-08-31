@@ -1,8 +1,12 @@
 import Comment from "./Comment";
-import useModal from "../../../hooks/useModal";
 // import { useEffect, useRef } from "react";
 
-const CurrentComments = ({ comments, setComments, newComments }) => {
+const CurrentComments = ({
+  comments,
+  setComments,
+  newComments,
+  setNewComments,
+}) => {
   // const { setReviews } = useReview();
   // const scrollRef = useRef(null);
 
@@ -26,7 +30,11 @@ const CurrentComments = ({ comments, setComments, newComments }) => {
       {newComments &&
         newComments.map((comment) => (
           <div key={comment._id}>
-            <Comment comment={comment} setComments={setComments} />
+            <Comment
+              comment={comment}
+              setComments={setComments}
+              setNewComments={setNewComments}
+            />
           </div>
         ))}
       {/* <div ref={scrollRef}></div> */}

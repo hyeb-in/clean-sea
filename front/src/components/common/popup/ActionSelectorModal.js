@@ -18,6 +18,8 @@ const ActionSelectorModal = () => {
   const review = modalVisible?.data?.review;
   const commentId = modalVisible?.data?.commentId;
   const setReviews = modalVisible?.data?.setReviews;
+  const setComments = modalVisible?.data?.setComments;
+  const setNewComments = modalVisible?.data?.setNewComments;
 
   const editReview = () => {
     if (review) {
@@ -43,9 +45,15 @@ const ActionSelectorModal = () => {
         }
         // [x]reload?
         // set toast
-
+        setComments((current) => {
+          return current.filter((comment) => comment._id !== commentId);
+        });
+        if (setNewComments) {
+          setNewComments((current) => {
+            return current.filter((comment) => comment._id !== commentId);
+          });
+        }
         return closeModal();
-        // return setModalVisible({ status: "deleted", commentId }); // test
       }
 
       // 리뷰 삭제 로직 -->> review가 있는지 체크 해야함 (뭔가 꼬여있음 주의)

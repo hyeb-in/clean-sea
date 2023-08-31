@@ -7,7 +7,7 @@ import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import { Form } from "react-bootstrap";
 import * as Api from "../../../Api";
 
-const Comment = ({ comment, setComments }) => {
+const Comment = ({ comment, setComments, setNewComments }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const { userId } = comment;
@@ -81,6 +81,7 @@ const Comment = ({ comment, setComments }) => {
                       target: MODAL_TYPE.deleteComment,
                       commentId: comment._id,
                       setComments,
+                      setNewComments,
                     });
                   }}
                 >
