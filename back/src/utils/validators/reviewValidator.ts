@@ -11,11 +11,8 @@ const errorMessage = {
 
 const validateSchema = (schema: joi.ObjectSchema) => {
   return (req: IRequest, res: Response, next: NextFunction) => {
-    console.log(req.body);
     const { error } = schema.validate(req.body);
     if (error) {
-      console.log(11111111);
-      console.log(error);
       const errorMessage = error.details[0].message;
       const customError = errorGenerator(errorMessage, 400);
       throw customError;
