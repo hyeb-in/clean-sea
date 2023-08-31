@@ -19,16 +19,8 @@ const AddReview = ({
 
   const { user: loggedInUser } = useContext(UserStateContext);
   const formDataFileRef = useRef(null);
-
-  const {
-    showToast,
-    setShowToast,
-    toastMessage,
-
-    toastData,
-  } = useToast();
+  const { showToast, setShowToast, toastMessage, toastData } = useToast();
   const { closeModal } = useModal();
-  console.log(showToast, toastData);
 
   const handleFileChange = (files) => {
     const formDataFiles = Array.from(files);
