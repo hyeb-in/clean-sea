@@ -42,6 +42,8 @@ export const signUpUser = async (
 
     const newUser = await createUserService(name, email, password);
     const userWithoutPassword = deletePassword(newUser);
+    // const { password:pwd, ...userWithoutPassword } = newUser;
+    // const { password:pwd, ...userWithoutPassword } = newUser.toObject();
     res.status(200).json(userWithoutPassword);
   } catch (error) {
     next(error);

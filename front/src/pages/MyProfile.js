@@ -109,7 +109,7 @@ const MyProfile = () => {
     }
     Api.putImage(`users/photo/${id}`, formData).then(async r => {
       setUserProfileImage(
-        `/uploads/${r.data.uploadFile[0]}`);
+        `http://${window.location.hostname}:5001/${r.data.uploadFile[0]}`);
       displayToastMessage('프로필 이미지가 성공적으로 업데이트되었습니다.');
     })
       .catch(e => {
