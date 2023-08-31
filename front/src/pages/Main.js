@@ -5,6 +5,7 @@ import HighchartsMap from "highcharts/modules/map";
 import ExportingModule from "highcharts/modules/exporting";
 import ExportDataModule from "highcharts/modules/export-data";
 import AccessibilityModule from "highcharts/modules/accessibility";
+// import "./font/font.css";
 
 // Initialize Highcharts modules
 HighchartsMap(Highcharts);
@@ -36,21 +37,30 @@ const Main = () => {
         Highcharts.mapChart("container", {
           chart: {
             map: mapData,
+            backgroundColor: "transparent", // 백그라운드를 투명하게 설정
           },
 
           title: {
-            text: "지역 해수욕장 평균 수질적합도",
+            text: "깨끗 海",
+            style: {
+              fontSize: "24px",
+              fontWeight: "bold",
+            },
           },
 
           subtitle: {
-            text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/kr/kr-all.geo.json">South Korea</a>',
+            text: "해수욕장 평균 수질 적합도",
+            style: {
+              fontSize: "18px",
+            },
           },
 
           mapNavigation: {
-            enabled: true,
-            buttonOptions: {
-              verticalAlign: "bottom",
-            },
+            enabled: false,
+          },
+
+          exporting: {
+            enabled: false,
           },
 
           colorAxis: {
@@ -65,6 +75,10 @@ const Main = () => {
             {
               data: data,
               name: "수질적합도",
+              animation: {
+                duration: 1500, // 애니메이션 지속 시간 (밀리초)
+                easing: "easeOutBounce", // 애니메이션 이징 함수
+              },
               states: {
                 hover: {
                   color: "#BADA55",
@@ -90,9 +104,30 @@ const Main = () => {
   }, []);
 
   return (
-    <Container fluid style={{ height: "100vh" }}>
-      <Row style={{ height: "100%" }}>
-        <Col id="container"></Col>
+    <Container fluid style={{ width: "100%", height: "100%", backgroundSize: "cover" }}>
+      <Row className="align-items-center" style={{ height: "100vh" }}>
+        <Col md={6} className="text-center">
+          <img
+            className="kakaoImage"
+            src="../img/kakao1.png"
+            style={{
+              width: "450px",
+              height: "auto",
+            }}
+            alt="Kakao Image"
+          />
+        </Col>
+        <Col md={6}>
+          <div className="text-center">
+            <p style={{ fontSize: "18px", lineHeight: "1.5", fontFamily: 'Black Han Sans, sans-serif' }}>
+              여름철 해수욕장, 좋은 수질의 해수욕장 어딨을까?<br />
+              깨끗 海 서비스를 통해 보다 빠르게 깨끗한 해수욕장을 찾아보세요!
+            </p>
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col id="container" style={{ width: "100%", height: "800px" }} ></Col>
       </Row>
     </Container>
   );
