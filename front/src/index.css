@@ -89,7 +89,7 @@ body {
   height: 100vh;
 }
 .backdrop {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.662);
 }
 
 /* indicator 모달창 관련 */

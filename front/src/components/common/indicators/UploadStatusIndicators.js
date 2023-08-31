@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal, Spinner } from "react-bootstrap";
 import ModalBodyWrapper from "../layout/ModalBodyWrapper";
 import { RESULT_ENUM } from "../../../constants";
+import ToastWrapper from "../popup/ToastWrapper";
+import useToast from "../../../hooks/useToast";
 
 const UploadStatusIndicators = ({ uploadingStatus, setUploadingStatus }) => {
+  const { showToast, toastData } = useToast();
   return (
     <>
       <Modal
@@ -41,6 +44,7 @@ const UploadStatusIndicators = ({ uploadingStatus, setUploadingStatus }) => {
             icon={faBomb}
             className="uploading-indicator-icons"
           />
+          {showToast && <ToastWrapper toastData={toastData} />}
         </ModalBodyWrapper>
       </Modal>
     </>

@@ -22,12 +22,10 @@ import PageNotFound from "./pages/PageNotFound";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
 import EditReview from "./components/review/EditReview";
-import { Modal, Spinner } from "react-bootstrap";
 import { RESULT_ENUM } from "./constants";
-import ModalBodyWrapper from "./components/common/layout/ModalBodyWrapper";
-import { faBomb, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UploadStatusIndicators from "./components/common/indicators/UploadStatusIndicators";
+import ToastWrapper from "./components/common/popup/ToastWrapper";
+import useToast from "./hooks/useToast";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -52,6 +50,7 @@ function App() {
     content: "",
   });
   const [uploadingStatus, setUploadingStatus] = useState(RESULT_ENUM.NOT_YET);
+  const { showToast, toastData } = useToast();
 
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
@@ -98,6 +97,7 @@ function App() {
       <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
         <DispatchContext.Provider value={dispatch}>
           <Interceptor>
+            {showToast && <ToastWrapper toastData={toastData} />}
             {!is404Page && <NavBar />}
             {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
             {/* >>>> edit review 오류때문에 임시로 edit도 여기서 사용한다 */}
@@ -124,6 +124,7 @@ function App() {
                 setUploadingStatus={setUploadingStatus}
               />
             )}
+
             <Routes>
               <Route path="/" exact element={<Main />} />
               <Route path="/login" exact element={<Login />} />
