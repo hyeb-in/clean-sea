@@ -48,6 +48,7 @@ body {
 .text-author {
   font-weight: 600;
   color: rgba(0, 0, 0, 0.786);
+  min-width: fit-content;
 }
 .bold {
   font-weight: 600;

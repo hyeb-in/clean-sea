@@ -25,7 +25,8 @@ const NavBar = () => {
   const dispatch = useContext(DispatchContext);
   const { setModalVisible } = useContext(ModalVisibleContext);
   const isLogin = !!loggedInUser;
-  console.log(loggedInUser);
+  console.log(isLogin);
+
   const logout = () => {
     sessionStorage.removeItem("userToken");
     dispatch({ type: "LOGOUT" });

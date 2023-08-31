@@ -1,6 +1,6 @@
 export const createFormData = (formDataFileRef, userInputValues) => {
   let formDataFiles = null;
-  if (formDataFileRef.current) {
+  if (formDataFileRef?.current) {
     formDataFiles = Array.from(formDataFileRef.current);
   }
   const formData = new FormData();
