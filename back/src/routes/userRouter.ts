@@ -3,7 +3,8 @@ import {
   changePassword,
   deleteUser,
   getRandomUser,
-  getUser,
+  getCurrentUser,
+  getUserById,
   resetPassword,
   signUpUser,
   updateUser,
@@ -19,7 +20,7 @@ const userRouter = Router();
 
 userRouter.post("/register", validateSignUp, signUpUser);
 
-userRouter.get("/current", jwtAuthentication, getUser);
+userRouter.get("/current", jwtAuthentication, getCurrentUser);
 
 userRouter.get("/randomlist", getRandomUser);
 
@@ -27,10 +28,17 @@ userRouter.post("/reset-password", resetPassword);
 
 userRouter.post("/:userId/change-password", jwtAuthentication, changePassword);
 
+userRouter.put(
+  "/photo/:userId",
+  jwtAuthentication,
+  handleFileUpload,
+  updateUser
+);
+
 userRouter
   .route("/:userId")
-  .get(jwtAuthentication, getUser)
-  .put(jwtAuthentication, handleFileUpload, validateUpdateUser, updateUser)
+  .get(jwtAuthentication, getUserById)
+  .put(jwtAuthentication, validateUpdateUser, updateUser)
   .delete(jwtAuthentication, deleteUser);
 
 export default userRouter;

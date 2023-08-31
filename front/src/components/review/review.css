@@ -86,6 +86,7 @@ textarea:focus {
 }
 .show-more-btn {
   word-break: break-all;
+  margin-top: 5px;
 }
 .comment__content {
   white-space: unset;
@@ -95,10 +96,12 @@ textarea:focus {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  height: 400px;
   display: flex;
   align-items: center;
   background-color: #000000f5;
+}
+.carousel {
+  overflow: hidden;
 }
 .text-overflow {
   overflow: hidden;
@@ -120,6 +123,10 @@ textarea:focus {
 .carousel-bg-white {
   /* background-color: white; */
   max-width: 50%;
+}
+.carousel-item img {
+  object-fit: cover;
+  height: 350px;
 }
 .review__contents {
   margin-top: 10px;
@@ -144,10 +151,7 @@ textarea:focus {
   flex-direction: column;
   align-items: center;
   justify-items: center;
-  /* padding: 40px 0;
-  margin: 15px; */
-  color: #aaa;
-  background-color: rgba(117, 120, 205, 0.263);
+  background-color: rgba(156, 157, 178, 0.263);
 }
 .upload-label {
   display: flex;

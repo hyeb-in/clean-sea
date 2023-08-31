@@ -1,10 +1,13 @@
-<<<<<<<<< Temporary merge branch 1
-import { BeachByBeachName, BeachByBeachId, BeachByRegionAndYear, Beaches } from "../db/models/Beach";
-=========
-import { BeachByBeachId, BeachByRegionAndYear, BeachByRegionAndYearSpecificAvg, BeachByRegionAndYearSpecific, Beaches } from "../db/models/Beach";
->>>>>>>>> Temporary merge branch 2
+import {
+  BeachByBeachName,
+  BeachByBeachId,
+  BeachByRegionAndYear,
+  BeachByRegionAndYearSpecificAvg,
+  BeachByRegionAndYearSpecific,
+  Beaches,
+} from "../db/models/Beach";
 import { Types } from "mongoose";
-import { IBeach, BeachData, BeachDataAvg } from "../types/beach";
+import { IBeach, BeachData, BeachDataAvg } from "beach";
 
 // 해수욕장 명칭 하나로 가져오기
 async function getBeachByNameService(name: string): Promise<IBeach | null> {
@@ -15,11 +18,6 @@ async function getBeachByNameService(name: string): Promise<IBeach | null> {
 // 해수욕장 id로 가져오기
 async function getBeachByIdService(_id: Types.ObjectId): Promise<IBeach[]> {
   const beachDataOne = await BeachByBeachId(_id);
-  return beachDataOne;
-}
-
-async function getBeachByBeachNameService(name: IBeach): Promise<IBeach[]> {
-  const beachDataOne = await BeachByBeachName(name);
   return beachDataOne;
 }
 
@@ -56,25 +54,16 @@ async function getBeachesService(): Promise<IBeach[]> {
   }
 
   // 모든 이력을 배열로 변환
-  const beachDataResult: IBeach[] = beachData.map(beach => ({
-    _id: beach._id,
-    name: beach.name,
-    address: beach.address,
-    goodnessFit: beach.goodnessFit,
-    eschScore: beach.eschScore,
-    enteScore: beach.enteScore,
-    ente: beach.ente,
-    esch: beach.esch,
-    latitude: beach.latitude,
-    longitude: beach.longitude,
-  }));
+  const beachDataResult: IBeach[] = beachData.map((beach) => beach);
 
   return beachDataResult;
 }
 
-
-<<<<<<<<< Temporary merge branch 1
-export { getBeachByBeachNameService, getBeachByIdService, getBeachByRegionAndYearService, getBeachesService };
-=========
-export { getBeachByIdService, getBeachByRegionAndYearService, getBeachByRegionAndYearSpecificServiceAvg, getBeachByRegionAndYearSpecificService, getBeachesService };
->>>>>>>>> Temporary merge branch 2
+export {
+  getBeachByNameService,
+  getBeachByIdService,
+  getBeachByRegionAndYearService,
+  getBeachByRegionAndYearSpecificServiceAvg,
+  getBeachByRegionAndYearSpecificService,
+  getBeachesService,
+};

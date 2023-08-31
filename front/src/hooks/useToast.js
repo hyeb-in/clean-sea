@@ -1,31 +1,38 @@
 import { useState } from "react";
 
 const useToast = () => {
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastStatus, setToastStatus] = useState(null);
-  const [toastPosition, setToastPosition] = useState("top-center");
+  const [toastData, setToastData] = useState({
+    isVisible: false,
+    text: "",
+    status: null,
+    position: "top-center",
+  });
 
   const showToastPopup = (text, status, position = "top-center") => {
-    setToastMessage(text);
-    setToastStatus(status);
-    setToastPosition(position);
-    setShowToast(true);
-
-    setTimeout(() => {
-      setToastMessage("");
-      setShowToast(false);
-      setToastStatus(null);
-    }, 2000);
+    setToastData({
+      isVisible: true,
+      text,
+      status,
+      position,
+    });
   };
 
+  // setTimeout(() => {
+  //   setToastData((prevData) => ({
+  //     ...prevData,
+  //     isVisible: false,
+  //     text: "", // 토스트가 닫힐 때 메시지 내용도 초기화
+  //   }));
+  // }, 2000);// >>> 부트스트랩이랑 부딪히나??
+
   return {
-    showToast,
-    setShowToast,
+    showToast: toastData.isVisible,
+    setShowToast: (isVisible) =>
+      setToastData((prevData) => ({ ...prevData, isVisible })),
     showToastPopup,
-    toastMessage,
-    toastStatus,
-    toastPosition,
+    toastText: toastData.text,
+    toastStatus: toastData.status,
+    toastPosition: toastData.position,
   };
 };
 

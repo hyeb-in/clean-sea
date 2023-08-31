@@ -4,6 +4,7 @@ import {
   createUserService,
   deleteUserService,
   getRandomUserService,
+  getUserService,
   resetPasswordService,
   updateUserService,
 } from "../services/userService";
@@ -72,8 +73,9 @@ export const getRandomUser = async (
 /**
  * @returns res.status(200).json(req.user);
  * @description 현재 유저 호출 jwt에서 DB user검색 후 넘겨줌
+ * @description 현재 세션의 유저 호출 api
  */
-export const getUser = async (
+export const getCurrentUser = async (
   req: IRequest,
   res: Response,
   next: NextFunction
@@ -89,6 +91,25 @@ export const getUser = async (
 /**
  * @param req userId
  * @returns res.status(200).json(updatedUser);
+ * @description id값으로 유저 호출 api
+ */
+export const getUserById = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.params;
+    const user = await getUserService(userId);
+    const userWithoutPassword = deletePassword(user);
+    return res.status(200).json(userWithoutPassword);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ *
  * @description update api
  */
 export const updateUser = async (

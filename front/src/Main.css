@@ -3,6 +3,12 @@
 @import "./components/review/review.css";
 @import "./components/review/comment/comment.css";
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -42,11 +48,12 @@ body {
 /* 텍스트 관련 */
 .link {
   cursor: pointer;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.579);
 }
 .text-author {
   font-weight: 600;
   color: rgba(0, 0, 0, 0.786);
-  /* text-wrap: nowrap; */
 }
 .bold {
   font-weight: 600;
@@ -62,6 +69,10 @@ body {
   display: flex;
   white-space: nowrap;
   align-items: center;
+  /* margin-bottom: 10px; */
+}
+.fa-heart {
+  color: rgb(47, 46, 46);
 }
 .text-like {
   margin-right: 10px;

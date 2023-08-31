@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
@@ -11,6 +11,7 @@ import * as Api from "../../Api";
 import useToast from "../../hooks/useToast";
 import ToastWrapper from "../common/popup/ToastWrapper";
 import { TOAST_POPUP_STATUS } from "../../constants";
+import EditReview from "./EditReview";
 
 const ReviewsList = ({ setReview, reviews, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
@@ -33,37 +34,51 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
     await Api.get("reviews/reviewListLogin");
   const fetchPublicReviews = async () => await Api.get("reviews/reviewList");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
-        if (loggedInUser) {
-          const res = await fetchPrivateReviews();
-          if (!res.data) {
-            showToastPopup(
-              "유저의 데이터를 불러올 수 없습니다",
-              TOAST_POPUP_STATUS.error
-            );
-          }
-          setReviews(res.data);
-          setIsLoaded(true);
-        } else {
-          const res = await fetchPublicReviews();
-          if (!res.data) {
-            showToastPopup(
-              "공개된 데이터를 불러올 수 없습니다",
-              TOAST_POPUP_STATUS.error
-            );
-          }
-          setReviews(res.data);
-          setIsLoaded(true);
+  const fetchData = useCallback(async () => {
+    try {
+      // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
+      if (loggedInUser) {
+        const res = await fetchPrivateReviews();
+        console.log(res);
+        if (!res.data) {
+          showToastPopup(
+            "유저의 데이터를 불러올 수 없습니다",
+            TOAST_POPUP_STATUS.error
+          );
         }
-      } catch (error) {
-        // showToastPopup(error, TOAST_POPUP_STATUS.error);
+        setReviews(res.data);
+        setIsLoaded(true);
+      } else {
+        const res = await fetchPublicReviews();
+        if (!res.data) {
+          showToastPopup(
+            "공개된 데이터를 불러올 수 없습니다",
+            TOAST_POPUP_STATUS.error
+          );
+        }
+
+        setReviews(res.data);
+        setIsLoaded(true);
       }
-    };
+    } catch (error) {
+      // showToastPopup(error, TOAST_POPUP_STATUS.error);
+    }
+  }, [loggedInUser, setReviews]);
+
+  useEffect(() => {
     fetchData();
-  }, [loggedInUser]);
+  }, [loggedInUser, setReviews, fetchData]);
+
+  useEffect(() => {
+    console.log(modalVisible);
+
+    if (modalVisible.status === "deleted") {
+      console.log("hi");
+      fetchData();
+      // reviews 정보를 새로 받아오는 방법
+    }
+  }, [modalVisible, setReviews, fetchData]);
+  const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
 
   return (
     <>
@@ -82,10 +97,10 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&
-            reviews.map((review, index) => (
+            reviews.map((review) => (
               <div
                 // to do: key 중복 없애라는 경고가 계속 발생함
-                key={`${review._id}-${modalVisible?.type}-${index}`}
+                key={review._id}
                 className="d-flex justify-content-center align-items-center"
               >
                 <Review
@@ -111,14 +126,9 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
 
       {/* 모달3. review 수정하기 폼 모달 */}
       {/* >>>> Review 하위 컴포넌트로 이동 */}
-      {showToast && (
-        <ToastWrapper
-          setShowToast={setShowToast}
-          text={toastMessage}
-          status={toastStatus}
-          position={toastPosition}
-        />
-      )}
+
+      {/* 모달3. review 수정하기 폼 모달 */}
+      {isEditReviewPopupOpen && <EditReview />}
     </>
   );
 };

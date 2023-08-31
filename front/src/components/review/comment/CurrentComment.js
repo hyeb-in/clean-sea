@@ -1,6 +1,7 @@
 import Comment from "./Comment";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import useReview from "../../../hooks/useReview";
+// import { useEffect, useRef } from "react";
 
 const CurrentComments = ({
   review,
@@ -11,12 +12,17 @@ const CurrentComments = ({
 }) => {
   const { openModal } = useModal();
   const { setReviews } = useReview();
+  // const scrollRef = useRef(null);
+  console.log(review, "wiejfwlifj");
+  // useEffect(() => {
+  //   if (newCommentsList) {
+  //     scrollRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [newCommentsList]);
 
   return (
-    <div className="comments-container">
+    <div className="comments-container scroll-container">
       {/* 댓글 3개까지만 미리보기 */}
-      {/* 삭제 로직 구현  */}
-      {/* setComments 갱신 */}
       {commentList?.map(
         (comment, index) =>
           index < 2 && (
@@ -40,6 +46,7 @@ const CurrentComments = ({
           />
         </div>
       ))}
+      {/* <div ref={scrollRef}></div> */}
       {/* 댓글 더보기 클릭시 댓글 상세 모달창으로 이동 */}
       <div
         onClick={() =>
@@ -50,10 +57,12 @@ const CurrentComments = ({
             newCommentsList,
           })
         }
-        className="link"
+        className="link flex-justify-end"
       >
         {/* 임시로 2개!! 원래 3개임 */}
-        {commentList?.length > 2 && `댓글 ${commentList.length}개 모두 보기`}
+        <div className="more-comments">
+          {review.commentCount > 2 && `댓글 ${review.commentCount}개 모두 보기`}
+        </div>
       </div>
     </div>
   );

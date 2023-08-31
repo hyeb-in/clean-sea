@@ -8,7 +8,7 @@
 
 /**
  * @swagger
- * /beaches/beachbyname/:name:
+ * /beaches/name/:name:
  *  get:
  *      tags: [Beach]
  *      summary: get beach by name

@@ -6,12 +6,12 @@ const ModalBodyWrapper = ({ children, title, onHide, content }) => {
       <Modal.Header closeButton onHide={onHide}>
         <Modal.Title size="ms">{title}</Modal.Title>
       </Modal.Header>
-      {content && (
+      {children && (
         <Modal.Body className="d-flex justify-content-center align-items-center ">
-          {content}
+          {children}
         </Modal.Body>
       )}
-      <Modal.Footer>{children}</Modal.Footer>
+      <Modal.Footer>{content}</Modal.Footer>
     </>
   );
 };

@@ -5,6 +5,7 @@ import {
   findUserByEmail,
   getRandomUser,
   update,
+  findUserById,
 } from "../db/models/User";
 import { IUser } from "user";
 import { generateRandomPassword } from "../utils/randomPassword";
@@ -36,6 +37,16 @@ export const createUserService = async (
 
 /**
  * @param {*} userId
+ * @returns user
+ * @description Id로 유저 검색
+ */
+export const getUserService = async (userId: string) => {
+  const user = await findUserById(userId);
+  return user;
+};
+
+/**
+ * @param {*} userId
  * @param {*} inputData
  * @returns updatedUser
  * @description 유저 존재 확인 후 업데이트
@@ -59,7 +70,6 @@ export const updateUserService = async (
 
   //3.일부분만 업데이트 해준다.
   const updatedUser = await update(userId, changedValue);
-  // if (!updatedUser || updatedUser === {})
   if (!updatedUser) throw errorGenerator("업데이트에 실패했습니다.", 500);
   return updatedUser;
 };
@@ -113,6 +123,5 @@ export const changePasswordService = async (
 ) => {
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   const updatedPwdUser = await update(userId, { password: hashedPassword });
-  console.log(updatedPwdUser);
   return updatedPwdUser;
 };

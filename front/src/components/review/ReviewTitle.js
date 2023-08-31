@@ -36,7 +36,7 @@ const ReviewTitle = ({ review, setReviews }) => {
         {isMyReview && (
           <Button
             variant="link"
-            className="black"
+            className="link"
             onClick={() => {
               const data = {
                 review,

@@ -46,13 +46,13 @@ const CommentForm = ({ review, setNewCommentsList }) => {
           setNewCommentValue(e.target.value);
         }}
         placeholder="댓글 달기..."
-        className="comment__input"
+        className="comment__input comment__border "
       />
       {newCommentValue?.length > 0 && (
         <Button
           onClick={handleCommentSubmit}
           variant="outline-primary"
-          className="comment__button"
+          className="comment__submit-btn"
         >
           게시
         </Button>

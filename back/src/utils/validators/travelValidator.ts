@@ -3,10 +3,6 @@ import { NextFunction, Response } from "express";
 import { IRequest } from "user";
 import { errorGenerator } from "../errorGenerator";
 
-const errorMessage = {
-    invalidDate : "날짜형식에 맞춰 입력해야합니다.",
-};
-
 const validateSchema = (schema : joi.ObjectSchema, optional = false) => {
     return (req : IRequest, res : Response , next : NextFunction) => {
         const { error } = schema.validate(req.body);
@@ -20,7 +16,8 @@ const validateSchema = (schema : joi.ObjectSchema, optional = false) => {
 }
 
 const travelSchema = joi.object({
-    date : joi.date().iso().messages(errorMessage),
+    beachId: joi.required().required(),
+    date : joi.date().iso().required()
 });
 
 export const postTravelValidator = validateSchema (travelSchema);

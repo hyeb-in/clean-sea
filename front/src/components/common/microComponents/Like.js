@@ -50,7 +50,7 @@ const Like = ({ iLiked, reviewId, setReviews, likeCount }) => {
   return (
     <Col onClick={handleLikes} className="flex-justify-end mx-0">
       <div className="text-like text-timestamp flex-justify-end">
-        {`좋아요 ${likeCount}개`}
+        {likeCount > 0 && `좋아요 ${likeCount}개`}
       </div>
 
       {iLiked ? (
