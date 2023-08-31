@@ -42,6 +42,15 @@ export const update = async (userId: string, changedValue: Partial<IUser>) => {
 };
 
 export const updateUserName = async (userId: string, newUserName: string) => {
+  // const userReviews = await ReviewModel.updateMany(
+  //   { author: userId },
+  //   { userName: newUserName }
+  // ).exec();
+
+  // const userComments = await CommentModel.updateMany(
+  //   { userId },
+  //   { userName: newUserName }
+  // ).exec();
   const userReviews = await ReviewModel.find({ author: userId }).exec();
   const userComments = await CommentModel.find({ userId }).exec();
 

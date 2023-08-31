@@ -8,7 +8,6 @@ import {
   getBeachByRegionAndYearService,
 } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
-//import { IBeach } from 'beach';
 import { Types } from "mongoose";
 
 const getBeachByName = async (
@@ -51,8 +50,7 @@ const getBeachByRegionAndYear = async (
   next: NextFunction
 ) => {
   try {
-    const address = req.params.address; // 주소 파라미터를 받아옴
-    const year = req.params.year; // 연도 파라미터를 받아옴
+    const { address, year } = req.params;
     const result = await getBeachByRegionAndYearService(address, year); // 주소와 연도 값을 직접 전달
     console.log(result);
     res.status(StatusCodes.OK).json(result);
