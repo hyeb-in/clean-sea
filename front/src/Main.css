@@ -2,6 +2,8 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "./components/review/review.css";
 @import "./components/review/comment/comment.css";
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+
 
 body {
   margin: 0;
@@ -9,6 +11,7 @@ body {
   width: 100%;
   height: 100%;
   min-height: 100vh;
+  font-family: 'Black Han Sans', sans-serif;
 }
 /* flex-방향-justify-align 순서 */
 .flex-row-center-center {
@@ -102,4 +105,13 @@ body {
 }
 .toast-popup__title {
   font-weight: 600;
+}
+
+.navbar {
+  margin-bottom: 20px; /* 네비게이션 바 아래 여백 추가 */
+}
+
+.text-center {
+  padding-top: 20px; /* 텍스트 위 여백 추가 */
+  padding-bottom: 20px; /* 텍스트 아래 여백 추가 */
 }
