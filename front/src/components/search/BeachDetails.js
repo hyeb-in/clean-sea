@@ -27,12 +27,12 @@ const BeachDetails = ({ beachData }) => {
           <Table hover responsive>
             <thead>
             <tr>
-              <th colSpan="2" style={{backgroundColor: "#e0e0e0"}}>ESCH 정보</th>
+              <th colSpan="2" style={{backgroundColor: "#e0e0e0"}}>대장균 정보</th>
             </tr>
             </thead>
             <tbody className="table-group-divider">
             <tr>
-              <td>값</td>
+              <td>검출수</td>
               <td>{beachData.esch}</td>
             </tr>
             <tr>
@@ -54,12 +54,12 @@ const BeachDetails = ({ beachData }) => {
           <Table hover>
             <thead>
               <tr>
-                <th colSpan="2" style={{backgroundColor: "#e0e0e0"}}>ENTE 정보</th>
+                <th colSpan="2" style={{backgroundColor: "#e0e0e0"}}>장구균 정보</th>
               </tr>
             </thead>
             <tbody className="table-group-divider">
             <tr>
-              <td>값</td>
+              <td>검출수</td>
               <td>{beachData.ente}</td>
             </tr>
             <tr>
