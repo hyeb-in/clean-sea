@@ -1,15 +1,41 @@
-.speech-bubble {
-  position: relative;
-  background: pink;
-  margin: 50px;
-  width: 200px;
-  height: 50px;
-  border-radius: 10px;
-  text-align: center;
-  line-height: 50px;
+.chats-container {
+  display: flex;
+  flex-direction: column;
 }
-
-.speech-bubble:after {
+.bubbles-container {
+  margin-top: 100px;
+  width: 100%;
+}
+.bubbles__row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.bubble {
+  color: rgba(255, 255, 255, 0.919);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  border-radius: 10px;
+  width: max-content;
+  height: 100%;
+  padding: 10px 20px;
+}
+.bubble:nth-child(even) {
+  margin-left: 20px;
+}
+.bubble:nth-child(odd) {
+  margin-right: 20px;
+}
+.bubble:nth-child(even) {
+  background-color: pink;
+  justify-content: flex-end;
+}
+.bubble:nth-child(odd) {
+  background-color: blue;
+}
+.bubble.right:after {
   content: "";
   position: absolute;
   top: 100%;
@@ -19,4 +45,25 @@
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-bottom: 5px solid transparent;
+}
+.bubble.left:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 15%; /* 가운데 정렬된 위치로 수정 */
+  transform: translateX(-50%);
+  border-top: 5px solid blue;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+.animal-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 50px;
+}
+.animal {
+  width: 360px;
 }
