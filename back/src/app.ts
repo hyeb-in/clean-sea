@@ -11,6 +11,7 @@ import passport from "passport";
 import { jwtStrategy, localStrategy } from "./config/passport";
 import authRouter from "./routes/authRouter";
 import { swaggerUi, specs } from "./swagger/swagger";
+import path from 'path';
 
 import "./db";
 
@@ -42,6 +43,7 @@ app.use("/beaches", beachRouter);
 app.use("/auth", authRouter);
 app.use("/comments", commentAuthRouter);
 
+app.use('/uploads', express.static(path.join(__dirname, 'imageUpload')));
 app.use("/api", likeAuthRouter);
 
 app.use(errorMiddleware);
