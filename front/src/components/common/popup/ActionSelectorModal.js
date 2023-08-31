@@ -13,7 +13,7 @@ import * as Api from "../../../Api";
 const ActionSelectorModal = () => {
   // commentId가 있다면 comment를 삭제 -----> comment 수정은 Comment 컴포넌트에서 해결하는 걸로 바뀜. 수정사항 반영할 것
   // reviewId가 있다면 reviewId를 삭제
-  const { closeModal, openModal, modalVisible, setModalVisible } = useModal();
+  const { closeModal, openModal, modalVisible } = useModal();
   // 현 상황에선 edit된 상태 반영하기 위해 setReviews를 받아오기보단, 모달창을 닫은 후 새로 데이터를 받아오는 방법도 있음
   const review = modalVisible?.data?.review;
   const setReviews = modalVisible?.data?.setReviews;

@@ -1,16 +1,17 @@
 import { Col, Container, Row } from "react-bootstrap";
-import useModal from "../../../hooks/useModal";
 
-const ReviewFormBody = ({ userInputValues, setUserInputValues }) => {
-  const { modalVisible } = useModal();
-  const currentReviewData = modalVisible?.data?.review;
+const ReviewFormBody = ({
+  editedReview,
+  setEditedReview,
+  userInputValues,
+  setUserInputValues,
+}) => {
+  // setUserInputValues({
+  //   title: currentReviewData.title,
+  //   content: currentReviewData.content,
+  // });
+  // app[x] ==> 폼바디 안에서 상태 관리 ==?
 
-  if (currentReviewData) {
-    setUserInputValues({
-      title: currentReviewData.title,
-      content: currentReviewData.content,
-    });
-  }
   // title, content, uploadFile
   return (
     <Container className="w-100">
@@ -20,9 +21,16 @@ const ReviewFormBody = ({ userInputValues, setUserInputValues }) => {
           <input
             className="w-100"
             type="input"
-            value={userInputValues?.title}
+            value={editedReview ? editedReview?.title : userInputValues.title}
             onChange={(e) => {
-              setUserInputValues({ ...userInputValues, title: e.target.value });
+              if (editedReview) {
+                setEditedReview({ ...editedReview, title: e.target.value });
+              } else {
+                setUserInputValues({
+                  ...userInputValues,
+                  title: e.target.value,
+                });
+              }
             }}
           />
         </Col>
@@ -31,10 +39,17 @@ const ReviewFormBody = ({ userInputValues, setUserInputValues }) => {
           <textarea
             className="w-100"
             rows={6}
-            value={userInputValues?.content}
+            value={
+              editedReview ? editedReview.content : userInputValues.content
+            }
             onChange={(e) => {
-              if (userInputValues?.content.length < 300) {
+              if (editedReview && editedReview.content.length < 300) {
                 // 300 길이로 조건 걸어두면 300에서 멈춰서 글자가 지워지지도 않음
+                setEditedReview({
+                  ...editedReview,
+                  content: e.target.value,
+                });
+              } else {
                 setUserInputValues({
                   ...userInputValues,
                   content: e.target.value,
@@ -45,12 +60,12 @@ const ReviewFormBody = ({ userInputValues, setUserInputValues }) => {
         </Col>
         <small
           className={
-            userInputValues?.content?.length < 300
+            editedReview?.content?.length < 300
               ? "text-muted flex-justify-end"
               : "delete flex-justify-end"
           }
         >
-          {userInputValues?.content ? userInputValues?.content.length : "0"}/300
+          {editedReview?.content ? editedReview.content.length : "0"}/300
         </small>
       </Row>
     </Container>

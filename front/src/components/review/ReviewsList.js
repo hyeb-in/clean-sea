@@ -48,7 +48,6 @@ const ReviewsList = ({
         // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
         if (loggedInUser) {
           const res = await fetchPrivateReviews();
-          console.log(res);
           if (!res.data) {
             showToastPopup(
               "데이터를 불러올 수 없습니다",

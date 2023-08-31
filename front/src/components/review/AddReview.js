@@ -50,7 +50,14 @@ const AddReview = ({
     } catch (error) {
       console.log(error);
     }
-  }, [closeModal, userInputValues]);
+  }, [
+    closeModal,
+    userInputValues,
+    loggedInUser,
+    setReviews,
+    setUserInputValues,
+    showToastPopup,
+  ]);
 
   return (
     <ReviewFormContainer

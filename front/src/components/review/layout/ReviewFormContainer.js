@@ -1,3 +1,4 @@
+import React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import ModalBodyWrapper from "../../common/layout/ModalBodyWrapper";
 import CarouselWrapper from "../../common/Carousel";
@@ -18,12 +19,14 @@ const ReviewFormContainer = ({
   handleSubmit,
   preview,
   setPreview,
+  editedReview,
+  setEditedReview,
 }) => {
   const { modalVisible, closeModal } = useModal();
+
   const { showToast, toastPosition, toastText, toastStatus } = useToast();
 
-  const editingReviewData = modalVisible?.data?.review?.uploadFile;
-
+  const currentReviewFiles = modalVisible?.data?.review?.uploadFile;
   // 저장됐던 이미지가 있다면 불러와서 보여준다
   // 삭제 가능
   // 추가 가능?
@@ -59,7 +62,10 @@ const ReviewFormContainer = ({
         keyboard={false}
         dialogClassName="addreview__modalWrapper" // 기본 부트스트랩 스타일 제거(max-width)
         className="px-5"
-        show={modalVisible.type === MODAL_TYPE.addReview}
+        show={
+          modalVisible.type === MODAL_TYPE.addReview ||
+          modalVisible.type === MODAL_TYPE.editReview
+        }
         onHide={() => {
           // title과 content가 비어있다면(날아갈 데이터가 없다면) 유저에게 묻지 않고 모달창 제거
           if (userInputValues.title !== "" || userInputValues.content !== "") {
@@ -85,7 +91,7 @@ const ReviewFormContainer = ({
           }
         >
           <Form className="addReview__form">
-            {editingReviewData || (preview && preview?.length > 0) ? (
+            {currentReviewFiles || (preview && preview?.length > 0) ? (
               <CarouselWrapper preview={preview} setPreview={setPreview} />
             ) : (
               <FileUploader
@@ -98,6 +104,8 @@ const ReviewFormContainer = ({
               />
             )}
             <ReviewFormBody
+              editedReview={editedReview}
+              setEditedReview={setEditedReview}
               userInputValues={userInputValues}
               setUserInputValues={setUserInputValues}
             />
