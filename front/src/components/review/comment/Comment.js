@@ -7,12 +7,13 @@ import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import { Form } from "react-bootstrap";
 import * as Api from "../../../Api";
 
-const Comment = ({ review, comment }) => {
+const Comment = ({ comment, setComments }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
   const { userId } = comment;
-  const { modalVisible, setModalVisible } = useModal();
+  const { modalVisible, openModal } = useModal();
   const isMyComment = loggedInUser && loggedInUser._id === userId;
+  /// set comments 필요함
 
   // 만약 modalVisible에 currentComment가 있다면
   // 해당 코멘트 id로 커맨트 창을 찾아서 edit input 을 보여준다
@@ -76,13 +77,10 @@ const Comment = ({ review, comment }) => {
                 <div
                   className="comment__col flex-justify-end link comment__edit-btn"
                   onClick={() => {
-                    setModalVisible({
-                      type: MODAL_TYPE.actionSelector,
-                      isVisible: true,
-                      data: {
-                        commentId: comment._id,
-                        setResult,
-                      },
+                    openModal(MODAL_TYPE.actionSelector, {
+                      target: MODAL_TYPE.deleteComment,
+                      commentId: comment._id,
+                      setComments,
                     });
                   }}
                 >

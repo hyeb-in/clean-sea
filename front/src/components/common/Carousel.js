@@ -19,7 +19,7 @@ const nextIcon = (
 
 const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
   const { modalVisible } = useModal();
-  const editingReviewImgUrls = modalVisible?.data?.review.uploadFile;
+  const editingReviewImgUrls = modalVisible?.data?.review?.uploadFile;
 
   // 업로드, 수정 할 때 삭제버튼 누르면 하나씩 제거
   const removeUrl = (index) => {

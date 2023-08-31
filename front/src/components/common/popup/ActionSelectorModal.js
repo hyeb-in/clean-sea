@@ -16,8 +16,8 @@ const ActionSelectorModal = () => {
   const { closeModal, openModal, modalVisible } = useModal();
   // 현 상황에선 edit된 상태 반영하기 위해 setReviews를 받아오기보단, 모달창을 닫은 후 새로 데이터를 받아오는 방법도 있음
   const review = modalVisible?.data?.review;
-  const setReviews = modalVisible?.data?.setReviews;
   const commentId = modalVisible?.data?.commentId;
+  const setReviews = modalVisible?.data?.setReviews;
 
   const editReview = () => {
     if (review) {
@@ -32,10 +32,10 @@ const ActionSelectorModal = () => {
 
   const deleteById = async () => {
     try {
-      if (!review?._id && !commentId)
-        throw new Error("정보를 찾을 수 없습니다");
+      if (!commentId && !review) throw new Error("정보를 찾을 수 없습니다");
       // comment OR review 이기때문에 if문 제거하지 말 것!!
 
+      // 댓글 삭제
       if (commentId) {
         const res = await Api.delete(`comments/${commentId}`);
         if (!res.ok) {
@@ -43,8 +43,8 @@ const ActionSelectorModal = () => {
         }
         // [x]reload?
         // set toast
-        // modalVisible.data.setResult(null);
-        // return closeModal(); // edit comment했으면 return!
+
+        return closeModal();
         // return setModalVisible({ status: "deleted", commentId }); // test
       }
 
