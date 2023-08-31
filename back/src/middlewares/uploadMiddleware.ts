@@ -97,28 +97,3 @@ export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
         }
     });
 }
-
-
-// export const videoFileUpload: RequestHandler<FileRequest> = (req, res, next) => {
-//     videoUploadMiddleware(req as Request, res, async function (err: any) {
-
-//         try {
-//             if (err instanceof MulterError || err) {
-//                 return next(err);
-//             }
-//             const files: FileObjects[] = req.files ? ([] as FileObjects[]).concat(...Object.values(req.files)) : [];
-//             const uploadVideo = files.map(file => file.filename);
-
-//             if (req.method === 'POST') {
-//                 await handleFileOperation(files, insertFile);
-//             } else if (req.method === 'PUT') {
-//                 await handleFileOperation(files, replacePlaceholder);
-//             }
-
-//             req.body.uploadVideo = uploadVideo.map(filename => `${filename}`);
-//             next();
-//         } catch (error) {
-//             next(error);
-//         }
-//     });
-// }
