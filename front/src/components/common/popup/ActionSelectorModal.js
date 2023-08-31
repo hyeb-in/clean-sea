@@ -13,21 +13,22 @@ import * as Api from "../../../Api";
 const ActionSelectorModal = () => {
   // commentId가 있다면 comment를 삭제 -----> comment 수정은 Comment 컴포넌트에서 해결하는 걸로 바뀜. 수정사항 반영할 것
   // reviewId가 있다면 reviewId를 삭제
-  const { closeModal, openModal, modalVisible, setModalVisible } = useModal();
+  const { closeModal, openModal, modalVisible } = useModal();
   // 현 상황에선 edit된 상태 반영하기 위해 setReviews를 받아오기보단, 모달창을 닫은 후 새로 데이터를 받아오는 방법도 있음
   const review = modalVisible?.data?.review;
   const setReviews = modalVisible?.data?.setReviews;
   const commentId = modalVisible?.data?.commentId;
 
-  const onEdit = () => {
+  const editReview = () => {
     if (review) {
+      // 임시로 addReview로 보냄-> EDIT REVIEW data
       openModal(MODAL_TYPE.editReview, {
         ...modalVisible.data,
         review,
       });
     }
-    // 수정은 모달창 아니고 그냥 review 컨테이너 안에서 해결. ==> to do: 코드 정리
   };
+  // => 댓글 수정은 모달창 아니고 그냥 review 컨테이너 안에서 해결
 
   const deleteById = async () => {
     try {
@@ -40,11 +41,11 @@ const ActionSelectorModal = () => {
         if (!res.ok) {
           throw new Error("failed");
         }
-        // reload?
+        // [x]reload?
         // set toast
         // modalVisible.data.setResult(null);
         // return closeModal(); // edit comment했으면 return!
-        return setModalVisible({ status: "deleted", commentId }); // test
+        // return setModalVisible({ status: "deleted", commentId }); // test
       }
 
       // 리뷰 삭제 로직 -->> review가 있는지 체크 해야함 (뭔가 꼬여있음 주의)
@@ -69,15 +70,14 @@ const ActionSelectorModal = () => {
   return (
     <Modal
       show={isActionPopupOpen}
-      // onHide={closeModal}
+      onHide={closeModal}
       backdrop="static"
       keyboard={false}
-      // aria-labelledby="contained-modal-title-vcenter" // to do: 정체가 뭐임
       centered
     >
       <ListGroup className="text-center">
         {review && (
-          <ListGroup.Item action onClick={onEdit}>
+          <ListGroup.Item action onClick={editReview}>
             수정
           </ListGroup.Item>
         )}
@@ -85,7 +85,7 @@ const ActionSelectorModal = () => {
         <ListGroup.Item action className="delete" onClick={deleteById}>
           삭제
         </ListGroup.Item>
-        <ListGroup.Item action onClick={() => closeModal()}>
+        <ListGroup.Item action onClick={closeModal}>
           취소
         </ListGroup.Item>
       </ListGroup>

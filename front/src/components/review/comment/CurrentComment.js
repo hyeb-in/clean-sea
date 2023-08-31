@@ -1,6 +1,5 @@
 import Comment from "./Comment";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
-import useReview from "../../../hooks/useReview";
 // import { useEffect, useRef } from "react";
 
 const CurrentComments = ({
@@ -9,11 +8,13 @@ const CurrentComments = ({
   setSelectedReview,
   commentList,
   newCommentsList,
+  setReviews,
 }) => {
   const { openModal } = useModal();
-  const { setReviews } = useReview();
+
+  // const { setReviews } = useReview();
   // const scrollRef = useRef(null);
-  console.log(review, "wiejfwlifj");
+
   // useEffect(() => {
   //   if (newCommentsList) {
   //     scrollRef.current.scrollIntoView({ behavior: "smooth" });
@@ -61,7 +62,7 @@ const CurrentComments = ({
       >
         {/* 임시로 2개!! 원래 3개임 */}
         <div className="more-comments">
-          {review.commentCount > 2 && `댓글 ${review.commentCount}개 모두 보기`}
+          {review.commentCount < 3 && `댓글 ${review.commentCount}개 모두 보기`}
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Image } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import { serverUrl } from "../../Api";
+import useModal from "../../hooks/useModal";
 
 const prevIcon = (
   <FontAwesomeIcon icon={faArrowLeft} className="carousel-arrow-icon" />
@@ -17,6 +18,9 @@ const nextIcon = (
 );
 
 const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
+  const { modalVisible } = useModal();
+  const editingReviewImgUrls = modalVisible?.data?.review.uploadFile;
+
   // 업로드, 수정 할 때 삭제버튼 누르면 하나씩 제거
   const removeUrl = (index) => {
     setPreview((current) => {
@@ -24,7 +28,7 @@ const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
     });
   };
 
-  const urls = imageUrls ? imageUrls : preview;
+  const urls = editingReviewImgUrls || imageUrls || preview;
 
   return (
     <Carousel
