@@ -38,7 +38,7 @@ const Graph = () => {
     },
     chart: {
       type: "bar",
-      height: 350,
+      height: 700,
       toolbar: {
         show: false,
       },
@@ -145,7 +145,7 @@ const Graph = () => {
   return (
     <Container>
       <Row>
-        <Col xs={4} className="px-0">
+        <Col xs={6} className="px-0">
           <Dropdown>
             <DropdownButton
               id="year-dropdown"
@@ -161,12 +161,7 @@ const Graph = () => {
       </Row>
       <Row>
         <div id="chart">
-          <ApexCharts
-            options={options}
-            series={chartData.series}
-            type="bar"
-            height={350}
-          />
+          <ApexCharts options={options} series={chartData.series} type="bar" />
         </div>
       </Row>
     </Container>
