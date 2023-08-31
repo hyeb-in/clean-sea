@@ -27,7 +27,7 @@ const CommentForm = ({
       }
       // 글자수 제한: 1글자이상 100자이하
       if (!isValid) {
-        alert("글자수 제한");
+        return;
       }
 
       const res = await Api.post(`comments/${targetReview._id}`, {
