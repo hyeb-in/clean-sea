@@ -110,31 +110,14 @@ const Main = () => {
       style={{ width: "100%", height: "100%", backgroundSize: "cover" }}
     >
       <Row className="align-items-center" style={{ minHeight: "80vh" }}>
-        <Col className="text-center">
-          <img
-            className="dolphin"
-            src="../img/dolphin.png" // 이미지 파일 경로로 변경
-            style={{
-              maxWidth: "90%", // 이미지 너비 최대 100%
-              height: "100%", // 이미지 높이 자동 조절
-            }}
-            alt="Kakao"
-          />
-        </Col>
-        <Col className="text-center">
-          <img
-            className="seagull"
-            src="../img/seagull.png" // 이미지 파일 경로로 변경
-            style={{
-              maxWidth: "90%", // 이미지 너비 최대 100%
-              height: "100%", // 이미지 높이 자동 조절
-            }}
-          />
-        </Col>
+        {/* <Col> */}
+        <Chats />
+        {/* </Col> */}
         <Col style={{ backgroundColor: "#fff" }}>
           <div className="text-center">
             <p
               style={{
+                width: "100%",
                 fontSize: "22px", // 텍스트 크기를 크게 조정
                 lineHeight: "1.5",
                 border: "2px solid #00B9FF", // 파란색 테두리 추가
