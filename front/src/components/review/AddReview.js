@@ -7,6 +7,7 @@ import useToast from "../../hooks/useToast";
 import axios from "axios";
 import { serverUrl } from "../../Api";
 import useModal from "../../hooks/useModal";
+import ToastWrapper from "../common/popup/ToastWrapper";
 
 const AddReview = ({
   userInputValues,
@@ -18,21 +19,28 @@ const AddReview = ({
 
   const { user: loggedInUser } = useContext(UserStateContext);
   const formDataFileRef = useRef(null);
-  const { showToastPopup } = useToast();
+
+  const {
+    showToast,
+    setShowToast,
+    toastMessage,
+
+    toastData,
+  } = useToast();
   const { closeModal } = useModal();
+  console.log(showToast, toastData);
 
   const handleFileChange = (files) => {
     const formDataFiles = Array.from(files);
     formDataFileRef.current = formDataFiles;
     createBlobUrls(files, setPreview);
   };
-
   const handleSubmit = useCallback(async () => {
     try {
       const validationError = validationReview(loggedInUser, userInputValues);
-
       if (validationError) {
-        showToastPopup(validationError.message, validationError.status);
+        setShowToast(validationError.message, validationError.status);
+        console.log(validationError.message);
         return;
       }
       const formData = createFormData(formDataFileRef, userInputValues);
@@ -56,19 +64,23 @@ const AddReview = ({
     loggedInUser,
     setReviews,
     setUserInputValues,
-    showToastPopup,
+    toastMessage,
+    showToast,
   ]);
 
   return (
-    <ReviewFormContainer
-      headerTitle="글 작성하기"
-      userInputValues={userInputValues}
-      setUserInputValues={setUserInputValues}
-      handleFileChange={handleFileChange}
-      handleSubmit={handleSubmit}
-      preview={preview}
-      setPreview={setPreview}
-    />
+    <>
+      {showToast && <ToastWrapper toastData={toastData} />}
+      <ReviewFormContainer
+        headerTitle="글 작성하기"
+        userInputValues={userInputValues}
+        setUserInputValues={setUserInputValues}
+        handleFileChange={handleFileChange}
+        handleSubmit={handleSubmit}
+        preview={preview}
+        setPreview={setPreview}
+      />
+    </>
   );
 };
 

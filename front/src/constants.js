@@ -70,3 +70,4 @@ export const RESULT_ENUM = {
 };
 
 export const DEFAULT_AVATAR = "/image/icon.png";
+export const DEFAULT_IMAGE_URL = "/image/imageLoading.png";

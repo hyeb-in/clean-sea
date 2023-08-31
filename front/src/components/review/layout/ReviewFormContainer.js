@@ -24,8 +24,6 @@ const ReviewFormContainer = ({
 }) => {
   const { modalVisible, closeModal } = useModal();
 
-  const { showToast, toastPosition, toastText, toastStatus } = useToast();
-
   const currentReviewFiles = modalVisible?.data?.review?.uploadFile;
   // 저장됐던 이미지가 있다면 불러와서 보여준다
   // 삭제 가능
@@ -44,14 +42,6 @@ const ReviewFormContainer = ({
 
   return (
     <>
-      {/* 클라이언트 단에서 오류 처리 */}
-      {showToast && (
-        <ToastWrapper
-          text={toastText}
-          toastStatus={toastStatus}
-          position={toastPosition}
-        />
-      )}
       <Modal
         onClick={(e) => {
           e.preventDefault();
@@ -90,7 +80,12 @@ const ReviewFormContainer = ({
             </Button>
           }
         >
-          <Form className="addReview__form">
+          <Form
+            className="addReview__form"
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             {currentReviewFiles || (preview && preview?.length > 0) ? (
               <CarouselWrapper preview={preview} setPreview={setPreview} />
             ) : (
