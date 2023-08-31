@@ -6,9 +6,9 @@ import * as Api from "../../Api";
 import { UserStateContext } from "../../App";
 import TravelItem from "./TravelItem";
 import SearchInput from "./SearchInput";
-import { useToggle } from "../../customhooks/modalCustomHooks";
+import { useToggle } from "../../hooks/profileHooks";
 
-const History = ({ displayToast }) => {
+const History = ({ displayToast, isEditable }) => {
   const [travels, setTravels] = useState([]);
   const [showModal, setShowModal] = useToggle();
 
@@ -65,12 +65,17 @@ const History = ({ displayToast }) => {
                 <h3 className="mb-3">방문 로그</h3>
               </Col>
               <Col xs={6} className="d-flex justify-content-end">
-                <Button
-                  size="sm" style={{ marginTop: "5px", marginBottom: "5px" }}
-                  onClick={setShowModal}
-                >
-                  로그 작성
-                </Button>
+                {
+                  isEditable ? (
+                    <Button
+                      size="sm" style={{ marginTop: "5px", marginBottom: "5px" }}
+                      onClick={setShowModal}
+                    >
+                      로그 작성
+                    </Button>
+                  ) : <></>
+                }
+
               </Col>
               <Col xs={1}>
                 {/*여백용 빈 컬럼*/}
@@ -83,7 +88,8 @@ const History = ({ displayToast }) => {
                     <TravelItem key={index} travelData={travel}
                                 onTravelUpdate={handleTravelUpdate}
                                 onTravelDelete={fetchTravelList}
-                                displayToast={displayToast}/>
+                                displayToast={displayToast}
+                                isEditable={isEditable}/>
                   ))
                 ) : (
                   <p className="m-2">방문 로그가 없습니다</p>

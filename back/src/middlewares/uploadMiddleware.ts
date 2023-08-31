@@ -25,21 +25,53 @@ async function handleFileOperation(files: FileObjects[], operation: (placeholder
     }
 }
 
-export const handleFileUpload: RequestHandler<FileRequest> = (req, res, next) => {
+
+// export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
+//     const middleware = req.originalUrl.includes('video/') ? uploadMiddleware : videoUploadMiddleware;
+//     middleware(req as Request, res, async function(err: any){
+//         try {   
+//             if (err instanceof MulterError || err) {
+//                 return next(err);
+//             }
+//             const files: FileObjects[] = req.files ? ([] as FileObjects[]).concat(...Object.values(req.files)) : [];
+//             const uploadVideo = files.map(file => file.filename);
+
+//             if (req.method === 'POST') {
+//                 await handleFileOperation(files, insertFile);
+//             } else if (req.method === 'PUT') {
+//                 await handleFileOperation(files, replacePlaceholder);
+//             }
+
+//             req.body.uploadVideo = uploadVideo.map(filename => `${filename}`);
+//             next();
+//         } catch (error) {
+//             next(error);
+//         }
+//     })
+// }
+
+
+
+export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
     uploadMiddleware(req as Request, res, async function (err: any) {
+
         try {
             if (err instanceof MulterError || err) {
                 return next(err);
             }
+            console.log(req.files);
             const files: FileObjects[] = req.files ? ([] as FileObjects[]).concat(...Object.values(req.files)) : [];
+            console.log(req.files);
             const uploadFile = files.map(file => file.filename);
 
             if (req.method === 'POST') {
                 await handleFileOperation(files, insertFile);
-            } else if (req.method === 'PUT') {
+                req.body.uploadFile = uploadFile.map(filename => `${filename}`);
+            } else if (req.method === 'PUT' && files.length > 0) {
+                console.log(files.length);
                 await handleFileOperation(files, replacePlaceholder);
+                req.body.uploadFile = uploadFile.map(filename => `${filename}`);
             }
-            req.body.uploadFile = uploadFile.map(filename => `uploads/${filename}`);
             next();
         } catch (error) {
             next(error);
@@ -48,83 +80,23 @@ export const handleFileUpload: RequestHandler<FileRequest> = (req, res, next) =>
 }
 
 
+// export const videoFileUpload: RequestHandler<FileRequest> = (req, res, next) => {
+//     videoUploadMiddleware(req as Request, res, async function (err: any) {
 
-
-
-
-
-
-
-
-
-
-
-// export const handleFileUpload : RequestHandler<FileRequest> = (req, res, next) => {
-//     uploadMiddleware(req as Request, res, async function (err: any) {
 //         try {
 //             if (err instanceof MulterError || err) {
 //                 return next(err);
 //             }
 //             const files: FileObjects[] = req.files ? ([] as FileObjects[]).concat(...Object.values(req.files)) : [];
-//             const uploadFile = files.map(file => file.filename);
-
+//             const uploadVideo = files.map(file => file.filename);
 
 //             if (req.method === 'POST') {
-//                 const fileUrls: string[] = [];
-//                 const fileObjects: FileObjects[] = [];
-
-//                 for (const file of files) {
-//                     fileUrls.push(file.filename as string);
-//                     fileObjects.push({
-//                         fieldname: file.fieldname,
-//                         originalname: file.originalname,
-//                         encoding: file.encoding,
-//                         mimetype: file.mimetype,
-//                         size: file.size,
-//                         destination: file.destination,
-//                         filename: file.filename,
-//                         path: file.filename
-//                     });
-//                     insertFile(file, {
-//                         fieldname: file.fieldname,
-//                         originalname: file.originalname,
-//                         encoding: file.encoding,
-//                         mimetype: file.mimetype,
-//                         size: file.size,
-//                         destination: file.destination,
-//                         filename: file.filename,
-//                         path: file.filename
-//                     });
-//                 }
+//                 await handleFileOperation(files, insertFile);
 //             } else if (req.method === 'PUT') {
-//                 const fileUrls: string[] = [];
-//                 const fileObjects: FileObjects[] = [];
-
-//                 for (const file of files) {
-//                     fileUrls.push(file.filename as string);
-//                     fileObjects.push({
-//                         fieldname: file.fieldname,
-//                         originalname: file.originalname,
-//                         encoding: file.encoding,
-//                         mimetype: file.mimetype,
-//                         size: file.size,
-//                         destination: file.destination,
-//                         filename: file.filename,
-//                         path: file.filename
-//                     });
-//                     replacePlaceholder(file, {
-//                         fieldname: file.fieldname,
-//                         originalname: file.originalname,
-//                         encoding: file.encoding,
-//                         mimetype: file.mimetype,
-//                         size: file.size,
-//                         destination: file.destination,
-//                         filename: file.filename,
-//                         path: file.filename
-//                     });
-//                 }
+//                 await handleFileOperation(files, replacePlaceholder);
 //             }
-//             req.body.uploadFile = uploadFile.map(filename => `/team/imageUpload/${filename}`);
+
+//             req.body.uploadVideo = uploadVideo.map(filename => `${filename}`);
 //             next();
 //         } catch (error) {
 //             next(error);

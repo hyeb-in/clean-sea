@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useContext,
+} from 'react';
 import {
   Container,
   Row,
@@ -15,13 +21,15 @@ import History from '../components/travel/History';
 import CardHeader from 'react-bootstrap/CardHeader';
 import * as Api from '../Api';
 import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from '../constants';
-import { useToggle } from '../customhooks/modalCustomHooks';
+import { useToggle } from '../hooks/profileHooks';
 import RandomUserList from '../components/travel/RandomUserList';
 import ProfileToastWrapper
   from '../components/common/popup/ProfileToastWrapper';
+import { UserStateContext } from '../App';
 
 const MyProfile = () => {
   const { id } = useParams();
+  const { user: loggedInUser } = useContext(UserStateContext);
 
   const [userName, setUserName] = useState('훈제오리');
   const [userEmail, setUserEmail] = useState('elice@elice.com');
@@ -99,7 +107,7 @@ const MyProfile = () => {
     for (const file of inputFile.files) {
       formData.append('uploadFile[]', file);
     }
-    Api.putImage(`users/${id}`, formData).then(async r => {
+    Api.putImage(`users/photo/${id}`, formData).then(async r => {
       setUserProfileImage(
         `http://${window.location.hostname}:5001/${r.data.uploadFile[0]}`);
       displayToastMessage('프로필 이미지가 성공적으로 업데이트되었습니다.');
@@ -117,7 +125,7 @@ const MyProfile = () => {
       <Container>
         <Row>
           <Col sm={8}>
-            <Card small className="mb-4 mt-4 pt-3">
+            <Card className="mb-4 mt-4 pt-3">
               <CardHeader className="border-bottom">
                 <div className="mb-3 mx-auto">
                   <img
@@ -133,7 +141,7 @@ const MyProfile = () => {
                   className="mb-2">{userName}</h4>}
                 <span className="text-muted d-block mb-1">{userEmail}</span>
               </CardHeader>
-              <ListGroup flush>
+              <ListGroup>
                 <ListGroupItem className="p-4">
                   {isEditMode ? <FormControl type="text" value={userDescription}
                                              onChange={e => setUserDescription(
@@ -142,19 +150,21 @@ const MyProfile = () => {
                 </ListGroupItem>
               </ListGroup>
 
-              <span>
-                <Button variant="link" onClick={setIsEditMode}>{isEditMode
-                  ? '취소'
-                  : '편집'}</Button>
-                {isEditMode && <Button variant="link"
-                                       onClick={handleCompleteClick}>완료</Button>}
-                {isEditMode &&
-                  <Button variant="link" onClick={toggleProfileModal}>프로필 이미지
-                    편집</Button>}
-              </span>
+              {loggedInUser._id === id && (
+                <span>
+                  <Button variant="link" onClick={setIsEditMode}>{isEditMode
+                    ? '취소'
+                    : '편집'}</Button>
+                  {isEditMode && <Button variant="link"
+                                         onClick={handleCompleteClick}>완료</Button>}
+                  {isEditMode &&
+                    <Button variant="link" onClick={toggleProfileModal}>프로필 이미지
+                      편집</Button>}
+                </span>
+              )}
             </Card>
 
-            <History displayToast={displayToastMessage}/>
+            <History displayToast={displayToastMessage} isEditable={id === loggedInUser._id}/>
           </Col>
           <Col sm={4}>
             <RandomUserList data={randomUsers}></RandomUserList>

@@ -12,13 +12,7 @@ import useToast from "../../hooks/useToast";
 import ToastWrapper from "../common/popup/ToastWrapper";
 import { TOAST_POPUP_STATUS } from "../../constants";
 
-const ReviewsList = ({
-  setReview,
-  reviews,
-  setReviews,
-  userInputValues,
-  setUserInputValues,
-}) => {
+const ReviewsList = ({ setReview, reviews, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
 
@@ -38,8 +32,6 @@ const ReviewsList = ({
   const fetchPrivateReviews = async () =>
     await Api.get("reviews/reviewListLogin");
   const fetchPublicReviews = async () => await Api.get("reviews/reviewList");
-
-  // , [loggedInUser, modalVisible, reviews]); // deps 값이 변경될 때에만 실행한다
 
   // deps에 fetchData 포함시키면 무한요청 날림
   useEffect(() => {
@@ -75,7 +67,11 @@ const ReviewsList = ({
       }
     };
     fetchData();
-  }, [loggedInUser, modalVisible]);
+  }, [
+    loggedInUser,
+    // modalVisible, reviews, showToastPopup, setReviews
+    // 다 넣으면 다시 무한 요청..
+  ]);
 
   // fetchData가 변경될 때마다 useEffect 내부 함수를 실행한다
   // []에 포함되어있는 게 변경되어야 fetchData가 실행된다

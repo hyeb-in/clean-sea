@@ -6,12 +6,12 @@ import {
   getBeaches,
   getBeachByRegionAndYearSpecific
 } from '../controllers/beachController';
-import { beachValidator } from '../utils/validators/beachValidator';
-import { jwtAuthentication } from "../middlewares/authenticateJwt";
+// import { beachValidator } from '../utils/validators/beachValidator';
+// import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const beachRouter = Router();
 
-beachRouter.get("/name/:name", getBeachByName);
+beachRouter.get("/beaches/name/:name", getBeachByName);
   // .get('/beachbyId/:_id', beachValidator.getBeach, jwtAuthentication, getBeachById);
 
 beachRouter.get("/beachbyId/:_id", getBeachById);

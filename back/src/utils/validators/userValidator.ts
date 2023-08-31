@@ -54,7 +54,6 @@ const validateSchema = {
   uploadFile: joi.any(),
 };
 
-//TODO창근님 코드 훔쳐오기
 export const validateSignUp = async (
   req: IRequest,
   res: Response,

@@ -16,7 +16,7 @@ const CommentsModal = () => {
   const { modalVisible } = useModal();
   const scrollRef = useRef(null);
 
-  const { review, setComments, newComments, setNewComments } =
+  const { review, setComments, newComments, setNewComments, setCommentCount } =
     modalVisible.data;
   const { closeModal } = useModal();
   const [modalNewComments, setModalNewComments] = useState([]);
@@ -72,6 +72,7 @@ const CommentsModal = () => {
               <AddCommentForm
                 setNewComments={setNewComments}
                 setModalNewComments={setModalNewComments}
+                setCommentCount={setCommentCount}
               />
             </Row>
             <div ref={scrollRef}></div>

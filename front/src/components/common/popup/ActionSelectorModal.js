@@ -20,7 +20,8 @@ const ActionSelectorModal = () => {
   const setReviews = modalVisible?.data?.setReviews;
   const setComments = modalVisible?.data?.setComments;
   const setNewComments = modalVisible?.data?.setNewComments;
-
+  const setCommentCount = modalVisible?.data?.setCommentCount;
+  console.log(modalVisible.data);
   const editReview = () => {
     if (review) {
       // 임시로 addReview로 보냄-> EDIT REVIEW data
@@ -43,8 +44,7 @@ const ActionSelectorModal = () => {
         if (!res.ok) {
           throw new Error("failed");
         }
-        // [x]reload?
-        // set toast
+        // 글 생성 후 바로 댓글 모달창 들어와서 수정 혹은 삭제하려고하면 버그있음
         setComments((current) => {
           return current.filter((comment) => comment._id !== commentId);
         });
@@ -53,6 +53,9 @@ const ActionSelectorModal = () => {
             return current.filter((comment) => comment._id !== commentId);
           });
         }
+        console.log(setCommentCount);
+        setCommentCount((current) => current - 1);
+
         return closeModal();
       }
 

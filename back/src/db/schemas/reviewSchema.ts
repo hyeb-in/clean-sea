@@ -21,6 +21,9 @@ const ReviewSchema : Schema<IReview> = new Schema({
     uploadFile : {
         type : [String],
     },
+    uploadVideo : {
+      type : [String],
+    },
     comments: [
         {
           type: mongoose.Schema.Types.ObjectId,

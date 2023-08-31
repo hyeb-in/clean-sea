@@ -3,8 +3,10 @@ import {
   create,
   deleteById,
   findUserByEmail,
+  updateUserName,
   getRandomUser,
   update,
+  findUserById,
 } from "../db/models/User";
 import { IUser } from "user";
 import { generateRandomPassword } from "../utils/randomPassword";
@@ -54,6 +56,11 @@ export const updateUserService = async (
   //3.일부분만 업데이트 해준다.
   const updatedUser = await update(userId, changedValue);
   if (!updatedUser) throw errorGenerator("업데이트에 실패했습니다.", 403);
+
+  if('name' in changedValue){
+    const newUserName = changedValue['name'] as string;
+    await updateUserName(userId, newUserName);
+  }
   return updatedUser;
 };
 
@@ -87,3 +94,8 @@ export const changePasswordService = async (
   const updatedPwdUser = await update(userId, { password: hashedPassword });
   return updatedPwdUser;
 };
+
+export const getUserService = async (userId: string) => {
+  const user = await findUserById(userId);
+  return user;
+}

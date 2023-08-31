@@ -9,11 +9,12 @@ import { UserStateContext } from "../../../App";
 import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 
 // get review list -> 보여지는 하나의 리뷰 카드가 이 컴포넌트
-const Review = ({ review, setReviews }) => {
+const Review = ({ review, setReview, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
-  const { openModal } = useModal();
+  const { openModal, setModalVisible } = useModal();
   const [comments, setComments] = useState(review?.comments || []);
   const [newComments, setNewComments] = useState([]);
+  const [commentCount, setCommentCount] = useState(review.commentCount);
 
   return (
     <>
@@ -43,34 +44,37 @@ const Review = ({ review, setReviews }) => {
                   setComments={setComments}
                   newComments={newComments}
                   setNewComments={setNewComments}
+                  setCommentCount={setCommentCount}
                 />
               </div>
               <div
                 onClick={() =>
                   openModal(MODAL_TYPE.commentsList, {
                     review,
-                    // setReviews,
-                    // comments,
                     setComments,
                     newComments,
                     setNewComments,
+                    setCommentCount,
                   })
                 }
                 className="link flex-justify-end"
               >
                 {/* 임시로 2개!! 원래 3개임 */}
                 <div className="more-comments">
-                  {review.commentCount > 0 &&
-                    review.commentCount <= 2 &&
-                    `댓글 ${review.commentCount}개 모두 보기`}
-                  {review.commentCount > 2 &&
-                    `댓글 ${review.commentCount}개 모두 보기`}
-                  {`댓글 ${review.commentCount}개 임시 댓글 카운트 모두 보기`}
+                  {commentCount > 0 &&
+                    commentCount <= 2 &&
+                    `댓글 ${commentCount}개`}
+                  {commentCount > 2 && `댓글 ${commentCount}개 모두 보기`}
                 </div>
               </div>
               {/* 댓글 다는 창이 있다? reviewId가 필요함 */}
               {loggedInUser && (
-                <CommentForm review={review} setNewComments={setNewComments} />
+                <CommentForm
+                  review={review}
+                  setNewComments={setNewComments}
+                  setCommentCount={setCommentCount}
+                  setReviews={setReviews}
+                />
               )}
             </div>
           </Card.Body>

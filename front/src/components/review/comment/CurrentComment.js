@@ -6,6 +6,7 @@ const CurrentComments = ({
   setComments,
   newComments,
   setNewComments,
+  setCommentCount,
 }) => {
   // const { setReviews } = useReview();
   // const scrollRef = useRef(null);
@@ -23,7 +24,11 @@ const CurrentComments = ({
         (comment, index) =>
           index < 3 && (
             <div key={comment._id}>
-              <Comment comment={comment} setComments={setComments} />
+              <Comment
+                comment={comment}
+                setComments={setComments}
+                setCommentCount={setCommentCount}
+              />
             </div>
           )
       )}
@@ -34,6 +39,7 @@ const CurrentComments = ({
               comment={comment}
               setComments={setComments}
               setNewComments={setNewComments}
+              setCommentCount={setCommentCount}
             />
           </div>
         ))}

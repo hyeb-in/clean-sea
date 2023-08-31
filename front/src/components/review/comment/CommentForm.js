@@ -4,7 +4,13 @@ import { ModalVisibleContext, UserStateContext } from "../../../App";
 import * as Api from "../../../Api";
 import { MODAL_TYPE } from "../../../hooks/useModal";
 
-const CommentForm = ({ review, setNewComments, setModalNewComments }) => {
+const CommentForm = ({
+  review,
+  setNewComments,
+  setModalNewComments,
+  setReviews,
+  setCommentCount,
+}) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const { modalVisible } = useContext(ModalVisibleContext);
   // 부모 컴포넌트로부터 데이터를 받을 수 있다(리뷰 페이지에서 작성되는 경우)
@@ -37,6 +43,9 @@ const CommentForm = ({ review, setNewComments, setModalNewComments }) => {
       if (modalVisible.type === MODAL_TYPE.commentsList) {
         setModalNewComments((current) => [...current, updatedComment]);
       }
+
+      setCommentCount((current) => current + 1);
+
       setNewCommentValue("");
     } catch (error) {
       console.log(error);
