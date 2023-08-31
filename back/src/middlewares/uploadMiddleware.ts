@@ -102,7 +102,6 @@ export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
     }
   });
 };
-
 // export const videoFileUpload: RequestHandler<FileRequest> = (req, res, next) => {
 //     videoUploadMiddleware(req as Request, res, async function (err: any) {
 

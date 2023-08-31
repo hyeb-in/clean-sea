@@ -18,8 +18,6 @@ import "./db";
 const app: Express = express();
 app.use(cors());
 
-app.use("/uploads", express.static("imageUpload"));
-
 app.use(passport.initialize());
 localStrategy();
 jwtStrategy();

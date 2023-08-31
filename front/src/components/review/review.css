@@ -117,8 +117,8 @@ textarea:focus {
   right: 0;
 }
 .carousel-bg-black {
-  background-color: black;
-  /* background-color: white; */
+  /* background-color: black; */
+  background-color: white;
 }
 .carousel-bg-white {
   /* background-color: white; */
