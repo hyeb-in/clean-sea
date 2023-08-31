@@ -66,7 +66,7 @@ export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
 
             if (req.method === 'POST') {
                 await handleFileOperation(files, insertFile);
-                req.body.uploadFile = uploadFile.map(filename => `uploads/${filename}`);
+                req.body.uploadFile = uploadFile.map(filename => `${filename}`);
             } else if (req.method === 'PUT'  && files.length > 0) {
                 await handleFileOperation(files, replacePlaceholder);
                 // if (req.originalUrl.includes('/photo/')) {
@@ -89,7 +89,7 @@ export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
                 //         return res.status(500).json({ message: 'Internal server error' });
                 //     }
                 // }
-                req.body.uploadFile = uploadFile.map(filename => `uploads/${filename}`);
+                req.body.uploadFile = uploadFile.map(filename => `${filename}`);
             }
             next();
         } catch (error) {
