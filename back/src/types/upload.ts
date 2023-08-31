@@ -13,6 +13,8 @@ interface FileRequest {
     file?: FileObjects;
     files?: { [fieldname: string]: FileObjects[] };
     uploadFile?: string[];
+    reviewId?: string;
+    userId?: string;
 }
 
 export { FileObjects, FileRequest };

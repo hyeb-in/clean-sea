@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { ILike } from "likes";
 import { LikeModel } from "../db/schemas/likeSchema";
 import { IRequest } from "user";

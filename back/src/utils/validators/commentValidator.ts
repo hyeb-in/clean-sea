@@ -9,7 +9,7 @@ const errorMessage = {
     stringMax : '100글자이하이여야합니다.',
 }
 
-const validateSchema = (schema : joi.ObjectSchema, optional = false) => {
+const validateSchema = (schema : joi.ObjectSchema) => {
     return (req : IRequest, res : Response , next : NextFunction) => {
         const { error } = schema.validate(req.body);
         if (error){
@@ -21,10 +21,14 @@ const validateSchema = (schema : joi.ObjectSchema, optional = false) => {
     }
 }
 
-const commentSchema = joi.object({
-    content : joi.string().min(1).max(100).messages(errorMessage),
-})
+const postcommentSchema = joi.object({
+    content : joi.string().min(1).max(100).required().messages(errorMessage),
+});
 
-export const postCommentValidator = validateSchema (commentSchema);
+const putcommentSchema = joi.object({
+    content : joi.string().min(1).max(100).optional().messages(errorMessage),
+});
 
-export const putCommentValidator = validateSchema (commentSchema, true);
+export const postCommentValidator = validateSchema (postcommentSchema);
+
+export const putCommentValidator = validateSchema (putcommentSchema);

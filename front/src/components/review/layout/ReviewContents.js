@@ -1,19 +1,16 @@
 import { useContext, useState } from "react";
-import Like from "../common/microComponents/Like";
-import { UserStateContext } from "../../App";
-import { IS_LIKE } from "../../constants";
-import { Col } from "react-bootstrap";
-import LikeText from "../common/microComponents/LikeText";
+import Like from "../../common/microComponents/Like";
+import { UserStateContext } from "../../../App";
+import { IS_LIKE } from "../../../constants";
+import LikeText from "../../common/microComponents/LikeText";
 
 const ReviewContents = ({ review, setReviews }) => {
   const { user: loggedInUser } = useContext(UserStateContext);
   const iLiked = loggedInUser && review.isLike === IS_LIKE.yes;
-  const [showDetails, setShowDetails] = useState(false);
-
-  const hasCommentsMoreThanThree = review.comments?.length > 3;
-
   const { _id: reviewId, title, content, likeCount } = review;
-
+  const [showDetails, setShowDetails] = useState(content?.length > 10);
+  // 글자수 10자 이상이면 showDetails true
+  // false 때 줄임말 제거
   return (
     <>
       <div className="flex-justify-between review__contents">
@@ -30,10 +27,16 @@ const ReviewContents = ({ review, setReviews }) => {
         )}
       </div>
       {/* 이름과 제목, 내용 */}
-      <div className={"comment__title"}>
-        <span className="">{title}</span>
-        <div className={!showDetails && "text-overflow"}>{content}</div>
-        {!showDetails && hasCommentsMoreThanThree && (
+      <div className="">
+        <div className="review__title">{title}</div>
+        <div
+          className={
+            showDetails ? "text-overflow review__content" : "review__content"
+          }
+        >
+          {content}
+        </div>
+        {!showDetails && (
           <div
             onClick={() => setShowDetails(true)}
             className={"text-timestamp link show-more-btn"}

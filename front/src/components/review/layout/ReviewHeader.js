@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
-import Avatar from "../common/Avatar";
+import Avatar from "../../common/Avatar";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { ModalVisibleContext, UserStateContext } from "../../App";
-import { MODAL_TYPE } from "../../constants";
+import { ModalVisibleContext, UserStateContext } from "../../../App";
+import { MODAL_TYPE } from "../../../constants";
 
 const ReviewTitle = ({ children, review, onEditReview }) => {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form, ListGroup } from "react-bootstrap";
 import * as Api from "../../Api";
 import beachList from "./data/beachList.json";
@@ -7,6 +7,21 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
 
   const [searchTerm, setSearchTerm] = useState(beachName || '');
   const [filteredItems, setFilteredItems] = useState([]);
+
+  const wrapperRef = useRef(null); // 컴포넌트의 DOM에 직접 접근하기 위한 ref
+
+  const handleClickOutside = event => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      setFilteredItems([]);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleInputChange = (event) => {
     const inputValue = event.target.value;
@@ -22,7 +37,7 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
 
   const handleListItemClick = async (name) => {
     try {
-      const beach = await Api.get(`beaches/beachbyname/${name}`);
+      const beach = await Api.get(`beaches/name/${name}`);
       onBeachIdSelected(beach.data._id);
       setSearchTerm(beach.data.name);
       setFilteredItems([]);
@@ -32,7 +47,7 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
   };
 
   return (
-    <div>
+    <div ref={wrapperRef}>
       <Form.Control
         type="text"
         placeholder="검색"
@@ -40,7 +55,9 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
         onChange={handleInputChange}
       />
       {filteredItems.length > 0 && (
-        <ListGroup style={{ position: 'absolute', zIndex: 1 }}>
+        <ListGroup style={{ position: 'absolute', zIndex: 1 }}
+                   onMouseLeave={() => setFilteredItems([])}
+        >
           {filteredItems.map((item) => (
             <ListGroup.Item key={item} onClick={() => handleListItemClick(item)}>
               {item}
