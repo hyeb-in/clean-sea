@@ -14,26 +14,27 @@ interface IBeach {
   enteScore?: number;
   latitude?: number;
   longitude?: number;
+  globalScore?: number;
+}
+
+interface IRankedBeach extends IBeach {
+  rank: number;
+  globalScore: number; // 이제 optional이 아니라 필수로
 }
 
 interface BeachData {
-  [year: string]: 
-  { 
-    eschAvg: number, 
-    enteAvg: number 
+  [year: string]: {
+    eschAvg: number;
+    enteAvg: number;
   }[];
 }
 
 type BeachDataAvg = {
-  [year: string]: 
-  { 
-    eschAvgRelative: number,
-    enteAvgRelative: number,
-    avgRelativeScore: number
+  [year: string]: {
+    eschAvgRelative: number;
+    enteAvgRelative: number;
+    avgRelativeScore: number;
   }[];
 };
 
-  
-
-
-export { IBeach, BeachData, BeachDataAvg }
+export { IBeach, BeachData, IRankedBeach, BeachDataAvg };

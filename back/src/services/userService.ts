@@ -36,6 +36,22 @@ export const createUserService = async (
   return createdUser;
 };
 
+/**
+ * @param {*} userId
+ * @returns user
+ * @description Id로 유저 검색
+ */
+export const getUserService = async (userId: string) => {
+  const user = await findUserById(userId);
+  return user;
+};
+
+/**
+ * @param {*} userId
+ * @param {*} inputData
+ * @returns updatedUser
+ * @description 유저 존재 확인 후 업데이트
+ */
 export const updateUserService = async (
   userId: string,
   inputData: Partial<IUser>
@@ -57,13 +73,18 @@ export const updateUserService = async (
   const updatedUser = await update(userId, changedValue);
   if (!updatedUser) throw errorGenerator("업데이트에 실패했습니다.", 403);
 
-  if('name' in changedValue){
-    const newUserName = changedValue['name'] as string;
+  if ("name" in changedValue) {
+    const newUserName = changedValue["name"] as string;
     await updateUserName(userId, newUserName);
   }
   return updatedUser;
 };
 
+/**
+ * @param {*} userId
+ * @returns deletedUser
+ * @description 유저 존재하는지 체크 후 삭제
+ */
 export const deleteUserService = async (userId: string) => {
   const deletedUser = await deleteById(userId);
 
@@ -72,6 +93,12 @@ export const deleteUserService = async (userId: string) => {
   return deletedUser;
 };
 
+/**
+ * @param {*} userId
+ * @param {*} email
+ * @returns updatedUser
+ * @description 유저 이메일로 랜덤 비밀번호 발송
+ */
 export const resetPasswordService = async (userId: string, email: string) => {
   const newPassword = generateRandomPassword();
   const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -81,11 +108,21 @@ export const resetPasswordService = async (userId: string, email: string) => {
   return updatedUser;
 };
 
+/**
+ * @returns randomUser
+ * @description 5명의 랜덤 유저 가져옴
+ */
 export const getRandomUserService = async () => {
   const randomUser = await getRandomUser();
   return randomUser;
 };
 
+/**
+ * @param {*} userId
+ * @param {*} newPassword
+ * @returns updatedPwdUser
+ * @description 비밀번호 업데이트
+ */
 export const changePasswordService = async (
   userId: string,
   newPassword: string
@@ -94,8 +131,3 @@ export const changePasswordService = async (
   const updatedPwdUser = await update(userId, { password: hashedPassword });
   return updatedPwdUser;
 };
-
-export const getUserService = async (userId: string) => {
-  const user = await findUserById(userId);
-  return user;
-}
