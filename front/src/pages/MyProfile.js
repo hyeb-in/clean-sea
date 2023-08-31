@@ -60,9 +60,15 @@ const MyProfile = () => {
         setUserName(userData.name);
         setUserEmail(userData.email);
         setUserDescription(userData.description);
+
+        if(userData.uploadFile[0] === null || userData.uploadFile[0] === "") {
+          setUserProfileImage('https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png');
+          return;
+        }
+
         setUserProfileImage(
-          `http://${window.location.hostname}:5001/${userData.uploadFile[0]}` ||
-          'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png');
+          `http://${window.location.hostname}:5001/${userData.uploadFile[0]}`
+        );
       } catch (error) {
         displayToastMessage('유저 정보를 가져오는 데 실패했습니다.');
       }
