@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import SpinnerWrapper from "../common/indicators/Spinner";
 import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
