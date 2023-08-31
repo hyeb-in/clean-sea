@@ -5,6 +5,7 @@ import HighchartsMap from "highcharts/modules/map";
 import ExportingModule from "highcharts/modules/exporting";
 import ExportDataModule from "highcharts/modules/export-data";
 import AccessibilityModule from "highcharts/modules/accessibility";
+import Chats from "../components/common/Chats";
 // import "./font/font.css";
 
 // Initialize Highcharts modules
@@ -104,8 +105,14 @@ const Main = () => {
   }, []);
 
   return (
-    <Container fluid style={{ width: "100%", height: "100%", backgroundSize: "cover" }}>
+    <Container
+      fluid
+      style={{ width: "100%", height: "100%", backgroundSize: "cover" }}
+    >
       <Row className="align-items-center" style={{ height: "100vh" }}>
+        <Col>
+          <Chats />
+        </Col>
         <Col md={6} className="text-center">
           <img
             className="kakaoImage"
@@ -114,20 +121,27 @@ const Main = () => {
               width: "450px",
               height: "auto",
             }}
-            alt="Kakao Image"
+            alt="Kakao"
           />
         </Col>
         <Col md={6}>
           <div className="text-center">
-            <p style={{ fontSize: "18px", lineHeight: "1.5", fontFamily: 'Black Han Sans, sans-serif' }}>
-              여름철 해수욕장, 좋은 수질의 해수욕장 어딨을까?<br />
+            <p
+              style={{
+                fontSize: "18px",
+                lineHeight: "1.5",
+                fontFamily: "Black Han Sans, sans-serif",
+              }}
+            >
+              여름철 해수욕장, 좋은 수질의 해수욕장 어딨을까?
+              <br />
               깨끗 海 서비스를 통해 보다 빠르게 깨끗한 해수욕장을 찾아보세요!
             </p>
           </div>
         </Col>
       </Row>
       <Row>
-        <Col id="container" style={{ width: "100%", height: "800px" }} ></Col>
+        <Col id="container" style={{ width: "100%", height: "800px" }}></Col>
       </Row>
     </Container>
   );

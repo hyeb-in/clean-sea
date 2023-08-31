@@ -3,6 +3,7 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "./components/review/review.css";
 @import "./components/review/comment/comment.css";
+@import "./components/common/chats.css";
 
 body {
   font-family: "Black Han Sans", sans-serif;
