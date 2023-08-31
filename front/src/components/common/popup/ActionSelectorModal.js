@@ -16,9 +16,12 @@ const ActionSelectorModal = () => {
   const { closeModal, openModal, modalVisible } = useModal();
   // 현 상황에선 edit된 상태 반영하기 위해 setReviews를 받아오기보단, 모달창을 닫은 후 새로 데이터를 받아오는 방법도 있음
   const review = modalVisible?.data?.review;
-  const setReviews = modalVisible?.data?.setReviews;
   const commentId = modalVisible?.data?.commentId;
-
+  const setReviews = modalVisible?.data?.setReviews;
+  const setComments = modalVisible?.data?.setComments;
+  const setNewComments = modalVisible?.data?.setNewComments;
+  const setCommentCount = modalVisible?.data?.setCommentCount;
+  console.log(modalVisible.data);
   const editReview = () => {
     if (review) {
       // 임시로 addReview로 보냄-> EDIT REVIEW data
@@ -32,20 +35,28 @@ const ActionSelectorModal = () => {
 
   const deleteById = async () => {
     try {
-      if (!review?._id && !commentId)
-        throw new Error("정보를 찾을 수 없습니다");
+      if (!commentId && !review) throw new Error("정보를 찾을 수 없습니다");
       // comment OR review 이기때문에 if문 제거하지 말 것!!
 
+      // 댓글 삭제
       if (commentId) {
         const res = await Api.delete(`comments/${commentId}`);
         if (!res.ok) {
           throw new Error("failed");
         }
-        // [x]reload?
-        // set toast
-        // modalVisible.data.setResult(null);
-        // return closeModal(); // edit comment했으면 return!
-        // return setModalVisible({ status: "deleted", commentId }); // test
+        // 글 생성 후 바로 댓글 모달창 들어와서 수정 혹은 삭제하려고하면 버그있음
+        setComments((current) => {
+          return current.filter((comment) => comment._id !== commentId);
+        });
+        if (setNewComments) {
+          setNewComments((current) => {
+            return current.filter((comment) => comment._id !== commentId);
+          });
+        }
+        console.log(setCommentCount);
+        setCommentCount((current) => current - 1);
+
+        return closeModal();
       }
 
       // 리뷰 삭제 로직 -->> review가 있는지 체크 해야함 (뭔가 꼬여있음 주의)

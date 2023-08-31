@@ -4,7 +4,6 @@ export const createFormData = (formDataFileRef, userInputValues) => {
     formDataFiles = Array.from(formDataFileRef.current);
   }
   const formData = new FormData();
-  console.log(userInputValues.title, userInputValues.content);
   formData.append("uploadFile", formDataFiles);
   if (formDataFiles && formDataFiles.length > 0) {
     for (let i = 0; i < formDataFiles.length; i++) {
@@ -13,7 +12,7 @@ export const createFormData = (formDataFileRef, userInputValues) => {
   }
   formData.append("title", userInputValues.title);
   formData.append("content", userInputValues.content);
-  // console.log(formData.getAll("uploadFile[]"));
+  console.log(formData.getAll("uploadFile[]"));
   // console.log(formData.getAll("title"));
   // console.log(formData.getAll("content"));
   return formData;

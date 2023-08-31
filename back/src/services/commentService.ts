@@ -11,7 +11,7 @@ async function getComment(reviewId : string) : Promise<IComment[]>{
     return comment;
 }
 
-async function setComment(commentId : string, {toUpdate} :{toUpdate : any}) : Promise<IComment | null>{
+async function setComment(commentId : string, {toUpdate} :{toUpdate : Partial<IComment>}) : Promise<IComment | null>{
     const updatedComment = updateComment(commentId, toUpdate);
     return updatedComment;
 }
