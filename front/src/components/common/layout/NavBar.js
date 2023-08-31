@@ -24,10 +24,6 @@ const NavBar = () => {
   const { user } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
   const { setModalVisible } = useContext(ModalVisibleContext);
-  console.log("user : ", user);
-  console.log("user : ", typeof user);
-
-  // 왜 {}로 나오는지 ?? user가 없으면 null 안닌가?
 
   const logout = () => {
     sessionStorage.removeItem("userToken");
@@ -93,15 +89,7 @@ const NavBar = () => {
                 <Nav.Item>
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>
                 </Nav.Item>
-                <Nav.Link onClick={() => navigate(`/users/${user._id}`)}>
-                  {/* to do: 툴팁 안뜸 */}
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={<Tooltip id="profile">프로필</Tooltip>}
-                  >
-                    <Avatar width="50" />
-                  </OverlayTrigger>
-                </Nav.Link>
+                <Avatar width={30} user={user} />
               </>
             ) : (
               <Nav.Item>
