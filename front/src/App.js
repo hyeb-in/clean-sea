@@ -13,7 +13,7 @@ import Footer from "./components/common/layout/Footer";
 import NavBar from "./components/common/layout/NavBar";
 import ReviewsList from "./components/review/ReviewsList";
 import { loginReducer } from "./Reducer";
-import "./Main.css";
+import "./index.css";
 import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";

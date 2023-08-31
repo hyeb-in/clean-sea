@@ -6,6 +6,7 @@
 .comments-container {
   margin: 25px 0;
   max-height: 300px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.097);
 }
 .scroll-container {
   overflow: auto;
@@ -123,7 +124,7 @@
   color: inherit;
   line-height: inherit;
   width: 100%;
-  padding: 10px 0;
+  padding: 5px 0;
   font-weight: 500;
   font-size: 0.9rem;
   margin: 10px;
@@ -151,6 +152,13 @@
 .comment__edit-btn {
   min-width: fit-content;
   font-size: 0.9rem;
+  margin-left: 10px;
+}
+.comment__complete-btn {
+  color: #176cf8;
+  min-width: fit-content;
+  font-size: 0.9rem;
+  margin-left: 10px;
 }
 .comment__edit-btn:first-child {
   margin-right: 10px;

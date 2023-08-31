@@ -5,7 +5,7 @@ import ReviewFormContainer from "./layout/ReviewFormContainer";
 import useToast from "../../hooks/useToast";
 import { UserStateContext } from "../../App";
 import { serverUrl } from "../../Api";
-import axios from "axios";
+import * as Api from "../../Api";
 import useModal from "../../hooks/useModal";
 
 // <ReviewTitle/>에서  '...' 버튼을 클릭 => id, review 값 modalVisible 컨텍스트에 전달
@@ -28,34 +28,36 @@ const EditReview = ({
 
   const { showToastPopup } = useToast();
   const [preview, setPreview] = useState(null);
-  const formDataFileRef = useRef(null);
+  // const formDataFileRef = useRef(null);
 
-  const handleFileChange = (files) => {
-    const formDataFiles = Array.from(files);
-    formDataFileRef.current = formDataFiles;
-    createBlobUrls(files, setPreview);
-  };
+  // const handleFileChange = (files) => {
+  //   const formDataFiles = Array.from(files);
+  //   formDataFileRef.current = formDataFiles;
+  //   createBlobUrls(files, setPreview);
+  // };
 
   // inputs 중 하나가 변경되어야만 콜백을 새로 실행시킨다
   const handleSubmit = useCallback(async () => {
     try {
+      console.log("hi");
       // const validationError = validationReview(loggedInUser, userInputValues);
       // if (validationError) {
       //   showToastPopup(validationError.message, validationError.status);
       //   return;
       // }
-      if (!formDataFileRef) {
-        console.log("null eeee");
-      }
+      // if (!formDataFileRef) {
+      //   console.log("null eeee");
+      // }
+      console.log(editedReview);
 
-      const formData = createFormData(formDataFileRef, editedReview);
-      const res = await axios.put(
-        `${serverUrl}reviews/${currentReviewData._id}`,
-        formData
-      );
+      const res = await Api.put(`reviews/${currentReviewData._id}`, {
+        title: editedReview.title,
+        content: editedReview.content,
+      });
       if (!res.data) {
         throw new Error("데이터를 불러오지 못했습니다");
       }
+      console.log(res.data);
       setReviews((current) => [res.data, ...current]);
       setEditedReview(null);
       closeModal();
@@ -81,7 +83,7 @@ const EditReview = ({
       headerTitle="수정하기"
       userInputValues={userInputValues}
       setUserInputValues={setUserInputValues}
-      handleFileChange={handleFileChange}
+      // handleFileChange={handleFileChange}
       handleSubmit={handleSubmit}
       preview={preview}
       setPreview={setPreview}

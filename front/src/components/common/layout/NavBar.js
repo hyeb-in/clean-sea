@@ -25,6 +25,7 @@ const NavBar = () => {
   const dispatch = useContext(DispatchContext);
   const { setModalVisible } = useContext(ModalVisibleContext);
   const isLogin = !!loggedInUser;
+  console.log(isLogin);
 
   const logout = () => {
     sessionStorage.removeItem("userToken");
@@ -40,8 +41,8 @@ const NavBar = () => {
     <>
       <Navbar bg="primary" data-bs-theme="dark">
         <Container className="d-flex justify-content-between">
-          <Navbar.Brand onClick={() => navigate("/")} className="link">
-            해조
+          <Navbar.Brand onClick={() => navigate("/")} className="logo">
+            깨끗 海
           </Navbar.Brand>
           <Nav className="align-items-center">
             <Nav.Link onClick={() => navigate("/search")}>

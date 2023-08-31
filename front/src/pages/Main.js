@@ -5,6 +5,7 @@ import HighchartsMap from "highcharts/modules/map";
 import ExportingModule from "highcharts/modules/exporting";
 import ExportDataModule from "highcharts/modules/export-data";
 import AccessibilityModule from "highcharts/modules/accessibility";
+import Chats from "../components/common/Chats";
 // import "./font/font.css";
 
 // Initialize Highcharts modules
@@ -43,15 +44,15 @@ const Main = () => {
           title: {
             text: "깨끗 海",
             style: {
-              fontSize: "24px",
-              fontWeight: "bold",
+              fontSize: "36px", // 제목 텍스트 크기를 크게 조정
+              font: "Black Han Sans",
             },
           },
 
           subtitle: {
             text: "해수욕장 평균 수질 적합도",
             style: {
-              fontSize: "18px",
+              fontSize: "24px", // 부제목 텍스트 크기를 크게 조정
             },
           },
 
@@ -104,30 +105,50 @@ const Main = () => {
   }, []);
 
   return (
-    <Container fluid style={{ width: "100%", height: "100%", backgroundSize: "cover" }}>
-      <Row className="align-items-center" style={{ height: "100vh" }}>
-        <Col md={6} className="text-center">
+    <Container
+      fluid
+      style={{ width: "100%", height: "100%", backgroundSize: "cover" }}
+    >
+      <Row className="align-items-center" style={{ minHeight: "80vh" }}>
+        <Col className="text-center">
           <img
-            className="kakaoImage"
-            src="../img/kakao1.png"
+            className="dolphin"
+            src="../img/dolphin.png" // 이미지 파일 경로로 변경
             style={{
-              width: "450px",
-              height: "auto",
+              maxWidth: "90%", // 이미지 너비 최대 100%
+              height: "100%", // 이미지 높이 자동 조절
             }}
-            alt="Kakao Image"
+            alt="Kakao"
           />
         </Col>
-        <Col md={6}>
+        <Col className="text-center">
+          <img
+            className="seagull"
+            src="../img/seagull.png" // 이미지 파일 경로로 변경
+            style={{
+              maxWidth: "90%", // 이미지 너비 최대 100%
+              height: "100%", // 이미지 높이 자동 조절
+            }}
+          />
+        </Col>
+        <Col style={{ backgroundColor: "#fff" }}>
           <div className="text-center">
-            <p style={{ fontSize: "18px", lineHeight: "1.5", fontFamily: 'Black Han Sans, sans-serif' }}>
-              여름철 해수욕장, 좋은 수질의 해수욕장 어딨을까?<br />
-              깨끗 海 서비스를 통해 보다 빠르게 깨끗한 해수욕장을 찾아보세요!
+            <p
+              style={{
+                fontSize: "22px", // 텍스트 크기를 크게 조정
+                lineHeight: "1.5",
+                border: "2px solid #00B9FF", // 파란색 테두리 추가
+                borderRadius: "10px", // 라운드 모양으로 만듦
+                padding: "15px", // 테두리 내부 여백 추가
+              }}
+            >
+              여름철 해수욕장, 어디까지 가봤니?
+              <br />
+              전국 지역별 해수욕장 수질 데이터 공개 및추천!
             </p>
           </div>
+          <div id="container" style={{ width: "100%", height: "800px" }}></div>
         </Col>
-      </Row>
-      <Row>
-        <Col id="container" style={{ width: "100%", height: "800px" }} ></Col>
       </Row>
     </Container>
   );

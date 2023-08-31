@@ -7,10 +7,7 @@ import {
   getBeaches,
   getBeachByRegionAndYearSpecific,
 } from "../controllers/beachController";
-import {
-  beachParamsValidator,
-  commonParamValidator,
-} from "../utils/validators/beachValidator";
+import { beachParamsValidator } from "../utils/validators/beachValidator";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const beachRouter = Router();
@@ -35,13 +32,6 @@ beachRouter.get(
 beachRouter.get(
   "/beaches/:year",
   jwtAuthentication,
-  getBeachByRegionAndYearSpecific
-);
-
-beachRouter.get(
-  "/beaches/:year",
-  jwtAuthentication,
-  // beachValidator.getBeachByRegionAndYearSpecific,
   getBeachByRegionAndYearSpecific
 );
 
