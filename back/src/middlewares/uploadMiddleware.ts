@@ -28,30 +28,6 @@ async function handleFileOperation(
   }
 }
 
-// export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
-//     const middleware = req.originalUrl.includes('video/') ? uploadMiddleware : videoUploadMiddleware;
-//     middleware(req as Request, res, async function(err: any){
-//         try {
-//             if (err instanceof MulterError || err) {
-//                 return next(err);
-//             }
-//             const files: FileObjects[] = req.files ? ([] as FileObjects[]).concat(...Object.values(req.files)) : [];
-//             const uploadVideo = files.map(file => file.filename);
-
-//             if (req.method === 'POST') {
-//                 await handleFileOperation(files, insertFile);
-//             } else if (req.method === 'PUT') {
-//                 await handleFileOperation(files, replacePlaceholder);
-//             }
-
-//             req.body.uploadVideo = uploadVideo.map(filename => `${filename}`);
-//             next();
-//         } catch (error) {
-//             next(error);
-//         }
-//     })
-// }
-
 export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
   uploadMiddleware(req as Request, res, async function (err: any) {
     try {
@@ -72,26 +48,6 @@ export const fileUpload: RequestHandler<FileRequest> = (req, res, next) => {
         );
       } else if (req.method === "PUT" && files.length > 0) {
         await handleFileOperation(files, replacePlaceholder);
-        // if (req.originalUrl.includes('/photo/')) {
-        //     console.log('Update user photo logic');
-        // } else if (req.originalUrl.includes('/reviews/')) {
-        //     const {reviewId} = req.params;
-        //     try {
-        //         const foundReview = await ReviewModel.findOne({ _id: reviewId });
-
-        //         if (!foundReview) {
-        //             return res.status(404).json({ message: 'Review not found' });
-        //         }
-        //         const reviewUploadFiles = foundReview.uploadFile;
-        //         console.log(reviewUploadFiles);
-        //         console.log(222222222);
-        //         await handleFileOperation(files, (placeholder, file) => replacePlaceholder(placeholder, reviewUploadFiles[0], file));
-        //         next();
-        //     } catch (error) {
-        //         console.error('Error finding review:', error);
-        //         return res.status(500).json({ message: 'Internal server error' });
-        //     }
-        // }
         req.body.uploadFile = uploadFile.map(
           (filename) => `uploads/${filename}`
         );
