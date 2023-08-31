@@ -17,6 +17,7 @@ const getBeachByName = async (
 ) => {
   try {
     const name = req.params.name;
+    console.log(name)
 
     const result = await getBeachByNameService(name);
     if (result) {

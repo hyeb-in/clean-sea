@@ -15,6 +15,14 @@ const validateSchema = (schema : joi.ObjectSchema, location : 'body' | 'params' 
   };
 };
 
+export const yearAddressParamsValidator = validateSchema(
+  joi.object({
+    year: joi.string().required(),
+    address: joi.string().required(),
+  }),
+  'params'
+);
+
 export const beachParamsValidator = validateSchema(
   joi.object({
     year: joi.string().required(),
@@ -22,11 +30,16 @@ export const beachParamsValidator = validateSchema(
   'params'
 );
 
-export const commonParamValidator = (paramName: string) => {
-  return validateSchema(
-    joi.object({
-      [paramName]: joi.string().required(),
-    }),
-    'params'
-  );
-};
+export const nameParamValidator = validateSchema(
+  joi.object({
+    name: joi.string().required(),
+  }),
+  'params'
+);
+
+export const idParamValidator = validateSchema(
+  joi.object({
+    _id: joi.string().required(),
+  }),
+  'params'
+);
