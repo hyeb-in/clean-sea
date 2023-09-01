@@ -9,7 +9,7 @@ const BeachDetails = ({ beachData }) => {
   }
 
   return (
-    <Container>
+    <Container style={{height:"75vh"}}>
       <Row className="mb-3">
         <Col>
           {beachData.goodnessFit ? (

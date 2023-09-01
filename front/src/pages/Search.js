@@ -16,7 +16,7 @@ const Search = () => {
           {selectedBeach ? (
             <BeachDetails beachData={selectedBeach} />
           ) : (
-            <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+            <Container className="d-flex justify-content-center align-items-center" style={{ height: '75vh' }}>
               <h1>선택된 지역이 없습니다</h1>
             </Container>
           )}
