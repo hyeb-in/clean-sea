@@ -5,12 +5,6 @@ import { DEFAULT_AVATAR } from "../../constants";
 //React.forwardRef ref
 const Avatar = ({ width, user }) => {
   const navigate = useNavigate();
-  // console.log(user.uploadFile[0]);
-  // const src = `http://${window.location.hostname}${}`;
-  // const handleError = (e) => {
-  //   e.target.src = DEFAULT_AVATAR; // 대체 이미지로 변경
-  // };
-  console.log(window.location.hostname);
 
   return (
     <Nav.Link onClick={() => navigate(`/users/${user._id}`)}>
@@ -21,16 +15,17 @@ const Avatar = ({ width, user }) => {
         <Image
           src={
             user?.uploadFile && user?.uploadFile[0]
-              ? `http://${window.location.hostname}:5001/${user.uploadFile[0]}`
-              : "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
+              ? `http://34.64.87.254:5001/${user.uploadFile[0]}`
+              : `${process.env.PUBLIC_URL}/image/icon.png`
           }
           width={width}
           height={width}
           roundedCircle={true}
           alt="avatar"
-          onError={(e) =>
-            (e.currentTarget.src =
-              "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png")
+          onError={
+            (e) =>
+              (e.currentTarget.src = `${process.env.PUBLIC_URL}/image/icon.png`)
+            // "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png")
           }
         />
       </OverlayTrigger>

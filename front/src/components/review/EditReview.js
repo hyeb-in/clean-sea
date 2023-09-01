@@ -31,6 +31,7 @@ const EditReview = ({
         return;
       }
       setUploadingStatus(RESULT_ENUM.UPLOADING);
+
       const res = await Api.put(`reviews/${currentReviewData._id}`, {
         title: editedReview.title,
         content: editedReview.content,
