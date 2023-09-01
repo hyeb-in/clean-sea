@@ -18,8 +18,9 @@ const RandomUserList = ({ data }) => {
                 alt="User Profile"
                 roundedCircle
                 onClick={() => navigate(`/users/${user._id}`)}
-                onError={(e) =>
-                  (e.currentTarget.src = `${process.env.PUBLIC_URL}/image/icon.png`)
+                onError={
+                  (e) =>
+                    (e.currentTarget.src = `${process.env.PUBLIC_URL}/image/icon.png`)
                   //"https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
                 }
               />

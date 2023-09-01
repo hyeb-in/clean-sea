@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as Api from "../Api";
 import ToastWrapper from "../components/common/popup/ToastWrapper";
 import useToast from "../hooks/useToast";
-import { TOAST_POPUP_STATUS } from "../constants";
+import { TOAST_POPUP_POSITION, TOAST_POPUP_STATUS } from "../constants";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -46,7 +46,7 @@ const SignUp = () => {
         });
       navigate("/login");
     } catch (err) {
-      setShowToast(err.response.data, TOAST_POPUP_STATUS.error);
+      window.alert(err.response.data);
     }
   };
 

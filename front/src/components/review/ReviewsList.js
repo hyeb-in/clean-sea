@@ -76,21 +76,6 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
     // 다 넣으면 다시 무한 요청..
   ]);
 
-  // fetchData가 변경될 때마다 useEffect 내부 함수를 실행한다
-  // []에 포함되어있는 게 변경되어야 fetchData가 실행된다
-  // fetchData가 포함이 되어있지 않다면 loggedInUser의 상태에 따라서 실행된다
-
-  // useEffect(() => {
-  //   if (modalVisible.status === "deleted") {
-  //     fetchData();
-  //     // setState 대신 reviews 정보를 새로 받아오는 방법
-  //   }
-  //   // 댓글 삭제 후 modalVisible.status에 'deleted'를 보내준다
-  //   // status에 deleted가 있다면 fetchData() -> 새로운 review list를 받아온다
-  // }, [modalVisible.status, fetchData]);
-
-  const isEditReviewPopupOpen = modalVisible?.type === MODAL_TYPE.editReview;
-
   return (
     <>
       {showToast && (
@@ -132,15 +117,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
       {isActionPopupOpen && <ActionSelectorModal />}
 
       {/* 모달2. comments get, post, 댓글 전체 볼 수 있는 창 띄우기 */}
-      {/* delete comment는 actionselector에서 처리한다 */}
       {isCommentListPopupOpen && <CommentsModal />}
-      {/* 모달3. review 수정하기 폼 모달 */}
-      {/* {isEditReviewPopupOpen && (
-        <EditReview
-          userInputValues={userInputValues}
-          setUserInputValues={setUserInputValues}
-        />
-      )} */}
     </>
   );
 };

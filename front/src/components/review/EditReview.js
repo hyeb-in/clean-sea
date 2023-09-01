@@ -48,7 +48,7 @@ const EditReview = ({
             return {
               ...review,
               title: editedReview.title,
-              content: editedReview.content
+              content: editedReview.content,
             };
           }
           return review;

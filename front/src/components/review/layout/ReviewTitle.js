@@ -29,10 +29,7 @@ const ReviewTitle = ({ review, setReviews }) => {
 
   return (
     <div className="d-flex align-items-center justify-content-between link px-0 commentModal">
-      <div
-        className="px-0 review__title"
-        // onClick={() => navigate(`/users/${review?.author}`)}
-      >
+      <div className="px-0 review__title">
         <Avatar width="40" user={user} />
         <div
           xs="10"

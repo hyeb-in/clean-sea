@@ -1,11 +1,9 @@
 import React from "react";
 import { Image, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { DEFAULT_AVATAR } from "../../constants";
-//React.forwardRef ref
+
 const Avatar = ({ width, user }) => {
   const navigate = useNavigate();
-
   return (
     <Nav.Link onClick={() => navigate(`/users/${user._id}`)}>
       <OverlayTrigger

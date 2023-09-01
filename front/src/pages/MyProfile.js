@@ -124,7 +124,6 @@ const MyProfile = ({ setAvatarUrl }) => {
     Api.putImage(`users/photo/${id}`, formData)
       .then(async (r) => {
         setUserProfileImage(`http://34.64.87.254:5001/${r.data.uploadFile[0]}`);
-
         // dispatch({
         //   type: "UPDATE",
         //   payload: {

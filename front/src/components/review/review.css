@@ -16,14 +16,12 @@ textarea:focus {
   padding: 50px;
 }
 .review-container {
-  width: 320px;
   padding: 10px;
 }
 
 .review__title {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  justify-items: space-between;
   padding: 10px 0;
 }
 
@@ -34,45 +32,20 @@ textarea:focus {
 .addreview__modalWrapper {
   max-width: 100% !important;
 }
+.review-modal-body {
+  min-width: 500px;
+}
 .addreview__btn {
   height: max-content;
 }
 
-@media (max-width: 800px) {
-  .addReview__form.flexible-col,
-  .review.flexible-col {
-    display: flex;
-    flex-direction: column;
-  }
-}
-/* 큰 화면에서 flex-row 스타일 적용 */
-/* @media (min-width: 801px) {
-  .addReview__form.flexible-col,
-  .review.flexible-col {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-  }
-} */
-/* .review.flexible-col {
+.review.flexible-col {
   min-width: 350px;
   width: 100%;
-} */
+}
 .review__flexible-child {
   padding: 0;
 }
-/* @media (max-width: 800) {
-  .review__flexible-child {
-    width: 100%;
-  }
-}
-@media (min-width: 801px) {
-  .review__flexible-child {
-    max-width: 50%;
-  }
-} */
 .carousel-arrow-icon {
   background-color: black;
   padding: 5px;
@@ -83,6 +56,8 @@ textarea:focus {
 }
 .editForm__author {
   width: auto;
+  white-space: nowrap;
+  font-weight: 900;
 }
 .show-more-btn {
   word-break: break-all;
@@ -102,6 +77,7 @@ textarea:focus {
 }
 .carousel {
   overflow: hidden;
+  max-width: 500px;
 }
 .text-overflow {
   overflow: hidden;
@@ -124,21 +100,25 @@ textarea:focus {
   /* background-color: white; */
   max-width: 50%;
 }
-.carousel-inner {
-  background-color: rgb(17, 16, 16);
-}
 
+.carousel__container {
+  background-color: #ccc;
+}
 .carousel-item img {
   object-fit: cover;
   height: 350px;
+  width: 100%;
+  max-width: 380px;
+}
+.carousel-item.active {
+  display: flex;
+  justify-content: space-around;
 }
 .review__contents {
   margin-top: 10px;
 }
 .review__title {
   font-weight: 600;
-}
-.review__content {
 }
 .isLiked {
   color: red;

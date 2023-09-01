@@ -6,7 +6,6 @@
 .comments-container {
   margin: 25px 0;
   max-height: 300px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.097);
 }
 .scroll-container {
   overflow: auto;
@@ -14,9 +13,6 @@
 }
 .comment__border {
   border: 1px solid rgb(0, 0, 0);
-}
-.commentModal__title {
-  /* background-color: white; */
 }
 .commentModal {
   background-color: #f8f9fb;
@@ -28,7 +24,6 @@
   max-width: 100%;
   margin: 0 60px;
 }
-/* 커맨트 */
 .comment-list__container {
   overflow: scroll;
   height: 400px;
@@ -44,6 +39,7 @@
 }
 .comment__author {
   display: flex;
+  flex-direction: row;
   align-items: center;
 }
 .text-content {
@@ -80,7 +76,6 @@
 }
 .comment__title img {
   float: left;
-  margin-right: 10px;
 }
 .comment__col:nth-child(2) {
   display: flex;
@@ -132,7 +127,6 @@
   font-size: 0.9rem;
   margin: 10px;
   padding-right: 60px;
-  border-top: 1px solid rgb(203, 203, 203);
   border-bottom: 1px solid rgb(203, 203, 203);
 }
 .comment__submit-btn {

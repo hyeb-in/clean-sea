@@ -61,11 +61,11 @@ const Interceptor = ({ children }) => {
       (error) => {
         const errorMessage = error?.response?.data;
         const status = error?.response?.status;
-        console.log(error?.response?.status, "from interceptor");
-        console.log(error?.response?.data, "from interceptor");
+        // console.log(error?.response?.status, "from interceptor");
+        // console.log(error?.response?.data, "from interceptor");
 
         const isTokenExpired = errorMessage === "토큰 만료" || status === 401;
-
+        console.log(error);
         if (!isGetRequest && isTokenExpired) {
           sessionStorage.removeItem("userToken");
           dispatch({ type: "LOGOUT" });
