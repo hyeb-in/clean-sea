@@ -5,11 +5,7 @@ import { Container, Modal } from "react-bootstrap";
 /**
  * @param 경고 팝업을 생성하는 리액트 컴포넌트(작성하던 글 삭제 하시겠어요? -> 버튼)
  */
-const ConfirmDeleteModal = ({
-  show,
-  setShowConfirmModal,
-  closeReviewFormModal,
-}) => {
+const ConfirmDeleteModal = ({ show, closeModal, closeReviewModal }) => {
   return (
     <Modal
       show={show}
@@ -18,7 +14,7 @@ const ConfirmDeleteModal = ({
       className="backdrop"
       // 가시성을 위해 모달창 바깥 화면 어둡게 조정
       // backdrop: 'static'일 경우 먼저 띄워진 모달은 영향받지 않기때문에 직접 css로 배경색을 바꿔준다
-      onHide={() => setShowConfirmModal(false)}
+      onHide={() => closeModal(false)}
       onClick={(e) => e.stopPropagation()}
     >
       <ModalBodyWrapper
@@ -29,17 +25,14 @@ const ConfirmDeleteModal = ({
           <Button
             variant="outline-danger"
             onClick={() => {
-              setShowConfirmModal(false);
-              closeReviewFormModal();
+              closeModal(false);
+              closeReviewModal();
             }}
           >
             삭제
           </Button>
 
-          <Button
-            variant="outline-secondary"
-            onClick={() => setShowConfirmModal(false)}
-          >
+          <Button variant="outline-secondary" onClick={() => closeModal(false)}>
             취소
           </Button>
         </Container>

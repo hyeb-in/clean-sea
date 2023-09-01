@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import Comment from "./Comment";
 // import { useEffect, useRef } from "react";
 
@@ -8,15 +9,6 @@ const CurrentComments = ({
   setNewComments,
   setCommentCount,
 }) => {
-  // const { setReviews } = useReview();
-  // const scrollRef = useRef(null);
-
-  // useEffect(() => {
-  //   if (newCommentsList) {
-  //     scrollRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // }, [newCommentsList]);
-
   return (
     <div className="comments-container scroll-container">
       {/* 댓글 3개까지만 미리보기 */}

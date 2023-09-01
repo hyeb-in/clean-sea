@@ -6,8 +6,9 @@ import * as Api from "../../Api";
 import TravelItem from "./TravelItem";
 import SearchInput from "./SearchInput";
 import { useToggle } from "../../hooks/profileHooks";
+import { getTodayDate } from './utils/travelUtils';
 
-const History = ({ displayToast, isEditable }) => {
+const History = ({ displayToast, isEditable, id }) => {
   const [travels, setTravels] = useState([]);
   const [showModal, setShowModal] = useToggle();
 
@@ -22,7 +23,7 @@ const History = ({ displayToast, isEditable }) => {
 
   const fetchTravelList = async () => {
     try {
-      const response = await Api.get("travels/travelList");
+      const response = await Api.get(`travels/users/${id}`);
       setTravels(response.data);
     } catch (error) {
       displayToast("방문 로그 조회 실패.");
@@ -44,7 +45,7 @@ const History = ({ displayToast, isEditable }) => {
 
   useEffect(() => {
     fetchTravelList();
-  }, []);
+  }, [id]);
 
   const handleTravelUpdate = (travelId, updatedTravel) => {
     const updatedTravels = travels.map(
@@ -54,7 +55,7 @@ const History = ({ displayToast, isEditable }) => {
 
   return (
     <>
-      <Container>
+      <Container className="px-0">
         <Card className="mb-4 mt-4 pt-3">
           <Card.Body>
             <Row className="mt-4">
@@ -109,6 +110,7 @@ const History = ({ displayToast, isEditable }) => {
               value={newTravel.date}
               onChange={(e) => setNewTravel(
                 { ...newTravel, date: e.target.value })}
+              max={getTodayDate()}
             />
           </Modal.Body>
           <Modal.Footer>

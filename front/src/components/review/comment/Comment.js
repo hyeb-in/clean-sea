@@ -1,5 +1,5 @@
 import Avatar from "../../common/Avatar";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserStateContext } from "../../../App";
 import { useNavigate } from "react-router-dom";
 import Timestamp from "../../common/microComponents/Timestamp";
@@ -20,6 +20,7 @@ const Comment = ({ comment, setComments, setNewComments, setCommentCount }) => {
   const targetId = modalVisible.data?.currentComment?._id;
 
   const [isEditing, setIsEditing] = useState(targetId === comment._id);
+  const [user, setUser] = useState(null);
   const [editCommentValue, setEditCommentValue] = useState(
     comment?.content || modalVisible.data?.currentComment?.content
   );
@@ -40,6 +41,14 @@ const Comment = ({ comment, setComments, setNewComments, setCommentCount }) => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    const getUserAvatar = async () => {
+      const res = await Api.get(`users/${userId}`);
+      console.log(res.data);
+      setUser(res.data);
+    };
+    getUserAvatar();
+  }, [userId]);
 
   return (
     <>
@@ -47,8 +56,9 @@ const Comment = ({ comment, setComments, setNewComments, setCommentCount }) => {
         <div className="comment__container">
           <div className="comment__col comment__title">
             {!isEditing && (
-              <div className="text-content">
+              <div className="text-content comment__author">
                 <Avatar
+                  user={user}
                   className="comment__avatar"
                   width="30"
                   onClick={() => navigate(`/users/${userId}`)}

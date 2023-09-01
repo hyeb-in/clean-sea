@@ -8,11 +8,11 @@ const Search = () => {
 
   return (
     <Container fluid style={{ height: "100%" }}>
-      <Row>
-        <Col xs={3} className="px-0">
+      <Row className="justify-content-center">
+        <Col xs={2} className="px-0">
           <SearchBar setSelectedBeach={setSelectedBeach} />
         </Col>
-        <Col xs={9} className="px-0">
+        <Col xs={10} className="px-0">
           {selectedBeach ? (
             <BeachDetails beachData={selectedBeach} />
           ) : (

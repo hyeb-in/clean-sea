@@ -16,16 +16,14 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Avatar from "../Avatar";
 import { MODAL_TYPE } from "../../../hooks/useModal";
+import Avatar from "../Avatar";
 
-const NavBar = () => {
+const NavBar = ({ avatarUrl, setAvatarUrl }) => {
   const navigate = useNavigate();
-  const { user: loggedInUser } = useContext(UserStateContext);
+  const { user } = useContext(UserStateContext);
   const dispatch = useContext(DispatchContext);
   const { setModalVisible } = useContext(ModalVisibleContext);
-  const isLogin = !!loggedInUser;
-  console.log(isLogin);
 
   const logout = () => {
     sessionStorage.removeItem("userToken");
@@ -70,7 +68,8 @@ const NavBar = () => {
               </OverlayTrigger>
             </Nav.Link>
             {/* 로그인 한 유저에게만 보이기 */}
-            {isLogin ? (
+            {/* to do: 임시!! 로그아웃되면 null이어야하는데 {} 빈 객체가 찍히고있음 */}
+            {user ? (
               <>
                 <Nav.Link
                   onClick={() =>
@@ -91,17 +90,13 @@ const NavBar = () => {
                 <Nav.Item>
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>
                 </Nav.Item>
-                <Nav.Link
-                  onClick={() => navigate(`/users/${loggedInUser._id}`)}
-                >
-                  {/* to do: 툴팁 안뜸 */}
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={<Tooltip id="profile">프로필</Tooltip>}
-                  >
-                    <Avatar width="50" />
-                  </OverlayTrigger>
-                </Nav.Link>
+                {/* 아바타 */}
+                <Avatar
+                  width={30}
+                  user={user}
+                  avatarUrl={avatarUrl}
+                  setAvatarUrl={setAvatarUrl}
+                />
               </>
             ) : (
               <Nav.Item>

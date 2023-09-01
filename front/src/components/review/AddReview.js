@@ -7,18 +7,20 @@ import useToast from "../../hooks/useToast";
 import axios from "axios";
 import { serverUrl } from "../../Api";
 import useModal from "../../hooks/useModal";
+import ToastWrapper from "../common/popup/ToastWrapper";
+import { RESULT_ENUM } from "../../constants";
 
 const AddReview = ({
   userInputValues,
   setUserInputValues,
   setReviews,
-  reviews,
+  setUploadingStatus,
 }) => {
   const [preview, setPreview] = useState(null);
 
   const { user: loggedInUser } = useContext(UserStateContext);
   const formDataFileRef = useRef(null);
-  const { showToastPopup } = useToast();
+  const { showToast, setShowToast, toastMessage, toastData } = useToast();
   const { closeModal } = useModal();
 
   const handleFileChange = (files) => {
@@ -30,45 +32,47 @@ const AddReview = ({
   const handleSubmit = useCallback(async () => {
     try {
       const validationError = validationReview(loggedInUser, userInputValues);
-
       if (validationError) {
-        showToastPopup(validationError.message, validationError.status);
+        setShowToast(validationError.message, validationError.status);
         return;
       }
+      setUploadingStatus(RESULT_ENUM.UPLOADING);
       const formData = createFormData(formDataFileRef, userInputValues);
       const res = await axios.post(`${serverUrl}reviews/register`, formData);
       if (!res.data) {
-        throw new Error("데이터를 불러오지 못했습니다");
+        return setUploadingStatus(RESULT_ENUM.FAIL);
       }
       setReviews((current) => [res.data, ...current]);
       setUserInputValues({ title: "", content: "" });
+      setUploadingStatus(RESULT_ENUM.SUCCESS);
       closeModal();
-      // closeModal();
-      // [x] 토스트
       // 알림창: loading ->  onError, onSuccess
-      // 작성중 close -> 경고창
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, [
     closeModal,
     userInputValues,
     loggedInUser,
     setReviews,
     setUserInputValues,
-    showToastPopup,
+    toastMessage,
+    showToast,
+    setUploadingStatus,
+    setShowToast,
   ]);
 
   return (
-    <ReviewFormContainer
-      headerTitle="글 작성하기"
-      userInputValues={userInputValues}
-      setUserInputValues={setUserInputValues}
-      handleFileChange={handleFileChange}
-      handleSubmit={handleSubmit}
-      preview={preview}
-      setPreview={setPreview}
-    />
+    <>
+      {showToast && <ToastWrapper toastData={toastData} />}
+      <ReviewFormContainer
+        headerTitle="글 작성하기"
+        userInputValues={userInputValues}
+        setUserInputValues={setUserInputValues}
+        handleFileChange={handleFileChange}
+        handleSubmit={handleSubmit}
+        preview={preview}
+        setPreview={setPreview}
+      />
+    </>
   );
 };
 
