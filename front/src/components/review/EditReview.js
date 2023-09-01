@@ -41,11 +41,18 @@ const EditReview = ({
       }
       setUploadingStatus(RESULT_ENUM.SUCCESS);
       closeModal();
-      setReviews((current) => [
-        ...current,
-        editedReview.title,
-        editedReview.content,
-      ]);
+      setReviews((current) => {
+        return current.map((review) => {
+          if (review._id === editedReview._id) {
+            return {
+              ...review,
+              title: editedReview.title,
+              content: editedReview.content,
+            };
+          }
+          return review;
+        });
+      });
       setEditedReview(null);
     } catch (error) {
       console.log(error);

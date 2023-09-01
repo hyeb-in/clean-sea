@@ -123,9 +123,7 @@ const MyProfile = ({ setAvatarUrl }) => {
     }
     Api.putImage(`users/photo/${id}`, formData)
       .then(async (r) => {
-        setUserProfileImage(
-          `http://${window.location.hostname}:5001/${r.data.uploadFile[0]}`
-        );
+        setUserProfileImage(`http://34.64.87.254:5001/${r.data.uploadFile[0]}`);
         // dispatch({
         //   type: "UPDATE",
         //   payload: {
@@ -143,7 +141,6 @@ const MyProfile = ({ setAvatarUrl }) => {
         displayToastMessage("오류가 발생했습니다. 다시 시도해주세요.");
       });
     toggleProfileModal();
-
   }, [toggleProfileModal, fileRef]);
 
   return (
