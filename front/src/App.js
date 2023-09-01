@@ -23,7 +23,7 @@ import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
 import EditReview from "./components/review/EditReview";
 import "./index.css";
-import { RESULT_ENUM } from "./constants";
+import { DEFAULT_AVATAR, RESULT_ENUM } from "./constants";
 import UploadStatusIndicators from "./components/common/indicators/UploadStatusIndicators";
 import ToastWrapper from "./components/common/popup/ToastWrapper";
 import useToast from "./hooks/useToast";
@@ -44,6 +44,7 @@ function App() {
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
+  const [avatarUrl, setAvatarUrl] = useState(DEFAULT_AVATAR);
   const [reviews, setReviews] = useState([]);
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
   const [userInputValues, setUserInputValues] = useState({
@@ -68,7 +69,7 @@ function App() {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
       const res = await Api.get("users/current");
-      if (!res) throw new Error("유저 정보를 받아올 수 없습니다");
+      if (!res.data) throw new Error("유저 정보를 받아올 수 없습니다");
       const currentUser = res.data;
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
       console.log(res.data, "null 이어야함?");
@@ -95,12 +96,14 @@ function App() {
 
   return (
     // to do: 구조.................?
-    <UserStateContext.Provider value={userState}>
-      <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
-        <DispatchContext.Provider value={dispatch}>
+    <DispatchContext.Provider value={dispatch}>
+      <UserStateContext.Provider value={userState}>
+        <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
           <Interceptor>
             {showToast && <ToastWrapper toastData={toastData} />}
-            {!is404Page && <NavBar />}
+            {!is404Page && (
+              <NavBar avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />
+            )}
             {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
             {/* >>>> edit review 오류때문에 임시로 edit도 여기서 사용한다 */}
             {modalVisible && modalVisible.type === MODAL_TYPE.addReview && (
@@ -132,7 +135,11 @@ function App() {
               <Route path="/" exact element={<Main />} />
               <Route path="/login" exact element={<Login />} />
               <Route path="/signup" exact element={<SignUp />} />
-              <Route path="/users/:id" exact element={<MyProfile />} />
+              <Route
+                path="/users/:id"
+                exact
+                element={<MyProfile setAvatarUrl={setAvatarUrl} />}
+              />
               <Route path="/search" exact element={<Search />} />
               <Route
                 path="/reviews"
@@ -152,9 +159,9 @@ function App() {
             </Routes>
             {!is404Page && <Footer />}
           </Interceptor>
-        </DispatchContext.Provider>
-      </ModalVisibleContext.Provider>
-    </UserStateContext.Provider>
+        </ModalVisibleContext.Provider>
+      </UserStateContext.Provider>
+    </DispatchContext.Provider>
   );
 }
 
