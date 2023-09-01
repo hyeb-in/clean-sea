@@ -4,7 +4,11 @@ import * as Api from "../../Api";
 import TravelImageWithText from "./TravelImageWithText";
 import SearchInput from "./SearchInput";
 import { useToggle } from "../../hooks/profileHooks";
-import { formatDate, formatDateWithoutTime } from './utils/travelUtils';
+import {
+  formatDate,
+  formatDateWithoutTime,
+  getTodayDate,
+} from './utils/travelUtils';
 
 const TravelItem = ({
   travelData,
@@ -117,6 +121,7 @@ const TravelItem = ({
                 value={formatDate(updatedTravel.date)}
                 onChange={e => setUpdatedTravel(
                   { ...updatedTravel, date: e.target.value })}
+                max={getTodayDate()}
               /></p>
             <div style={{
               display: "flex",

@@ -53,6 +53,10 @@ const SearchBar = ({ setSelectedBeach }) => {
     }
   };
 
+  const getCircleColor = (goodnessFit) => {
+    return goodnessFit ? 'green' : 'red';
+  };
+
   return (
     <Container fluid className="mt-2">
       <Row className="justify-content-center">
@@ -78,6 +82,16 @@ const SearchBar = ({ setSelectedBeach }) => {
               <ListGroup key={beach._id} className="my-2 hoverable" onClick={() => handleBeachSelect(beach)}>
                 <ListGroup.Item style={{ backgroundColor: getBackgroundColor(beach.rank)[0],
                   color: getBackgroundColor(beach.rank)[1]}}>
+                  <div style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    backgroundColor: getCircleColor(beach.goodnessFit),
+                    position: 'absolute',
+                    left: '10px',
+                    top: '50%',
+                    transform: 'translateY(-50%) translateX(-200%)'
+                  }}></div>
                   {`${beach.rank}위 - ${beach.name} 해수욕장`}
                 </ListGroup.Item>
               </ListGroup>

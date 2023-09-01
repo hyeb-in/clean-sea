@@ -6,6 +6,7 @@ import * as Api from "../../Api";
 import TravelItem from "./TravelItem";
 import SearchInput from "./SearchInput";
 import { useToggle } from "../../hooks/profileHooks";
+import { getTodayDate } from './utils/travelUtils';
 
 const History = ({ displayToast, isEditable, id }) => {
   const [travels, setTravels] = useState([]);
@@ -109,6 +110,7 @@ const History = ({ displayToast, isEditable, id }) => {
               value={newTravel.date}
               onChange={(e) => setNewTravel(
                 { ...newTravel, date: e.target.value })}
+              max={getTodayDate()}
             />
           </Modal.Body>
           <Modal.Footer>
