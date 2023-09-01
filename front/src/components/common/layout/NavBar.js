@@ -71,7 +71,7 @@ const NavBar = () => {
             {/* to do: 임시!! 로그아웃되면 null이어야하는데 {} 빈 객체가 찍히고있음 */}
             {user &&
             user?.constructor === Object &&
-            Object.keys(user)?.length !== 0 ? (
+            Object.keys(user)?.length > 0 ? (
               <>
                 <Nav.Link
                   onClick={() =>

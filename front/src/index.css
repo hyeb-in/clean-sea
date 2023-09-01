@@ -19,6 +19,9 @@ body {
   border-radius: 30px;
   padding: 5px 10px;
 }
+.logo:hover {
+  background-color: rgba(255, 255, 255, 0.137);
+}
 /* flex-방향-justify-align 순서 */
 .flex-row-center-center {
   display: flex;
