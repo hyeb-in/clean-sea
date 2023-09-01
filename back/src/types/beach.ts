@@ -35,14 +35,6 @@ interface IRankedBeach extends IBeach {
   _doc:any;
 }
 
-interface BeachData {
-  [year: string]: 
-  { 
-    eschAvg: number, 
-    enteAvg: number 
-  }[];
-}
-
 type BeachDataAvg = {
   [year: string]: 
   { 
@@ -55,4 +47,4 @@ type BeachDataAvg = {
   
 
 
-export { IBeach, BeachData, IRankedBeach, BeachDataAvg }
+export { IBeach, IRankedBeach, BeachDataAvg }
