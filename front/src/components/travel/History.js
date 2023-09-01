@@ -54,7 +54,7 @@ const History = ({ displayToast, isEditable, id }) => {
 
   return (
     <>
-      <Container>
+      <Container className="px-0">
         <Card className="mb-4 mt-4 pt-3">
           <Card.Body>
             <Row className="mt-4">
