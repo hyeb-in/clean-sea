@@ -22,7 +22,7 @@ const Review = ({ review, setReviews }) => {
         <Card
           bg="light"
           key={review._id}
-          className="my-5 review-container review flexible-col "
+          className="my-5 review-container review"
         >
           <Card.Header className="review__flexible-child">
             <ReviewTitle review={review} setReviews={setReviews} />
