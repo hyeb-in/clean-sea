@@ -3,6 +3,12 @@ import { NextFunction, Response } from "express";
 import { IRequest } from "user";
 import { errorGenerator } from "../errorGenerator";
 
+const errorMessage = {
+    stringBase : "문자여야합니다.",
+    stringMin : '1글자이상이여야합니다.',
+    stringMax : '100글자이하이여야합니다.',
+}
+
 const validateSchema = (schema : joi.ObjectSchema) => {
     return (req : IRequest, res : Response , next : NextFunction) => {
         const { error } = schema.validate(req.body);
@@ -15,23 +21,14 @@ const validateSchema = (schema : joi.ObjectSchema) => {
     }
 }
 
+const postcommentSchema = joi.object({
+    content : joi.string().min(1).max(100).required().messages(errorMessage),
+});
 
-export const postCommentValidator = validateSchema (
-    joi.object({
-        content : joi.string().min(1).max(100).required().messages({
-            'string.base' : "문자여야합니다.",
-            'string.min' : '1글자이상이여야합니다.',
-            'string.max' : '100글자이하이여야합니다.',
-        }),
-    })
-);
+const putcommentSchema = joi.object({
+    content : joi.string().min(1).max(100).optional().messages(errorMessage),
+});
 
-export const putCommentValidator = validateSchema (
-    joi.object({
-        content : joi.string().min(1).max(100).optional().messages({
-            'string.base' : "문자여야합니다.",
-            'string.min' : '1글자이상이여야합니다.',
-            'string.max' : '100글자이하이여야합니다.',
-        }),
-    })
-);
+export const postCommentValidator = validateSchema (postcommentSchema);
+
+export const putCommentValidator = validateSchema (putcommentSchema);

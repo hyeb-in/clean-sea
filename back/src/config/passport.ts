@@ -3,22 +3,24 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { findUserByEmail, findUserById } from "../db/models/User";
 import bcrypt from "bcrypt";
-//import { errorGenerator } from "../utils/errorGenerator";
 
 const localOptions = {
   usernameField: "email",
   passwordField: "password",
 };
 
+const jwtOptions = {
+  secretOrKey: process.env.JWT_SECRET_KEY,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+};
+
 const localCallback = async (email: string, password: string, done: any) => {
   try {
     const user = await findUserByEmail(email);
     if (!user) {
-      return done(null, false, { message: "회원이 존재하지 않습니다.!" });
+      return done(null, false, { message: "사용자가 존재하지 않습니다." });
     }
-
     const isMatched = await bcrypt.compare(password, user.password);
-
     if (!isMatched) {
       return done(null, false, { message: "비밀번호가 일치하지 않습니다." });
     }
@@ -27,12 +29,6 @@ const localCallback = async (email: string, password: string, done: any) => {
     done(error);
   }
 };
-
-const jwtOptions = {
-  secretOrKey: process.env.JWT_SECRET_KEY,
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-};
-
 const jwtCallback = async (payload: any, done: any) => {
   try {
     const { id } = payload;

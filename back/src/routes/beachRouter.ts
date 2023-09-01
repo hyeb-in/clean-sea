@@ -5,9 +5,14 @@ import {
   getBeachByRegionAndYear,
   getBeachByRegionAndYearSpecificAvg,
   getBeaches,
-  getBeachByRegionAndYearSpecific
-} from '../controllers/beachController';
-import { yearAddressParamsValidator, beachParamsValidator, idParamValidator, nameParamValidator} from '../utils/validators/beachValidator';
+  getBeachByRegionAndYearSpecific,
+} from "../controllers/beachController";
+import {
+  yearAddressParamsValidator,
+  beachParamsValidator,
+  idParamValidator,
+  nameParamValidator,
+} from "../utils/validators/beachValidator";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const beachRouter = Router();

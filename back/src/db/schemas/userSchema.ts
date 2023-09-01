@@ -20,9 +20,9 @@ const UserSchema = new Schema<IUser>(
       required: false,
       default: "한 줄로 자신을 설명해주세요!",
     },
-    profileImage: {
-      type: String,
-    },
+    uploadFile : {
+      type : [String],
+    }
   },
   {
     timestamps: true,

@@ -1,106 +1,121 @@
-import { Col, Container, Form, Row } from "react-bootstrap";
 import Avatar from "../../common/Avatar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
-import { ModalVisibleContext, UserStateContext } from "../../../App";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { UserStateContext } from "../../../App";
 import { useNavigate } from "react-router-dom";
-import { MODAL_TYPE } from "../../../constants";
-import Timestamp from "../../common/Timestamp";
+import Timestamp from "../../common/microComponents/Timestamp";
+import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
+import { Form } from "react-bootstrap";
+import * as Api from "../../../Api";
 
-const Comment = ({ comment, review }) => {
+const Comment = ({ comment, setComments, setNewComments, setCommentCount }) => {
   const navigate = useNavigate();
   const { user: loggedInUser } = useContext(UserStateContext);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newComment, setNewComment] = useState(comment);
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  const [targetId, setTargetId] = useState(null);
-  const { postId, userId, content, userName, date } = comment;
+  const { userId } = comment;
+  const { modalVisible, openModal } = useModal();
   const isMyComment = loggedInUser && loggedInUser._id === userId;
-  const isButtonsVisible = isMyComment && !isEditing;
-  const isCommentEditBtnVisible =
-    isMyComment && modalVisible.type === MODAL_TYPE.floatingReview;
+  /// set comments 필요함
 
-  const editComment = async (e) => {
+  // 만약 modalVisible에 currentComment가 있다면
+  // 해당 코멘트 id로 커맨트 창을 찾아서 edit input 을 보여준다
+  const targetId = modalVisible.data?.currentComment?._id;
+
+  const [isEditing, setIsEditing] = useState(targetId === comment._id);
+  const [editCommentValue, setEditCommentValue] = useState(
+    comment?.content || modalVisible.data?.currentComment?.content
+  );
+  const [result, setResult] = useState(comment);
+
+  const onEditComment = async (e) => {
     e.preventDefault();
-    if (!isMyComment) {
-      // return setToastMsg("다른 사람의 게시물을 수정할 수 없습니다");
-      alert("다른사람 게시물 수정못함");
-    }
+
     try {
-      // const res = await Api.put(`/comments/${postId}`);
+      const res = await Api.put(`comments/${comment._id}`, {
+        content: editCommentValue,
+      });
+      if (!res.ok) throw new Error("업데이트에 실패했습니다");
+
+      setResult(res.data);
+      setIsEditing(false);
     } catch (error) {
       console.log(error);
-      // to do: 에러 메세지 핸들링
     }
-  };
-
-  const deleteComment = async () => {
-    if (!isMyComment) {
-      alert("다른 사람의 게시물");
-    }
-    console.log("삭제");
-    //     // const res = await Api.delete(`/comments/${postId}`);
-    //     console.log(postId);
   };
 
   return (
-    <Container className="flex">
-      <Row>
-        <div>
-          {!isEditing && (
-            <div>
-              <div className="py-1 px-0 flex-space-between line-break">
-                <div className="comment__content d-flex w-100 flex-col">
-                  <Avatar
-                    className="comment__avatar"
-                    width="30"
-                    onClick={() => navigate(`/users/${userId}`)}
-                  />
-                  <div className="text-author mx-2">{userName}</div> {content}
-                </div>
+    <>
+      {
+        <div className="comment__container">
+          <div className="comment__col comment__title">
+            {!isEditing && (
+              <div className="text-content">
+                <Avatar
+                  className="comment__avatar"
+                  width="30"
+                  onClick={() => navigate(`/users/${userId}`)}
+                />
+                <span className="text-author">{result.userName}</span>
+                {result.content}
               </div>
+            )}
+          </div>
+          <div className="comment__col link">
+            {!isEditing && (
               <Timestamp
-                createdAt={date}
+                createdAt={result.date}
                 className="text-timestamp comment__timestamp flex-justify-end"
               />
-            </div>
-          )}
+            )}
+
+            {isMyComment && !isEditing && (
+              <div className="comment__btn-col">
+                <div
+                  className="comment__edit-btn"
+                  onClick={() => setIsEditing(true)}
+                >
+                  수정
+                </div>
+                <div
+                  className="comment__col flex-justify-end link comment__edit-btn"
+                  onClick={() => {
+                    openModal(MODAL_TYPE.actionSelector, {
+                      target: MODAL_TYPE.deleteComment,
+                      commentId: comment._id,
+                      setComments,
+                      setNewComments,
+                      setCommentCount,
+                    });
+                  }}
+                >
+                  삭제
+                </div>
+              </div>
+            )}
+
+            {isMyComment && isEditing && (
+              <Form
+                onSubmit={onEditComment}
+                className="comment__edit-input-container"
+              >
+                <input
+                  className="comment__edit-input comment__input"
+                  value={editCommentValue}
+                  onChange={(e) => setEditCommentValue(e.target.value)}
+                />
+                <div className="comment__complete-btn" onClick={onEditComment}>
+                  게시
+                </div>
+                <div
+                  className="comment__edit-btn "
+                  onClick={() => setIsEditing(false)}
+                >
+                  취소
+                </div>
+              </Form>
+            )}
+          </div>
         </div>
-        {/* 댓글 수정 입력 인풋창 */}
-        {isMyComment && isEditing && (
-          <div className="pr-2 py-2">
-            {/* to do: 인풋 레이아웃. pr, px 적용 안됨 */}
-            <Form onSubmit={(e) => editComment(e)}>
-              <Form.Control
-                value={newComment.content}
-                onChange={(e) =>
-                  setNewComment({ ...comment, content: e.target.value })
-                }
-              />
-            </Form>
-          </div>
-        )}
-        {/* 2. 댓글 목록에서 ... 버튼: 클릭시 수정, 삭제, 취소 버튼 나타남 */}
-        {/* 댓글 -> 수정으로 들어가면 댓글 창을 띄울 거라서 reviewId, review 정보가 필요함 */}
-        {isCommentEditBtnVisible && (
-          <div
-            xs="auto"
-            onClick={() => {
-              setModalVisible({
-                type: MODAL_TYPE.actionSelector,
-                isVisible: true,
-                data: {
-                  FLOATING_REVIEW_DATA: { review, commentId: comment._id },
-                },
-              });
-            }}
-          >
-            <FontAwesomeIcon icon={faEllipsis} />
-          </div>
-        )}
-      </Row>
-    </Container>
+      }
+    </>
   );
 };
 export default Comment;

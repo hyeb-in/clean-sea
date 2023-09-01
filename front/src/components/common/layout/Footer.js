@@ -5,12 +5,12 @@ function Footer() {
     background: "#4B89DC",
     color: "#FFFFFF",
     fontFamily: "Arial, sans-serif",
-    // position: "relative",
+    // position: "fixed",
+    // bottom: "0",
     // transform: "translateY(-100%)",
     width: "100%",
-    //   minWidth: "833px",
+    minWidth: "833px",
     display: "flex",
-    //   justifyContent: "center",
     alignItems: "center",
   };
 

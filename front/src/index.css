@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
+@import "./reset.css";
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "./components/review/review.css";
+@import "./components/review/comment/comment.css";
+@import "./components/common/chats.css";
+
+body {
+  font-family: "Black Han Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  font-family: "Black Han Sans", sans-serif;
+}
+.logo {
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.561);
+  border-radius: 30px;
+  padding: 5px 10px;
+}
+/* flex-방향-justify-align 순서 */
+.flex-row-center-center {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+/* d-flex flex-column justify-content-center align-items-center */
+.flex-column-center-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-justify-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flex-justify-end {
+  display: flex;
+  justify-content: flex-end;
+}
+.line-break {
+  white-space: pre-wrap;
+}
+/* 텍스트 관련 */
+.link {
+  cursor: pointer;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.579);
+}
+.text-author {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.786);
+  min-width: fit-content;
+}
+.bold {
+  font-weight: 600;
+}
+.text-content {
+  color: grey;
+}
+.text-timestamp,
+.text-like {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: gray;
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+  /* margin-bottom: 10px; */
+}
+.fa-heart {
+  color: rgb(47, 46, 46);
+}
+.text-like {
+  margin-right: 10px;
+}
+.h-100 {
+  height: 100%;
+}
+.min-h-100 {
+  height: 100vh;
+}
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* indicator 모달창 관련 */
+.spinner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin: 100px 0;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
+
+/* 토스트 팝업 창 */
+.toast-popup {
+  font-size: 1rem;
+}
+.toast-popup__icon {
+  font-size: 2rem;
+  min-height: 60px;
+}
+.toast-popup__title {
+  font-weight: 600;
+}
+
+.navbar {
+  margin-bottom: 20px; /* 네비게이션 바 아래 여백 추가 */
+}
+
+.text-center {
+  padding-top: 20px; /* 텍스트 위 여백 추가 */
+  padding-bottom: 20px; /* 텍스트 아래 여백 추가 */
+}

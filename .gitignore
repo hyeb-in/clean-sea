@@ -10,3 +10,6 @@ front/...
 back/node_modules/
 back/.yarn-integrity
 back/...
+imageUpload
+node_modules
+videoUpload

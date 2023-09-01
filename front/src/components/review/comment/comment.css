@@ -1,4 +1,183 @@
 .comment__timestamp {
   width: 100%;
   text-align: right;
+  margin-left: 10px;
+}
+.comments-container {
+  margin: 25px 0;
+  max-height: 300px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.097);
+}
+.scroll-container {
+  overflow: auto;
+  max-height: 300px;
+}
+.comment__border {
+  border: 1px solid rgb(0, 0, 0);
+}
+.commentModal__title {
+  /* background-color: white; */
+}
+.commentModal {
+  background-color: #f8f9fb;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+}
+.commentModal__modalWrapper {
+  max-width: 100%;
+  margin: 0 60px;
+}
+/* 커맨트 */
+.comment-list__container {
+  overflow: scroll;
+  height: 400px;
+  padding-left: 0;
+  margin-top: 20px;
+}
+.comment__container {
+  display: flex;
+  /* 여기 flex하면 텍스트 넘침 */
+  margin-bottom: 10px;
+  flex-direction: column;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.text-content {
+  width: 100%;
+  font-size: 0.9rem;
+  margin: 10px 0;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.928);
+}
+
+.comment__btn-container {
+  display: flex;
+}
+.comment__btn-col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1px solid black;
+}
+.text-author {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.comment__col {
+  float: left;
+  margin: 0;
+}
+.comment__title {
+  display: flex;
+  color: rgb(65, 65, 65);
+  padding-top: 10px;
+  /* float: left; */
+  font-weight: 500;
+}
+.comment__title img {
+  float: left;
+}
+.comment__col:nth-child(2) {
+  display: flex;
+}
+
+.w-100.bla {
+  width: auto;
+}
+.comment__author {
+  font-weight: 600;
+  min-width: 100%;
+  display: inline-block;
+  white-space: nowrap;
+}
+.comment__avatar {
+  position: absolute;
+  top: 20px;
+}
+.comment__form {
+  /* display: flex;
+  flex-direction: column; */
+  position: relative;
+}
+.comment__content {
+  color: grey;
+  word-break: break-all;
+}
+.comment__input {
+  margin-left: 0 !important;
+  background-color: none;
+  border: none;
+
+  /* Remove outline */
+  outline: none;
+  /* Reset padding and margin */
+  padding: 0;
+  margin: 0;
+  /* Reset background */
+  background: none;
+  /* Reset font styles */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  /* Reset other styles */
+  color: inherit;
+  line-height: inherit;
+  width: 100%;
+  padding: 5px 0;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin: 10px;
+  padding-right: 60px;
+  border-top: 1px solid rgb(203, 203, 203);
+  border-bottom: 1px solid rgb(203, 203, 203);
+}
+.comment__submit-btn {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  border: none;
+  padding-top: 10px;
+}
+.comment__edit-input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.comment__edit-input {
+  width: 100%;
+  border-top: none;
+  padding-right: 0;
+}
+.comment__edit-btn {
+  min-width: fit-content;
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+.comment__complete-btn {
+  color: #176cf8;
+  min-width: fit-content;
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+.comment__edit-btn:first-child {
+  margin-right: 10px;
+}
+.comment__b .position-rel {
+  position: relative;
+}
+.comment__avatar {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.showMoreDetails {
+  display: flex;
+  text-align: end;
+  padding: 10px;
+  font-size: 0.9rem;
+}
+.more-comments {
+  font-size: 0.8rem;
 }

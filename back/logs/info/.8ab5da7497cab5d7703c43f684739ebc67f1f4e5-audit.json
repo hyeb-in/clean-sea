@@ -49,6 +49,36 @@
             "date": 1692889263876,
             "name": "logs/info/2023-08-25.info.log",
             "hash": "756797a902f4ec158d983e41adba531db9a73946f69815fa9328e98e0ddc0ab7"
+        },
+        {
+            "date": 1692981984441,
+            "name": "logs/info/2023-08-26.info.log",
+            "hash": "c0e4a62b8a29987283381030bdffc0cd6d3ff3990d51d43d85d5387e0dd521fc"
+        },
+        {
+            "date": 1693062366651,
+            "name": "logs/info/2023-08-27.info.log",
+            "hash": "1301c483de8728139c886f9987e9285b0e1c6a3f2f28d61ffc926751c948f106"
+        },
+        {
+            "date": 1693148648019,
+            "name": "logs/info/2023-08-28.info.log",
+            "hash": "5a2361fc29160ab97d031a10a9fa3b1673498b99dc7cadab366bfe5a3d7d564a"
+        },
+        {
+            "date": 1693234810570,
+            "name": "logs/info/2023-08-29.info.log",
+            "hash": "186abbe3a56e29e0cbeb78eda03f55e0ec08bc463c76fd8d6fae9428ac940c89"
+        },
+        {
+            "date": 1693321273795,
+            "name": "logs/info/2023-08-30.info.log",
+            "hash": "c12259ce4cd775f1accd06691ef1cb547662eab3afbc41fedfbedada8473fd1b"
+        },
+        {
+            "date": 1693443493388,
+            "name": "logs/info/2023-08-31.info.log",
+            "hash": "d753677c466b0c6e9645b7e644e6eca60b5458894dbcc878879ed00ca19bd00e"
         }
     ],
     "hashType": "sha256"

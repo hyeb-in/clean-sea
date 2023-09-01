@@ -1,127 +1,81 @@
-import {
-  Button,
-  CloseButton,
-  Col,
-  Container,
-  Form,
-  Modal,
-  Row,
-} from "react-bootstrap";
-import ReviewTitle from "../ReviewTitle";
+import { CloseButton, Col, Container, Modal, Row } from "react-bootstrap";
+import ReviewHeader from "../layout/ReviewTitle";
 import CarouselWrapper from "../../common/Carousel";
-import { ModalVisibleContext, UserStateContext } from "../../../App";
-import { useContext, useState } from "react";
-import { MODAL_TYPE } from "../../../constants";
-import * as Api from "../../../Api";
 import Comment from "./Comment";
+import AddCommentForm from "./CommentForm";
+import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
+import * as Api from "../../../Api";
+import { useEffect, useRef, useState } from "react";
 
-// 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
-// 그냥 Review를 볼 수 있는 컴포넌트와 다르게 생김 주의... 이름 바꿔야할 듯
-// 모든 커멘트 목록이 필요함
-const FloatingReview = () => {
-  const { user: loggedInUser } = useContext(UserStateContext);
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  const {
-    data: { reviewId, review, setNewComments, setReviews },
-  } = modalVisible;
+// 리뷰와 함께 댓글 목록을 볼 수 있고, 댓글을 수정, 삭제 할 수 있는 모달창
+// 업데이트시 해야할 일
+// 1. background에 보이는 커맨트 리스트를 업데이트 해야함
+// 2. 모달창에 있는 커맨트 리스트 업데이트
+// -> 모든 커멘트 목록이 필요
+const CommentsModal = () => {
+  const { modalVisible } = useModal();
+  const scrollRef = useRef(null);
 
-  // data: {
-  //   reviewId,
-  //   review,
-  //   setNewComments,
-  //   setReviews,
-  const [comment, setComment] = useState("");
-  const isValid = comment.length > 0 && comment.length < 100;
+  const { review, setComments, newComments, setNewComments, setCommentCount } =
+    modalVisible.data;
+  const { closeModal } = useModal();
+  const [modalNewComments, setModalNewComments] = useState([]);
 
-  console.log(modalVisible.data);
+  // // 댓글 입력시 자동 스크롤
+  // useEffect(() => {
+  //   scrollRef.current.scrollIntoView({ behavior: "smooth" });
+  // }, [modalCommentList, newCommentsList]);
 
-  const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (!loggedInUser) {
-        alert("유저 없음");
-      }
-      // 글자수 제한: 1글자이상 100자이하
-      if (!isValid) {
-        alert("글자수 제한");
-      }
-      // review id로 해당 리뷰를 찾아서 review.Likes id가 있나? 값으로 갱신한다??
-      // isLikes에 userId가 저장되어있음
-      const res = await Api.post(`comments/${reviewId}`, { content: comment });
-      if (!res.data) {
-        return alert("요청 실패");
-      }
+  try {
+    useEffect(() => {
+      console.log("newComments");
+      const getAllComments = async () => {
+        const res = await Api.get(`comments/${review._id}`);
+        if (!res.data) throw new Error("데이터를 가져올 수 없습니다");
+        setModalNewComments(res.data);
+      };
+      getAllComments();
 
-      setReviews((current) => [...current, res.data]);
-      setNewComments((newComments) => [...newComments, res.data]);
-      setComment("");
-    } catch (error) {
-      // 서버 error 핸들링
-      alert(error);
-    }
-  };
+      // newComments 가 갱신될 때마다 다시 그려준다 ??
+    }, [review, newComments, setNewComments]);
+  } catch (error) {
+    console.log(error);
+  }
 
   return (
     <Modal
       sm={1}
       lg={6}
-      show={modalVisible.type === MODAL_TYPE.floatingReview}
-      onHide={() => {
-        setModalVisible({
-          type: null,
-          isVisible: false,
-          data: null,
-        });
-      }}
+      show={modalVisible.type === MODAL_TYPE.commentsList}
+      onHide={closeModal}
       centered
+      dialogClassName="commentModal__modalWrapper"
     >
       <Row className="flex-row-center-center carousel-bg-black">
+        <ReviewHeader review={review} className="commentModal__title">
+          <CloseButton className="close-btn" onClick={closeModal} />
+        </ReviewHeader>
         <Col className="carousel-bg-white">
-          <ReviewTitle review={modalVisible.data}>
-            <CloseButton
-              className="close-btn"
-              // to do: 댓글 입력중이었다면 경고창 먼저 띄우기
-              onClick={() =>
-                setModalVisible({
-                  type: null,
-                  isVisible: false,
-                  data: null,
-                })
-              }
-            />
-          </ReviewTitle>
           <CarouselWrapper
             className="carousel__container"
-            imageUrls={[
-              "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
-              "https://health.chosun.com/site/data/img_dir/2023/05/31/2023053102582_0.jpg",
-            ]}
+            imageUrls={review.uploadFile}
           />
         </Col>
         <Col className="carousel-bg-white">
-          <Container>
+          <Container className="comment-list__container">
             <Row className="py-4 mx-2">
-              {review.comments?.map((comment) => (
-                <Comment comment={comment} />
+              {modalNewComments?.map((comment) => (
+                <div key={comment._id}>
+                  <Comment comment={comment} setComments={setComments} />
+                </div>
               ))}
-              <Form onSubmit={handleCommentSubmit} className="comment__form">
-                <input
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder="댓글 달기..."
-                  className="comment__input"
-                />
-                {comment?.length > 0 && (
-                  <Button
-                    onClick={handleCommentSubmit}
-                    variant="outline-primary"
-                    className="comment__button"
-                  >
-                    게시
-                  </Button>
-                )}
-              </Form>
+              <AddCommentForm
+                setNewComments={setNewComments}
+                setModalNewComments={setModalNewComments}
+                setCommentCount={setCommentCount}
+              />
             </Row>
+            <div ref={scrollRef}></div>
           </Container>
         </Col>
       </Row>
@@ -129,4 +83,4 @@ const FloatingReview = () => {
   );
 };
 
-export default FloatingReview;
+export default CommentsModal;

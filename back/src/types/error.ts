@@ -1,3 +1,3 @@
 export interface IError extends Error {
-  statusCode?: number;
+  statusCode?: number | null | undefined;
 }

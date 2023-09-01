@@ -1,139 +1,102 @@
-import React, { useContext } from "react";
+import React from "react";
 import { ListGroup, Modal } from "react-bootstrap";
-import { ModalVisibleContext } from "../../../App";
-import { MODAL_TYPE } from "../../../constants";
+import useModal, { MODAL_TYPE } from "../../../hooks/useModal";
 import * as Api from "../../../Api";
 
-// export const MODAL_TYPE = {
-//   floatingReview: "FLOATING_REVIEW",
-//   actionSelector: "ACTION_SELECTOR",
-//   addReview: "ADD_REVIEW",
-//   editReview: "EDIT_REVIEW_FORM",
-// };
-
 /**
- * 수정, 삭제, 취소 선택하는 모달창
- *  초기값
- *  const [modalVisible, setModalVisible] = useState({
- *   type: MODAL_TYPE.floatingReview,      // 위의 MODAL_TYPE enum 참고
- *   isVisible: false, // 모달창 show 판단 기준
- *   data: null,  // 다른 곳으로 보내줄 데이터를 객체 형식으로 작성
- *  });
- * 
- * 사용 예시 const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
- * 
- *   setModalVisible({
-          type: null,
-          isVisible: false,
-          data: null,
-            })
- * 
- * 
+ * 수정, 삭제, 취소 선택하는 모달창 --- 수정 중
+ *
+ *
+ *
+ *
  */
 const ActionSelectorModal = () => {
-  // commentId가 있다면 comment를 삭제
+  // commentId가 있다면 comment를 삭제 -----> comment 수정은 Comment 컴포넌트에서 해결하는 걸로 바뀜. 수정사항 반영할 것
   // reviewId가 있다면 reviewId를 삭제
-  const { modalVisible, setModalVisible } = useContext(ModalVisibleContext);
-  // user가 있는지, 유저 author인지 확인하는 로직은 모달로 넘어오기 전에 판단한다
-  // 굳이 이 컴포넌트에까지 유저 정보를 가져오지 않도록한다
-  const isReviewEditing = modalVisible?.data?.reviewId;
-  const isCommentEditing = modalVisible?.data?.FLOATING_REVIEW_DATA;
+  const { closeModal, openModal, modalVisible } = useModal();
+  // 현 상황에선 edit된 상태 반영하기 위해 setReviews를 받아오기보단, 모달창을 닫은 후 새로 데이터를 받아오는 방법도 있음
+  const review = modalVisible?.data?.review;
+  const commentId = modalVisible?.data?.commentId;
+  const setReviews = modalVisible?.data?.setReviews;
+  const setComments = modalVisible?.data?.setComments;
+  const setNewComments = modalVisible?.data?.setNewComments;
+  const setCommentCount = modalVisible?.data?.setCommentCount;
   console.log(modalVisible.data);
-  const commentId = modalVisible.data?.FLOATING_REVIEW_DATA?.commentId;
-
-  const deleteById = async (data) => {
-    try {
-      const { reviewId } = data;
-      const path = reviewId ? "reviews/" : "comments";
-      const id = reviewId ? reviewId : commentId;
-      const res = await Api.delete(`${path}/${id}`);
-      if (!res.status === 204) {
-        throw new Error("failed");
-      }
-      setModalVisible({
-        type: null,
-        isVisible: false,
-        data: null,
-        // to do: set reviews state  ||  set comments state ????
-        // 요청 후 reviews 기존 레이아웃에 반영하기
-        // reviews 값을 전역으로 관리 해야하는 건가?
+  const editReview = () => {
+    if (review) {
+      // 임시로 addReview로 보냄-> EDIT REVIEW data
+      openModal(MODAL_TYPE.editReview, {
+        ...modalVisible.data,
+        review,
       });
-      alert("성공");
-    } catch (error) {
-      alert(error);
-      // to do: 에러 메세지!_!
     }
   };
+  // => 댓글 수정은 모달창 아니고 그냥 review 컨테이너 안에서 해결
+
+  const deleteById = async () => {
+    try {
+      if (!commentId && !review) throw new Error("정보를 찾을 수 없습니다");
+      // comment OR review 이기때문에 if문 제거하지 말 것!!
+
+      // 댓글 삭제
+      if (commentId) {
+        const res = await Api.delete(`comments/${commentId}`);
+        if (!res.ok) {
+          throw new Error("failed");
+        }
+        // 글 생성 후 바로 댓글 모달창 들어와서 수정 혹은 삭제하려고하면 버그있음
+        setComments((current) => {
+          return current.filter((comment) => comment._id !== commentId);
+        });
+        if (setNewComments) {
+          setNewComments((current) => {
+            return current.filter((comment) => comment._id !== commentId);
+          });
+        }
+        console.log(setCommentCount);
+        setCommentCount((current) => current - 1);
+
+        return closeModal();
+      }
+
+      // 리뷰 삭제 로직 -->> review가 있는지 체크 해야함 (뭔가 꼬여있음 주의)
+      if (review) {
+        const res = await Api.delete(`reviews/${review._id}`);
+        if (!res.ok) {
+          throw new Error("failed");
+        }
+        setReviews((current) => {
+          const currentReviews = [...current];
+          return currentReviews.filter((item) => item._id !== review._id);
+        });
+      }
+      closeModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const isActionPopupOpen = modalVisible.type === MODAL_TYPE.actionSelector;
-  // 질문: 위에다 놓으면 여기서 잘 안보이는데 어차피 jsx 내부에서만 쓰일 변수라면 이곳에 작성해도 상관 없나요?
 
   return (
     <Modal
       show={isActionPopupOpen}
-      onHide={() => {
-        // 수정 클릭시 현재 가지고있는 data를 edit form에 전달해줘야함!
-        // review 상세 메뉴 클릭 (review에 관한 data 전달) => (현재) => (<EditForm />에 전달)
-        setModalVisible({
-          type: null,
-          isVisible: false,
-          data: modalVisible.data,
-        });
-      }}
+      onHide={closeModal}
       backdrop="static"
       keyboard={false}
-      aria-labelledby="contained-modal-title-vcenter" // to do: 정체가 뭐임
       centered
     >
       <ListGroup className="text-center">
-        <ListGroup.Item
-          // key="edit"
-          action
-          onClick={() => {
-            // 수정하기 위해서 review 혹은 review id가 필요
-            // review list -> ellipsis 클릭할 때 (<ReviewTitle /> 내부에서) data를 포함시켜서 건내준다
-            // 받은 정보 + 여기서 필요한 정보를 추가해서 보내준다
-            if (isReviewEditing) {
-              // edit review인지 comment인지 구분해서 라우팅
-              setModalVisible({
-                ...modalVisible, // 받은 정보에 추가한다
-                type: MODAL_TYPE.editReview,
-              });
-            } else if (isCommentEditing) {
-              setModalVisible({
-                ...modalVisible,
-                type: MODAL_TYPE.floatingReview,
-              });
-            }
+        {review && (
+          <ListGroup.Item action onClick={editReview}>
+            수정
+          </ListGroup.Item>
+        )}
 
-            // ActionSelector -> 실제 수정 가능한 모달 창으로 이동
-            // <EditReview />
-          }}
-        >
-          수정
-        </ListGroup.Item>
-        <ListGroup.Item
-          key="del"
-          action
-          className="delete"
-          onClick={() => {
-            if (!modalVisible.data.commentId && !modalVisible.data.review) {
-              // 어떤 로직으로 들어온 건지 찾아서 에러메세지 띄워주기
-              return alert("아무 정보가 없음. 지우거나 수정 불가");
-            }
-            // commentId가 있다면 comment를 삭제
-            // reviewId가 있다면 reviewId를 삭제
-            deleteById(modalVisible.data);
-          }}
-        >
+        <ListGroup.Item action className="delete" onClick={deleteById}>
           삭제
         </ListGroup.Item>
-        <ListGroup.Item
-          key="cancel" // to do: key값 필요함 ??
-          action
-          onClick={() => {
-            setModalVisible({ type: null, isVisible: false, data: null });
-          }}
-        >
+        <ListGroup.Item action onClick={closeModal}>
           취소
         </ListGroup.Item>
       </ListGroup>

@@ -3,5 +3,7 @@ node_modules
 package-lock.js
 logs/*
 imageUpload/*
+videoUpload/*
+profileImages/*
 .env
 idea

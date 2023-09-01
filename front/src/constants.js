@@ -55,16 +55,6 @@ export const TOAST_POPUP_POSITION = {
   bottomEnd: "bottom-end",
 };
 
-export const MODAL_TYPE = {
-  floatingReview: "FLOATING_REVIEW",
-  actionSelector: "ACTION_SELECTOR",
-  addReview: "ADD_REVIEW",
-  editReview: "EDIT_REVIEW_FORM",
-  deleteReview: "DELETE_REVIEW",
-  editComment: "EDIT_COMMENT",
-  deleteComment: "DELETE_COMMENT",
-};
-
 export const IS_LIKE = {
   yes: "yes",
   no: "no",
@@ -72,19 +62,9 @@ export const IS_LIKE = {
   added: "Like added",
 };
 
-// export const MODAL_OPTIONS = {
-//   FLOATING_REVIEW: {
-//     type: MODAL_TYPE.floatingReview,
-//     isVisible: false, // >> type이 있어서 굳이 필요한가 싶은데
-//     data: (data) => data,
-//   },
-//   DESTROY_MODAL: {
-//     type: null,
-//     isVisible: false,
-//     data: null,
-//   },
-// };
-
-export const truncate = (content) => {
-  return content?.length > 10 ? content.slice(0, 10) + "..." : content;
+export const RESULT_ENUM = {
+  NOT_YET: "작성중",
+  UPLOADING: "업로드 중",
+  SUCCESS: "성공",
+  FAIL: "실패",
 };

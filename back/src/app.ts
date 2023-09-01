@@ -13,10 +13,12 @@ import authRouter from "./routes/authRouter";
 import { swaggerUi, specs } from "./swagger/swagger";
 
 import "./db";
-import { mailSender } from "./utils/sendMail";
 
 const app: Express = express();
 app.use(cors());
+
+
+
 app.use(passport.initialize());
 localStrategy();
 jwtStrategy();
@@ -39,9 +41,9 @@ app.use("/travels", travelAuthRouter);
 app.use("/beaches", beachRouter);
 app.use("/auth", authRouter);
 app.use("/comments", commentAuthRouter);
-app.use("/api", likeAuthRouter);
 
 app.use("/uploads", express.static("imageUpload"));
+app.use("/api", likeAuthRouter);
 
 app.use(errorMiddleware);
 

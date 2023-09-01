@@ -13,16 +13,15 @@ import Footer from "./components/common/layout/Footer";
 import NavBar from "./components/common/layout/NavBar";
 import ReviewsList from "./components/review/ReviewsList";
 import { loginReducer } from "./Reducer";
-import "./Main.css";
+import "./index.css";
 import Graph from "./pages/Graph";
 import MyProfile from "./pages/MyProfile";
 import { Interceptor } from "./Interceptor";
 import AddReview from "./components/review/AddReview";
 import PageNotFound from "./pages/PageNotFound";
-import ResponseIndicator from "./components/common/indicators/ResponseIndicator";
-import axios from "axios";
 import * as Api from "./Api";
-import { MODAL_TYPE } from "./constants";
+import { MODAL_TYPE } from "./hooks/useModal";
+import EditReview from "./components/review/EditReview";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -31,67 +30,25 @@ export const ModalOptionContext = createContext(null);
 export const ModalVisibleContext = createContext(null);
 
 function App() {
-  const [isHandlerEnabled, setIsHandlerEnabled] = useState(true);
-  const [modalOptions, setModalOptions] = useState({
-    state: false,
-    description: null,
-    title: null,
-  });
   const [modalVisible, setModalVisible] = useState({
     type: null,
     isVisible: false,
     data: null,
   });
-
-  // 모든 요청에 isHandlerEnabled(상태 관리)를 함께 보낸다
-  axios.interceptors.request.use((config) => {
-    if (config.isHandlerEnabled) {
-      console.log("from App.js REQ.use isHandlerEnabled", isHandlerEnabled);
-    }
-    return config;
-  });
-
-  axios.interceptors.response.use(
-    (response) => {
-      if (response.config.isHandlerEnabled) {
-        console.log(
-          `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`
-        );
-        setModalOptions({
-          state: true,
-          description: `from App.js RES.use isHandlerEnabled, ${isHandlerEnabled}`,
-          title: "Request succeeded!",
-        });
-      }
-      return response;
-    },
-    (error) => {
-      // 서버 에러 -> 인터셉터 -> 유저에게 노출
-      // to do: 에러 핸들링 세분화 작업
-      // if (!error) return;
-      if (error.config.isHandlerEnabled) {
-        console.log("from app.js, ", isHandlerEnabled);
-        setModalOptions({
-          state: true,
-          description: `Unfortunately error happened during request: ${error.config.url}`,
-          title: `Request failed: ${error.response.status}`,
-        });
-      }
-      return Promise.reject({ ...error });
-    }
-  );
-
   // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
-
+  const [reviews, setReviews] = useState([]);
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
+  const [userInputValues, setUserInputValues] = useState({
+    title: "",
+    content: "",
+  });
 
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
   // 아래 코드를 보면 isFetchCompleted 가 true여야 컴포넌트가 구현됨.
-  const [reviews, setReviews] = useState(null);
   const path = location.pathname.split("/")[1];
   const is404Page =
     path !== "" &&
@@ -130,52 +87,55 @@ function App() {
   return (
     // to do: 구조.................?
     <UserStateContext.Provider value={userState}>
-      <HandlerEnabledContext.Provider
-        value={{ isHandlerEnabled, setIsHandlerEnabled }}
-      >
-        <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
-          <ModalOptionContext.Provider
-            value={{ modalOptions, setModalOptions }}
-          >
-            <DispatchContext.Provider value={dispatch}>
-              <Interceptor>
-                {!is404Page && <NavBar />}
-                {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
-                {modalVisible.isVisible &&
-                  modalVisible.type === MODAL_TYPE.addReview && (
-                    <AddReview
-                      headerTitle="새 게시물 작성하기"
-                      reviews={reviews}
-                      setReviews={setReviews}
-                    />
-                  )}
-                <Routes>
-                  <Route path="/" exact element={<Main />} />
-                  <Route path="/login" exact element={<Login />} />
-                  <Route path="/signup" exact element={<SignUp />} />
-                  <Route path="/users/:id" exact element={<MyProfile />} />
-                  <Route path="/search" exact element={<Search />} />
-                  <Route
-                    path="/reviews"
-                    exact
-                    element={
-                      <ReviewsList reviews={reviews} setReviews={setReviews} />
-                    }
+      <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
+        <DispatchContext.Provider value={dispatch}>
+          <Interceptor>
+            {!is404Page && <NavBar />}
+            {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
+            {/* >>>> edit review 오류때문에 임시로 edit도 여기서 사용한다 */}
+            {modalVisible && modalVisible.type === MODAL_TYPE.addReview && (
+              <AddReview
+                reviews={reviews}
+                setReviews={setReviews}
+                userInputValues={userInputValues}
+                setUserInputValues={setUserInputValues}
+              />
+            )}
+            {modalVisible && modalVisible.type === MODAL_TYPE.editReview && (
+              <EditReview
+                reviews={reviews}
+                setReviews={setReviews}
+                userInputValues={userInputValues}
+                setUserInputValues={setUserInputValues}
+              />
+            )}
+
+            <Routes>
+              <Route path="/" exact element={<Main />} />
+              <Route path="/login" exact element={<Login />} />
+              <Route path="/signup" exact element={<SignUp />} />
+              <Route path="/users/:id" exact element={<MyProfile />} />
+              <Route path="/search" exact element={<Search />} />
+              <Route
+                path="/reviews"
+                exact
+                element={
+                  <ReviewsList
+                    reviews={reviews}
+                    setReviews={setReviews}
+                    userInputValues={userInputValues}
+                    setUserInputValues={setUserInputValues}
                   />
-                  <Route path="/graph" exact element={<Graph />} />
-                  {/* 404 페이지 */}
-                  <Route path="*" element={<PageNotFound />} />
-                </Routes>
-                <ResponseIndicator
-                  modalOptions={modalOptions}
-                  setModalOptions={setModalOptions}
-                />
-                {!is404Page && <Footer />}
-              </Interceptor>
-            </DispatchContext.Provider>
-          </ModalOptionContext.Provider>
-        </ModalVisibleContext.Provider>
-      </HandlerEnabledContext.Provider>
+                }
+              />
+              <Route path="/graph" exact element={<Graph />} />
+              {/* 404 페이지 */}
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+            {!is404Page && <Footer />}
+          </Interceptor>
+        </DispatchContext.Provider>
+      </ModalVisibleContext.Provider>
     </UserStateContext.Provider>
   );
 }
