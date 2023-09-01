@@ -12,18 +12,18 @@ import { IRequest, IUser } from "user";
 import { findUserByEmail, findUserById } from "../db/models/User";
 import { errorGenerator } from "../utils/errorGenerator";
 import { pwdMatchCheck } from "../utils/pwdMatchCheck";
+import { StatusCodes } from "http-status-codes";
 
 const deletePassword = (user: IUser) => {
   const userWithoutPassword = {
+    _id: user._id,
     name: user.name,
     email: user.email,
     description: user.description,
-    _id: user._id,
     uploadFile: user.uploadFile,
-    createdAt: user.createdAt,
     updatedAt: user.updatedAt,
+    createdAt: user.createdAt,
   };
-
   return userWithoutPassword;
 };
 /**
@@ -31,7 +31,7 @@ const deletePassword = (user: IUser) => {
  * @return res.status(200).json(newUser);
  * @description 회원가입 api
  */
-//TODO newUser 통째로 X password 뺴고
+
 export const signUpUser = async (
   req: IRequest,
   res: Response,
@@ -42,9 +42,8 @@ export const signUpUser = async (
 
     const newUser = await createUserService(name, email, password);
     const userWithoutPassword = deletePassword(newUser);
-    // const { password:pwd, ...userWithoutPassword } = newUser;
-    // const { password:pwd, ...userWithoutPassword } = newUser.toObject();
-    res.status(200).json(userWithoutPassword);
+
+    res.status(StatusCodes.OK).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -66,7 +65,7 @@ export const getRandomUser = async (
       return acc;
     }, []);
 
-    res.status(200).json(randomUser);
+    res.status(StatusCodes.OK).json(randomUser);
   } catch (error) {
     next(error);
   }
@@ -84,7 +83,7 @@ export const getCurrentUser = async (
 ) => {
   try {
     const userWithoutPassword = deletePassword(req.user);
-    res.status(200).json(userWithoutPassword);
+    res.status(StatusCodes.OK).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -104,7 +103,7 @@ export const getUserById = async (
     const { userId } = req.params;
     const user = await getUserService(userId);
     const userWithoutPassword = deletePassword(user);
-    return res.status(200).json(userWithoutPassword);
+    return res.status(StatusCodes.OK).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -125,8 +124,9 @@ export const updateUser = async (
     const inputData = req.body;
 
     const updatedUser = await updateUserService(userId, inputData);
+    const userWithoutPassword = deletePassword(updatedUser);
 
-    res.status(200).json(updatedUser);
+    res.status(200).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -145,8 +145,8 @@ export const deleteUser = async (
   try {
     const { userId } = req.params;
     const user = await deleteUserService(userId);
-
-    res.status(200).json(user);
+    const userWithoutPassword = deletePassword(user);
+    res.status(StatusCodes.OK).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -171,7 +171,7 @@ export const resetPassword = async (
     const resetedUser = await resetPasswordService(userId, email);
 
     const userWithoutPassword = deletePassword(resetedUser);
-    res.status(200).json(userWithoutPassword);
+    res.status(StatusCodes.OK).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }
@@ -199,7 +199,7 @@ export const changePassword = async (
 
     const updatedPwdUser = await changePasswordService(userId, newPassword);
     const userWithoutPassword = deletePassword(updatedPwdUser);
-    res.status(200).json(userWithoutPassword);
+    res.status(StatusCodes.OK).json(userWithoutPassword);
   } catch (error) {
     next(error);
   }

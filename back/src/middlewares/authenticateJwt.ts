@@ -18,20 +18,8 @@ export const jwtAuthentication = async (
           next(err);
         }
         if (info) {
-          if (info.message === "jwt expired") {
-            const err = errorGenerator("토큰 만료", 401);
-            next(err);
-          }
-
-          if (info.message === "No auth token") {
-            const err = errorGenerator("토큰 없음", 401);
-            next(err);
-          }
-
-          if (info.message === "user not exist") {
-            const err = errorGenerator("User Not Found!", 404);
-            next(err);
-          }
+          const err = errorGenerator(info.message, 401);
+          next(err);
         }
         req.user = user;
         next();
