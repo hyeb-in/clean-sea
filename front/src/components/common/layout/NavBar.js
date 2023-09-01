@@ -16,8 +16,8 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Avatar from "../Avatar";
 import { MODAL_TYPE } from "../../../hooks/useModal";
+import Avatar from "../Avatar";
 
 const NavBar = ({ avatarUrl, setAvatarUrl }) => {
   const navigate = useNavigate();
@@ -91,12 +91,7 @@ const NavBar = ({ avatarUrl, setAvatarUrl }) => {
                   <Nav.Link onClick={logout}>로그아웃</Nav.Link>
                 </Nav.Item>
                 {/* 아바타 */}
-                <Avatar
-                  width={30}
-                  user={user}
-                  avatarUrl={avatarUrl}
-                  setAvatarUrl={setAvatarUrl}
-                />
+                <Avatar width={30} user={user} />
               </>
             ) : (
               <Nav.Item>

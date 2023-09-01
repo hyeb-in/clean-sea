@@ -1,5 +1,5 @@
 import Avatar from "../../common/Avatar";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserStateContext } from "../../../App";
 import { useNavigate } from "react-router-dom";
 import Timestamp from "../../common/microComponents/Timestamp";
@@ -44,7 +44,6 @@ const Comment = ({ comment, setComments, setNewComments, setCommentCount }) => {
   useEffect(() => {
     const getUserAvatar = async () => {
       const res = await Api.get(`users/${userId}`);
-      console.log(res.data);
       setUser(res.data);
     };
     getUserAvatar();
