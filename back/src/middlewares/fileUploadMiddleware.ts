@@ -1,7 +1,9 @@
 import multer from 'multer';
 import path from 'path';
 
+// 이미지와 비디오 파일 필터링을 위한 함수
 const imageFilter = (req : any, file : Express.Multer.File, cb : any) =>{
+    // 파일의 mimetype검사하여 필터링 수행
     if( file.mimetype.startsWith('video/') || (file.mimetype.startsWith('image/') && (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'))){
         cb(null,true);
     }else{
@@ -12,8 +14,8 @@ const imageFilter = (req : any, file : Express.Multer.File, cb : any) =>{
 const storage = multer.diskStorage({
     destination: './imageUpload/',
     filename : function (req, file, cb) {
-        const ext = path.extname(file.originalname);
-        const fileName = `${Date.now()}${ext}`;
+        const ext = path.extname(file.originalname); // 파일 확장자 추출
+        const fileName = `${Date.now()}${ext}`; // 현재 시간 + 확장자로 파일명 생성
         cb(null, fileName);
     },
 });
@@ -21,31 +23,6 @@ const storage = multer.diskStorage({
 const uploadMiddleware = multer({
     storage : storage,
     fileFilter : imageFilter,
-}).array('uploadFile[]',5);
+}).array('uploadFile[]',5); // 배열 형태의 업로드 필드 설정 (최대 5개)
 
-
-
-// 동영상 업로드 저장 경로
-const videoStorage = multer.diskStorage({
-    destination : path.join(__dirname, '../videoUpload/'),
-    filename : function(req,file,cb){
-        const ext = path.extname(file.originalname);
-        const fileName = `${Date.now()}${ext}`;
-        cb(null, fileName);
-    }
-});
-
-const videoFilter = (req : any, file : Express.Multer.File, cb : any) => {
-    if(file.mimetype.startsWith('video/')){
-        cb(null,true);
-    }else{
-        cb(new Error('비디오만 업로드 가능합니다.'), false);
-    }
-};
-
-const videoUploadMiddleware = multer({
-    storage : videoStorage,
-    fileFilter : videoFilter,
-}).array('uploadVideo[]',5);
-
-export { uploadMiddleware, videoUploadMiddleware };
+export { uploadMiddleware };
