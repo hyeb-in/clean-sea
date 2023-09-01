@@ -22,6 +22,11 @@ import PageNotFound from "./pages/PageNotFound";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
 import EditReview from "./components/review/EditReview";
+import "./index.css";
+import { DEFAULT_AVATAR, RESULT_ENUM } from "./constants";
+import UploadStatusIndicators from "./components/common/indicators/UploadStatusIndicators";
+import ToastWrapper from "./components/common/popup/ToastWrapper";
+import useToast from "./hooks/useToast";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -39,12 +44,15 @@ function App() {
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
+  const [avatarUrl, setAvatarUrl] = useState(DEFAULT_AVATAR);
   const [reviews, setReviews] = useState([]);
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
   const [userInputValues, setUserInputValues] = useState({
     title: "",
     content: "",
   });
+  const [uploadingStatus, setUploadingStatus] = useState(RESULT_ENUM.NOT_YET);
+  const { showToast, toastData } = useToast();
 
   const location = useLocation();
   // 아래의 fetchCurrentUser 함수가 실행된 다음에 컴포넌트가 구현되도록 함.
@@ -88,9 +96,9 @@ function App() {
 
   return (
     // to do: 구조.................?
-    <UserStateContext.Provider value={userState}>
-      <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
-        <DispatchContext.Provider value={dispatch}>
+    <DispatchContext.Provider value={dispatch}>
+      <UserStateContext.Provider value={userState}>
+        <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
           <Interceptor>
             {showToast && <ToastWrapper toastData={toastData} />}
             {!is404Page && (
@@ -151,9 +159,9 @@ function App() {
             </Routes>
             {!is404Page && <Footer />}
           </Interceptor>
-        </DispatchContext.Provider>
-      </ModalVisibleContext.Provider>
-    </UserStateContext.Provider>
+        </ModalVisibleContext.Provider>
+      </UserStateContext.Provider>
+    </DispatchContext.Provider>
   );
 }
 
