@@ -10,12 +10,16 @@ export const loginUser = async (
     const user = {
       token: req.token,
       _id: req.user._id,
-      email: req.user.email,
       name: req.user.name,
+      email: req.user.email,
+      description: req.user.description,
+      uploadFile: req.user.uploadFile,
+      updatedAt: req.user.updatedAt,
+      createdAt: req.user.createdAt,
     };
+
     return res.status(200).json(user);
   } catch (error) {
     next(error);
   }
 };
- 
