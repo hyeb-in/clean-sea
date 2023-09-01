@@ -1,5 +1,5 @@
 import Avatar from "../../common/Avatar";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserStateContext } from "../../../App";
 import { useNavigate } from "react-router-dom";
 import Timestamp from "../../common/microComponents/Timestamp";
