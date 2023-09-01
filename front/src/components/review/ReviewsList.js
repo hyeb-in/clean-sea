@@ -37,15 +37,9 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 임시!!
-        const loggedIn =
-          loggedInUser?.constructor === Object &&
-          Object.keys(loggedInUser).length > 0;
-
         // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
-        if (loggedIn) {
+        if (loggedInUser) {
           const res = await fetchPrivateReviews();
-          console.log(res.data);
           if (!res.data) {
             showToastPopup(
               "데이터를 불러올 수 없습니다",
