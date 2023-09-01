@@ -1,4 +1,4 @@
-const TextBubble = ({ text }) => {
-  return <div className="speech-bubble">{text}</div>;
+const TextBubble = ({ text, className }) => {
+  return <div className={className}>{text}</div>;
 };
 export default TextBubble;

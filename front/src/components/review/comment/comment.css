@@ -42,7 +42,10 @@
   flex-direction: column;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
-
+.comment__author {
+  display: flex;
+  align-items: center;
+}
 .text-content {
   width: 100%;
   font-size: 0.9rem;
@@ -77,6 +80,7 @@
 }
 .comment__title img {
   float: left;
+  margin-right: 10px;
 }
 .comment__col:nth-child(2) {
   display: flex;
@@ -88,7 +92,6 @@
 .comment__author {
   font-weight: 600;
   min-width: 100%;
-  display: inline-block;
   white-space: nowrap;
 }
 .comment__avatar {

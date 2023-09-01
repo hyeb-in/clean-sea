@@ -22,9 +22,9 @@ const CommentsModal = () => {
   const [modalNewComments, setModalNewComments] = useState([]);
 
   // // 댓글 입력시 자동 스크롤
-  // useEffect(() => {
-  //   scrollRef.current.scrollIntoView({ behavior: "smooth" });
-  // }, [modalCommentList, newCommentsList]);
+  useEffect(() => {
+    scrollRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [modalNewComments, newComments]);
 
   try {
     useEffect(() => {

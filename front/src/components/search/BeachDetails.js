@@ -4,15 +4,18 @@ import { Container, Row, Col, Badge, Table, Alert } from 'react-bootstrap';
 const BeachDetails = ({ beachData }) => {
   if (!beachData) return null;
 
+  const formatNumber = (num) => {
+    return parseFloat(num).toFixed(3);
+  }
+
   return (
-    <Container>
+    <Container style={{height:"75vh"}}>
       <Row className="mb-3">
         <Col>
-          {/* goodnessFit에 따라 빨간색 혹은 초록색 박스로 표시 */}
           {beachData.goodnessFit ? (
-            <Badge bg="success" className="p-2 m-2">적합</Badge>
+            <Badge bg="success" className="px-3 m-1" style={{fontSize: '1.5rem'}}>적합</Badge>
           ) : (
-            <Badge bg="danger" className="p-2 m-2">부적합</Badge>
+            <Badge bg="danger" className="px-3 m-1" style={{fontSize: '1.5rem'}}>부적합</Badge>
           )}
         </Col>
       </Row>
@@ -33,19 +36,19 @@ const BeachDetails = ({ beachData }) => {
             <tbody className="table-group-divider">
             <tr>
               <td>검출수</td>
-              <td>{beachData.esch}</td>
+              <td style={{textAlign: "right"}}>{formatNumber(beachData.esch)}</td>
             </tr>
             <tr>
               <td>평균</td>
-              <td>{beachData.eschAvg}</td>
+              <td style={{textAlign: "right"}}>{formatNumber(beachData.eschAvg)}</td>
             </tr>
             <tr>
-              <td>점수</td>
-              <td>{beachData.eschScore}</td>
+              <td><u>점수</u></td>
+              <td style={{textAlign: "right"}}>{formatNumber(beachData.eschScore)}</td>
             </tr>
             <tr>
-              <td>전국 평균 대비 점수</td>
-              <td>{beachData.eschAvgGlobalScore}</td>
+              <td>전국 평균 대비 지역 점수</td>
+              <td style={{textAlign: "right"}}>{formatNumber(beachData.eschAvgGlobalScore)}</td>
             </tr>
             </tbody>
           </Table>
@@ -60,19 +63,19 @@ const BeachDetails = ({ beachData }) => {
             <tbody className="table-group-divider">
             <tr>
               <td>검출수</td>
-              <td>{beachData.ente}</td>
+              <td style={{textAlign: "right"}}>{formatNumber(beachData.ente)}</td>
             </tr>
             <tr>
               <td>평균</td>
-              <td>{beachData.enteAvg}</td>
+              <td style={{textAlign: "right"}}>{formatNumber(beachData.enteAvg)}</td>
             </tr>
             <tr>
-              <td>점수</td>
-              <td>{beachData.enteScore}</td>
+              <td><u>점수</u></td>
+              <td style={{textAlign: "right"}}>{formatNumber(beachData.enteScore)}</td>
             </tr>
             <tr>
-              <td>전국 평균 대비 점수</td>
-              <td>{beachData.enteAvgGlobalScore}</td>
+              <td>전국 평균 대비 지역 점수</td>
+              <td style={{textAlign: "right"}}>{formatNumber(beachData.enteAvgGlobalScore)}</td>
             </tr>
             </tbody>
           </Table>
@@ -81,8 +84,11 @@ const BeachDetails = ({ beachData }) => {
 
       <Row className="mt-3 p-4">
         <Alert key="info" variant="info">
-          <h4>전국 대비 종합 점수: {beachData.sumGerms}</h4>
+          <h4 className="mb-0" style={{ textAlign: "center"}}>
+            전국 대비 종합 <u>점수</u>: <b>{formatNumber(beachData.globalScore)}</b>
+          </h4>
         </Alert>
+        <p>점수는 0에 가까울 수록 좋은 수치입니다.</p>
       </Row>
     </Container>
   );

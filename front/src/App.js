@@ -61,8 +61,10 @@ function App() {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
       const res = await Api.get("users/current");
+      if (!res.data) throw new Error("유저 정보를 받아올 수 없습니다");
       const currentUser = res.data;
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
+      console.log(res.data, "null 이어야함?");
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: currentUser,
@@ -90,7 +92,10 @@ function App() {
       <ModalVisibleContext.Provider value={{ modalVisible, setModalVisible }}>
         <DispatchContext.Provider value={dispatch}>
           <Interceptor>
-            {!is404Page && <NavBar />}
+            {showToast && <ToastWrapper toastData={toastData} />}
+            {!is404Page && (
+              <NavBar avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />
+            )}
             {/* upload는 모든 페이지에서 할 수 있기때문에 여기 있어야 함!! 옮기지 말 것 */}
             {/* >>>> edit review 오류때문에 임시로 edit도 여기서 사용한다 */}
             {modalVisible && modalVisible.type === MODAL_TYPE.addReview && (
@@ -99,6 +104,7 @@ function App() {
                 setReviews={setReviews}
                 userInputValues={userInputValues}
                 setUserInputValues={setUserInputValues}
+                setUploadingStatus={setUploadingStatus}
               />
             )}
             {modalVisible && modalVisible.type === MODAL_TYPE.editReview && (
@@ -107,6 +113,13 @@ function App() {
                 setReviews={setReviews}
                 userInputValues={userInputValues}
                 setUserInputValues={setUserInputValues}
+                setUploadingStatus={setUploadingStatus}
+              />
+            )}
+            {uploadingStatus && (
+              <UploadStatusIndicators
+                uploadingStatus={uploadingStatus}
+                setUploadingStatus={setUploadingStatus}
               />
             )}
 
@@ -114,7 +127,11 @@ function App() {
               <Route path="/" exact element={<Main />} />
               <Route path="/login" exact element={<Login />} />
               <Route path="/signup" exact element={<SignUp />} />
-              <Route path="/users/:id" exact element={<MyProfile />} />
+              <Route
+                path="/users/:id"
+                exact
+                element={<MyProfile setAvatarUrl={setAvatarUrl} />}
+              />
               <Route path="/search" exact element={<Search />} />
               <Route
                 path="/reviews"

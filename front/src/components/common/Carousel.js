@@ -8,6 +8,7 @@ import { Button, Image } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import { serverUrl } from "../../Api";
 import useModal from "../../hooks/useModal";
+import { DEFAULT_AVATAR, DEFAULT_IMAGE_URL } from "../../constants";
 
 const prevIcon = (
   <FontAwesomeIcon icon={faArrowLeft} className="carousel-arrow-icon" />
@@ -44,7 +45,8 @@ const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
           <Carousel.Item key={`${url}-${index}`}>
             <Image
               src={url && url?.includes("blob") ? url : `${serverUrl}${url}`}
-              fluid
+              alt="default-image"
+              onError={handleError}
             />
             {/* preview 삭제버튼 */}
             {preview && (

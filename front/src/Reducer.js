@@ -12,6 +12,12 @@ export function loginReducer(userState, action) {
         ...userState,
         user: null,
       };
+    case "UPDATE":
+      console.log("user info updated");
+      return {
+        ...userState,
+        user: action.payload,
+      };
     default:
       return userState;
   }

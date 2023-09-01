@@ -1,19 +1,35 @@
 import React from "react";
-import { Col } from "react-bootstrap";
+import { Image, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { DEFAULT_AVATAR } from "../../constants";
+import { serverUrl } from "../../Api";
 
-const Avatar = React.forwardRef(({ width }, ref) => {
-  // url 링크를 여기에 포함시키는 게 어떨까?!?
-  // 오버레이 -> 유저 프로필 보여주는 화면도 구현
-  return (
-    <Col sm="auto" ref={ref}>
-      <img
-        className="rounded-circle"
-        src="/icon.png"
-        width={width}
-        alt="avatar"
-      />
-    </Col>
-  );
-});
+const Avatar = React.forwardRef(
+  ({ width, user, avatarUrl, setAvatarUrl }, ref) => {
+    const navigate = useNavigate();
+    const src = serverUrl + avatarUrl;
+    const handleError = (e) => {
+      e.target.src = DEFAULT_AVATAR; // 대체 이미지로 변경
+    };
+
+    return (
+      <Nav.Link onClick={() => navigate(`/users/${user._id}`)} ref={ref}>
+        <OverlayTrigger
+          placement="bottom"
+          overlay={<Tooltip id="profile">프로필</Tooltip>}
+        >
+          <Image
+            src={src}
+            width={width}
+            height={width}
+            roundedCircle={true}
+            alt="avatar"
+            enError={handleError}
+          />
+        </OverlayTrigger>
+      </Nav.Link>
+    );
+  }
+);
 
 export default Avatar;

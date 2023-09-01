@@ -5,12 +5,6 @@ const validationReview = (user, userInputValues) => {
   const isContentInvalid = userInputValues.content.length < 4;
   const isTooLong = userInputValues.content.length > 300;
 
-  if (userInputValues.content.length > 300) {
-    return {
-      message: "내용이 너무 깁니다",
-      status: TOAST_POPUP_STATUS.alert,
-    };
-  }
   if (!user) {
     return {
       message: "로그인 한 유저만 사용할 수 있습니다",

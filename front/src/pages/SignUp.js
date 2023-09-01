@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import * as Api from "../Api";
+import ToastWrapper from "../components/common/popup/ToastWrapper";
+import useToast from "../hooks/useToast";
+import { TOAST_POPUP_STATUS } from "../constants";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -9,6 +11,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const { showToast, toastData, setShowToast } = useToast();
 
   //이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
   const validateEmail = (email) => {
@@ -43,121 +46,123 @@ const SignUp = () => {
         });
       navigate("/login");
     } catch (err) {
-      console.log("회원가입에 실패하셨습니다.", err);
-      window.alert(err.response.data);
+      setShowToast(err.response.data, TOAST_POPUP_STATUS.error);
     }
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <>
+      {showToast && <ToastWrapper toastData={toastData} />}
       <div
         style={{
-          width: "350px",
-          boxShadow: "0px 4px 12px #00000026",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <div
-          className="container"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            gap: "16px",
-            padding: "16px",
+            width: "350px",
+            boxShadow: "0px 4px 12px #00000026",
           }}
         >
-          <h2 style={{ textAlign: "center" }}>회원가입</h2>
-          <form
-            onSubmit={handleSubmit}
+          <div
+            className="container"
             style={{
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
+              alignItems: "center",
               height: "100%",
-              width: "100%",
               gap: "16px",
+              padding: "16px",
             }}
           >
-            <div className="form-group">
-              <label style={{ fontSize: "18px" }}>이름</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="이름을 입력하세요."
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              {!isNameValid && name.length > 0 && (
-                <div className="text-danger">
-                  이름은 2글자 이상으로 설정해 주세요.
-                </div>
-              )}
-            </div>
-            <div className="form-group">
-              <label style={{ fontSize: "18px" }}>이메일</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="생성할 이메일을 입력하세요."
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {!isEmailValid && email.length > 0 && (
-                <div className="text-danger">
-                  이메일 형식이 올바르지 않습니다.
-                </div>
-              )}
-            </div>
-            <div className="form-group">
-              <label style={{ fontSize: "18px" }}>비밀번호</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="비밀번호를 입력하세요."
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {!isPasswordValid && password.length > 0 && (
-                <div className="text-danger">
-                  비밀번호는 4글자 이상으로 설정해 주세요.
-                </div>
-              )}
-            </div>
-            <div className="form-group">
-              <label style={{ fontSize: "18px" }}>비밀번호 확인</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="비밀번호 확인."
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              {!isPasswordValid && confirmPassword.length > 0 && (
-                <div className="text-danger">
-                  비밀번호가 일치한지 확인해 주세요.
-                </div>
-              )}
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={!isFormValid}
+            <h2 style={{ textAlign: "center" }}>회원가입</h2>
+            <form
+              onSubmit={handleSubmit}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                height: "100%",
+                width: "100%",
+                gap: "16px",
+              }}
             >
-              회원가입
-            </button>
-          </form>
+              <div className="form-group">
+                <label style={{ fontSize: "18px" }}>이름</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="이름을 입력하세요."
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {!isNameValid && name.length > 0 && (
+                  <div className="text-danger">
+                    이름은 2글자 이상으로 설정해 주세요.
+                  </div>
+                )}
+              </div>
+              <div className="form-group">
+                <label style={{ fontSize: "18px" }}>이메일</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="생성할 이메일을 입력하세요."
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {!isEmailValid && email.length > 0 && (
+                  <div className="text-danger">
+                    이메일 형식이 올바르지 않습니다.
+                  </div>
+                )}
+              </div>
+              <div className="form-group">
+                <label style={{ fontSize: "18px" }}>비밀번호</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="비밀번호를 입력하세요."
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {!isPasswordValid && password.length > 0 && (
+                  <div className="text-danger">
+                    비밀번호는 4글자 이상으로 설정해 주세요.
+                  </div>
+                )}
+              </div>
+              <div className="form-group">
+                <label style={{ fontSize: "18px" }}>비밀번호 확인</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="비밀번호 확인."
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                {!isPasswordValid && confirmPassword.length > 0 && (
+                  <div className="text-danger">
+                    비밀번호가 일치한지 확인해 주세요.
+                  </div>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!isFormValid}
+              >
+                회원가입
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -7,6 +7,7 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
 
   const [searchTerm, setSearchTerm] = useState(beachName || '');
   const [filteredItems, setFilteredItems] = useState([]);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(-1); // 선택된 항목의 인덱스
 
   const wrapperRef = useRef(null); // 컴포넌트의 DOM에 직접 접근하기 위한 ref
 
@@ -33,6 +34,9 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
     } else {
       setFilteredItems([]);
     }
+
+    // 입력 변경시 항목 인덱스 초기화
+    setSelectedItemIndex(-1);
   };
 
   const handleListItemClick = async (name) => {
@@ -46,6 +50,38 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (filteredItems.length === 0) return;
+
+    // 아래 화살표 키
+    if (event.keyCode === 40) {
+      event.preventDefault();
+      if (selectedItemIndex < filteredItems.length - 1) {
+        setSelectedItemIndex(selectedItemIndex + 1);
+      } else {
+        setSelectedItemIndex(0);
+      }
+    }
+
+    // 위 화살표 키
+    else if (event.keyCode === 38) {
+      event.preventDefault();
+      if (selectedItemIndex > 0) {
+        setSelectedItemIndex(selectedItemIndex - 1);
+      } else {
+        setSelectedItemIndex(filteredItems.length - 1);
+      }
+    }
+
+    // 엔터 키
+    else if (event.keyCode === 13) {
+      event.preventDefault();
+      if (selectedItemIndex !== -1) {
+        handleListItemClick(filteredItems[selectedItemIndex]);
+      }
+    }
+  };
+
   return (
     <div ref={wrapperRef}>
       <Form.Control
@@ -53,13 +89,16 @@ const SearchInput = ({ onBeachIdSelected, displayToast, beachName }) => {
         placeholder="검색"
         value={searchTerm}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
       />
       {filteredItems.length > 0 && (
-        <ListGroup style={{ position: 'absolute', zIndex: 1 }}
-                   onMouseLeave={() => setFilteredItems([])}
-        >
-          {filteredItems.map((item) => (
-            <ListGroup.Item key={item} onClick={() => handleListItemClick(item)}>
+        <ListGroup style={{ position: 'absolute', zIndex: 1 }}>
+          {filteredItems.map((item, index) => (
+            <ListGroup.Item
+              key={item}
+              onClick={() => handleListItemClick(item)}
+              active={index === selectedItemIndex}
+            >
               {item}
             </ListGroup.Item>
           ))}
