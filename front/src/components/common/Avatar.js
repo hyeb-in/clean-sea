@@ -1,33 +1,35 @@
 import React from "react";
-import { Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Image, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { DEFAULT_AVATAR } from "../../constants";
 import { serverUrl } from "../../Api";
 
-const Avatar = React.forwardRef(({ width, user }, ref) => {
-  const navigate = useNavigate();
-  const hasAvatarUrl = user?.uploadFile && !!user?.uploadFile[0];
+const Avatar = React.forwardRef(
+  ({ width, user, avatarUrl, setAvatarUrl }, ref) => {
+    const navigate = useNavigate();
+    const src = serverUrl + avatarUrl;
+    const handleError = (e) => {
+      e.target.src = DEFAULT_AVATAR; // 대체 이미지로 변경
+    };
 
-  const avatarUrl = hasAvatarUrl
-    ? `${serverUrl}${user.uploadFile[0]}`
-    : DEFAULT_AVATAR;
-
-  return (
-    <Nav.Link onClick={() => navigate(`/users/${user._id}`)} ref={ref}>
-      <OverlayTrigger
-        placement="bottom"
-        overlay={<Tooltip id="profile">프로필</Tooltip>}
-      >
-        <img
-          className="rounded-circle"
-          src={avatarUrl}
-          width={width}
-          alt="avatar"
-          onerror="/image/dolphin.png"
-        />
-      </OverlayTrigger>
-    </Nav.Link>
-  );
-});
+    return (
+      <Nav.Link onClick={() => navigate(`/users/${user._id}`)} ref={ref}>
+        <OverlayTrigger
+          placement="bottom"
+          overlay={<Tooltip id="profile">프로필</Tooltip>}
+        >
+          <Image
+            src={src}
+            width={width}
+            height={width}
+            roundedCircle={true}
+            alt="avatar"
+            enError={handleError}
+          />
+        </OverlayTrigger>
+      </Nav.Link>
+    );
+  }
+);
 
 export default Avatar;

@@ -18,6 +18,7 @@ export const jwtAuthentication = async (
           next(err);
         }
         if (info) {
+          console.log(info);
           if (info.message === "jwt expired") {
             const err = errorGenerator("토큰 만료", 401);
             next(err);

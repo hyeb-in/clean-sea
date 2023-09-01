@@ -8,6 +8,7 @@ import { Button, Image } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import { serverUrl } from "../../Api";
 import useModal from "../../hooks/useModal";
+import { DEFAULT_AVATAR, DEFAULT_IMAGE_URL } from "../../constants";
 
 const prevIcon = (
   <FontAwesomeIcon icon={faArrowLeft} className="carousel-arrow-icon" />
@@ -30,6 +31,10 @@ const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
 
   const urls = editingReviewImgUrls || imageUrls || preview;
 
+  const handleError = (e) => {
+    e.target.src = DEFAULT_IMAGE_URL; // 대체 이미지로 변경
+  };
+
   return (
     <Carousel
       className={`carousel__container px-0`}
@@ -43,13 +48,9 @@ const CarouselWrapper = ({ preview, setPreview, imageUrls }) => {
         return (
           <Carousel.Item key={`${url}-${index}`}>
             <Image
-              src={
-                url && url?.includes("blob")
-                  ? url
-                  : `${serverUrl}${url}` || "/image/imageLoading"
-              }
-              fluid
+              src={url && url?.includes("blob") ? url : `${serverUrl}${url}`}
               alt="default-image"
+              onError={handleError}
             />
             {/* preview 삭제버튼 */}
             {preview && (
