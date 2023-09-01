@@ -21,12 +21,12 @@ const validateSchema = (schema : joi.ObjectSchema) => {
 
 const posttravelSchema = joi.object({
     beachId: joi.required(),
-    date : joi.date().iso().required().messages(errorMessage),
+    date : joi.date().iso().max(new Date().toISOString()).required().messages(errorMessage),
 });
 
 const puttravelSchema = joi.object({
     beachId: joi.required(),
-    date : joi.date().iso().optional().messages(errorMessage),
+    date : joi.date().iso().max(new Date().toISOString()).optional().messages(errorMessage),
 });
 
 export const postTravelValidator = validateSchema (posttravelSchema);

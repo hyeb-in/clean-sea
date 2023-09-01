@@ -9,7 +9,6 @@ interface IReview extends Document {
   location?: string;
   author?: string;
   uploadFile?: string[];
-  uploadVideo?: string[];
   comments?: Types.ObjectId[];
   commentCount? : number;
   likeCount?: number;
