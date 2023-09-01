@@ -66,7 +66,7 @@ function errorMiddleware(
   error: IError,
   req: Request,
   res: Response,
-  next: NextFunction
+  // next: NextFunction
 ): void {
   if (error.statusCode === null || error.statusCode === undefined)
     error.statusCode = 500;

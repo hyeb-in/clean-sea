@@ -8,7 +8,6 @@ import {
   getBeachByRegionAndYearService,
 } from "../services/beachService";
 import { StatusCodes } from "http-status-codes";
-import { IRankedBeach } from 'beach';
 import { Types } from "mongoose";
 
 const getBeachByName = async (
