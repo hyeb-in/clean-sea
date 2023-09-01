@@ -170,7 +170,7 @@ const MyProfile = () => {
               )}
             </Card>
 
-            <History displayToast={displayToastMessage} isEditable={id === loggedInUser._id}/>
+            <History displayToast={displayToastMessage} id={id} isEditable={id === loggedInUser._id}/>
           </Col>
           <Col sm={4}>
             <RandomUserList data={randomUsers}></RandomUserList>

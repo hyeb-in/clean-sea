@@ -7,7 +7,7 @@ import TravelItem from "./TravelItem";
 import SearchInput from "./SearchInput";
 import { useToggle } from "../../hooks/profileHooks";
 
-const History = ({ displayToast, isEditable }) => {
+const History = ({ displayToast, isEditable, id }) => {
   const [travels, setTravels] = useState([]);
   const [showModal, setShowModal] = useToggle();
 
@@ -22,7 +22,7 @@ const History = ({ displayToast, isEditable }) => {
 
   const fetchTravelList = async () => {
     try {
-      const response = await Api.get("travels/travelList");
+      const response = await Api.get(`travels/users/${id}`);
       setTravels(response.data);
     } catch (error) {
       displayToast("방문 로그 조회 실패.");
@@ -44,7 +44,7 @@ const History = ({ displayToast, isEditable }) => {
 
   useEffect(() => {
     fetchTravelList();
-  }, []);
+  }, [id]);
 
   const handleTravelUpdate = (travelId, updatedTravel) => {
     const updatedTravels = travels.map(
