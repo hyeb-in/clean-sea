@@ -70,5 +70,5 @@ export const RESULT_ENUM = {
   SUCCESS: "성공",
 };
 
-export const DEFAULT_AVATAR = "image/icon.png";
+export const DEFAULT_AVATAR = "/image/icon.png";
 export const DEFAULT_IMAGE_URL = "/image/imageLoading.png";

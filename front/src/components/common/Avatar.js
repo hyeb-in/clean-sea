@@ -7,6 +7,10 @@ import { serverUrl } from "../../Api";
 const Avatar = React.forwardRef(
   ({ width, user, avatarUrl, setAvatarUrl }, ref) => {
     const navigate = useNavigate();
+    const src = serverUrl + avatarUrl;
+    const handleError = (e) => {
+      e.target.src = DEFAULT_AVATAR; // 대체 이미지로 변경
+    };
 
     return (
       <Nav.Link onClick={() => navigate(`/users/${user._id}`)} ref={ref}>
@@ -15,12 +19,12 @@ const Avatar = React.forwardRef(
           overlay={<Tooltip id="profile">프로필</Tooltip>}
         >
           <Image
-            src={serverUrl + avatarUrl}
+            src={src}
             width={width}
             height={width}
             roundedCircle={true}
             alt="avatar"
-            // enError={(e) => (e.currentTarget.src = DEFAULT_AVATAR)}
+            enError={handleError}
           />
         </OverlayTrigger>
       </Nav.Link>
