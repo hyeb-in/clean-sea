@@ -67,7 +67,7 @@ const Comment = ({ comment, setComments, setNewComments, setCommentCount }) => {
               </div>
             )}
           </div>
-          <div className="comment__col link">
+          <div className="comment__col">
             {!isEditing && (
               <Timestamp
                 createdAt={result.date}

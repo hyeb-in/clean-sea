@@ -30,7 +30,7 @@ const NavBar = ({ avatarUrl, setAvatarUrl }) => {
     dispatch({ type: "LOGOUT" });
     navigate("/");
   };
-
+  console.log(user);
   const login = () => {
     navigate("/login");
   };

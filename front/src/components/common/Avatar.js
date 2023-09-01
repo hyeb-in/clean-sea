@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Avatar = ({ width, user }) => {
   const navigate = useNavigate();
-
+  console.log(user?.uploadFile[0]);
   return (
     <Nav.Link onClick={() => navigate(`/users/${user._id}`)}>
       <OverlayTrigger

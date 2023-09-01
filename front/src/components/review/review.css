@@ -32,6 +32,9 @@ textarea:focus {
 .addreview__modalWrapper {
   max-width: 100% !important;
 }
+.review-modal-body {
+  min-width: 500px;
+}
 .addreview__btn {
   height: max-content;
 }
