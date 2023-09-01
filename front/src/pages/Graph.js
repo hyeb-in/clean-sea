@@ -91,7 +91,6 @@ const Graph = () => {
   const handleYearSelect = (year) => {
     setSelectedYear(year);
   };
-  // beaches/beachesbyregion/강원/2015
 
   useEffect(() => {
     const fetchData = () => {
@@ -154,7 +153,10 @@ const Graph = () => {
         </Col>
       </Row>
       <Row>
-        <div id="chart">
+        <div
+          id="chart"
+          style={{ minHeight: "calc(100vh - 58px - 200px)", paddingTop: "40px" }} // 최소 높이와 상단 패딩 설정
+        >
           <ApexCharts options={options} series={chartData.series} type="bar" />
         </div>
       </Row>

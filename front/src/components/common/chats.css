@@ -18,7 +18,6 @@
 .bubble {
   color: rgba(255, 255, 255, 0.919);
   position: relative;
-  border-radius: 10px;
   width: max-content;
   padding: 20px 20px;
   margin-bottom: 5px; /* 변경 */
@@ -28,36 +27,15 @@
 
 .bubble:nth-child(even) {
   margin-left: 200px; /* 변경 */
-  background-color: pink;
+  background-color: #FFBA46;
   align-self: flex-end; /* 변경 */
+  border-radius: 10px 10px 0px;
 }
 
 .bubble:nth-child(odd) {
   margin-right: auto; /* 변경 */
-  background-color: blue;
-}
-
-.bubble:after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-bottom-color: transparent;
-}
-
-.bubble.right:after {
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: pink;
-}
-
-.bubble.left:after {
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: blue;
+  background-color: #4070ff;
+  border-radius: 10px 10px 10px 0px;
 }
 
 .animal-container {
