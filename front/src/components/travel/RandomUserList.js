@@ -13,13 +13,12 @@ const RandomUserList = ({ data }) => {
           <CardHeader className="border-bottom">
             <div className="mb-3 mx-auto">
               <Image
-                src={user.uploadFile && user.uploadFile.length > 0 && user.uploadFile[0] !== ""
-                  ? `http://${window.location.hostname}:5001/${user.uploadFile[0]}`
-                  : 'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png'}
+                src={`http://${window.location.hostname}:5001/${user.uploadFile[0]}`}
                 width="110"
                 alt="User Profile"
                 roundedCircle
                 onClick={() => navigate(`/users/${user._id}`)}
+                onError={(e) => e.currentTarget.src = 'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png'}
               />
             </div>
             <h4 className="mb-2">{user.name}</h4>

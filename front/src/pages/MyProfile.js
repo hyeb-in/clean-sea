@@ -61,11 +61,6 @@ const MyProfile = () => {
         setUserEmail(userData.email);
         setUserDescription(userData.description);
 
-        if(userData.uploadFile.length === 0 || userData.uploadFile[0] === null || userData.uploadFile[0] === "") {
-          setUserProfileImage('https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png');
-          return;
-        }
-
         setUserProfileImage(
           `http://${window.location.hostname}:5001/${userData.uploadFile[0]}`
         );
@@ -139,6 +134,7 @@ const MyProfile = () => {
                     width="110"
                     alt="User Profile"
                     roundedCircle
+                    onError={(e) => e.currentTarget.src = 'https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png'}
                   />
                 </div>
                 {isEditMode ? <FormControl type="text" value={userName}
