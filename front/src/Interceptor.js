@@ -59,26 +59,26 @@ const Interceptor = ({ children }) => {
         return response;
       },
       (error) => {
-        const errorMessage = error?.response?.data;
-        const status = error?.response?.status;
-        console.log(error?.response?.status, "from interceptor");
-        console.log(error?.response?.data, "from interceptor");
+        // const errorMessage = error?.response?.data;
+        // const status = error?.response?.status;
+        // console.log(error?.response?.status, "from interceptor");
+        // console.log(error?.response?.data, "from interceptor");
 
-        const isTokenExpired = errorMessage === "토큰 만료" || status === 401;
-
-        if (!isGetRequest && isTokenExpired) {
-          sessionStorage.removeItem("userToken");
-          dispatch({ type: "LOGOUT" });
-          navigate("/login");
-          // 로그인 필요한 요청에 대해서만 로그아웃으로 튕기게해주면 됨
-          // post, put, del 요청만 막기
-          // 모달창 띄워서 알려주기:: ex) 토큰이 만료되어 로그아웃되었습니다 팝업
-          // throw new Error(
-          //   "토큰이 만료되었습니다. post, put, del 하려면 다시 로그인."
-          // );
-        }
-        setShowToast(errorMessage, TOAST_POPUP_STATUS.error);
-        showToastWithStatus(status, errorMessage);
+        // const isTokenExpired = errorMessage === "토큰 만료" || status === 401;
+        // console.log(error);
+        // if (!isGetRequest && isTokenExpired) {
+        //   sessionStorage.removeItem("userToken");
+        //   dispatch({ type: "LOGOUT" });
+        //   navigate("/login");
+        //   // 로그인 필요한 요청에 대해서만 로그아웃으로 튕기게해주면 됨
+        //   // post, put, del 요청만 막기
+        //   // 모달창 띄워서 알려주기:: ex) 토큰이 만료되어 로그아웃되었습니다 팝업
+        //   // throw new Error(
+        //   //   "토큰이 만료되었습니다. post, put, del 하려면 다시 로그인."
+        //   // );
+        // }
+        // setShowToast(errorMessage, TOAST_POPUP_STATUS.error);
+        // showToastWithStatus(status, errorMessage);
         return Promise.reject(error); // 여기서 reject하면 => 어딘가에서 catch 해줘야 함!
       }
     );

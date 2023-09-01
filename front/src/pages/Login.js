@@ -45,7 +45,7 @@ const Login = () => {
       });
       navigate("/", { replace: true });
     } catch (err) {
-      setShowToast(err.response.data, TOAST_POPUP_STATUS.error);
+      window.alert(err.response.data);
     }
   };
 

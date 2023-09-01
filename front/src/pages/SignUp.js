@@ -46,7 +46,8 @@ const SignUp = () => {
         });
       navigate("/login");
     } catch (err) {
-      setShowToast(err.response.data, TOAST_POPUP_STATUS.error);
+      console.log(err);
+      window.alert(err.response.data);
     }
   };
 
