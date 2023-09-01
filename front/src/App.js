@@ -22,6 +22,7 @@ import PageNotFound from "./pages/PageNotFound";
 import * as Api from "./Api";
 import { MODAL_TYPE } from "./hooks/useModal";
 import EditReview from "./components/review/EditReview";
+import "./index.css";
 import { RESULT_ENUM } from "./constants";
 import UploadStatusIndicators from "./components/common/indicators/UploadStatusIndicators";
 import ToastWrapper from "./components/common/popup/ToastWrapper";

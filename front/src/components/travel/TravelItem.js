@@ -64,7 +64,7 @@ const TravelItem = ({
     setShowDeleteModal();
   };
 
-  const defaultImage = process.env.PUBLIC_URL + "/stamp.png";
+  const defaultImage = process.env.PUBLIC_URL + "/image/stamp.png";
 
   return (
     <>

@@ -1,69 +1,71 @@
 .chats-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
+
 .bubbles-container {
-  margin-top: 100px;
-  width: 100%;
+  margin-bottom: 20px;
 }
+
 .bubbles__row {
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center; /* 변경 */
 }
+
 .bubble {
   color: rgba(255, 255, 255, 0.919);
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-items: center;
   border-radius: 10px;
   width: max-content;
-  height: 100%;
-  padding: 10px 20px;
+  padding: 20px 20px;
+  margin-bottom: 5px; /* 변경 */
+  margin-top: 20px;
+  font-size: 20px;
 }
+
 .bubble:nth-child(even) {
-  margin-left: 20px;
-}
-.bubble:nth-child(odd) {
-  margin-right: 20px;
-}
-.bubble:nth-child(even) {
+  margin-left: 200px; /* 변경 */
   background-color: pink;
-  justify-content: flex-end;
+  align-self: flex-end; /* 변경 */
 }
+
 .bubble:nth-child(odd) {
+  margin-right: auto; /* 변경 */
   background-color: blue;
 }
-.bubble.right:after {
+
+.bubble:after {
   content: "";
   position: absolute;
-  top: 100%;
-  left: 85%; /* 가운데 정렬된 위치로 수정 */
+  bottom: 0;
+  left: 50%;
   transform: translateX(-50%);
-  border-top: 5px solid pink;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid transparent;
+  border-width: 5px;
+  border-style: solid;
+  border-bottom-color: transparent;
 }
+
+.bubble.right:after {
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: pink;
+}
+
 .bubble.left:after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 15%; /* 가운데 정렬된 위치로 수정 */
-  transform: translateX(-50%);
-  border-top: 5px solid blue;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: blue;
 }
 
 .animal-container {
-  width: 100%;
+  width: 80%;
   display: flex;
   justify-content: space-around;
-  margin-bottom: 50px;
 }
+
 .animal {
   width: 360px;
 }

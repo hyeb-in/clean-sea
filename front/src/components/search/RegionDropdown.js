@@ -7,7 +7,7 @@ const regions = ['강원', '경남', '경북', '인천', '울산', '부산', '�
 
 const RegionDropdown = ({ selectedItem, handleItemSelect }) => (
   <Dropdown onSelect={handleItemSelect} className="mb-2">
-    <Dropdown.Toggle id="dropdown-basic-button" style={{ width: '200px' }}>
+    <Dropdown.Toggle id="dropdown-basic-button" style={{ width: '100%' }}>
       {selectedItem ? selectedItem : "지역을 선택해주세요"}
     </Dropdown.Toggle>
     <Dropdown.Menu>

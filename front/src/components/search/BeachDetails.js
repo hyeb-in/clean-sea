@@ -8,11 +8,10 @@ const BeachDetails = ({ beachData }) => {
     <Container>
       <Row className="mb-3">
         <Col>
-          {/* goodnessFit에 따라 빨간색 혹은 초록색 박스로 표시 */}
           {beachData.goodnessFit ? (
-            <Badge bg="success" className="p-2 m-2">적합</Badge>
+            <Badge bg="success" className="px-3 m-1" style={{fontSize: '1.5rem'}}>적합</Badge>
           ) : (
-            <Badge bg="danger" className="p-2 m-2">부적합</Badge>
+            <Badge bg="danger" className="px-3 m-1" style={{fontSize: '1.5rem'}}>부적합</Badge>
           )}
         </Col>
       </Row>
@@ -81,7 +80,7 @@ const BeachDetails = ({ beachData }) => {
 
       <Row className="mt-3 p-4">
         <Alert key="info" variant="info">
-          <h4>전국 대비 종합 점수: {beachData.sumGerms}</h4>
+          <h4>전국 대비 종합 점수: {beachData.globalScore}</h4>
         </Alert>
       </Row>
     </Container>
