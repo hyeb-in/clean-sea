@@ -26,6 +26,7 @@ const EditReview = ({
     try {
       console.log(editedReview);
       const validationError = validationReview(loggedInUser, editedReview);
+      console.log(validationError);
       if (validationError) {
         setShowToast(validationError.message, validationError.status);
         console.log(validationError.message);
@@ -36,13 +37,17 @@ const EditReview = ({
         title: editedReview.title,
         content: editedReview.content,
       });
+      console.log(res.data);
       if (!res.data) {
-        setUploadingStatus(RESULT_ENUM.FAIL);
+        return setUploadingStatus(RESULT_ENUM.FAIL);
       }
       setUploadingStatus(RESULT_ENUM.SUCCESS);
+      closeModal();
       setReviews((current) => [res.data, ...current]);
       setEditedReview(null);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }, [
     closeModal,
     loggedInUser,

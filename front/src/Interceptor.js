@@ -23,6 +23,7 @@ const Interceptor = ({ children }) => {
           Authorization: `Bearer ${token}`,
         };
       }
+
       // 여기에 명시 없을 시, 업로드 할 때 formData형식으로 보낸 후 계속 formData 형식으로 남아있는 듯(??)
       if (
         config.url.includes("/reviews/register") ||

@@ -22,7 +22,6 @@ const ReviewTitle = ({ review, setReviews }) => {
       if (!res?.data) {
         console.log("유저 데이터를 가져올 수 없습니다"); // >> 기본 이미지 띄우기
       }
-      console.log(res.data);
       setUser(res.data);
     };
     fetchUserData();

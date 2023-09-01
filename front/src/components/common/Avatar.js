@@ -1,8 +1,8 @@
 import React from "react";
 import { Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { serverUrl } from "../../Api";
 import { DEFAULT_AVATAR } from "../../constants";
+import { serverUrl } from "../../Api";
 
 const Avatar = React.forwardRef(({ width, user }, ref) => {
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ const Avatar = React.forwardRef(({ width, user }, ref) => {
           src={avatarUrl}
           width={width}
           alt="avatar"
+          onerror="/image/dolphin.png"
         />
       </OverlayTrigger>
     </Nav.Link>

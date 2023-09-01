@@ -40,7 +40,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
         // 임시!!
         const loggedIn =
           loggedInUser?.constructor === Object &&
-          Object.keys(loggedInUser).length !== 0;
+          Object.keys(loggedInUser).length > 0;
 
         // 로그인 유저가 있다면 iLiked 포함된 전체 리뷰를 받아온다
         if (loggedIn) {
