@@ -1,8 +1,7 @@
 import React from "react";
 import { Image, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { DEFAULT_AVATAR } from "../../constants";
-//React.forwardRef ref
+
 const Avatar = ({ width, user }) => {
   const navigate = useNavigate();
 
@@ -14,7 +13,7 @@ const Avatar = ({ width, user }) => {
       >
         <Image
           src={
-            user?.uploadFile && user?.uploadFile[0]
+            user?.uploadFile[0]
               ? `http://34.64.87.254:5001/${user.uploadFile[0]}`
               : "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
           }

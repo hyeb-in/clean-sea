@@ -6,13 +6,6 @@ const ReviewFormBody = ({
   userInputValues,
   setUserInputValues,
 }) => {
-  // setUserInputValues({
-  //   title: currentReviewData.title,
-  //   content: currentReviewData.content,
-  // });
-  // app[x] ==> 폼바디 안에서 상태 관리 ==?
-
-  // title, content, uploadFile
   return (
     <Container className="w-100">
       <Row className="d-flex flex-column">

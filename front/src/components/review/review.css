@@ -36,40 +36,12 @@ textarea:focus {
   height: max-content;
 }
 
-@media (max-width: 800px) {
-  .addReview__form.flexible-col,
-  .review.flexible-col {
-    display: flex;
-    flex-direction: column;
-  }
-}
-/* 큰 화면에서 flex-row 스타일 적용 */
-@media (min-width: 801px) {
-  .addReview__form.flexible-col,
-  .review.flexible-col {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-  }
-}
 .review.flexible-col {
   min-width: 350px;
   width: 100%;
 }
 .review__flexible-child {
   padding: 0;
-}
-@media (max-width: 800) {
-  .review__flexible-child {
-    width: 100%;
-  }
-}
-@media (min-width: 801px) {
-  .review__flexible-child {
-    max-width: 50%;
-  }
 }
 .carousel-arrow-icon {
   background-color: black;
