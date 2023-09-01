@@ -1,6 +1,7 @@
 import { Request } from "express";
 
 export interface IUser {
+  toObject(): unknown;
   _id: string;
   name: string;
   email: string;
