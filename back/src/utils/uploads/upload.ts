@@ -3,10 +3,10 @@ import fs from 'fs';
 import path from 'path';
 import { NextFunction } from "express";
 
-// 새 파일 정보를 기존 파일 정보에 병합하는 함수
-function insertFile(placeholder : FileObjects, file : FileObjects){
-    Object.assign(placeholder, file);
-}
+// // 새 파일 정보를 기존 파일 정보에 병합하는 함수
+// function insertFile(placeholder : FileObjects, file : FileObjects){
+//     Object.assign(placeholder, file);
+// }
 
 // 이미지 파일을 삭제하고 새로운 파일 정보를 업데이트하는 함수
 const imageUploadPath = path.join(__dirname, '../../../imageUpload');
@@ -31,4 +31,4 @@ function replacePlaceholder(placeholder : FileObjects, filenameToDelete : string
     Object.assign(placeholder, file);
 }
 
-export { insertFile, replacePlaceholder };
+export { replacePlaceholder };
