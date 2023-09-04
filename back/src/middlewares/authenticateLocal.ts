@@ -27,7 +27,7 @@ export const localAuthentication = (
         //토큰 테스트하려고 짧게해둔 변경할 것
         if (user) {
           const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
-            expiresIn: "10000m",
+            expiresIn: "1d",
           });
           req.token = token;
           req.user = user;

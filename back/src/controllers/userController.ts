@@ -8,24 +8,13 @@ import {
   resetPasswordService,
   updateUserService,
 } from "../services/userService";
-import { IRequest, IUser } from "user";
+import { IRequest } from "user";
 import { findUserByEmail, findUserById } from "../db/models/User";
 import { errorGenerator } from "../utils/errorGenerator";
 import { pwdMatchCheck } from "../utils/pwdMatchCheck";
 import { StatusCodes } from "http-status-codes";
+import { deletePassword } from "../utils/deletePassword";
 
-const deletePassword = (user: IUser) => {
-  const userWithoutPassword = {
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    description: user.description,
-    uploadFile: user.uploadFile,
-    updatedAt: user.updatedAt,
-    createdAt: user.createdAt,
-  };
-  return userWithoutPassword;
-};
 /**
  * @param {*} req name,email,password
  * @return res.status(200).json(newUser);
@@ -41,8 +30,9 @@ export const signUpUser = async (
     const { name, email, password } = req.body;
 
     const newUser = await createUserService(name, email, password);
+    console.time("1Timer");
     const userWithoutPassword = deletePassword(newUser);
-
+    console.timeEnd("1Timer");
     res.status(StatusCodes.OK).json(userWithoutPassword);
   } catch (error) {
     next(error);
@@ -60,8 +50,11 @@ export const getRandomUser = async (
 ) => {
   try {
     const randomUsers = await getRandomUserService();
+
+    const isRandomUser = true;
+
     const randomUser = randomUsers.reduce((acc, user) => {
-      acc.push(deletePassword(user));
+      acc.push(deletePassword(user, isRandomUser));
       return acc;
     }, []);
 
@@ -102,6 +95,7 @@ export const getUserById = async (
   try {
     const { userId } = req.params;
     const user = await getUserService(userId);
+
     const userWithoutPassword = deletePassword(user);
     return res.status(StatusCodes.OK).json(userWithoutPassword);
   } catch (error) {
