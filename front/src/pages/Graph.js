@@ -38,7 +38,10 @@ const Graph = () => {
     },
     chart: {
       type: "bar",
-      height: 350,
+      height: 700,
+      toolbar: {
+        show: false,
+      },
     },
     plotOptions: {
       bar: {
@@ -70,18 +73,24 @@ const Graph = () => {
         },
       },
     },
+    title: {
+      text: "연도별 지역 해수욕장 대장균/장구균 검출수",
+      align: "center",
+      margin: 10,
+      offsetX: 0,
+      offsetY: 0,
+      floating: false,
+      style: {
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#333",
+      },
+    },
   };
 
   const handleYearSelect = (year) => {
     setSelectedYear(year);
   };
-  // beaches/beachesbyregion/강원/2015
-
-  useEffect(() => {
-    Api.get("beaches/beaches")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  }, []);
 
   useEffect(() => {
     const fetchData = () => {
@@ -113,95 +122,6 @@ const Graph = () => {
     };
     if (selectedYear) {
       fetchData();
-      //   // mocking
-      //   const yearsData = {
-      //     "2023": [
-      //         {
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     },{
-      //         eschAvg: 10,
-      //         enteAvg: 11,
-      //     }
-      //     ],
-      //     "2014": [{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     },{
-      //         eschAvg: 40,
-      //         enteAvg: 50,
-      //     }]
-      //     }
-      //   const data = yearsData[selectedYear]
-      //   console.log(data);
-      //   console.log(yearsData);
-      //   console.log(selectedYear);
-      //   console.log(typeof selectedYear);
-      // const eschAvgData = data.map((item) => item.eschAvg); // 대장균 데이터
-      //       const enteAvgData = data.map((item) => item.enteAvg); // 장구균 데이터
-
-      //       const updatedChartData = {
-      //         series: [
-      //           {
-      //             name: '대장균',
-      //             data: eschAvgData
-      //           },
-      //           {
-      //             name: '장구균',
-      //             data: enteAvgData
-      //           }
-      //         ]
-      //       };
-
-      //       setChartData(updatedChartData); // 상태를 업데이트합니다.;
     }
   }, [selectedYear]);
 
@@ -218,30 +138,26 @@ const Graph = () => {
   return (
     <Container>
       <Row>
-        <Col xs={4} className="px-0">
+        <Col xs={6} className="px-0">
           <Dropdown>
             <DropdownButton
               id="year-dropdown"
               title={selectedYear}
               onSelect={handleYearSelect}
             >
-              {[2015, 2017, 2019, 2021, 2022, 2023].map(
-                (year) => (
-                  <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
-                )
-              )}
+              {[2015, 2017, 2019, 2021, 2022, 2023].map((year) => (
+                <Dropdown.Item eventKey={year}>{year}년</Dropdown.Item>
+              ))}
             </DropdownButton>
           </Dropdown>
         </Col>
       </Row>
       <Row>
-        <div id="chart">
-          <ApexCharts
-            options={options}
-            series={chartData.series}
-            type="bar"
-            height={350}
-          />
+        <div
+          id="chart"
+          style={{ minHeight: "calc(100vh - 58px - 200px)", paddingTop: "40px" }} // 최소 높이와 상단 패딩 설정
+        >
+          <ApexCharts options={options} series={chartData.series} type="bar" />
         </div>
       </Row>
     </Container>

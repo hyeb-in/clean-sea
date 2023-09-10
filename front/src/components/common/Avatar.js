@@ -1,18 +1,33 @@
 import React from "react";
-import { Col } from "react-bootstrap";
+import { Image, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
-const Avatar = ({ width }) => {
-  // url 링크를 여기에 포함시키는 게 어떨까?!?
-  // 오버레이 -> 유저 프로필 보여주는 화면도 구현
+const Avatar = ({ width, user }) => {
+  const navigate = useNavigate();
   return (
-    <Col sm="auto">
-      <img
-        className="rounded-circle"
-        src="https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png"
-        width={width}
-        alt="avatar"
-      />
-    </Col>
+    <Nav.Link onClick={() => navigate(`/users/${user._id}`)}>
+      <OverlayTrigger
+        placement="bottom"
+        overlay={<Tooltip id="profile">프로필</Tooltip>}
+      >
+        <Image
+          src={
+            user?.uploadFile && user?.uploadFile[0]
+              ? `http://34.64.87.254:5001/${user.uploadFile[0]}`
+              : `${process.env.PUBLIC_URL}/image/icon.png`
+          }
+          width={width}
+          height={width}
+          roundedCircle={true}
+          alt="avatar"
+          onError={
+            (e) =>
+              (e.currentTarget.src = `${process.env.PUBLIC_URL}/image/icon.png`)
+            // "https://blog.getbootstrap.com/assets/brand/bootstrap-logo-shadow@2x.png")
+          }
+        />
+      </OverlayTrigger>
+    </Nav.Link>
   );
 };
 

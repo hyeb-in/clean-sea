@@ -14,6 +14,25 @@ interface IBeach {
   enteScore?: number;
   latitude?: number;
   longitude?: number;
+  globalScore?: number;
+}
+
+interface IRankedBeach extends IBeach {
+  year?: number;
+  _id?: Types.ObjectId;
+  address: string;
+  name: string;
+  ente?: number;
+  esch?: number;
+  goodnessFit?: boolean;
+  eschAvg?: number;
+  enteAvg?: number;
+  eschScore?: number;
+  enteScore?: number;
+  latitude?: number;
+  longitude?: number;
+  globalScore?: number;
+  _doc:any;
 }
 
 interface BeachData {
@@ -36,4 +55,4 @@ type BeachDataAvg = {
   
 
 
-export { IBeach, BeachData, BeachDataAvg }
+export { IBeach, BeachData, IRankedBeach, BeachDataAvg }

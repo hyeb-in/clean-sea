@@ -1,4 +1,5 @@
 import {
+  BeachByBeachName,
   BeachByBeachId,
   BeachByRegionAndYear,
   BeachByRegionAndYearSpecificAvg,
@@ -9,6 +10,12 @@ import { Types } from "mongoose";
 import { IBeach, BeachData, BeachDataAvg } from "../types/beach";
 
 // 해수욕장 명칭 하나로 가져오기
+async function getBeachByNameService(name: string): Promise<IBeach | null> {
+  const beachDataOne = await BeachByBeachName(name);
+  return beachDataOne;
+}
+
+// 해수욕장 id로 가져오기
 async function getBeachByIdService(_id: Types.ObjectId): Promise<IBeach[]> {
   const beachDataOne = await BeachByBeachId(_id);
   return beachDataOne;
@@ -47,24 +54,13 @@ async function getBeachesService(): Promise<IBeach[]> {
   }
 
   // 모든 이력을 배열로 변환
-  //TODO beach => beach로 하면 안되나요?
-  const beachDataResult: IBeach[] = beachData.map((beach) => ({
-    _id: beach._id,
-    name: beach.name,
-    address: beach.address,
-    goodnessFit: beach.goodnessFit,
-    eschScore: beach.eschScore,
-    enteScore: beach.enteScore,
-    ente: beach.ente,
-    esch: beach.esch,
-    latitude: beach.latitude,
-    longitude: beach.longitude,
-  }));
+  const beachDataResult: IBeach[] = beachData.map((beach) => beach);
 
   return beachDataResult;
 }
 
 export {
+  getBeachByNameService,
   getBeachByIdService,
   getBeachByRegionAndYearService,
   getBeachByRegionAndYearSpecificServiceAvg,

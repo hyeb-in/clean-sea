@@ -1,32 +1,38 @@
-import { Router } from 'express';
-import { 
+import { Router } from "express";
+import {
+  getBeachByName,
   getBeachById,
   getBeachByRegionAndYear,
+  getBeachByRegionAndYearSpecificAvg,
   getBeaches,
-  getBeachByRegionAndYearSpecific
-} from '../controllers/beachController';
-import { beachValidator } from '../utils/validators/beachValidator';
+  getBeachByRegionAndYearSpecific,
+} from "../controllers/beachController";
+import {
+  yearAddressParamsValidator,
+  beachParamsValidator,
+  idParamValidator,
+  nameParamValidator,
+} from "../utils/validators/beachValidator";
 import { jwtAuthentication } from "../middlewares/authenticateJwt";
 
 const beachRouter = Router();
 
 beachRouter
-  .get('/beachbyId/:_id', getBeachById);
-  // .get('/beachbyId/:_id', beachValidator.getBeach, jwtAuthentication, getBeachById);
+  .get("/beaches/name/:name", nameParamValidator, getBeachByName);
 
 beachRouter
-  .get('/beachesbyregion/:address/:year', getBeachByRegionAndYear);
-  // .get('/beachesbyregion/:address/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+  .get("/beachbyId/:_id", idParamValidator, getBeachById);
 
 beachRouter
-  .get('/beachesavg/:year', getBeachByRegionAndYearSpecific);
-  // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+  .get('/beaches/:year/:address', yearAddressParamsValidator, getBeachByRegionAndYear);
 
 beachRouter
-  .get('/beaches/:year', getBeachByRegionAndYearSpecific);
-  // .get('/beaches/:year', beachValidator.getBeachAndYear, jwtAuthentication, getBeachByRegionAndYear);
+  .get('/beachesavg/:year', beachParamsValidator, getBeachByRegionAndYearSpecificAvg);
 
 beachRouter
-  .get('/beaches', getBeaches);
+  .get('/beaches/:year', beachParamsValidator, getBeachByRegionAndYearSpecific);
+
+beachRouter
+  .get("/beaches", getBeaches);
 
 export default beachRouter;

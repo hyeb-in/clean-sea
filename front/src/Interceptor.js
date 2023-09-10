@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { DispatchContext, ModalOptionContext, UserStateContext } from "./App";
+import { DispatchContext, UserStateContext } from "./App";
+import { TOAST_POPUP_STATUS } from "./constants";
+import useToast from "./hooks/useToast";
 
 const Interceptor = ({ children }) => {
   const dispatch = useContext(DispatchContext);
   const { user } = useContext(UserStateContext);
-  const { modalOptions, setModalOptions } = useContext(ModalOptionContext);
   const [isGetRequest, setIsGetRequest] = useState(false);
   const navigate = useNavigate();
+  const { showToastWithStatus, setShowToast } = useToast();
 
   useEffect(() => {
     // 모든 요청을 가로채서 do something
@@ -22,8 +24,10 @@ const Interceptor = ({ children }) => {
         };
       }
       // 여기에 명시 없을 시, 업로드 할 때 formData형식으로 보낸 후 계속 formData 형식으로 남아있는 듯(??)
-      if (config.url.includes("/reviews/register") ||
-        config.url.includes("/users/photo")) {
+      if (
+        config.url.includes("/reviews/register") ||
+        (config.url.includes("/users/photo") && config.method === "put")
+      ) {
         // Form Data 형식으로 데이터 보내기
         config.headers["Content-Type"] = "multipart/form-data";
       } else {
@@ -48,33 +52,34 @@ const Interceptor = ({ children }) => {
           // GET 요청 처리를 위한 스테이트
           setIsGetRequest(true);
         }
-
+        showToastWithStatus(200, "성공:)");
         // 403 : 인증 에러 권한 없음
         // 400 : 클라이언트가 잘못된 값 전달
         // 500 : 서버 에러
         return response;
       },
       (error) => {
-        const errorMessage = error.response.data;
-        const status = error.response.status;
-        console.log(error.response.status, "from interceptor");
-        console.log(error.response.data, "from interceptor");
+        const errorMessage = error?.response?.data;
+        const status = error?.response?.status;
+        // console.log(error?.response?.status, "from interceptor");
+        // console.log(error?.response?.data, "from interceptor");
 
         const isTokenExpired = errorMessage === "토큰 만료" || status === 401;
-
+        console.log(error);
         if (!isGetRequest && isTokenExpired) {
-          // 될 떄가 있고 안될 때가 있는데 백엔드 코드 아직 통일 안되서 그런 건가...?
-          // post reviews에서는 /login까지 수행 Ok
-          console.log(error.response);
           sessionStorage.removeItem("userToken");
           dispatch({ type: "LOGOUT" });
           navigate("/login");
           // 로그인 필요한 요청에 대해서만 로그아웃으로 튕기게해주면 됨
           // post, put, del 요청만 막기
           // 모달창 띄워서 알려주기:: ex) 토큰이 만료되어 로그아웃되었습니다 팝업
-          alert("토큰이 만료되었습니다. post, put, del 하려면 다시 로그인.");
+          // throw new Error(
+          //   "토큰이 만료되었습니다. post, put, del 하려면 다시 로그인."
+          // );
         }
-        return Promise.reject(error);
+        setShowToast(errorMessage, TOAST_POPUP_STATUS.error);
+        showToastWithStatus(status, errorMessage);
+        return Promise.reject(error); // 여기서 reject하면 => 어딘가에서 catch 해줘야 함!
       }
     );
     // Clean up interceptors when the component unmounts
@@ -82,7 +87,14 @@ const Interceptor = ({ children }) => {
       axios.interceptors.request.eject(axiosInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, [user, modalOptions, setModalOptions, dispatch, navigate, isGetRequest]);
+  }, [
+    navigate,
+    dispatch,
+    isGetRequest,
+    user,
+    showToastWithStatus,
+    setShowToast,
+  ]);
   return children;
 };
 

@@ -10,5 +10,7 @@ front/...
 back/node_modules/
 back/.yarn-integrity
 back/...
+back/.env
 imageUpload
 node_modules
+videoUpload

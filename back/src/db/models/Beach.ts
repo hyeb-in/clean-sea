@@ -1,6 +1,11 @@
 import { BeachModel, IBeach } from "../schemas/beachSchema";
 import { Types } from "mongoose";
-import { BeachData, BeachDataAvg } from "beach";
+import { BeachData, BeachDataAvg, IRankedBeach } from "beach";
+
+async function BeachByBeachName(name: string): Promise<IBeach | null> {
+  const getBeaches = await BeachModel.findOne({ name: name });
+  return getBeaches;
+}
 
 async function BeachByBeachId(_id: Types.ObjectId): Promise<IBeach[]> {
   const getBeaches = (await BeachModel.findOne({ _id: _id })) as IBeach[];
@@ -10,12 +15,11 @@ async function BeachByBeachId(_id: Types.ObjectId): Promise<IBeach[]> {
 async function BeachByRegionAndYear(
   address: string,
   year: string
-): Promise<IBeach[]> {
-  //TODO {address, year}로 보내도 ok
+): Promise<IRankedBeach[]> {
   const getBeaches = (await BeachModel.find({
     address: address,
     year: year,
-  })) as IBeach[]; // 주소와 연도로 찾기
+  })) as IRankedBeach[]; // 주소와 연도로 찾기
   return getBeaches;
 }
 
@@ -113,6 +117,7 @@ async function Beaches(): Promise<IBeach[]> {
 }
 
 export {
+  BeachByBeachName,
   BeachByBeachId,
   BeachByRegionAndYear,
   BeachByRegionAndYearSpecificAvg,

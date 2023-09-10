@@ -6,6 +6,5 @@ import { validateLogin } from "../utils/validators/userValidator";
 const authRouter = Router();
 
 authRouter.post("/login", validateLogin, localAuthentication, loginUser);
-authRouter.post("/logout");
 
 export default authRouter;

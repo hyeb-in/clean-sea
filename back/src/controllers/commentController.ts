@@ -1,18 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import {
     addComment,
     getComment,
     setComment,
     deletedComment,
 } from '../services/commentService';
-import { ReviewModel } from '../db/schemas/reviewSchema';
-import { CommentModel } from '../db/schemas/commetSchema';
 import { IRequest } from "user";
-  
-const sendResponseWithData = function (res: Response, statusCode: number, data: any) {
-    res.status(statusCode).json(data);
-};
 
 const createComment = async (
     req : IRequest,
@@ -28,7 +21,7 @@ const createComment = async (
             toCreate : {...req.body, userId, userName, postId},
         });
 
-        return sendResponseWithData(res,StatusCodes.CREATED, addMyComment);
+        res.status(200).json(addMyComment);
     }catch(err){
         next(err);
     }
@@ -42,7 +35,7 @@ const getReviewComment = async (
     try {
         const getUserComment = await getComment(req.params.reviewId);
 
-        return sendResponseWithData(res, StatusCodes.OK, getUserComment);
+        res.status(200).json(getUserComment);
     }catch(err){
         next(err);
     }
@@ -60,7 +53,7 @@ const updateComment = async (
             toUpdate : { ...req.body },
         });
 
-        return sendResponseWithData(res, StatusCodes.OK, updatedComment);
+        res.status(200).json(updatedComment);
     }catch(err){
         next(err);
     }
@@ -74,7 +67,7 @@ const deleteComment = async(
     try{
         const deleteComment = await deletedComment(req.params.commentId);
 
-        return sendResponseWithData(res, StatusCodes.OK, deleteComment);
+        res.status(200).json(deleteComment);
     }catch(err){
         next(err);
     }

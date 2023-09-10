@@ -3,18 +3,16 @@ import {
   Col, Container, Row, Card, Button, Modal, FormControl
 } from "react-bootstrap";
 import * as Api from "../../Api";
-import { UserStateContext } from "../../App";
 import TravelItem from "./TravelItem";
 import SearchInput from "./SearchInput";
-import { useToggle } from "../../customhooks/modalCustomHooks";
+import { useToggle } from "../../hooks/profileHooks";
+import { getTodayDate } from './utils/travelUtils';
 
-const History = ({ displayToast }) => {
+const History = ({ displayToast, isEditable, id }) => {
   const [travels, setTravels] = useState([]);
   const [showModal, setShowModal] = useToggle();
 
-  const { user } = useContext(UserStateContext);
   const [newTravel, setNewTravel] = useState({
-    author: user._id,
     beachId: "",
     date: ""
   });
@@ -25,7 +23,7 @@ const History = ({ displayToast }) => {
 
   const fetchTravelList = async () => {
     try {
-      const response = await Api.get("travels/travelList");
+      const response = await Api.get(`travels/users/${id}`);
       setTravels(response.data);
     } catch (error) {
       displayToast("방문 로그 조회 실패.");
@@ -47,7 +45,7 @@ const History = ({ displayToast }) => {
 
   useEffect(() => {
     fetchTravelList();
-  }, []);
+  }, [id]);
 
   const handleTravelUpdate = (travelId, updatedTravel) => {
     const updatedTravels = travels.map(
@@ -57,7 +55,7 @@ const History = ({ displayToast }) => {
 
   return (
     <>
-      <Container>
+      <Container className="px-0">
         <Card className="mb-4 mt-4 pt-3">
           <Card.Body>
             <Row className="mt-4">
@@ -65,12 +63,17 @@ const History = ({ displayToast }) => {
                 <h3 className="mb-3">방문 로그</h3>
               </Col>
               <Col xs={6} className="d-flex justify-content-end">
-                <Button
-                  size="sm" style={{ marginTop: "5px", marginBottom: "5px" }}
-                  onClick={setShowModal}
-                >
-                  로그 작성
-                </Button>
+                {
+                  isEditable ? (
+                    <Button
+                      size="sm" style={{ marginTop: "5px", marginBottom: "5px" }}
+                      onClick={setShowModal}
+                    >
+                      로그 작성
+                    </Button>
+                  ) : <></>
+                }
+
               </Col>
               <Col xs={1}>
                 {/*여백용 빈 컬럼*/}
@@ -83,7 +86,8 @@ const History = ({ displayToast }) => {
                     <TravelItem key={index} travelData={travel}
                                 onTravelUpdate={handleTravelUpdate}
                                 onTravelDelete={fetchTravelList}
-                                displayToast={displayToast}/>
+                                displayToast={displayToast}
+                                isEditable={isEditable}/>
                   ))
                 ) : (
                   <p className="m-2">방문 로그가 없습니다</p>
@@ -106,6 +110,7 @@ const History = ({ displayToast }) => {
               value={newTravel.date}
               onChange={(e) => setNewTravel(
                 { ...newTravel, date: e.target.value })}
+              max={getTodayDate()}
             />
           </Modal.Body>
           <Modal.Footer>

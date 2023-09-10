@@ -15,7 +15,7 @@ travelAuthRouter
     .post('/register', jwtAuthentication, postTravelValidator, createTravel)
     .get('/travelList', jwtAuthentication, getMyTravel);
 
-travelAuthRouter.get('/:userId', jwtAuthentication, getUserTravel);
+travelAuthRouter.get('/users/:userId', getUserTravel);
 
 travelAuthRouter
     .route('/:travelId')

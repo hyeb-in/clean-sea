@@ -1,0 +1,49 @@
+.chats-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bubbles-container {
+  margin-bottom: 20px;
+}
+
+.bubbles__row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 변경 */
+}
+
+.bubble {
+  color: rgba(255, 255, 255, 0.919);
+  position: relative;
+  width: max-content;
+  padding: 20px 20px;
+  margin-bottom: 5px; /* 변경 */
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+.bubble:nth-child(even) {
+  margin-left: 200px; /* 변경 */
+  background-color: #FFBA46;
+  align-self: flex-end; /* 변경 */
+  border-radius: 10px 10px 0px;
+}
+
+.bubble:nth-child(odd) {
+  margin-right: auto; /* 변경 */
+  background-color: #4070ff;
+  border-radius: 10px 10px 10px 0px;
+}
+
+.animal-container {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.animal {
+  width: 360px;
+}

@@ -5,7 +5,7 @@ import NoReviewIndicator from "../common/indicators/NoReviewIndicator";
 import { ModalVisibleContext, UserStateContext } from "../../App";
 import ActionSelectorModal from "../common/popup/ActionSelectorModal";
 import CommentsModal from "./comment/CommentsModal";
-import Review from "./Review";
+import Review from "./layout/Review";
 import { MODAL_TYPE } from "../../hooks/useModal";
 import * as Api from "../../Api";
 import useToast from "../../hooks/useToast";
@@ -33,6 +33,7 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
     await Api.get("reviews/reviewListLogin");
   const fetchPublicReviews = async () => await Api.get("reviews/reviewList");
 
+  // deps에 fetchData 포함시키면 무한요청 날림
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,10 +42,11 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
           const res = await fetchPrivateReviews();
           if (!res.data) {
             showToastPopup(
-              "유저의 데이터를 불러올 수 없습니다",
+              "데이터를 불러올 수 없습니다",
               TOAST_POPUP_STATUS.error
             );
           }
+          if (reviews === res.data) return;
           setReviews(res.data);
           setIsLoaded(true);
         } else {
@@ -55,15 +57,24 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
               TOAST_POPUP_STATUS.error
             );
           }
+
           setReviews(res.data);
           setIsLoaded(true);
         }
       } catch (error) {
         // showToastPopup(error, TOAST_POPUP_STATUS.error);
+        console.log(error);
       }
     };
     fetchData();
-  }, [loggedInUser]);
+  }, [
+    loggedInUser,
+    // modalVisible,
+    // reviews,
+    // showToastPopup,
+    // setReviews,
+    // 다 넣으면 다시 무한 요청..
+  ]);
 
   return (
     <>
@@ -82,10 +93,10 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
           {!isLoaded && <SpinnerWrapper text="로딩 중..." />}
           {isLoaded &&
             reviews?.length > 0 &&
-            reviews.map((review, index) => (
+            reviews.map((review) => (
               <div
                 // to do: key 중복 없애라는 경고가 계속 발생함
-                key={`${review._id}-${modalVisible?.type}-${index}`}
+                key={review._id}
                 className="d-flex justify-content-center align-items-center"
               >
                 <Review
@@ -100,25 +111,13 @@ const ReviewsList = ({ setReview, reviews, setReviews }) => {
       </Container>
       {/* 1. isActionSelectorVisible, setActionSelectorVisible 상태관리 useContext */}
       {/* 2. 삭제, 취소, 수정 띄우는 ActionSelectorModal */}
-      {/* 3. 커멘트 수정 -> 이미 떠있는 모달 없애고(ActionSelectorModal) -> EditCommentsModal */}
+      {/* 3. 모든 댓글 볼 수 있는 CommentsModal */}
 
       {/* 모달1. edit review 수정, 삭제, 취소 선택할 수 있는 모달창 띄우기 */}
       {isActionPopupOpen && <ActionSelectorModal />}
 
       {/* 모달2. comments get, post, 댓글 전체 볼 수 있는 창 띄우기 */}
-      {/* delete comment는 actionselector에서 처리한다 */}
       {isCommentListPopupOpen && <CommentsModal />}
-
-      {/* 모달3. review 수정하기 폼 모달 */}
-      {/* >>>> Review 하위 컴포넌트로 이동 */}
-      {showToast && (
-        <ToastWrapper
-          setShowToast={setShowToast}
-          text={toastMessage}
-          status={toastStatus}
-          position={toastPosition}
-        />
-      )}
     </>
   );
 };

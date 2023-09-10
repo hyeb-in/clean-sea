@@ -5,6 +5,7 @@ import HighchartsMap from "highcharts/modules/map";
 import ExportingModule from "highcharts/modules/exporting";
 import ExportDataModule from "highcharts/modules/export-data";
 import AccessibilityModule from "highcharts/modules/accessibility";
+import Chats from "../components/common/Chats";
 
 // Initialize Highcharts modules
 HighchartsMap(Highcharts);
@@ -36,21 +37,30 @@ const Main = () => {
         Highcharts.mapChart("container", {
           chart: {
             map: mapData,
+            backgroundColor: "transparent", // 백그라운드를 투명하게 설정
           },
 
           title: {
-            text: "지역 해수욕장 평균 수질적합도",
+            text: "깨끗 海",
+            style: {
+              fontSize: "36px", // 제목 텍스트 크기를 크게 조정
+              font: "Black Han Sans",
+            },
           },
 
           subtitle: {
-            text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/kr/kr-all.geo.json">South Korea</a>',
+            text: "해수욕장 평균 수질 적합도",
+            style: {
+              fontSize: "24px", // 부제목 텍스트 크기를 크게 조정
+            },
           },
 
           mapNavigation: {
-            enabled: true,
-            buttonOptions: {
-              verticalAlign: "bottom",
-            },
+            enabled: false,
+          },
+
+          exporting: {
+            enabled: false,
           },
 
           colorAxis: {
@@ -65,6 +75,10 @@ const Main = () => {
             {
               data: data,
               name: "수질적합도",
+              animation: {
+                duration: 1500, // 애니메이션 지속 시간 (밀리초)
+                easing: "easeOutBounce", // 애니메이션 이징 함수
+              },
               states: {
                 hover: {
                   color: "#BADA55",
@@ -90,9 +104,34 @@ const Main = () => {
   }, []);
 
   return (
-    <Container fluid style={{ height: "100vh" }}>
-      <Row style={{ height: "100%" }}>
-        <Col id="container"></Col>
+    <Container
+      fluidstyle={{ width: "100%", height: "100%", backgroundSize: "cover" }}
+    >
+      <Row className="align-items-center" style={{ minHeight: "80vh" }}>
+        {/* <Col> */}
+        <Chats />
+        {/* </Col> */}
+        <Col style={{ backgroundColor: "#fff" }}>
+          <div className="text-center">
+            <p
+              style={{
+                width: "100%",
+                maxWidth: "800px",
+                fontSize: "22px", // 텍스트 크기를 크게 조정
+                border: "10px solid #00B9FF", // 파란색 테두리 추가
+                borderRadius: "10px", // 라운드 모양으로 만듦
+                padding: "15px", // 테두리 내부 여백 추가
+                borderWidth: "10px",
+                display: "inline-block", // 블록 요소를 인라인 블록으로 변경
+              }}
+            >
+              여름철 해수욕장, 어디까지 가봤니?
+              <br />
+              전국 지역별 해수욕장 수질 데이터 공개 및 추천!
+            </p>
+          </div>
+          <div id="container" style={{ width: "100%", height: "800px" }}></div>
+        </Col>
       </Row>
     </Container>
   );

@@ -61,3 +61,14 @@ export const IS_LIKE = {
   removed: "Like removed",
   added: "Like added",
 };
+
+export const RESULT_ENUM = {
+  NOT_YET: "작성중",
+  UPLOADING: "업로드 중",
+  SEND: "완료",
+  FAIL: "실패",
+  SUCCESS: "성공",
+};
+
+export const DEFAULT_AVATAR = "image/icon.png";
+export const DEFAULT_IMAGE_URL = "/image/imageLoading.png";

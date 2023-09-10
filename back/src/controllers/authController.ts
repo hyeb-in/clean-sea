@@ -1,4 +1,5 @@
 import { NextFunction, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 import { IRequest } from "user";
 
 export const loginUser = async (
@@ -10,12 +11,13 @@ export const loginUser = async (
     const user = {
       token: req.token,
       _id: req.user._id,
-      email: req.user.email,
       name: req.user.name,
+      email: req.user.email,
+      uploadFile: req.user.uploadFile,
     };
-    return res.status(200).json(user);
+
+    return res.status(StatusCodes.OK).json(user);
   } catch (error) {
     next(error);
   }
 };
- 

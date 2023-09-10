@@ -2,12 +2,16 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Api from "../Api";
 import { DispatchContext } from "../App";
+import useToast from "../hooks/useToast";
+import ToastWrapper from "../components/common/popup/ToastWrapper";
+import { TOAST_POPUP_STATUS } from "../constants";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
+  const { showToast, toastData, setShowToast } = useToast();
 
   const validateEmail = (email) => {
     return email.toLowerCase().match(
@@ -41,42 +45,30 @@ const Login = () => {
       });
       navigate("/", { replace: true });
     } catch (err) {
-      console.log("로그인에 실패하셨습니다.\n", err);
       window.alert(err.response.data);
     }
   };
 
   return (
-    <div
-      style={{
-        paddingTop: "134px",
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <>
+      {showToast && <ToastWrapper toastData={toastData} />}
       <div
         style={{
-          width: "300px",
-          boxShadow: "0px 4px 12px #00000026",
+          paddingTop: "134px",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <div
-          className="container"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            gap: "16px",
-            padding: "16px",
+            width: "300px",
+            boxShadow: "0px 4px 12px #00000026",
           }}
         >
-          <h2 style={{ textAlign: "center" }}>로그인</h2>
-          <form
-            onSubmit={handleSubmit}
+          <div
+            className="container"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -84,59 +76,73 @@ const Login = () => {
               alignItems: "center",
               height: "100%",
               gap: "16px",
+              padding: "16px",
             }}
           >
-            <div className="form-group">
-              <label style={{ fontSize: "18px" }}>이메일</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="이메일을 입력하세요."
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {!isEmailValid && email.length > 0 && (
-                // 이메일값이 있고 유효하지않을 때 띄우기
-                // email length > 0
-                // 클릭 하기 전을 정의(내게 뭐가 필요한지 고민)
-                <div className="text-danger">
-                  이메일 형식이 올바르지 않습니다.
-                </div>
-              )}
-            </div>
-            <div className="form-group">
-              <label style={{ fontSize: "18px" }}>비밀번호</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="비밀번호를 입력하세요."
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {!isPasswordValid && password.length > 0 && (
-                <div className="text-danger" style={{ color: "#FF6347" }}>
-                  비밀번호는 4글자 이상입니다.
-                </div>
-              )}
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={!isFormValid}
+            <h2 style={{ textAlign: "center" }}>로그인</h2>
+            <form
+              onSubmit={handleSubmit}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+                gap: "16px",
+              }}
             >
-              로그인
-            </button>
-            <button
-              type="button"
-              className="btn btn-link"
-              onClick={() => navigate("/SignUp")}
-            >
-              회원가입
-            </button>
-          </form>
+              <div className="form-group">
+                <label style={{ fontSize: "18px" }}>이메일</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="이메일을 입력하세요."
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {!isEmailValid && email.length > 0 && (
+                  // 이메일값이 있고 유효하지않을 때 띄우기
+                  // email length > 0
+                  // 클릭 하기 전을 정의(내게 뭐가 필요한지 고민)
+                  <div className="text-danger">
+                    이메일 형식이 올바르지 않습니다.
+                  </div>
+                )}
+              </div>
+              <div className="form-group">
+                <label style={{ fontSize: "18px" }}>비밀번호</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="비밀번호를 입력하세요."
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {!isPasswordValid && password.length > 0 && (
+                  <div className="text-danger" style={{ color: "#FF6347" }}>
+                    비밀번호는 4글자 이상입니다.
+                  </div>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!isFormValid}
+              >
+                로그인
+              </button>
+              <button
+                type="button"
+                className="btn btn-link"
+                onClick={() => navigate("/SignUp")}
+              >
+                회원가입
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,38 +1,39 @@
-import express, { Router } from "express";
+import { Router } from "express";
 import {
   changePassword,
   deleteUser,
   getRandomUser,
-  getUser,
+  getCurrentUser,
+  getUserById,
   resetPassword,
   signUpUser,
   updateUser,
-} from '../controllers/userController'
-import { jwtAuthentication } from '../middlewares/authenticateJwt'
+} from "../controllers/userController";
+import { jwtAuthentication } from "../middlewares/authenticateJwt";
 import {
   validateSignUp,
   validateUpdateUser,
 } from "../utils/validators/userValidator";
-import { handleFileUpload } from "../middlewares/uploadMiddleware";
+import { fileUpload } from "../middlewares/uploadMiddleware";
 
 const userRouter = Router();
 
 userRouter.post("/register", validateSignUp, signUpUser);
 
-userRouter.get("/tokentest", jwtAuthentication);
+userRouter.get("/current", jwtAuthentication, getCurrentUser);
 
-userRouter.get("/current", jwtAuthentication, getUser);
-
-userRouter.get("/randomlist", jwtAuthentication, getRandomUser);
+userRouter.get("/randomlist", getRandomUser);
 
 userRouter.post("/reset-password", resetPassword);
 
-userRouter.post("/:userId/change-password", changePassword);
+userRouter.post("/:userId/change-password", jwtAuthentication, changePassword);
+
+userRouter.put("/photo/:userId", jwtAuthentication, fileUpload, updateUser);
 
 userRouter
   .route("/:userId")
-  .get(jwtAuthentication, getUser)
-  .put(jwtAuthentication, handleFileUpload, validateUpdateUser, updateUser)
+  .get(jwtAuthentication, getUserById)
+  .put(jwtAuthentication, validateUpdateUser, updateUser)
   .delete(jwtAuthentication, deleteUser);
 
 export default userRouter;

@@ -3,14 +3,19 @@ import { FormControl, Button, Modal, Card, Col } from "react-bootstrap";
 import * as Api from "../../Api";
 import TravelImageWithText from "./TravelImageWithText";
 import SearchInput from "./SearchInput";
-import { useToggle } from "../../customhooks/modalCustomHooks";
-import { formatDate, formatDateWithoutTime } from './utils/travelUtils';
+import { useToggle } from "../../hooks/profileHooks";
+import {
+  formatDate,
+  formatDateWithoutTime,
+  getTodayDate,
+} from './utils/travelUtils';
 
 const TravelItem = ({
   travelData,
   onTravelUpdate,
   onTravelDelete,
-  displayToast
+  displayToast,
+  isEditable
 }) => {
   const [isEditing, setIsEditing] = useToggle();
   const [showDeleteModal, setShowDeleteModal] = useToggle();
@@ -63,7 +68,7 @@ const TravelItem = ({
     setShowDeleteModal();
   };
 
-  const defaultImage = process.env.PUBLIC_URL + "/stamp.png";
+  const defaultImage = process.env.PUBLIC_URL + "/image/stamp.png";
 
   return (
     <>
@@ -82,11 +87,18 @@ const TravelItem = ({
                   alignItems: "center",
                   justifyContent: "flex-start"
                 }}>
-                  <Button variant="outline-primary"
-                          onClick={setIsEditing}
-                          className={"mx-1"}>편집</Button>
-                  <Button variant="outline-danger"
-                          onClick={setShowDeleteModal}>삭제</Button>
+                  {
+                    isEditable ? (
+                      <>
+                        <Button variant="outline-primary"
+                                onClick={setIsEditing}
+                                className={"mx-1"}>편집</Button>
+                        <Button variant="outline-danger"
+                                onClick={setShowDeleteModal}>삭제</Button>
+                      </>
+                    ) : <></>
+                  }
+
                 </div>
               </Card.Body>
             </Col>
@@ -109,6 +121,7 @@ const TravelItem = ({
                 value={formatDate(updatedTravel.date)}
                 onChange={e => setUpdatedTravel(
                   { ...updatedTravel, date: e.target.value })}
+                max={getTodayDate()}
               /></p>
             <div style={{
               display: "flex",
